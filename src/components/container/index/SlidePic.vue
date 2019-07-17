@@ -74,7 +74,7 @@
 
 <script>
 export default {
-       el: '#app',
+       name: 'slidePic',
    data () {
       return {
             background:this.$store.state.url+"index/bg-blue-water.svg"
