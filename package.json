@@ -13,6 +13,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@dongido/vue-viaudio": "^0.2.9",
     "video.js": "^7.6.0",
     "vue": "^2.5.2",
     "vue-quill-editor": "^3.0.6",
