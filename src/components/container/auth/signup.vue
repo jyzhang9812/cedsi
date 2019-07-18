@@ -2,6 +2,13 @@
   <div id="signup">
     <div class="signup-form">
       <form @submit.prevent="onSubmit">
+          <div class="input">
+              <label for="username">Username</label>
+              <input
+                      type="username"
+                      id="username"
+                      v-model="username">
+            </div>
         <div class="input">
           <label for="email">Mail</label>
           <input
@@ -65,10 +72,33 @@
         </div>
       </form>
     </div>
+    <div class="signup-form">
+      <form @submit.prevent="onConfirm">
+        <div class="input">
+          <label for="username">username</label>
+          <input
+                  type="username"
+                  id="username"
+                  v-model="username">
+        </div>
+        <div class="input">
+          <label for="code">code</label>
+          <input
+                  type="code"
+                  id="code"
+                  v-model="code">
+        </div>
+        <div class="submit">
+          <button type="submit">Confirm your account</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
+  // import axios from 'axios';
+  // import axios from '../../axios-auth';
   export default {
     data () {
       return {
@@ -78,7 +108,9 @@
         confirmPassword: '',
         country: 'usa',
         hobbyInputs: [],
-        terms: false
+        terms: false,
+        username:'',
+        code:''
       }
     },
     methods: {
@@ -94,6 +126,7 @@
       },
       onSubmit () {
         const formData = {
+          username:this.username,
           email: this.email,
           age: this.age,
           password: this.password,
@@ -102,7 +135,17 @@
           hobbies: this.hobbyInputs.map(hobby => hobby.value),
           terms: this.terms
         }
-        console.log(formData)
+        // console.log(formData);
+        // this.$store.dispatch('signup', formData); //{email:formData.email,password:formData.password}
+        this.$store.dispatch('signupAWS', formData); 
+      },
+      onConfirm () {
+        const confirmData = {
+          username: this.username,
+          code: this.code
+        }
+        console.log(confirmData);
+        this.$store.dispatch('confirmUserAWS', confirmData); 
       }
     }
   }
@@ -145,7 +188,7 @@
 
   .input input:focus {
     outline: none;
-    border: 1px solid #50b8ee;
+    border: 1px solid #521751;
     background-color: #eee;
   }
 
@@ -155,8 +198,8 @@
   }
 
   .hobbies button {
-    border: 1px solid #50b8ee;
-    background: #50b8ee;
+    border: 1px solid #521751;
+    background: #521751;
     color: white;
     padding: 6px;
     font: inherit;
@@ -165,7 +208,7 @@
 
   .hobbies button:hover,
   .hobbies button:active {
-    background-color: #50b8ee;
+    background-color: #8d4288;
   }
 
   .hobbies input {
@@ -173,8 +216,8 @@
   }
 
   .submit button {
-    border: 1px solid #50b8ee;
-    color: #50b8ee;
+    border: 1px solid #521751;
+    color: #521751;
     padding: 10px 20px;
     font: inherit;
     cursor: pointer;
@@ -182,7 +225,7 @@
 
   .submit button:hover,
   .submit button:active {
-    background-color: #50b8ee;
+    background-color: #521751;
     color: white;
   }
 

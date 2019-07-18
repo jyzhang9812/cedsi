@@ -1,9 +1,9 @@
 <template>
-    <div>
-        <div class="course">
-            <div class="course_card" v-for="(item,index) in homework" :key="index" @mouseover="show(index)" @mouseleave="hidden(index)">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4" v-for="(item,index) in homework" :key="index" @mouseover="show(index)" @mouseleave="hidden(index)">
                 <div class="inside">
-                    <img class="img" :src="item.img_url"/>
+                    <img class="img" :style="style" :src="item.img_url"/>
                     <div class='details' v-show="index==i">
                         <div class="detail_item">
                             <img class="icon" v-for='i in item.star_num'  :src=star_active />
@@ -29,9 +29,9 @@
                     </div>
                 </div>
             </div>
-            <div class="course_card" v-for="(item,index) in product" :key="index" @mouseover="show0(index)" @mouseleave="hidden0(index)">
+            <div class="col-md-4" v-for="(item,index) in product" :key="'info-'+index" @mouseover="show0(index)" @mouseleave="hidden0(index)">
                     <div class="inside">
-                        <img class="img" :src="item.img_url"/>
+                        <img class="img" :style="style" :src="item.img_url"/>
                         <div class='details' v-show="index==j">
                             <div class="detail_item">
                                 <img class="icon" v-for='i in item.star_num'  :src=star_active />
@@ -114,6 +114,8 @@
     },
     created: function() {
     //let that = this.$router;
+    this.style='height:'+(document.documentElement.clientWidth*0.17)+'px;'
+    this.style1='height:'+(document.documentElement.clientWidth*0.17)+'px;margin-top:-'+(document.documentElement.clientWidth*0.17)+'px;'
     this.$http
       .get("https://dmx62xxcu2.execute-api.us-east-2.amazonaws.com/prod/products").then(response => {
           var arr1=[];
@@ -140,43 +142,20 @@
 
 
 <style scoped>
-    /* 修改 */
-    /* .course{
-        margin-top: 20px;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-    }
-    .course_card{
-        margin-top:10px; 
-        margin-bottom: 10px;
-        margin-left: 20px;
-    }
-    .img{
-        width: 300px;
-        height: 200px;
-        border-radius:20px; 
-    } */
-    .course {
+    .row{
         padding-top: 20px;
         display: flex;
-        flex-direction: row;
         flex-wrap: wrap;
-        justify-content: flex-start;
+        float: left;
     }
-    .course_card {
+    .col-md-4{
         margin-top: 10px;
         margin-bottom: 10px;
-        margin-left: 3%;
         text-decoration: none;
-        width: 30%;
-        min-width: 300px;
     }
     .img {
-        width: 100%;
-        height: 230px;
         border-radius: 20px;
+        width: 100%;
     }
     .inside{
         border-radius:20px;
