@@ -4,10 +4,10 @@
         <div class="col-md-4" 
           v-for="(item,index) in inside_detail"
           :key="index">
-          <router-link to="/dashboard/map" class="course_card">
+          <router-link to="/dashboard/map" class="box">
             <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
-              <img class="img" :src="item.img_url">
-              <div class="details" v-show="index==i">
+              <img class="img" :style="style" :src="item.img_url">
+              <div class="details" :style="style1" v-show="index==i">
                 <div class="detail_item">
                   <img class="icon" src='../../../../../../static/images/dashboard/class.png'>
                   <span>开课进度: {{item.status.haveStarted}} / {{item.status.chaptersNum}}</span>
@@ -66,6 +66,8 @@ export default {
   },
   created: function() {
     //let that = this.$router;
+    this.style='height:'+(document.documentElement.clientWidth*0.17)+'px;'
+    this.style1='height:'+(document.documentElement.clientWidth*0.17)+'px;margin-top:-'+(document.documentElement.clientWidth*0.17)+'px;'
     this.$http
       .get("https://jt6s63r7of.execute-api.us-east-2.amazonaws.com/prod/courses").then(response => {
           var arr=[];
@@ -107,11 +109,15 @@ export default {
   margin-bottom: 10px;
   margin-left: 3%;
   text-decoration: none;
+  position:relative;
+  width:40%;
+  height:0;
+  font-size:0;
+  line-height:0;
 }
 .img {
   border-radius: 20px;
-  width: 100%;
-  height: 230px;
+  max-width: 100%;
 }
 .inside {
   border-radius: 20px;
@@ -131,7 +137,7 @@ export default {
   background: #51c79f;
   color: #fff;
   height: 30px;
-  width: 70px;
+  width: 90px;
   font-size: 12px;
   text-align: center;
   margin-right: 10px;
@@ -142,23 +148,22 @@ export default {
   background: #51c79f;
   color: #fff;
   height: 35px;
-  width: 75px;
+  width: 95px;
   font-size: 12px;
   text-align: center;
   margin-right: 10px;
   margin-top: 10px;
   font-weight: bold;
   border-radius: 8px;
+  text-decoration: none;
 }
 .details {
   width: 100%;
-  height: 230px;
   background-color: rgba(0, 0, 0, 0.55);
   z-index: 999;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  margin-top: -230px;
   position: relative;
   border-radius: 20px;
   padding-top: 20px;
