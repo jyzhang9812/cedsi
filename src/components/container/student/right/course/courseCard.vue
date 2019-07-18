@@ -91,6 +91,7 @@ export default {
     padding-top: 20px;
     display: flex;
     flex-wrap: wrap;
+    float: left;
   }
 /* .course {
   background: linear-gradient(to right, #134a68, #006c9b); 
@@ -106,13 +107,11 @@ export default {
   margin-bottom: 10px;
   margin-left: 3%;
   text-decoration: none;
-  position:relative;
 }
 .img {
   border-radius: 20px;
-  position: absolute;
   width: 100%;
-  height: 100%;
+  height: 230px;
 }
 .inside {
   border-radius: 20px;
