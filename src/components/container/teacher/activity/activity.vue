@@ -62,7 +62,7 @@
     <div class="pag">
 
       <ul class="pagination modal-2">
-        <li><a href="#" class="prev">&laquo </a></li>
+        <li><a href="#" class="prev">&laquo;</a></li>
         <li><a href="#">1</a></li>
         <li> <a href="#">2</a></li>
         <li> <a href="#" class="active">3</a></li>
