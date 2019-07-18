@@ -2,16 +2,18 @@
   <div id="app">
     <app-header/>
     <router-view :style="screenHeight"></router-view>
+    <app-footer/>
   </div>
 </template>
 
 <script>
   import Header from './components/header/header.vue'
-
+  import Footer from './components/footer/footer.vue'
   export default {
     name: 'app',
     components: {
-      'app-header': Header
+      'app-header': Header,
+      'app-footer': Footer,
     },
     data() {
       return {

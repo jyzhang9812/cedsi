@@ -1,16 +1,12 @@
-<!--
- * @Email: rumosky@163.com
- * @Author: rumosky
- * @Github: https://github.com/rumosky
- * @Date: 2019-06-05 17:55:28
- * @LastEditors: rumosky
- * @LastEditTime: 2019-06-17 19:03:14
- -->
 <template>
     <div class="body">
+        <searchBar></searchBar>
         <div class="menu">
             <button class="tag" @click="change('message_system', 1)">系统消息</button>
             <button class="tag" @click="change('message_inform', 1)">通知公告</button>
+            <button class="tag" @click="change('message_activity', 1)">活动安排</button>
+            <button class="tag" @click="change('message_question', 1)">辅导答疑</button>
+            <button class="tag" @click="change('message_homework', 1)">我的作业</button>
         </div>
         <div class="main">
             <div class="cardbox" v-for="card in currentData">
@@ -60,28 +56,20 @@
     }
 
     .tag {
-        background-color: #ffffff;
-        color: #2E3347;
+        background-color: #f4f9fa;
+        color: #575757;
         padding: 15px 32px;
         margin: 10px 4px 0px;
         text-align: center;
         text-decoration: none;
         padding: 4px 10px;
-        font-size: 18px;
-        border-radius: 20px;
+        font-size: 16px;
+        border: none;
         font-weight: 550;
     }
 
-    .tag:hover {
-        background-color: #9196A1;
-        text-align: center;
-        text-decoration: none;
-        padding: 4px 10px;
-        margin: 10px 4px 0px;
-        font-size: 18px;
-        border-radius: 20px;
-        font-weight: 550;
-        color: #f4f9fa;
+    .tag:hover, .tag:active {
+        color: #00bcd4;
     }
 
     .main {
@@ -99,7 +87,7 @@
 
     .cardbox {
         width: 48%;
-        max-height: 250px;
+        height: 220px;
         margin-left: 20px;
         margin-bottom: 40px;
         display: flex;
@@ -107,7 +95,6 @@
         flex-direction: column;
         flex-wrap: wrap;
         justify-content: center;
-        height: auto;
         background-color: white;
         border-radius: 10px;
         border: 1px solid #e7e7e7;
@@ -271,8 +258,12 @@
 </style>
 
 <script>
+    import searchBar from'../searchBar.vue'
     export default {
         name: 'message',
+        components:{
+            searchBar,
+        },
         data() {
             return {
                 message_system: [
@@ -319,6 +310,21 @@
                     { message: "通知公告19", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
                     { message: "通知公告20", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" }
                 ],
+                message_activity: [
+                    { message: "活动1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                    { message: "活动2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                    { message: "活动3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
+                    { message: "活动4", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" }
+                ],
+                message_question: [
+                    { message: "问题1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                    { message: "问题2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                    { message: "问题3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
+                ],
+                message_homework: [
+                    { message: "作业1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                    { message: "作业2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                ],
                 currentData: [],
                 pagination: [],
                 currentType: "message_system"
@@ -332,6 +338,9 @@
                 this.currentType = message_type;
                 let mes_sys_len = this.message_system.length;
                 let mes_info_len = this.message_inform.length;
+                let mes_act_len = this.message_activity.length;
+                let mes_qus_len = this.message_question.length;
+                let mes_hwk_len = this.message_homework.length;
                 let per_page = 6;
                 if (message_type === "message_system") {
                     if (mes_info_len === 0) {
@@ -342,6 +351,36 @@
                             this.pagination[i] = (i + 1) === currentPage ? { cls: "active", num: i + 1 } : { cls: "better", num: i + 1 };
                         }
                         this.currentData = this.message_system.slice((currentPage - 1) * per_page, currentPage * per_page);
+                    }
+                }else if (message_type === "message_activity") {
+                    if (mes_act_len === 0) {
+                        console.log("您还没有活动消息！");
+                    } else {
+                        this.pagination = new Array(Math.ceil(mes_act_len / per_page));
+                        for (let i = 0; i < this.pagination.length; i += 1) {
+                            this.pagination[i] = (i + 1) === currentPage ? { cls: "active", num: i + 1 } : { cls: "better", num: i + 1 };
+                        }
+                        this.currentData = this.message_activity.slice((currentPage - 1) * per_page, currentPage * per_page);
+                    }
+                }else if (message_type === "message_question") {
+                    if (mes_qus_len === 0) {
+                        console.log("您还没有收到辅导答疑！");
+                    } else {
+                        this.pagination = new Array(Math.ceil(mes_qus_len / per_page));
+                        for (let i = 0; i < this.pagination.length; i += 1) {
+                            this.pagination[i] = (i + 1) === currentPage ? { cls: "active", num: i + 1 } : { cls: "better", num: i + 1 };
+                        }
+                        this.currentData = this.message_question.slice((currentPage - 1) * per_page, currentPage * per_page);
+                    }
+                }else if (message_type === "message_homework") {
+                    if (mes_hwk_len === 0) {
+                        console.log("您还没有作业消息！");
+                    } else {
+                        this.pagination = new Array(Math.ceil(mes_hwk_len / per_page));
+                        for (let i = 0; i < this.pagination.length; i += 1) {
+                            this.pagination[i] = (i + 1) === currentPage ? { cls: "active", num: i + 1 } : { cls: "better", num: i + 1 };
+                        }
+                        this.currentData = this.message_homework.slice((currentPage - 1) * per_page, currentPage * per_page);
                     }
                 }else{
                     if (mes_info_len === 0) {

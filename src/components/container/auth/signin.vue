@@ -73,13 +73,13 @@
 
   .input input:focus {
     outline: none;
-    border: 1px solid #521751;
-    background-color: #eee;
+    border: 1px solid #50b8ee;
+    background-color: #fff;
   }
 
   .submit button {
-    border: 1px solid #521751;
-    color: #521751;
+    border: 1px solid #50b8ee;
+    color: #50b8ee;
     padding: 10px 20px;
     font: inherit;
     cursor: pointer;
@@ -87,7 +87,7 @@
 
   .submit button:hover,
   .submit button:active {
-    background-color: #521751;
+    background-color: #50b8ee;
     color: white;
   }
 

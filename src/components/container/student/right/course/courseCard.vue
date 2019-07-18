@@ -1,45 +1,43 @@
 <template>
-
-  <div class="course">
-
-    <router-link to="/dashboard/map"
-      class="course_card"
-      v-for="(item,index) in inside_detail"
-      :key="index"
-    >
-      <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
-        <img class="img" :src="item.img_url">
-        <div class="details" v-show="index==i">
-          <div class="detail_item">
-            <img class="icon" src='../../../../../../static/images/dashboard/class.png'>
-            <span>开课进度: {{item.status.haveStarted}} / {{item.status.chaptersNum}}</span>
-          </div>
-          <div class="detail_item">
-            <img class="icon" src='../../../../../../static/images/dashboard/learn.png'>
-            <span>学习进度: {{item.status.haveLearned}} / {{item.status.chaptersNum}}</span>
-          </div>
-          <div class="detail_item">
-            <img class="icon" src='../../../../../../static/images/dashboard/star_active.png'>
-            <span>总星数: {{item.status.homeworkStars}}</span>
-          </div>
-          <div class="detail_item">
-            <img class="icon" src='../../../../../../static/images/dashboard/homework.png'>
-            <span>作业提交次数: {{item.status.homeworkNum}}</span>
-          </div>
-          <div class="detail_item">
-            <img class="icon" src='../../../../../../static/images/dashboard/create.png'>
-            <span>自由创作次数: {{item.status.creationNums}}</span>
-          </div>
-        </div>
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4" 
+          v-for="(item,index) in inside_detail"
+          :key="index">
+          <router-link to="/dashboard/map" class="box">
+            <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
+              <img class="img" :style="style" :src="item.img_url">
+              <div class="details" :style="style1" v-show="index==i">
+                <div class="detail_item">
+                  <img class="icon" src='../../../../../../static/images/dashboard/class.png'>
+                  <span>开课进度: {{item.status.haveStarted}} / {{item.status.chaptersNum}}</span>
+                </div>
+                <div class="detail_item">
+                  <img class="icon" src='../../../../../../static/images/dashboard/learn.png'>
+                  <span>学习进度: {{item.status.haveLearned}} / {{item.status.chaptersNum}}</span>
+                </div>
+                <div class="detail_item">
+                  <img class="icon" src='../../../../../../static/images/dashboard/star_active.png'>
+                  <span>总星数: {{item.status.homeworkStars}}</span>
+                </div>
+                <div class="detail_item">
+                  <img class="icon" src='../../../../../../static/images/dashboard/homework.png'>
+                  <span>作业提交次数: {{item.status.homeworkNum}}</span>
+                </div>
+                <div class="detail_item">
+                  <img class="icon" src='../../../../../../static/images/dashboard/create.png'>
+                  <span>自由创作次数: {{item.status.creationNums}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="outside">
+              <h4>{{item.course_name}}</h4>
+              <button :class="(index==i)?btnh:btn">开始学习</button>
+            </div>  
+        </router-link>
       </div>
-      <div class="outside">
-        <h4>{{item.course_name}}</h4>
-        <button :class="(index==i)?btnh:btn">开始学习</button>
-      </div>
-    </router-link>
-
+    </div>
   </div>
-
 </template>
 
 
@@ -68,6 +66,8 @@ export default {
   },
   created: function() {
     //let that = this.$router;
+    this.style='height:'+(document.documentElement.clientWidth*0.17)+'px;'
+    this.style1='height:'+(document.documentElement.clientWidth*0.17)+'px;margin-top:-'+(document.documentElement.clientWidth*0.17)+'px;'
     this.$http
       .get("https://jt6s63r7of.execute-api.us-east-2.amazonaws.com/prod/courses").then(response => {
           var arr=[];
@@ -89,25 +89,35 @@ export default {
 
 
 <style scoped>
-.course {
-  /* background: linear-gradient(to right, #134a68, #006c9b); */
+  .row{
+    padding-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    float: left;
+  }
+/* .course {
+  background: linear-gradient(to right, #134a68, #006c9b); 
   padding-top: 20px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  /* min-height: 620px; */
-}
+  justify-content: center;
+  min-height: 620px;
+} */
 .course_card {
   margin-top: 10px;
   margin-bottom: 10px;
-  margin-left: 20px;
+  margin-left: 3%;
   text-decoration: none;
+  position:relative;
+  width:40%;
+  height:0;
+  font-size:0;
+  line-height:0;
 }
 .img {
-  width: 300px;
-  height: 200px;
   border-radius: 20px;
+  max-width: 100%;
 }
 .inside {
   border-radius: 20px;
@@ -127,7 +137,7 @@ export default {
   background: #51c79f;
   color: #fff;
   height: 30px;
-  width: 70px;
+  width: 90px;
   font-size: 12px;
   text-align: center;
   margin-right: 10px;
@@ -138,23 +148,22 @@ export default {
   background: #51c79f;
   color: #fff;
   height: 35px;
-  width: 75px;
+  width: 95px;
   font-size: 12px;
   text-align: center;
   margin-right: 10px;
   margin-top: 10px;
   font-weight: bold;
   border-radius: 8px;
+  text-decoration: none;
 }
 .details {
-  width: 300px;
-  height: 200px;
+  width: 100%;
   background-color: rgba(0, 0, 0, 0.55);
   z-index: 999;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  margin-top: -200px;
   position: relative;
   border-radius: 20px;
   padding-top: 20px;
@@ -174,7 +183,7 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 300px;
+  width: 100%;
   font-size: 12px;
   justify-content: space-between;
 }

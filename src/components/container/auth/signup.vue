@@ -145,7 +145,7 @@
 
   .input input:focus {
     outline: none;
-    border: 1px solid #521751;
+    border: 1px solid #50b8ee;
     background-color: #eee;
   }
 
@@ -155,8 +155,8 @@
   }
 
   .hobbies button {
-    border: 1px solid #521751;
-    background: #521751;
+    border: 1px solid #50b8ee;
+    background: #50b8ee;
     color: white;
     padding: 6px;
     font: inherit;
@@ -165,7 +165,7 @@
 
   .hobbies button:hover,
   .hobbies button:active {
-    background-color: #8d4288;
+    background-color: #50b8ee;
   }
 
   .hobbies input {
@@ -173,8 +173,8 @@
   }
 
   .submit button {
-    border: 1px solid #521751;
-    color: #521751;
+    border: 1px solid #50b8ee;
+    color: #50b8ee;
     padding: 10px 20px;
     font: inherit;
     cursor: pointer;
@@ -182,7 +182,7 @@
 
   .submit button:hover,
   .submit button:active {
-    background-color: #521751;
+    background-color: #50b8ee;
     color: white;
   }
 
