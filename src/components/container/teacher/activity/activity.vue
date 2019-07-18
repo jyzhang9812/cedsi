@@ -4,14 +4,12 @@
  * @Github: https://github.com/rumosky
  * @Date: 2019-07-18 09:32:13
  * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 17:24:56
+ * @LastEditTime: 2019-07-18 17:47:35
  -->
 <template>
   <div class="body">
     <p>活动管理</p>
     <div class="filter">
-
-
       <form class="form-inline">
         <div class="form-group">
           <label class="sr-only" for="exampleInputEmail3">type</label>
@@ -36,14 +34,12 @@
             <th>活动类型</th>
             <th>所属学校</th>
             <th>回复/查看</th>
-            <th>是否置顶</th>
+            <!-- <th>是否置顶</th> -->
             <th>状态</th>
             <th>操作</th>
           </tr>
         </thead>
         <tbody>
-
-
           <tr v-for="(list, index) in activityList">
             <td>{{index+1}}</td>
             <td class="blue">{{list.title}}</td>
@@ -52,13 +48,13 @@
             <td>{{list.type}}</td>
             <td>{{list.school}}</td>
             <td>{{list.reply}}/{{list.view}}</td>
-            <td>
+            <!-- <td>
               <div class="switch-box is-info">
                 <input id="info" class="switch-box-input" type="checkbox" checked />
                 <label for="info" class="switch-box-slider"></label>
                 <label for="info" class="switch-box-label"></label>
               </div>
-            </td>
+            </td> -->
             <td>{{list.status}}</td>
             <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
           </tr>
@@ -66,7 +62,6 @@
       </table>
     </div>
     <div class="pag">
-
       <ul class="pagination modal-2">
         <li><a href="#" class="prev">&laquo;</a></li>
         <li><a href="#" class="active">1</a></li>
@@ -80,8 +75,6 @@
         <li> <a href="#">9</a></li>
         <li><a href="#" class="next"> &raquo;</a></li>
       </ul>
-
-
     </div>
   </div>
 </template>
