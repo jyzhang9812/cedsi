@@ -1,6 +1,7 @@
 <template>
     <div class="container">
         <div>
+            <searchBar></searchBar>
             <rollPic></rollPic>
         </div>
     </div>
@@ -8,10 +9,12 @@
 
 <script>
     import rollPic from'./rollPic.vue'
+    import searchBar from'../searchBar.vue'
     export default {
         name: 'homework',
         components:{
             rollPic,
+            searchBar,
         },
     }
 </script>

@@ -196,7 +196,7 @@
         min-height: 250px;
         overflow: hidden;
         margin: 0 auto;
-        background-color: #00bcd4;
+        background: linear-gradient(to right, #134a68, #006c9b);
     }
         
     .iconleft {
@@ -314,7 +314,7 @@
         height: 20px;
     }
     .btn{
-        background: #ff8d1a;
+        background: #51c79f;
         color: #fff;
         height: 35px;
         width: 75px;

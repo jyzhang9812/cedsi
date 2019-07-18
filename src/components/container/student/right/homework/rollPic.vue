@@ -141,7 +141,7 @@
 
 <style scoped>
     /* 修改 */
-    .course{
+    /* .course{
         margin-top: 20px;
         display: flex;
         flex-direction: row;
@@ -157,6 +157,26 @@
         width: 300px;
         height: 200px;
         border-radius:20px; 
+    } */
+    .course {
+        padding-top: 20px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    .course_card {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 3%;
+        text-decoration: none;
+        width: 30%;
+        min-width: 300px;
+    }
+    .img {
+        width: 100%;
+        height: 230px;
+        border-radius: 20px;
     }
     .inside{
         border-radius:20px;
@@ -217,7 +237,7 @@
         color: #f4f9fa;
     }
     .details{
-        width: 300px;
+        width: 100%;
         height: 50px;
         background-color: rgba(0, 0, 0, 0.35);
         z-index: 999;
@@ -246,7 +266,7 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        width: 300px;
+        width: 100%;
         font-size: 12px;
         justify-content: space-between;
     }

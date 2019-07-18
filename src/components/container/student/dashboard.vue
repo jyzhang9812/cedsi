@@ -92,7 +92,7 @@
                 {{title.name}}
               </router-link>
             </li>
-          </ul>325
+          </ul>
         </div>
         <div class="col-md-10 col-md-offset-2 main">
           <router-view></router-view>
@@ -260,7 +260,7 @@ a {
 }
 /* Hide for mobile, show later */
 .col-md-2 {
-  width: 13%;
+  width: 16.7%;
   position: relative;
   top: 0px;
   z-index: 999;

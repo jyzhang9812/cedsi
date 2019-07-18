@@ -1,45 +1,43 @@
 <template>
-
-  <div class="course">
-
-    <router-link to="/dashboard/map"
-      class="course_card"
-      v-for="(item,index) in inside_detail"
-      :key="index"
-    >
-      <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
-        <img class="img" :src="item.img_url">
-        <div class="details" v-show="index==i">
-          <div class="detail_item">
-            <img class="icon" src='../../../../../../static/images/dashboard/class.png'>
-            <span>开课进度: {{item.status.haveStarted}} / {{item.status.chaptersNum}}</span>
-          </div>
-          <div class="detail_item">
-            <img class="icon" src='../../../../../../static/images/dashboard/learn.png'>
-            <span>学习进度: {{item.status.haveLearned}} / {{item.status.chaptersNum}}</span>
-          </div>
-          <div class="detail_item">
-            <img class="icon" src='../../../../../../static/images/dashboard/star_active.png'>
-            <span>总星数: {{item.status.homeworkStars}}</span>
-          </div>
-          <div class="detail_item">
-            <img class="icon" src='../../../../../../static/images/dashboard/homework.png'>
-            <span>作业提交次数: {{item.status.homeworkNum}}</span>
-          </div>
-          <div class="detail_item">
-            <img class="icon" src='../../../../../../static/images/dashboard/create.png'>
-            <span>自由创作次数: {{item.status.creationNums}}</span>
-          </div>
-        </div>
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4" 
+          v-for="(item,index) in inside_detail"
+          :key="index">
+          <router-link to="/dashboard/map" class="course_card">
+            <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
+              <img class="img" :src="item.img_url">
+              <div class="details" v-show="index==i">
+                <div class="detail_item">
+                  <img class="icon" src='../../../../../../static/images/dashboard/class.png'>
+                  <span>开课进度: {{item.status.haveStarted}} / {{item.status.chaptersNum}}</span>
+                </div>
+                <div class="detail_item">
+                  <img class="icon" src='../../../../../../static/images/dashboard/learn.png'>
+                  <span>学习进度: {{item.status.haveLearned}} / {{item.status.chaptersNum}}</span>
+                </div>
+                <div class="detail_item">
+                  <img class="icon" src='../../../../../../static/images/dashboard/star_active.png'>
+                  <span>总星数: {{item.status.homeworkStars}}</span>
+                </div>
+                <div class="detail_item">
+                  <img class="icon" src='../../../../../../static/images/dashboard/homework.png'>
+                  <span>作业提交次数: {{item.status.homeworkNum}}</span>
+                </div>
+                <div class="detail_item">
+                  <img class="icon" src='../../../../../../static/images/dashboard/create.png'>
+                  <span>自由创作次数: {{item.status.creationNums}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="outside">
+              <h4>{{item.course_name}}</h4>
+              <button :class="(index==i)?btnh:btn">开始学习</button>
+            </div>  
+        </router-link>
       </div>
-      <div class="outside">
-        <h4>{{item.course_name}}</h4>
-        <button :class="(index==i)?btnh:btn">开始学习</button>
-      </div>
-    </router-link>
-
+    </div>
   </div>
-
 </template>
 
 
@@ -89,25 +87,32 @@ export default {
 
 
 <style scoped>
-.course {
-  /* background: linear-gradient(to right, #134a68, #006c9b); */
+  .row{
+    padding-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+/* .course {
+  background: linear-gradient(to right, #134a68, #006c9b); 
   padding-top: 20px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  /* min-height: 620px; */
-}
+  justify-content: center;
+  min-height: 620px;
+} */
 .course_card {
   margin-top: 10px;
   margin-bottom: 10px;
-  margin-left: 20px;
+  margin-left: 3%;
   text-decoration: none;
+  position:relative;
 }
 .img {
-  width: 300px;
-  height: 200px;
   border-radius: 20px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 .inside {
   border-radius: 20px;
@@ -147,14 +152,14 @@ export default {
   border-radius: 8px;
 }
 .details {
-  width: 300px;
-  height: 200px;
+  width: 100%;
+  height: 230px;
   background-color: rgba(0, 0, 0, 0.55);
   z-index: 999;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  margin-top: -200px;
+  margin-top: -230px;
   position: relative;
   border-radius: 20px;
   padding-top: 20px;
@@ -174,7 +179,7 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 300px;
+  width: 100%;
   font-size: 12px;
   justify-content: space-between;
 }
