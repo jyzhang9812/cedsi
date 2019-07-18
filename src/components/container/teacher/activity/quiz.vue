@@ -4,7 +4,7 @@
  * @Github: https://github.com/rumosky
  * @Date: 2019-07-18 09:32:13
  * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 10:21:00
+ * @LastEditTime: 2019-07-18 17:00:10
  -->
 <template>
   <div class="body">
@@ -33,13 +33,13 @@
           <th>状态</th>
           <th>操作</th>
         </tr>
-        <tr>
-          <td>1</td>
-          <td class="blue">函数如何书写</td>
-          <td>2019-5-2 19:30</td>
-          <td>小赛</td>
-          <td>赛迪思</td>
-          <td>已解答</td>
+        <tr v-for="(list, index) in quizList">
+          <td>{{index+1}}</td>
+          <td class="blue">{{list.title}}</td>
+          <td>{{list.date}}</td>
+          <td>{{list.s_name}}</td>
+          <td>{{list.school}}</td>
+          <td>{{list.status}}</td>
           <td><span class="blue">解答</span>&nbsp;&nbsp;<span class="red">删除</span></td>
         </tr>
       </table>
@@ -48,9 +48,9 @@
 
       <ul class="pagination modal-2">
         <li><a href="#" class="prev">&laquo </a></li>
-        <li><a href="#">1</a></li>
+        <li><a href="#" class="active">1</a></li>
         <li> <a href="#">2</a></li>
-        <li> <a href="#" class="active">3</a></li>
+        <li> <a href="#">3</a></li>
         <li> <a href="#">4</a></li>
         <li> <a href="#">5</a></li>
         <li> <a href="#">6</a></li>
@@ -67,10 +67,45 @@
 
 <script>
   export default {
-    name: 'ActivityList',
+    name: 'quizList',
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        quizList: [{
+            title: "函数如何书写",
+            date: "2019-01-02 17:00",
+            s_name: "小赛",
+            school: "赛迪思",
+            status: "已解答"
+          },
+          {
+            title: "类是干什么的",
+            date: "2019-02-02 17:00",
+            s_name: "小迪",
+            school: "赛迪思",
+            status: "已解答"
+          },
+          {
+            title: "不会啊",
+            date: "2019-03-02 17:00",
+            s_name: "小李",
+            school: "赛迪思",
+            status: "未解答"
+          },
+          {
+            title: "好难",
+            date: "2019-04-02 17:00",
+            s_name: "小王",
+            school: "赛迪思",
+            status: "已解答"
+          },
+          {
+            title: "辛苦",
+            date: "2019-05-02 17:00",
+            s_name: "小刘",
+            school: "赛迪思",
+            status: "未解答"
+          }
+        ]
       }
     }
   }
