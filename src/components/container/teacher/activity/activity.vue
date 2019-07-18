@@ -4,7 +4,7 @@
  * @Github: https://github.com/rumosky
  * @Date: 2019-07-18 09:32:13
  * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 16:19:38
+ * @LastEditTime: 2019-07-18 17:24:56
  -->
 <template>
   <div class="body">
@@ -26,37 +26,43 @@
       </form>
     </div>
     <div class="panels">
-      <table class="table talbe-hover" rules=rows frame=below>
-        <tr>
-          <th>序号</th>
-          <th>活动标题</th>
-          <th>发布时间</th>
-          <th>作者</th>
-          <th>活动类型</th>
-          <th>所属学校</th>
-          <th>回复/查看</th>
-          <th>是否置顶</th>
-          <th>状态</th>
-          <th>操作</th>
-        </tr>
-        <tr v-for="list in activityList">
-          <td>1</td>
-          <td class="blue">{{list.title}}</td>
-          <td>{{list.date}}</td>
-          <td>{{list.auther}}</td>
-          <td>{{list.type}}</td>
-          <td>{{list.school}}</td>
-          <td>{{list.reply}}/{{list.view}}</td>
-          <td>
-            <div class="switch-box is-info">
-              <input id="info" class="switch-box-input" type="checkbox" checked />
-              <label for="info" class="switch-box-slider"></label>
-              <label for="info" class="switch-box-label"></label>
-            </div>
-          </td>
-          <td>{{list.status}}</td>
-          <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
-        </tr>
+      <table class="table table-hover" rules=rows frame=below>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>活动标题</th>
+            <th>发布时间</th>
+            <th>作者</th>
+            <th>活动类型</th>
+            <th>所属学校</th>
+            <th>回复/查看</th>
+            <th>是否置顶</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+
+
+          <tr v-for="(list, index) in activityList">
+            <td>{{index+1}}</td>
+            <td class="blue">{{list.title}}</td>
+            <td>{{list.date}}</td>
+            <td>{{list.auther}}</td>
+            <td>{{list.type}}</td>
+            <td>{{list.school}}</td>
+            <td>{{list.reply}}/{{list.view}}</td>
+            <td>
+              <div class="switch-box is-info">
+                <input id="info" class="switch-box-input" type="checkbox" checked />
+                <label for="info" class="switch-box-slider"></label>
+                <label for="info" class="switch-box-label"></label>
+              </div>
+            </td>
+            <td>{{list.status}}</td>
+            <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <div class="pag">

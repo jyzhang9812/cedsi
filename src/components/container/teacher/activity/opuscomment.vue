@@ -4,7 +4,7 @@
  * @Github: https://github.com/rumosky
  * @Date: 2019-07-18 09:32:13
  * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 17:02:27
+ * @LastEditTime: 2019-07-18 17:29:22
  -->
 <template>
   <div class="body">
@@ -22,25 +22,29 @@
       </form>
     </div>
     <div class="panels">
-      <table class="table talbe-hover" rules=rows frame=below>
-        <tr>
-          <th>序号</th>
-          <th>评论内容</th>
-          <th>评论人</th>
-          <th>评论时间</th>
-          <th>所属学校</th>
-          <th>操作</th>
-        </tr>
-        <tr v-for="(list, index) in commentList">
-          <td>{{index+1}}</td>
-          <td>{{list.content}}</td>
-          <td>{{list.auther}}</td>
-          <td>{{list.date}}</td>
-          <td>{{list.school}}</td>
-          <td>
-            <span class="red">删除</span>
-          </td>
-        </tr>
+      <table class="table table-hover" rules=rows frame=below>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>评论内容</th>
+            <th>评论人</th>
+            <th>评论时间</th>
+            <th>所属学校</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(list, index) in commentList">
+            <td>{{index+1}}</td>
+            <td>{{list.content}}</td>
+            <td>{{list.auther}}</td>
+            <td>{{list.date}}</td>
+            <td>{{list.school}}</td>
+            <td>
+              <span class="red">删除</span>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <div class="pag">

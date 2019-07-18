@@ -4,7 +4,7 @@
  * @Github: https://github.com/rumosky
  * @Date: 2019-07-18 09:32:13
  * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 17:09:11
+ * @LastEditTime: 2019-07-18 17:27:47
  -->
 <template>
   <div class="body">
@@ -25,22 +25,26 @@
     </div>
     <div class="panels">
       <table class="table table-hover" rules=rows frame=below>
-        <tr>
-          <th>序号</th>
-          <th>所属学校</th>
-          <th>上传者</th>
-          <th>标题</th>
-          <th>发布时间</th>
-          <th>操作</th>
-        </tr>
-        <tr v-for="(list, index) in materialList">
-          <td>{{index+1}}</td>
-          <td>{{list.school}}</td>
-          <td>{{list.author}}</td>
-          <td>{{list.title}}</td>
-          <td>{{list.date}}</td>
-          <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
-        </tr>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>所属学校</th>
+            <th>上传者</th>
+            <th>标题</th>
+            <th>发布时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(list, index) in materialList">
+            <td>{{index+1}}</td>
+            <td>{{list.school}}</td>
+            <td>{{list.author}}</td>
+            <td>{{list.title}}</td>
+            <td>{{list.date}}</td>
+            <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <div class="pag">
