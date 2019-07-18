@@ -4,7 +4,7 @@
  * @Github: https://github.com/rumosky
  * @Date: 2019-07-18 09:32:13
  * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 10:23:38
+ * @LastEditTime: 2019-07-18 17:09:11
  -->
 <template>
   <div class="body">
@@ -24,7 +24,7 @@
       </form>
     </div>
     <div class="panels">
-      <table class="table talbe-hover" rules=rows frame=below>
+      <table class="table table-hover" rules=rows frame=below>
         <tr>
           <th>序号</th>
           <th>所属学校</th>
@@ -33,12 +33,12 @@
           <th>发布时间</th>
           <th>操作</th>
         </tr>
-        <tr>
-          <td>1</td>
-          <td>雁塔路小学</td>
-          <td>超级管理员</td>
-          <td>第一节课作业</td>
-          <td>2019-5-2 19:30</td>
+        <tr v-for="(list, index) in materialList">
+          <td>{{index+1}}</td>
+          <td>{{list.school}}</td>
+          <td>{{list.author}}</td>
+          <td>{{list.title}}</td>
+          <td>{{list.date}}</td>
           <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
         </tr>
       </table>
@@ -47,9 +47,9 @@
 
       <ul class="pagination modal-2">
         <li><a href="#" class="prev">&laquo </a></li>
-        <li><a href="#">1</a></li>
+        <li><a href="#" class="active">1</a></li>
         <li> <a href="#">2</a></li>
-        <li> <a href="#" class="active">3</a></li>
+        <li> <a href="#">3</a></li>
         <li> <a href="#">4</a></li>
         <li> <a href="#">5</a></li>
         <li> <a href="#">6</a></li>
@@ -69,7 +69,37 @@
     name: 'ActivityList',
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        materialList: [{
+            school: "回民街小学",
+            author: "超级管理员",
+            title: "第一节课作业",
+            date: "2019-03-02 18:00"
+          },
+          {
+            school: "雁塔路小学",
+            author: "超级管理员",
+            title: "第一节课作业",
+            date: "2019-03-02 18:00"
+          },
+          {
+            school: "北大街小学",
+            author: "超级管理员",
+            title: "第一节课作业",
+            date: "2019-03-02 18:00"
+          },
+          {
+            school: "翠华路小学",
+            author: "超级管理员",
+            title: "第一节课作业",
+            date: "2019-03-02 18:00"
+          },
+          {
+            school: "长安路小学",
+            author: "超级管理员",
+            title: "第一节课作业",
+            date: "2019-03-02 18:00"
+          }
+        ]
       }
     }
   }
