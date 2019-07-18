@@ -30,6 +30,7 @@ import asider from "../components/container/teacher/sidebar"
 Vue.use(Router);
 
 export default new Router({
+    mode: 'history',
     routes: [
         { path: '/', component: HomePage },
         { path: '/signup', component: SignupPage },
