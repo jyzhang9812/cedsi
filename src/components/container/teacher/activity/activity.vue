@@ -4,7 +4,7 @@
  * @Github: https://github.com/rumosky
  * @Date: 2019-07-18 09:32:13
  * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 17:47:35
+ * @LastEditTime: 2019-07-19 00:00:50
  -->
 <template>
   <div class="body">
@@ -48,13 +48,6 @@
             <td>{{list.type}}</td>
             <td>{{list.school}}</td>
             <td>{{list.reply}}/{{list.view}}</td>
-            <!-- <td>
-              <div class="switch-box is-info">
-                <input id="info" class="switch-box-input" type="checkbox" checked />
-                <label for="info" class="switch-box-slider"></label>
-                <label for="info" class="switch-box-label"></label>
-              </div>
-            </td> -->
             <td>{{list.status}}</td>
             <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
           </tr>
@@ -143,7 +136,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
   .body {
     background-color: #ffffff;
     display: flex;
@@ -171,73 +163,24 @@
   .form-control {
     padding: 0px 30px 0 15px;
     font-size: 12px;
-    /* box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04) */
     margin-right: 5px;
   }
 
   .panels {
-    margin-left: 10px;
+    text-align: center;
   }
 
   .panels tr {
     height: 40px;
+    text-align: center;
+  }
+
+  .panels th {
+    text-align: center;
   }
 
   table {
     border: #eeeeee;
-  }
-
-  .switch-box {
-    display: block;
-    padding-top: 8px;
-    padding-left: 8px;
-  }
-
-  .switch-box .switch-box-slider {
-    position: relative;
-    display: inline-block;
-    height: 8px;
-    width: 32px;
-    background: #d5d5d5;
-    border-radius: 8px;
-    cursor: pointer;
-    -webkit-transition: all 0.2s ease;
-    transition: all 0.2s ease;
-  }
-
-  .switch-box .switch-box-slider:after {
-    position: absolute;
-    left: -8px;
-    top: -8px;
-    display: block;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: #eeeeee;
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
-    content: '';
-    -webkit-transition: all 0.2s ease;
-    transition: all 0.2s ease;
-  }
-
-  .switch-box .switch-box-input {
-    display: none;
-  }
-
-  .switch-box .switch-box-input~.switch-box-label {
-    margin-left: 8px;
-  }
-
-  .switch-box .switch-box-input:checked~.switch-box-slider:after {
-    left: 16px;
-  }
-
-  .switch-box.is-info .switch-box-input:checked:not(:disabled)~.switch-box-slider {
-    background: #5faee3;
-  }
-
-  .switch-box.is-info .switch-box-input:checked:not(:disabled)~.switch-box-slider:after {
-    background: #3498db;
   }
 
   .pag {
