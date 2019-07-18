@@ -4,14 +4,12 @@
  * @Github: https://github.com/rumosky
  * @Date: 2019-07-18 09:32:13
  * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 10:24:19
+ * @LastEditTime: 2019-07-18 17:47:35
  -->
 <template>
   <div class="body">
     <p>活动管理</p>
     <div class="filter">
-
-
       <form class="form-inline">
         <div class="form-group">
           <label class="sr-only" for="exampleInputEmail3">type</label>
@@ -26,46 +24,49 @@
       </form>
     </div>
     <div class="panels">
-      <table class="table talbe-hover" rules=rows frame=below>
-        <tr>
-          <th>序号</th>
-          <th>活动标题</th>
-          <th>发布时间</th>
-          <th>作者</th>
-          <th>活动类型</th>
-          <th>所属学校</th>
-          <th>回复/查看</th>
-          <th>是否置顶</th>
-          <th>状态</th>
-          <th>操作</th>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td class="blue">test1</td>
-          <td>2019-5-2 19:30</td>
-          <td>编程测试</td>
-          <td>布置作业</td>
-          <td>赛迪思</td>
-          <td>1/6</td>
-          <td>
-            <div class="switch-box is-info">
-              <input id="info" class="switch-box-input" type="checkbox" checked />
-              <label for="info" class="switch-box-slider"></label>
-              <label for="info" class="switch-box-label"></label>
-            </div>
-          </td>
-          <td>正常</td>
-          <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
-        </tr>
+      <table class="table table-hover" rules=rows frame=below>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>活动标题</th>
+            <th>发布时间</th>
+            <th>作者</th>
+            <th>活动类型</th>
+            <th>所属学校</th>
+            <th>回复/查看</th>
+            <!-- <th>是否置顶</th> -->
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(list, index) in activityList">
+            <td>{{index+1}}</td>
+            <td class="blue">{{list.title}}</td>
+            <td>{{list.date}}</td>
+            <td>{{list.auther}}</td>
+            <td>{{list.type}}</td>
+            <td>{{list.school}}</td>
+            <td>{{list.reply}}/{{list.view}}</td>
+            <!-- <td>
+              <div class="switch-box is-info">
+                <input id="info" class="switch-box-input" type="checkbox" checked />
+                <label for="info" class="switch-box-slider"></label>
+                <label for="info" class="switch-box-label"></label>
+              </div>
+            </td> -->
+            <td>{{list.status}}</td>
+            <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <div class="pag">
-
       <ul class="pagination modal-2">
         <li><a href="#" class="prev">&laquo;</a></li>
-        <li><a href="#">1</a></li>
+        <li><a href="#" class="active">1</a></li>
         <li> <a href="#">2</a></li>
-        <li> <a href="#" class="active">3</a></li>
+        <li> <a href="#">3</a></li>
         <li> <a href="#">4</a></li>
         <li> <a href="#">5</a></li>
         <li> <a href="#">6</a></li>
@@ -74,18 +75,66 @@
         <li> <a href="#">9</a></li>
         <li><a href="#" class="next"> &raquo;</a></li>
       </ul>
-
-
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'ActivityList',
+    name: 'activity',
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        activityList: [{
+            title: "test1",
+            date: "2019-01-01 12:00",
+            auther: "编程测试",
+            type: "布置作业",
+            school: "赛迪思",
+            reply: "1",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test2",
+            date: "2019-01-06 12:00",
+            auther: "编程测试",
+            type: "布置作业",
+            school: "赛迪思",
+            reply: "2",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test3",
+            date: "2019-03-01 12:00",
+            auther: "编程测试",
+            type: "布置作业",
+            school: "赛迪思",
+            reply: "0",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test4",
+            date: "2019-04-01 12:00",
+            auther: "编程测试",
+            type: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test5",
+            date: "2019-05-01 12:00",
+            auther: "编程测试",
+            type: "布置作业",
+            school: "赛迪思",
+            reply: "5",
+            view: "6",
+            status: "正常"
+          }
+        ]
       }
     }
   }

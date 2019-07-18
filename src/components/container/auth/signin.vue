@@ -10,6 +10,13 @@
                   v-model="email">
         </div>
         <div class="input">
+          <label for="username">Username</label>
+          <input
+                  type="username"
+                  id="username"
+                  v-model="username">
+        </div>
+        <div class="input">
           <label for="password">Password</label>
           <input
                   type="password"
@@ -25,11 +32,13 @@
 </template>
 
 <script>
+  // import axios from '../../axios-auth';
   export default {
     data () {
       return {
         email: '',
-        password: ''
+        password: '',
+        username:''
       }
     },
     methods: {
@@ -37,14 +46,22 @@
         const formData = {
           email: this.email,
           password: this.password,
+          username: this.username
         }
-        console.log(formData)
+        // console.log(formData);
+        // this.$store.dispatch('login',{email:formData.email,password:formData.password});
+        this.$store.dispatch('loginAWS',{email:formData.email,password:formData.password,username: formData.username});
+        // this.$store.dispatch('resetPassword',{email:formData.email,password:formData.password,username: formData.username});
+        
       }
     }
   }
 </script>
 
 <style scoped>
+  #signin{
+    min-height: 100%;
+  }
   .signin-form {
     width: 400px;
     margin: 30px auto;
@@ -73,13 +90,13 @@
 
   .input input:focus {
     outline: none;
-    border: 1px solid #50b8ee;
-    background-color: #fff;
+    border: 1px solid #521751;
+    background-color: #eee;
   }
 
   .submit button {
-    border: 1px solid #50b8ee;
-    color: #50b8ee;
+    border: 1px solid #521751;
+    color: #521751;
     padding: 10px 20px;
     font: inherit;
     cursor: pointer;
@@ -87,7 +104,7 @@
 
   .submit button:hover,
   .submit button:active {
-    background-color: #50b8ee;
+    background-color: #521751;
     color: white;
   }
 
