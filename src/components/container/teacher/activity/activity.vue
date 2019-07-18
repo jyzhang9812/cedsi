@@ -4,7 +4,7 @@
  * @Github: https://github.com/rumosky
  * @Date: 2019-07-18 09:32:13
  * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 10:24:19
+ * @LastEditTime: 2019-07-18 16:19:38
  -->
 <template>
   <div class="body">
@@ -39,14 +39,14 @@
           <th>状态</th>
           <th>操作</th>
         </tr>
-        <tr>
+        <tr v-for="list in activityList">
           <td>1</td>
-          <td class="blue">test1</td>
-          <td>2019-5-2 19:30</td>
-          <td>编程测试</td>
-          <td>布置作业</td>
-          <td>赛迪思</td>
-          <td>1/6</td>
+          <td class="blue">{{list.title}}</td>
+          <td>{{list.date}}</td>
+          <td>{{list.auther}}</td>
+          <td>{{list.type}}</td>
+          <td>{{list.school}}</td>
+          <td>{{list.reply}}/{{list.view}}</td>
           <td>
             <div class="switch-box is-info">
               <input id="info" class="switch-box-input" type="checkbox" checked />
@@ -54,7 +54,7 @@
               <label for="info" class="switch-box-label"></label>
             </div>
           </td>
-          <td>正常</td>
+          <td>{{list.status}}</td>
           <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
         </tr>
       </table>
@@ -63,9 +63,9 @@
 
       <ul class="pagination modal-2">
         <li><a href="#" class="prev">&laquo;</a></li>
-        <li><a href="#">1</a></li>
+        <li><a href="#" class="active">1</a></li>
         <li> <a href="#">2</a></li>
-        <li> <a href="#" class="active">3</a></li>
+        <li> <a href="#">3</a></li>
         <li> <a href="#">4</a></li>
         <li> <a href="#">5</a></li>
         <li> <a href="#">6</a></li>
@@ -82,10 +82,60 @@
 
 <script>
   export default {
-    name: 'ActivityList',
+    name: 'activity',
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        activityList: [{
+            title: "test1",
+            date: "2019-01-01 12:00",
+            auther: "编程测试",
+            type: "布置作业",
+            school: "赛迪思",
+            reply: "1",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test2",
+            date: "2019-01-06 12:00",
+            auther: "编程测试",
+            type: "布置作业",
+            school: "赛迪思",
+            reply: "2",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test3",
+            date: "2019-03-01 12:00",
+            auther: "编程测试",
+            type: "布置作业",
+            school: "赛迪思",
+            reply: "0",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test4",
+            date: "2019-04-01 12:00",
+            auther: "编程测试",
+            type: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test5",
+            date: "2019-05-01 12:00",
+            auther: "编程测试",
+            type: "布置作业",
+            school: "赛迪思",
+            reply: "5",
+            view: "6",
+            status: "正常"
+          }
+        ]
       }
     }
   }
