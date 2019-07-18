@@ -89,35 +89,20 @@ export default {
 
 
 <style scoped>
-  .row{
-    padding-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    float: left;
-  }
-/* .course {
-  background: linear-gradient(to right, #134a68, #006c9b); 
+.row{
   padding-top: 20px;
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
-  min-height: 620px;
-} */
-.course_card {
+  float: left;
+}
+.col-md-4{
   margin-top: 10px;
   margin-bottom: 10px;
-  margin-left: 3%;
   text-decoration: none;
-  position:relative;
-  width:40%;
-  height:0;
-  font-size:0;
-  line-height:0;
 }
 .img {
   border-radius: 20px;
-  max-width: 100%;
+  width: 100%;
 }
 .inside {
   border-radius: 20px;
@@ -138,7 +123,7 @@ export default {
   color: #fff;
   height: 30px;
   width: 90px;
-  font-size: 12px;
+  font-size: 13px;
   text-align: center;
   margin-right: 10px;
   margin-top: 10px;
