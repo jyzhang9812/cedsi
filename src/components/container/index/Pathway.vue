@@ -1,53 +1,23 @@
 <template>
     <div class="pathway">
         <div class="pathwaydetail">
-            <h2>增强编码信心的途径</h2>
+            <h2>{{msg1}}</h2>
             <div class="pathwayword">
-                <p>我们采取自定进度学习模式，使孩子们能够提高自己的技能，并无缝过渡到JavaScript和Python等文本语言的学习中。</p>
+                <p>{{msg2}}</p>
             </div>
             <div class="pathwaycontainer">
-                <a style="display: block;" class="trisection left">
-                    <div class="tri begin">
+                <a style="display: block;" class="trisection left" v-for="item in period">
+                    <div class="tri" :style="{borderColor:item.borderColor}">
                         <picture>
-                            <img :src="begin" alt="Beginner path" class="tripic">
+                            <img :src="item.img" :alt="item.alt" class="tripic">
                         </picture>
-                        <h3>4-7岁</h3>
-                        <h4>语音教学</h4>
+                        <h3>{{item.age}}</h3>
+                        <h4>{{item.name}}</h4>
                         <ul>
-                            <li>开始使用代码！</li>
-                            <li>解决逻辑问题</li>
-                            <li>创建简单的应用</li>
-                            <li>掌握编程基础知识</li>
-                        </ul>
-                    </div>
-                </a>
-                <a style="display: block;" class="trisection middle">
-                    <div class="tri intermediate">
-                        <picture>
-                            <img :src="intermediate" alt="Intermediate path" class="tripic">
-                        </picture>
-                        <h3>7-13岁</h3>
-                        <h4>拖放代码</h4>
-                        <ul>
-                            <li>构建应用和游戏</li>
-                            <li>探索STEM科目</li>
-                            <li>设计Minecraft mods</li>
-                            <li>控制机器人及无人机</li>
-                        </ul>
-                    </div>
-                </a>
-                <a style="display: block;" class="trisection right">
-                    <div class="tri advance">
-                        <picture>
-                            <img :src="advance" alt="Advanced path" class="tripic">
-                        </picture>
-                        <h3>13岁以上</h3>
-                        <h4>真实的编码</h4>
-                        <ul>
-                            <li>JavaScript和Python</li>
-                            <li>Web开发中使用HTML和CSS</li>
-                            <li>学习数据结构</li>
-                            <li>准备AP Comp Sc.</li>
+                            <li>{{item.contentone}}</li>
+                            <li>{{item.contenttwo}}</li>
+                            <li>{{item.contentthree}}</li>
+                            <li>{{item.contentfour}}</li>
                         </ul>
                     </div>
                 </a>
@@ -66,9 +36,46 @@
         name: 'Pathway',
         data() {
             return {
-                begin: this.$store.state.url + 'index/path-beginner.png',
-                intermediate: this.$store.state.url + 'index/path-intermediate.png',
-                advance: this.$store.state.url + 'index/path-advanced.png',
+                msg1:"增强编码信心的途径",
+                msg2:"我们采取自定进度学习模式，使孩子们能够提高自己的技能，并无缝过渡到JavaScript和Python等文本语言的学习中。",
+                period:[
+                    {
+                        age:"4-7岁",
+                        name:"语音教学",
+                        alt:"Beginner path",
+                        contentone:"开始使用代码！",
+                        contenttwo:"解决逻辑问题",
+                        contentthree:"创建简单的应用",
+                        contentfour:"掌握编程基础知识",
+                        img:this.$store.state.url + "index/path-beginner.png",
+                        borderColor: "#7561a7",
+                    },
+                    {
+                        age:"7-13岁",
+                        name:"拖放代码",
+                        alt:"Intermediate path",
+                        contentone:"构建应用和游戏",
+                        contenttwo:"探索STEM科目",
+                        contentthree:"设计Minecraft mods",
+                        contentfour:"控制机器人及无人机",
+                        img:this.$store.state.url + "index/path-intermediate.png",
+                        borderColor: "#62b14c",
+                    },
+                    {
+                        age:"13岁以上",
+                        name:"真实的编码",
+                        alt:"Advanced path",
+                        contentone:"JavaScript和Python",
+                        contenttwo:"Web开发中使用HTML和CSS",
+                        contentthree:"学习数据结构",
+                        contentfour:"准备AP Comp Sc.",
+                        img:this.$store.state.url + "index/path-advanced.png",
+                        borderColor:"#de6f46",
+                    },
+                ],
+                // begin: this.$store.state.url + 'index/path-beginner.png',
+                // intermediate: this.$store.state.url + 'index/path-intermediate.png',
+                // advance: this.$store.state.url + 'index/path-advanced.png',
             }
         },
     }
@@ -106,9 +113,10 @@
 
     .pathwaycontainer {
         display: flex;
+        flex-wrap: wrap;
         padding: 20px;
         width: 97%;
-        height: 630px;
+        /* height: 630px; */
         /* border: 5px solid #000; */
         margin: 0 auto;
     }
@@ -133,18 +141,6 @@
         display: inline-block;
         height: 200px;
         margin: -130px 0 30px;
-    }
-
-    .begin {
-        border-color: #7561a7;
-    }
-
-    .intermediate {
-        border-color: #62b14c;
-    }
-
-    .advance {
-        border-color: #de6f46;
     }
 
     .pathwaycontainer .trisection+.trisection {

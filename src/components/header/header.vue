@@ -14,6 +14,9 @@
         <li>
           <router-link to="/dashboard">Dashboard</router-link>
         </li>
+        <li>
+          <router-link to="/console">Console</router-link>
+        </li>
       </ul>
     </nav>
   </header>
