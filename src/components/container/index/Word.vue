@@ -4,52 +4,19 @@
         <div class="worddetail" :style="bg">
             <h2>被更多人信赖</h2>
             <div class="wordcontainer">
-                <div class="trisection">
+                <div class="trisection" v-for="item in word">
                     <div class="tricard">
                         <blockquote :style="douhao">
                             <p>
-                                I thought a game was going to be extremely hard to make, but Tynker made it really easy.
+                                {{item.sentence}}
                             </p>
                         </blockquote>
                         <div class="triperson">
                             <span>
-                                <b>Tynker Featured Maker</b>
+                                <b>{{item.name}}</b><br>
+                                {{item.identity}} | {{item.address}}
                             </span>
-                            <img :src="student" class="tripic" alt="">
-                        </div>
-                    </div>
-                </div>
-                <div class="trisection">
-                    <div class="tricard">
-                        <blockquote :style="douhao">
-                            <p>
-                                There's so much opportunity once they understand how coding works.
-                                It's amazing to see them create incredible things themselves.
-                            </p>
-                        </blockquote>
-                        <div class="triperson">
-                            <span>
-                                <b>Charlotte R.</b><br>
-                                Parent | Melbourne, Australia
-                            </span>
-                            <img :src="parent" class="tripic" alt="">
-                        </div>
-                    </div>
-                </div>
-                <div class="trisection">
-                    <div class="tricard">
-                        <blockquote :style="douhao">
-                            <p>
-                                Tynker has made programming fun, exciting, and simple and will help lead kids into their
-                                future.
-                            </p>
-                        </blockquote>
-                        <div class="triperson">
-                            <span>
-                                <b>Valerie S.</b><br>
-                                5th Grade Teacher | California, US
-                            </span>
-                            <img :src="teacher" class="tripic" alt="">
+                            <img :src="item.img" class="tripic">
                         </div>
                     </div>
                 </div>
@@ -70,9 +37,35 @@
         name: 'Word',
         data() {
             return {
-                student: this.$store.state.url + 'index/testimonial-student-cropped.png',
-                parent: this.$store.state.url + 'index/testimonial-parent-cropped.png',
-                teacher: this.$store.state.url + 'index/testimonial-teacher-cropped.png',
+                word: [
+                    {
+                        sentence: "I thought a game was going to be extremely hard to make, but Tynker made it really easy.",
+                        name: "Tynker Featured Maker",
+                        description: "",
+                        identity:"student",
+                        address:"Melbourne, Australia",
+                        img: this.$store.state.url + "index/testimonial-student-cropped.png",
+                    },
+                    {
+                        sentence: "There's so much opportunity once they understand how coding works.It's amazing to see them create incredible things themselves.",
+                        name: "Charlotte R.",
+                        description: "Parent | Melbourne, Australia",
+                        identity:"Parent",
+                        address:"Melbourne, Australia",
+                        img: this.$store.state.url + "index/testimonial-parent-cropped.png",
+                    },
+                    {
+                        sentence: "Tynker has made programming fun, exciting, and simple and will help lead kids into their future.",
+                        name: "Tynker Featured Maker",
+                        description: "5th Grade Teacher | California, US",
+                        identity:"5th Grade Teacher",
+                        address:"California, US",
+                        img: this.$store.state.url + "index/testimonial-teacher-cropped.png",
+                    },
+                ],
+                // student: this.$store.state.url + 'index/testimonial-student-cropped.png',
+                // parent: this.$store.state.url + 'index/testimonial-parent-cropped.png',
+                // teacher: this.$store.state.url + 'index/testimonial-teacher-cropped.png',
                 video: this.$store.state.url + 'index/img-video-thumb.png',
                 // play:this.$store.state.url + 'index/play.png',
                 bg: {
@@ -102,7 +95,7 @@
     .worddetail {
         margin: 30px auto;
         width: 100%;
-        height: 700px;
+        height: 750px;
         /* border: 5px solid #000; */
         background-repeat: no-repeat;
         background-position: 0px 30px;
@@ -119,7 +112,7 @@
         display: flex;
         padding: 20px;
         width: 90%;
-        height: 600px;
+        height: 650px;
         margin: 0 auto;
         align-items: center;
         /* border: 5px solid #000; */
@@ -157,7 +150,8 @@
         color: #2f2f2f;
         font-size: 150%;
         font-style: italic;
-        font-family: "montserrat",sans-serif;
+        font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+        /* font-family: "montserrat", sans-serif; */
     }
 
     .triperson {
@@ -182,6 +176,7 @@
         margin-left: 1.5rem;
         width: 80px;
     }
+
     .join {
         margin: -60px auto;
         width: 100%;
@@ -190,10 +185,10 @@
         text-align: center;
         padding: 20px 0;
         background-color: #edfcff;
-        box-shadow: 0 3px 6px rgba(0,0,0,.16);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, .16);
     }
 
-    .wordjoin{
+    .wordjoin {
         font-size: 24px;
         font-weight: bold;
     }
