@@ -154,7 +154,6 @@
   }
 
   .sonContainer {
-    width: 100%;
     position: fixed;
     right: 0;
     left: 250px;
