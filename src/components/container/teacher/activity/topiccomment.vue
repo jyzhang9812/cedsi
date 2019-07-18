@@ -4,7 +4,7 @@
  * @Github: https://github.com/rumosky
  * @Date: 2019-07-18 09:32:13
  * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 10:21:56
+ * @LastEditTime: 2019-07-18 17:29:13
  -->
 <template>
   <div class="body">
@@ -23,34 +23,38 @@
       </form>
     </div>
     <div class="panels">
-      <table class="table talbe-hover" rules=rows frame=below>
-        <tr>
-          <th>序号</th>
-          <th>评论内容</th>
-          <th>评论人</th>
-          <th>评论时间</th>
-          <th>所属学校</th>
-          <th>所属分类</th>
-          <th>操作</th>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>这次活动不错</td>
-          <td>小赛</td>
-          <td>2019-5-2 19:30</td>
-          <td>赛迪思</td>
-          <td>班级活动</td>
-          <td><span class="red">删除</span></td>
-        </tr>
+      <table class="table table-hover" rules=rows frame=below>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>评论内容</th>
+            <th>评论人</th>
+            <th>评论时间</th>
+            <th>所属学校</th>
+            <th>所属分类</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(list, index) in commentList">
+            <td>{{index+1}}</td>
+            <td>{{list.content}}</td>
+            <td>{{list.author}}</td>
+            <td>{{list.date}}</td>
+            <td>{{list.school}}</td>
+            <td>{{list.type}}</td>
+            <td><span class="red">删除</span></td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <div class="pag">
 
       <ul class="pagination modal-2">
         <li><a href="#" class="prev">&laquo </a></li>
-        <li><a href="#">1</a></li>
+        <li><a href="#" class="active">1</a></li>
         <li> <a href="#">2</a></li>
-        <li> <a href="#" class="active">3</a></li>
+        <li> <a href="#">3</a></li>
         <li> <a href="#">4</a></li>
         <li> <a href="#">5</a></li>
         <li> <a href="#">6</a></li>
@@ -70,7 +74,42 @@
     name: 'ActivityList',
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        commentList: [{
+            content: "这次活动不错",
+            author: "小赛",
+            date: "2019-05-02 19:30",
+            school: "赛迪思",
+            type: "班级活动"
+          },
+          {
+            content: "一般一般",
+            author: "小孙",
+            date: "2019-01-02 19:30",
+            school: "赛迪思",
+            type: "班级活动"
+          },
+          {
+            content: "不错",
+            author: "小张",
+            date: "2019-02-22 19:30",
+            school: "赛迪思",
+            type: "班级活动"
+          },
+          {
+            content: "凑合",
+            author: "小刘",
+            date: "2019-04-22 19:30",
+            school: "赛迪思",
+            type: "班级活动"
+          },
+          {
+            content: "good",
+            author: "小王",
+            date: "2019-09-24 19:30",
+            school: "赛迪思",
+            type: "班级活动"
+          }
+        ]
       }
     }
   }
