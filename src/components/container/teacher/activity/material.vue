@@ -1,22 +1,12 @@
-<!--
- * @Email: rumosky@163.com
- * @Author: rumosky
- * @Github: https://github.com/rumosky
- * @Date: 2019-07-18 09:32:13
- * @LastEditors: rumosky
- * @LastEditTime: 2019-07-19 00:01:52
- -->
 <template>
   <div class="body">
     <p>辅导资料</p>
     <div class="filter">
-
       <form class="form-inline">
         <div class="form-group">
           <label class="sr-only" for="exampleInputEmail3">type</label>
           <input type="text" class="form-control" id="typekey" placeholder="请输入上传者名称">
           <input type="text" class="form-control" id="typekey" placeholder="请选择学校">
-
           <button type="button" class="btn btn-primary">搜索</button>
           <button type="button" class="btn btn-primary">清空筛选</button>
           <button type="button" class="btn btn-primary">新增</button>

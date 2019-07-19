@@ -9,6 +9,7 @@ yarn-error.log*
 selenium-debug.log
 ]
 FETCH_HEAD
+package-lock.json
 
 # Editor directories and files
 .idea
