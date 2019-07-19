@@ -2,9 +2,9 @@
   <div class="outside">
     <img class="icon-prefix" :src="inputPrefixSrc" alt="">
     <label>
-      <input type="text" :id="id" v-model="time" :placeholder='tips' class="inputbox">
+      <input type="text" :id="id" :value="date" :placeholder='tips' class="inputbox">
     </label>
-    <img class="icon-suffix" :src="inputSuffixSrc" alt="" @click="clearbox" v-show="this.time !== ''">
+    <img class="icon-suffix" :src="inputSuffixSrc" alt="" @click="" v-show="this.date !== ''">
   </div>
 </template>
 
@@ -18,14 +18,9 @@
     },
     data() {
       return {
-        time: this.date,
         inputPrefixSrc: "../../../static/images/datepicker/calendar.png",
-        inputSuffixSrc: "../../../static/images/datepicker/delete.png"
-      }
-    },
-    methods: {
-      clearbox(){
-        this.time = "";
+        inputSuffixSrc: "../../../static/images/datepicker/delete.png",
+        time: ""
       }
     },
     mounted() {
@@ -35,7 +30,7 @@
         isInitValue: false,
         theme: "#409eff",
         done: (value) => {
-          this.time = value
+          this.$emit('changeDate', value, this.id);
         }
       })
     }
@@ -48,6 +43,13 @@
     border: 1px solid #409eff;
     width: 180px;
     height: 32px;
+    border-radius: 5px;
+    margin-left: 5px;
+    transition: all .3s cubic-bezier(.645,.045,.355,1);
+  }
+
+  .outside:hover {
+    border-color: #c0c4cc;
   }
 
   .icon-prefix {
@@ -69,6 +71,7 @@
     height: 30px;
     width: 120px;
     border: none;
+    border-radius: 5px;
     font-size: 12px;
   }
 

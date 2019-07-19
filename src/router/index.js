@@ -19,7 +19,7 @@ import topiccomment from "../components/container/teacher/activity/topiccomment"
 import opuscomment from "../components/container/teacher/activity/opuscomment";
 import quiz from "../components/container/teacher/activity/quiz";
 import activity from "../components/container/teacher/activity/activity";
-import video from "../components/container/teacher/teach/video";
+import videos from "../components/container/teacher/teach/videos";
 import choiceness from "../components/container/teacher/teach/choiceness";
 import remark from "../components/container/teacher/teach/remark";
 import password from "../components/container/teacher/password/password";
@@ -45,7 +45,7 @@ export default new Router({
         { path: '/dashboard/question',component: question}
       ]
     },
-    { path:'/dashboard/map',component:map },  
+    { path:'/dashboard/map',component:map },
     {
       path: '/console',
       component: asider,
@@ -55,7 +55,7 @@ export default new Router({
           { path: '/console/password', component: password},
           { path: '/console/homework', component: remark },
           { path: '/console/choiceness', component: choiceness },
-          { path: '/console/video', component: video },
+          { path: '/console/video', component: videos },
           { path: '/console/activity', component: activity },
           { path: '/console/question', component: quiz },
           { path: '/console/opuscomment', component: opuscomment },

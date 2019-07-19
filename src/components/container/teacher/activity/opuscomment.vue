@@ -4,7 +4,7 @@
  * @Github: https://github.com/rumosky
  * @Date: 2019-07-18 09:32:13
  * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 20:13:36
+ * @LastEditTime: 2019-07-19 09:33:43
  -->
 <template>
   <div class="body">
@@ -144,11 +144,16 @@
   }
 
   .panels {
-    margin-left: 10px;
+    text-align: center;
   }
 
   .panels tr {
     height: 40px;
+    text-align: center;
+  }
+
+  .panels th {
+    text-align: center;
   }
 
   table {

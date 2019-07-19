@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        name: "video"
+        name: "selectInput"
     }
 </script>
 
