@@ -1,6 +1,7 @@
 <template>
   <div class="subContainer">
-    <div>
+    <span>作业点评</span>
+    <div class="first-floor">
       <label for="tel-name"></label>
       <input type="text" placeholder="请输入姓名、手机号"
              class="textBox" id="tel-name"
@@ -15,22 +16,50 @@
       </date-picker>
     </div>
     <div class="second-floor">
-      <label for="school"></label>
-      <input type="text" placeholder="请选择学校" class="textBox"
-             id="school" v-model="inputData.school">
-      <label for="class"></label>
-      <input type="text" placeholder="请选择班级名称" class="textBox"
-             id="class" v-model="inputData.class">
-      <label for="course"></label>
-      <input type="text" placeholder="请选择课程" class="textBox"
-             id="course" v-model="inputData.course">
-      <label for="order"></label>
-      <input type="text" placeholder="请选择课次" class="textBox"
-             id="order" v-model="inputData.order">
-      <span @click="changeChoices">
+      <div class="select-input">
+        <select-input id="school"
+                      tips="请选择学校"
+                      :option="inputData.school.option"
+                      @option="changeOption"
+                      :drop-down-list="inputData.school.list">
+        </select-input>
+      </div>
+      <div class="select-input">
+        <select-input id="classes"
+                      tips="请选择班级名称"
+                      :option="inputData.classes.option"
+                      @option="changeOption"
+                      :drop-down-list="inputData.classes.list">
+        </select-input>
+      </div>
+      <div class="select-input">
+        <select-input id="course"
+                      tips="请选择课程"
+                      :option="inputData.course.option"
+                      @option="changeOption"
+                      :drop-down-list="inputData.course.list">
+        </select-input>
+      </div>
+      <div class="select-input">
+        <select-input id="grade"
+                      tips="请选择课程等级"
+                      :option="inputData.grade.option"
+                      @option="changeOption"
+                      :drop-down-list="inputData.grade.list">
+          <select-input id="order"
+                        tips="请选择课次"
+                        :option="inputData.order.option"
+                        @option="changeOption"
+                        :drop-down-list="inputData.order.list">
+          </select-input>
+        </select-input>
+      </div>
+      <div class="select-input">
+       <span @click="changeChoices">
         <span :class="{'choose': chooseAll}" class="choose-icon"></span>
         <span>全选</span>
-      </span>
+       </span>
+      </div>
     </div>
     <div class="third-floor">
       <span>点评状态</span>
@@ -64,6 +93,7 @@
 
 <script>
   import DatePicker from "../utils/datePicker"
+  import SelectInput from "../utils/selectInput";
 
   export default {
     name: "remark",
@@ -75,7 +105,31 @@
           hasComment: "background-color: #FFF; color: #000",
           noComment: "background-color: #FFF; color: #000"
         },
-        inputData: {},
+        inputData: {
+          telOrName: "",
+          startDate: "",
+          endDate: "",
+          school: {
+            option: "",
+            list: ["师大一中", "师大二中", "师大三中"]
+          },
+          classes: {
+            option: "",
+            list: ["1班", "2班", "3班", "4班", "5班"]
+          },
+          course: {
+            option: "",
+            list: ["课程一", "课程二", "课程三"]
+          },
+          grade: {
+            option: "",
+            list: ["1", "2", "3", "4"]
+          },
+          order: {
+            option: "",
+            list: ["开学第一课", "开学第二课", "开学第三课"]
+          }
+        },
         tableTitle: [
           "序号",
           "作者姓名",
@@ -174,10 +228,26 @@
           telOrName: "",
           startDate: "",
           endDate: "",
-          school: "",
-          class: "",
-          course: "",
-          order: ""
+          school: {
+            option: "",
+            list: ["师大一中", "师大二中", "师大三中"]
+          },
+          classes: {
+            option: "",
+            list: ["1班", "2班", "3班", "4班", "5班"]
+          },
+          course: {
+            option: "",
+            list: ["课程一", "课程二", "课程三"]
+          },
+          grade: {
+            option: "",
+            list: ["1", "2", "3", "4"]
+          },
+          order: {
+            option: "",
+            list: ["开学第一课", "开学第二课", "开学第三课"]
+          }
         };
         this.chooseAll = true;
         this.comment = {
@@ -185,18 +255,32 @@
           hasComment: "background-color: #FFF; color: #000",
           noComment: "background-color: #FFF; color: #000"
         }
+      },
+      changeOption(item, id) {
+        Object.keys(this.inputData).forEach((res) => {
+          if (res === id) {
+            this.inputData[res].option = item;
+          }
+        });
       }
     },
-    components: {DatePicker},
-    mounted() {
-      this.optionsInit();
-    }
+    components: {SelectInput, DatePicker}
   }
 </script>
 
 <style scoped>
+  .subContainer {
+    font-size: 12px;
+    color: #606266;
+  }
+
+  .first-floor {
+    margin-top: 20px;
+  }
 
   .second-floor {
+    display: flex;
+    margin-left: 5px;
     margin-top: 10px;
   }
 
@@ -249,7 +333,8 @@
     width: 14px;
     height: 14px;
     border: 1px solid #409eff;
-    margin-left: 10px;
+    margin-left: 20px;
+    margin-top: 10px;
   }
 
   /* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
@@ -327,5 +412,9 @@
 
   .title {
     text-align: center;
+  }
+
+  .select-input {
+    margin-right: 8px;
   }
 </style>
