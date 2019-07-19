@@ -1,16 +1,7 @@
-<!--
- * @Email: rumosky@163.com
- * @Author: rumosky
- * @Github: https://github.com/rumosky
- * @Date: 2019-07-18 09:32:13
- * @LastEditors: rumosky
- * @LastEditTime: 2019-07-19 00:01:34
- -->
 <template>
   <div class="body">
     <p>作品评论</p>
     <div class="filter">
-
       <form class="form-inline">
         <div class="form-group">
           <label class="sr-only" for="exampleInputEmail3">type</label>
