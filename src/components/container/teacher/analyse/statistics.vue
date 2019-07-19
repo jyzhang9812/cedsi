@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="second-floor">
-      
+
       
     </div>
   
@@ -60,6 +60,18 @@
                    :date="inputData.endDate"
                    @changeDate="changeDate">
       </date-picker>
+
+       <span>是否学习:</span> 
+        <div class="btn-group btn-group-sm" role="group" aria-label="...">
+          <button type="button" class="btn btn-default ">是</button>
+          <button type="button" class="btn btn-default ">否</button>
+        </div>
+        <span>是否做作业:</span> 
+        <div class="btn-group btn-group-sm" role="group" aria-label="...">
+          <button type="button" class="btn btn-default ">是</button>
+          <button type="button" class="btn btn-default ">否</button>
+        </div>
+
       <button class="btn btn-search">搜索</button>
       <button class="btn btn-clear" @click="clearChoices">清空筛选</button>
     </div>
@@ -71,12 +83,12 @@
         </tr>
         </thead>
         <tbody>
-          <tr v-for="(list,index) in tableData" :key="index" class="content">
+          <tr v-for="(list,index) in tableData " :key="index" class="content">
             <td>{{index+1}}</td>
             <td>{{list.organName}}</td>
             <td>{{list.className}}</td>
             <td>{{list.studentName}}</td>
-            <td>{{list.objName}}</td>
+            <td width="190px">{{list.objName}}</td>
             <td>{{list.levelName}}</td>
             <td>{{list.videoName}}</td>
             <td>{{list.isStart}}</td>
@@ -93,7 +105,7 @@
        <div class="pag">
 
       <ul class="pagination modal-2">
-        <li><a href="#" class="prev">&laquo </a></li>
+        <li><a href="#" class="prev">&laquo;</a></li>
         <li><a href="#" class="active">1</a></li>
         <li> <a href="#">2</a></li>
         <li> <a href="#">3</a></li>
@@ -173,7 +185,7 @@
             organName:"snnu",
             className:"1702",
             studentName: "王晓瀑",
-            objName: "入门到放弃",
+            objName: "Scratch入门课 | 第1节课 | 大炮打僵尸--僵尸移动",
             levelName: "赛迪思",
             videoName: "java",
             isStart: "是",
@@ -189,7 +201,7 @@
              organName:"snnu",
             className:"1703",
             studentName: "李斌斌",
-            objName: "入门到放弃",
+            objName: "Scratch入门课 | 第2节课 | 大炮打僵尸--成群僵尸",
             levelName: "赛迪思",
             videoName: "java",
             isStart: "是",
