@@ -81,7 +81,7 @@
         </thead>
         <tbody>
         <tr v-for="(line, seq) in tableData" class="content">
-          <td>{{seq}}</td>
+          <td>{{seq + 1}}</td>
           <td v-for="item in line">{{item}}</td>
           <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
         </tr>
@@ -136,7 +136,7 @@
           "手机号码",
           "提交时间",
           "作品",
-          "学校",
+          "所属学校",
           "班级",
           "课程名称",
           "课程等级",
@@ -144,17 +144,7 @@
           "操作"
         ],
         tableData: [
-          [
-            "赛小迪",
-            "13152081872",
-            "2019-5-2 19:30",
-            "超级玛丽",
-            "师大附小",
-            "9班",
-            "计算机网络",
-            "1",
-            "已点评"
-          ],
+
           [
             "赛大迪",
             "15252081872",
