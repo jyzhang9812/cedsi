@@ -1,10 +1,10 @@
 <template>
   <div class="outside">
     <img class="icon-prefix" :src="inputPrefixSrc" alt="">
-    <label>
-      <input type="text" :id="id" :value="date" :placeholder='tips' class="inputbox">
-    </label>
-    <img class="icon-suffix" :src="inputSuffixSrc" alt="" @click="" v-show="this.date !== ''">
+    <label :for="id"></label>
+    <input type="text" :id="id" :value="date" :placeholder='tips' class="inputbox">
+    <img class="icon-suffix" :src="inputSuffixSrc" alt=""
+         @click="clearBox" v-show="this.date !== ''">
   </div>
 </template>
 
@@ -21,6 +21,11 @@
         inputPrefixSrc: "../../../static/images/datepicker/calendar.png",
         inputSuffixSrc: "../../../static/images/datepicker/delete.png",
         time: ""
+      }
+    },
+    methods: {
+      clearBox() {
+        this.$emit('changeDate', "", this.id);
       }
     },
     mounted() {
@@ -45,7 +50,7 @@
     height: 32px;
     border-radius: 5px;
     margin-left: 5px;
-    transition: all .3s cubic-bezier(.645,.045,.355,1);
+    transition: all .3s cubic-bezier(.645, .045, .355, 1);
   }
 
   .outside:hover {
