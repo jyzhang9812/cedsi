@@ -5,7 +5,7 @@
         <div class="select-input">
         <input type="text" placeholder="请输入姓名、手机号"
              class="textBox" id="tel-name"
-             v-model="inputData.telOrName">
+             v-model="formData.telOrName">
         </div>
       <div class="select-input">
         <select-input id="school"
@@ -72,7 +72,7 @@
           <button type="button" class="btn btn-default ">否</button>
         </div>
 
-      <button class="btn btn-search">搜索</button>
+      <button class="btn btn-search" @click="search(formData)">搜索</button>
       <button class="btn btn-clear" @click="clearChoices">清空筛选</button>
     </div>
     <div class="forth-floor">
@@ -83,19 +83,19 @@
         </tr>
         </thead>
         <tbody>
-          <tr v-for="(list,index) in tableData " :key="index" class="content">
+          <tr v-for="(list,index) in realList " :key="index" class="content">
             <td>{{index+1}}</td>
             <td>{{list.organName}}</td>
             <td>{{list.className}}</td>
             <td>{{list.studentName}}</td>
-            <td width="190px">{{list.objName}}</td>
+            <td>{{list.objName}}</td>
             <td>{{list.levelName}}</td>
-            <td>{{list.videoName}}</td>
+            <td width="180px">{{list.videoName}}</td>
             <td>{{list.isStart}}</td>
-            <td>{{list.startTime}}</td>
-            <td>{{list.learnTime}}</td>
-            <td>{{list.learnNmm}}</td>
-            <td>{{list.learnNoteNmm}}</td>
+            <td width="90px">{{list.startTime}}</td>
+            <td width="90px">{{list.learnTime}}</td>
+            <td width="60px">{{list.learnNmm}}</td>
+            <td width="60px">{{list.learnNoteNmm}}</td>
             <td>{{list.commitTime}}</td>
             <td>{{list.homeworkStar}}</td>
             <td>{{list.commitNmm}}</td>
@@ -138,6 +138,12 @@
           hasComment: "background-color: #FFF; color: #000",
           noComment: "background-color: #FFF; color: #000"
         },
+     //搜索条件   
+        formData: {
+        telOrName: '',
+        organName: ''
+      },
+        realList:[],      //真正的数组，经过filter后的
         inputData: {
           telOrName: "",
           startDate: "",
@@ -182,41 +188,95 @@
         ],
         tableData: [
          {
-            organName:"snnu",
-            className:"1702",
-            studentName: "王晓瀑",
-            objName: "Scratch入门课 | 第1节课 | 大炮打僵尸--僵尸移动",
-            levelName: "赛迪思",
-            videoName: "java",
+            organName:"赛迪思",
+            className:"赛迪思",
+            studentName: "小赛",
+            objName: "Scratch",
+            levelName: "Level 1",
+            videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
             isStart: "是",
-            startTime:"2019-01-01 ",
-            learnTime:"2019-01-01 ",
-            learnNmm:"5",
-            learnNoteNmm:"3",
+            startTime:"2019-03-01 00:00:00 ",
+            learnTime:"2019-04-03 20:00:06 ",
+            learnNmm:"17",
+            learnNoteNmm:"11",
             commitTime:"2019-05-17 15:31:55",
-            homeworkStar:"5",
-            commitNmm:"4"
+            homeworkStar:"0",
+            commitNmm:"2"
           },
           {
-             organName:"snnu",
-            className:"1703",
-            studentName: "李斌斌",
-            objName: "Scratch入门课 | 第2节课 | 大炮打僵尸--成群僵尸",
-            levelName: "赛迪思",
-            videoName: "java",
+             organName:"赛迪思",
+            className:"赛迪思",
+            studentName: "小赛",
+            objName: "Scratch",
+            levelName: "Level 1",
+            videoName: "Scratch Level 1| 第2节课 | 初遇地球--重组机器人",
             isStart: "是",
-            startTime:"2019-01-01 ",
-            learnTime:"2019-01-01 ",
-            learnNmm:"5",
-            learnNoteNmm:"3",
+            startTime:"2019-05-01 00:00:00",
+            learnTime:"2019-05-27 17:53:33",
+            learnNmm:"1",
+            learnNoteNmm:"1",
+            commitTime:"2019-05-27 16:57:55",
+            homeworkStar:"3",
+            commitNmm:"1"
+          },
+           {
+             organName:"赛迪思",
+            className:"赛迪思",
+            studentName: "大红",
+            objName: "Scratch",
+            levelName: "Level 1",
+            videoName: "Scratch Level 1| 第2节课 | 初遇地球--重组机器人",
+            isStart: "是",
+            startTime:"2019-05-01 00:00:00",
+            learnTime:"2019-05-27 17:53:33",
+            learnNmm:"1",
+            learnNoteNmm:"1",
+            commitTime:"2019-05-27 16:57:55",
+            homeworkStar:"3",
+            commitNmm:"1"
+          },
+          {
+            organName:"师大一中",
+            className:"赛迪思",
+            studentName: "小明",
+            objName: "Scratch",
+            levelName: "Level 1",
+            videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+            isStart: "是",
+            startTime:"2019-03-01 00:00:00 ",
+            learnTime:"2019-04-03 20:00:06 ",
+            learnNmm:"17",
+            learnNoteNmm:"11",
             commitTime:"2019-05-17 15:31:55",
-            homeworkStar:"5",
-            commitNmm:"4"
+            homeworkStar:"0",
+            commitNmm:"2"
           }
         ]
       }
     },
+    created() {
+    this.search({});
+  },
     methods: {
+      //真正的搜索
+      search({telOrName,organName}){
+         console.log("学校名是"+organName);
+        this.realList=this.tableData.filter(item =>{
+          let matchName=true;
+          let matchOrganName=true;
+         if (telOrName) {
+          // 姓名搜索;
+          matchName = item.studentName.match(telOrName);
+        }
+
+        if (organName) {
+          // 学校搜索;
+          matchOrganName = item.organName.match(organName);
+        }
+             return matchName && matchOrganName;
+        })
+      },
+
       changeChoices() {
         this.chooseAll = !this.chooseAll;
       },
@@ -247,6 +307,7 @@
         this.inputData.startDate = "";
         this.inputData.endDate = "";
         this.optionsInit();
+        this.formData='';
       },
       optionsInit() {
         this.inputData = {
@@ -285,6 +346,8 @@
         Object.keys(this.inputData).forEach((res) => {
           if (res === id) {
             this.inputData[res].option = item;
+            // console.log(item);
+            this.formData.organName=item;
           }
         });
       }
