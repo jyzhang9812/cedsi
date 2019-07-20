@@ -1,3 +1,10 @@
+<!--
+ * @Email: rumosky@163.com
+ * @Author: rumosky
+ * @Github: https://github.com/rumosky
+ * @Date: 2019-07-19 13:44:06
+ * @Description: techer角色发布活动页面
+ -->
 <template>
   <div class="body">
     <p>活动管理</p>
@@ -32,7 +39,7 @@
         </thead>
         <tbody>
           <tr v-for="(list, index) in currentList">
-            <td>{{index+1}}</td>
+            <td>{{index + 1}}</td>
             <td class="blue">{{list.title}}</td>
             <td>{{list.date}}</td>
             <td>{{list.auther}}</td>
@@ -45,7 +52,7 @@
         </tbody>
       </table>
     </div>
-    <pagination :num="num" :limit="limit" :offset="offset" @getNew="getNew"></pagination>
+    <pagination :num="num" :limit="limit" @getNew="getNew"></pagination>
   </div>
 </template>
 
@@ -55,8 +62,7 @@
     name: 'activity',
     data() {
       return {
-        num: 100,
-        offset: 0,
+        num: 0,
         limit: 10,
         currentList: [],
         activityList: [{
@@ -1067,12 +1073,12 @@
     },
     methods: {
       getNew(value) {
-        let start = Math.floor(value / 10) * 10;
-        this.currentList = this.activityList.slice(start, start + 10);
+        this.currentList = this.activityList.slice(value, value + this.limit);
       }
     },
     mounted() {
       this.getNew(1);
+      this.num = this.activityList.length;
     }
   }
 
@@ -1125,6 +1131,10 @@
 
   table {
     border: #eeeeee;
+  }
+
+  a {
+    color: #ffffff !important;
   }
 
 </style>
