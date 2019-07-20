@@ -3,7 +3,7 @@
  * @Author: rumosky
  * @Github: https://github.com/rumosky
  * @Date: 2019-07-19 13:44:06
- * @Description: techer角色发布活动页面
+ * @Description: teacher角色发布活动页面
  -->
 <template>
   <div class="body">
@@ -1101,9 +1101,7 @@
   }
 
   .red {
-
     color: #FF6947;
-
   }
 
   .filter {
@@ -1131,10 +1129,6 @@
 
   table {
     border: #eeeeee;
-  }
-
-  a {
-    color: #ffffff !important;
   }
 
 </style>
