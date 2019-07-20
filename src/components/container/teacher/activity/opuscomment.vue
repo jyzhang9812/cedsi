@@ -1,3 +1,10 @@
+<!--
+ * @Email: rumosky@163.com
+ * @Author: rumosky
+ * @Github: https://github.com/rumosky
+ * @Date: 2019-07-19 13:44:06
+ * @Description: teacher角色活动评论页面
+ -->
 <template>
   <div class="body">
     <p>作品评论</p>
@@ -38,32 +45,19 @@
         </tbody>
       </table>
     </div>
-    <div class="pag">
-
-      <ul class="pagination modal-2">
-        <li><a href="#" class="prev">&laquo </a></li>
-        <li><a href="#" class="active">1</a></li>
-        <li> <a href="#">2</a></li>
-        <li> <a href="#">3</a></li>
-        <li> <a href="#">4</a></li>
-        <li> <a href="#">5</a></li>
-        <li> <a href="#">6</a></li>
-        <li> <a href="#">7</a></li>
-        <li> <a href="#">8</a></li>
-        <li> <a href="#">9</a></li>
-        <li><a href="#" class="next"> &raquo;</a></li>
-      </ul>
-
-
-    </div>
+    <pagination :num="num" :limit="limit" @getNew="getNew"></pagination>
   </div>
 </template>
 
 <script>
+  import pagination from "../../teacher/utils/pagination.vue"
   export default {
-    name: 'ActivityList',
+    name: 'commentList',
     data() {
       return {
+        num: 0,
+        limit: 10,
+        currentList: [],
         commentList: [{
             content: "不错",
             auther: "小赛",
@@ -96,6 +90,18 @@
           }
         ]
       }
+    },
+    components: {
+      pagination
+    },
+    methods: {
+      getNew(value) {
+        this.currentList = this.commentList.slice(value, value + this.limit);
+      }
+    },
+    mounted() {
+      this.getNew(1);
+      this.num = this.commentList.length;
     }
   }
 
@@ -150,71 +156,4 @@
   table {
     border: #eeeeee;
   }
-
-  .pag {
-    font-size: 13px;
-  }
-
-  .pagination {
-    list-style: none;
-    display: inline-block;
-    padding: 0;
-    margin-top: 10px;
-  }
-
-  .pagination li {
-    display: inline;
-    text-align: center;
-  }
-
-  .pagination a {
-    float: left;
-    display: block;
-    font-size: 13px;
-    text-decoration: none;
-    padding: 5px 12px;
-    color: #c2c4cc;
-    margin-left: -1px;
-    border: 1px solid transparent;
-    line-height: 1.5;
-  }
-
-  .pagination a.active {
-    cursor: default;
-  }
-
-  .pagination a:active {
-    outline: none;
-  }
-
-  .modal-2 li:first-child a {
-    -moz-border-radius: 50px 0 0 50px;
-    -webkit-border-radius: 50px;
-    border-radius: 50px 0 0 50px;
-  }
-
-  .modal-2 li:last-child a {
-    -moz-border-radius: 0 50px 50px 0;
-    -webkit-border-radius: 0;
-    border-radius: 0 50px 50px 0;
-  }
-
-  .modal-2 a {
-    border-color: #f4f4f5;
-    color: #c2c4cc;
-    background: #f4f4f5;
-  }
-
-  .modal-2 a:hover {
-    color: #FFF;
-    background-color: #409EFF;
-  }
-
-  .modal-2 a.active,
-  .modal-2 a:active {
-    border-color: #409EFF;
-    background: #409EFF;
-    color: #fff;
-  }
-
 </style>
