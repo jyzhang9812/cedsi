@@ -7,6 +7,9 @@ import Video from 'video.js'
 import 'video.js/dist/video-js.css'
 import {store} from './store';
 import VueResource from 'vue-resource';
+import VCharts from 'v-charts'
+
+Vue.use(VCharts)
 Vue.use(VueResource);
 Vue.http.options.root = 'https://dk2nj7uhfi.execute-api.us-east-2.amazonaws.com/prod/studentinfo';
 

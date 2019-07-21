@@ -26,6 +26,13 @@ import password from "../components/container/teacher/password/password";
 import space from "../components/container/teacher/space/space";
 import staging from "../components/container/teacher/staging/staging";
 import asider from "../components/container/teacher/sidebar"
+//以下是教务角色
+import eduAdmin from "../components/container/eduAdmin/eduSidebar"
+import eduActivity from "../components/container/eduAdmin/activity/activity"
+import office from "../components/container/eduAdmin/office/classmanagement"
+import teaching from "../components/container/eduAdmin/teaching/teaching"
+import eduStatistics from "../components/container/eduAdmin/statistics/statistics"
+import eduStaging from "../components/container/eduAdmin/edustaging/edustaging"
 
 Vue.use(Router);
 
@@ -62,6 +69,17 @@ export default new Router({
           { path: '/console/topiccomment', component: topiccomment },
           { path: '/console/material', component: material },
           { path: '/console/statistics', component: statistics }
+      ]
+    },
+    {
+      path:'/eduAdmin',
+      component:eduAdmin,
+      children:[
+        { path:'/eduAdmin/',component:eduStaging},
+        { path:'/eduAdmin/activity',component:eduActivity },
+        { path:'/eduAdmin/classmanagement',component:office },
+        { path:'/eduAdmin/teaching',component:teaching },
+        { path:'/eduAdmin/eduStatistice',component:eduStatistics },
       ]
     }
   ]

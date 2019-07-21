@@ -80,7 +80,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(line, seq) in tableData" class="content">
+        <tr v-for="(line, seq) in currentList" class="content">
           <td>{{seq + 1}}</td>
           <td v-for="item in line">{{item}}</td>
           <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
@@ -88,17 +88,25 @@
         </tbody>
       </table>
     </div>
+    <div class="fifth-floor">
+      <pagination :num="tableData.length"
+                  @getNew="changeTablePages"
+                  :limit="limit">
+      </pagination>
+    </div>
   </div>
 </template>
 
 <script>
   import DatePicker from "../utils/datePicker"
   import SelectInput from "../utils/selectInput";
+  import Pagination from "../utils/pagination";
 
   export default {
     name: "remark",
     data() {
       return {
+        limit: 10,
         chooseAll: true,
         comment: {
           commentStatus: 0,
@@ -178,7 +186,8 @@
             "1",
             "未点评"
           ]
-        ]
+        ],
+        currentList: []
       }
     },
     methods: {
@@ -252,9 +261,15 @@
             this.inputData[res].option = item;
           }
         });
+      },
+      changeTablePages(value){
+        this.currentList = this.tableData.slice(value, value + this.limit);
       }
     },
-    components: {SelectInput, DatePicker}
+    mounted(){
+      this.changeTablePages(0);
+    },
+    components: {Pagination, SelectInput, DatePicker}
   }
 </script>
 
