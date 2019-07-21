@@ -37,7 +37,6 @@
     methods: {
       startRotate() {
         this.rotate = !this.rotate;
-        console.log(this.rotate);
       },
       reportOption(item) {
         this.startRotate();

@@ -1,34 +1,52 @@
 <template>
-    <div class="panels">
-      <table class="table table-hover" rules=rows frame=below>
+  <div class="outside">
+    <span>精选作品</span>
+    <div class="tab-bar">
+      <span v-for="title in tabBarTitle"
+            @click="tabBarChange(title)">{{title}}
+      </span>
+    </div>
+    <div class="divider">
+      <div class="blue-bar" :style="tabBarStyle"></div>
+    </div>
+    <div class="panels" v-if="currentTabBarTitle === tabBarTitle[0]">
+      <table class="table table-hover">
         <thead>
         <tr>
-          <th v-for="title in tableTitle" class="title">{{title}}</th>
+          <th v-for="title in tableTitle_0" class="title">{{title}}</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td></td>
-          <td>1</td>
-          <td class="blue">test1</td>
-          <td>2019-5-2 19:30</td>
-          <td>编程测试</td>
-          <td>布置作业</td>
-          <td>赛迪思</td>
-          <td>1/6</td>
+        <tr v-for="(line, index) in tableData_0" class="content">
+          <td>{{index + 1}}</td>
+          <td v-for="item in line">{{item}}</td>
           <td>
-            <div class="switch-box is-info">
-              <input id="info" class="switch-box-input" type="checkbox" checked/>
-              <label for="info" class="switch-box-slider"></label>
-              <label for="info" class="switch-box-label"></label>
-            </div>
+            <span class="blue">查看作品</span> &nbsp;&nbsp;
+            <span class="blue">审核</span> &nbsp;&nbsp;
+            <span class="red">删除</span>
           </td>
-          <td>正常</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="uploadWorks" v-if="currentTabBarTitle === tabBarTitle[1]">
+      <button>上传精选作品</button>
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th v-for="title in tableTitle_1" class="title">{{title}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(line, seq) in tableData_1" class="content">
+          <td>{{seq + 1}}</td>
+          <td v-for="item in line">{{item}}</td>
           <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
         </tr>
         </tbody>
       </table>
     </div>
+  </div>
 </template>
 
 <script>
@@ -36,36 +54,91 @@
     name: "choiceness",
     data() {
       return {
-        tableTitle: [
-          "序号",
-          "作者姓名",
-          "手机号码",
-          "提交时间",
-          "作品",
-          "学校",
-          "班级",
-          "课程名称",
-          "课程等级",
-          "状态",
-          "操作"
-        ]
+        tabBarTitle: ["学生作品审核", "上传精选作品"],
+        currentTabBarTitle: "学生作品审核",
+        tableTitle_0: ["序号", "作者姓名", "手机号码", "提交时间", "作品", "所属学校", "状态", "操作"],
+        tableData_0: [
+          [
+            "赛小迪",
+            "13152081872",
+            "2019-5-2 19:30",
+            "超级玛丽",
+            "师大附小",
+            "已拒绝"
+          ],
+          [
+            "赛大迪",
+            "16516661682",
+            "2017-5-2 15:03",
+            "超级玛丽",
+            "师大附小",
+            "已拒绝"
+          ]
+        ],
+        tableTitle_1: ["序号", "作者姓名", "提交时间", "作品", "所属学校", "操作"],
+        tableData_1: [
+          [
+            "赛小迪",
+            "2019-5-2 19:30",
+            "超级玛丽",
+            "师大附小"
+          ],
+          [
+            "赛大迪",
+            "2017-5-2 15:03",
+            "超级玛丽",
+            "师大附小"
+          ]
+        ],
+        tabBarStyle: {
+          'width': "",
+          'margin-left': ""
+        }
       }
+    },
+    methods: {
+      tabBarChange(titleName) {
+        this.currentTabBarTitle = titleName;
+        this.tabBarStyle.width = this.currentTabBarTitle.length * 14 + 'px';
+        let index = this.tabBarTitle.indexOf(titleName);
+        let subTabBarTitle = this.tabBarTitle.slice(0, index);
+        let titlesLength = subTabBarTitle.join("").length;
+        this.tabBarStyle["margin-left"] = (titlesLength * 14 + index * 30) + 'px';
+      }
+    },
+    mounted() {
+      this.tabBarStyle.width = this.currentTabBarTitle.length * 14 + 'px';
+      this.tabBarStyle["margin-left"] = "0";
     }
   }
 </script>
 
 <style scoped>
+  .outside {
+    color: #606266;
+    font-size: 12px;
+  }
 
   .blue {
     color: #409EFF;
+    cursor: pointer;
   }
 
   .red {
     color: #FF6947;
+    cursor: pointer;
+  }
+
+  .title {
+    text-align: center;
+  }
+
+  .content td {
+    line-height: 30px;
   }
 
   .panels {
-    margin-left: 10px;
+    margin-top: 20px;
     font-size: 12px;
     color: #606266;
   }
@@ -74,61 +147,66 @@
     height: 40px;
   }
 
-  table {
-    border: #eeeeee;
+  table tr {
+    text-align: center !important;
   }
 
-  .switch-box {
-    display: block;
-    padding-top: 8px;
-    padding-left: 8px;
+  table td {
+    vertical-align: middle !important;
   }
 
-  .switch-box .switch-box-slider {
-    position: relative;
-    display: inline-block;
-    height: 8px;
-    width: 32px;
-    background: #d5d5d5;
-    border-radius: 8px;
+  .tab-bar {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #303133;
+    display: flex;
+  }
+
+  .tab-bar span {
+    margin-right: 30px;
+  }
+
+  .tab-bar span:hover {
+    color: #409eff;
     cursor: pointer;
-    -webkit-transition: all 0.2s ease;
-    transition: all 0.2s ease;
   }
 
-  .switch-box .switch-box-slider:after {
-    position: absolute;
-    left: -8px;
-    top: -8px;
+  .divider {
+    margin-top: 15px;
     display: block;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: #eeeeee;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-    content: '';
-    -webkit-transition: all 0.2s ease;
-    transition: all 0.2s ease;
+    height: 2px;
+    width: 100%;
+    background: #e4e7ed;
   }
 
-  .switch-box .switch-box-input {
-    display: none;
+  .blue-bar {
+    background: #409eff;
+    height: 100%;
+    transition: all .2s;
   }
 
-  .switch-box .switch-box-input ~ .switch-box-label {
-    margin-left: 8px;
+  .uploadWorks {
+    margin-top: 15px;
   }
 
-  .switch-box .switch-box-input:checked ~ .switch-box-slider:after {
-    left: 16px;
+  .uploadWorks button {
+    width: 105px;
+    border: none;
+    background: #409eff;
+    color: #FFF;
+    height: 30px;
+    border-radius: 5px;
+    font-size: 12px;
+    transition: all .3s cubic-bezier(.645, .045, .355, 1);
+    margin-bottom: 10px;
   }
 
-  .switch-box.is-info .switch-box-input:checked:not(:disabled) ~ .switch-box-slider {
-    background: #5faee3;
+  .uploadWorks button:focus {
+    outline: none;
   }
 
-  .switch-box.is-info .switch-box-input:checked:not(:disabled) ~ .switch-box-slider:after {
-    background: #3498db;
+  .uploadWorks button:hover {
+    background: #66b1FF;
   }
 
 </style>
