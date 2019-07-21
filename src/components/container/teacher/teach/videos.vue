@@ -5,13 +5,17 @@
       <table class="table table-hover">
         <thead>
         <tr>
-          <th v-for="th in tableTitle" class="title">{{th}}</th>
+          <th v-for="(th, index) in tableTitle" :key="index" class="title">{{th}}</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(line, seq) in videoData" class="content">
+        <tr v-for="(line, seq) in currentList" :key="seq" class="content">
           <td :style="{'width': tableWidth[0] + 'px'}">{{seq + 1}}</td>
-          <td v-for="(item, index) in line" :style="{'width': tableWidth[index + 1] + 'px'}">{{item}}</td>
+          <td v-for="(item, index) in line"
+              :key="index"
+              :style="{'width': tableWidth[index + 1] + 'px'}">
+            {{item}}
+          </td>
           <td>
             <span class="operation" @click="popModal('view')">预览</span>
             <span class="operation" @click="popModal('choose')">选择题目</span>
@@ -21,14 +25,24 @@
         </tbody>
       </table>
     </div>
+    <div>
+      <pagination :num="videoData.length"
+                  @getNew="changeTablePages"
+                  :limit="limit">
+      </pagination>
+    </div>
   </div>
 </template>
 
 <script>
+  import Pagination from "../utils/pagination";
+
   export default {
     name: "videos",
+    components: {Pagination},
     data() {
       return {
+        limit: 10,
         videoData: [
           [
             "Scratch入门课 | 第1节课 | 大炮打僵尸--僵尸移动",
@@ -69,7 +83,8 @@
           "创建人",
           "操作"
         ],
-        tableWidth: [48, 290, 300, 210, 210, 180]
+        tableWidth: [48, 290, 300, 210, 210, 180],
+        currentList: []
       }
     },
     methods: {
@@ -82,7 +97,13 @@
         } else if (option === "insert") {
           // 插入题目
         }
+      },
+      changeTablePages(value) {
+        this.currentList = this.videoData.slice(value, value + this.limit);
       }
+    },
+    mounted() {
+      this.changeTablePages(0);
     }
   }
 </script>
@@ -102,8 +123,8 @@
   }
 
   table tr {
-     text-align: center !important;
-   }
+    text-align: center !important;
+  }
 
   table td {
     vertical-align: middle !important;
