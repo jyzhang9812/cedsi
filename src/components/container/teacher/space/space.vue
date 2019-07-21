@@ -72,7 +72,7 @@
         email: '',
         telnumber: '',
         remark: '',
-        headsculpture: this.$store.state.url + 'headsculpture.jpg',
+        headsculpture: this.$store.state.url + '/teacher/headsculpture.jpg',
       }
     },
     methods: {
@@ -107,6 +107,7 @@
     box-sizing: border-box;
     border: 0;
     outline: 0;
+    font-size:12px;
     font-family: Helvetica, Arial, sans-serif;
   }
 
@@ -158,8 +159,8 @@
 
   .formlabel {
     width: 80px;
-    font-size: 18px;
-    line-height: 32px;
+    font-size: 12px;
+    line-height: 15px;
     margin-left: 10px;
     text-align: right;
     margin-right: 20px;
@@ -167,8 +168,8 @@
   }
 
   .input {
-    width: 520px;
-    line-height: 32px;
+    width: 500px;
+    line-height: 15px;
     color: #000;
     padding: 5px 15px;
     border-radius: 5px;
@@ -187,19 +188,18 @@
   }
 
   .image {
-    width: 248px;
-    height: 246px;
+    width: 220px;
+    height: 220px;
   }
 
   .headsculpture {
-    width: 520px;
+    width: 500px;
     margin-left: 110px;
-    margin-bottom: 10px;
     margin-top: 10px;
   }
 
   .remark {
-    width: 520px;
+    width: 500px;
     height: 186px;
     padding: 5px 15px;
     resize: vertical;
@@ -211,7 +211,7 @@
   .buttonsave {
     margin-left: 260px;
     padding: 9px 15px;
-    font-size: 20px;
+    font-size: 12px;
     border-radius: 3px;
     color: #fff;
     background-color: #409eff;
