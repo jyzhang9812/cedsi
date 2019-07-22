@@ -5,7 +5,7 @@
         <ul class="menu">
           <li v-for="item in aside" class="bg-hover">
             <div class="item-name" @click="dropDownListListener(item)">
-              <i><img :alt="item.name" :src="item.iconSrc"></i>
+              <i><img :alt="item.name" :src="item.iconSrc" class="aside-icon"></i>
               <span>{{item.name}}</span>
               <span class="menuPosition" :class="{'glyphicon glyphicon-menu-down':item.close,
                 'glyphicon glyphicon-menu-up':!item.close}" v-show="item.children.length !== 0">
@@ -33,17 +33,12 @@
     name: "asider",
     data() {
       return {
-        aside: [{
-            name: "工作台",
-            iconSrc: "../../../../static/images/aside/staging.png",
-            children: [],
-            close: true,
-            route: "/console/staging"
-          },
+        aside: [
           {
             name: "教学管理",
             iconSrc: "../../../../static/images/aside/teachingManagement.png",
-            children: [{
+            children: [
+              {
                 name: "作业点评",
                 route: "/console/homework"
               },
@@ -62,21 +57,23 @@
             name: "活动管理",
             iconSrc: "../../../../static/images/aside/activityManagement.png",
             children: [{
-                name: "发布活动",
-                route: "/console/activity"
-              },
+              name: "发布活动",
+              route: "/console/activity"
+            },
               {
                 name: "学生提问",
                 route: "/console/question"
               },
-              {
-                name: "活动评论",
-                route: "/console/opuscomment"
-              },
-              {
-                name: "作品评论",
-                route: "/console/topiccomment"
-              },
+              // 2019-07-22
+              // 由于业务逻辑不清楚, 暂时关掉这两个页面
+              // {
+              //   name: "活动评论",
+              //   route: "/console/opuscomment"
+              // },
+              // {
+              //   name: "作品评论",
+              //   route: "/console/topiccomment"
+              // },
               {
                 name: "辅导资料",
                 route: "/console/material"
@@ -95,14 +92,14 @@
           },
           {
             name: "个人中心",
-            iconSrc: "../../../../static/images/aside/statisticalAnalyses.png",
+            iconSrc: "../../../../static/images/aside/personalCenter.png",
             children: [],
             close: true,
             route: "/console/space"
           },
           {
             name: "修改密码",
-            iconSrc: "../../../../static/images/aside/statisticalAnalyses.png",
+            iconSrc: "../../../../static/images/aside/modifyPwd.png",
             children: [],
             close: true,
             route: "/console/password"
@@ -162,6 +159,11 @@
   .asidebg {
     background-color: #3766A6;
     width: 220px;
+  }
+
+  .aside-icon {
+    width: 18px;
+    height: 18px;
   }
 
   .item-name {
