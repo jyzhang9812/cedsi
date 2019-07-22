@@ -1,5 +1,5 @@
 <template>
-  <div class="dropdown">
+  <div class="dropdown" @mouseover="clearIconShown" @mouseout="clearIconHidden">
     <div class="outside" :id="id"
          data-toggle="dropdown" aria-haspopup="true"
          aria-expanded="true" @click="startRotate">
@@ -9,7 +9,7 @@
              :id="id + 'text'">
       <img :src="menuIconSrc" alt=""
            :class="[rotate? 'afterRotate':'beforeRotate']"
-           class="menu-icon">
+           class="menu-icon" @click="clearOption">
     </div>
     <ul class="dropdown-menu" :aria-labelledby="id">
       <li v-for="item in dropDownList">
@@ -22,7 +22,7 @@
 <script>
   export default {
     name: "selectInput",
-    props:{
+    props: {
       option: String,
       tips: String,
       dropDownList: Array,
@@ -30,17 +30,40 @@
     },
     data() {
       return {
-        menuIconSrc: "../../../../../static/images/selectInput/menudown.png",
-        rotate: false
+        rotate: false,
+        deleteIcon: "../../../../../static/images/datepicker/delete.png",
+        menudownIcon: "../../../../../static/images/selectInput/menudown.png",
+        menuIconSrc: "../../../../../static/images/selectInput/menudown.png"
       }
     },
     methods: {
       startRotate() {
-        this.rotate = !this.rotate;
+        if (this.menuIconSrc !== this.deleteIcon) {
+          this.rotate = !this.rotate;
+        }
       },
       reportOption(item) {
         this.startRotate();
         this.$emit('option', item, this.id)
+      },
+      clearIconShown() {
+        if (this.option_copy !== "") {
+          this.menuIconSrc = this.deleteIcon;
+        }
+      },
+      clearIconHidden() {
+        this.menuIconSrc = this.menudownIcon;
+      },
+      clearOption() {
+        if (this.menuIconSrc === this.deleteIcon) {
+          this.$emit('option', '', this.id);
+          this.menuIconSrc = this.menudownIcon;
+        }
+      }
+    },
+    computed: {
+      option_copy() {
+        return this.option;
       }
     }
   }
@@ -96,6 +119,7 @@
     display: inline;
     width: 14px;
     height: 14px;
+    cursor: pointer;
   }
 
 </style>
