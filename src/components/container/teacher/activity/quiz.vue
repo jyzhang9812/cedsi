@@ -10,14 +10,14 @@
     <p>学生提问</p>
     <div class="filter">
       <div class="option">
-        <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者">
+        <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
         <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
           @option="changeOption">
         </selectInput>
         <selectInput :option="inputData.classOnline.option" :dropDownList="inputData.classOnline.list" tips="请选择线上班级"
           id="classOnline" @option="changeOption"></selectInput>
         <button type="button" class="btn-my">搜索</button>
-        <button type="button" class="btn-my">清空筛选</button>
+        <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
       </div>
     </div>
     <div class="panels">
@@ -61,6 +61,7 @@
         limit: 10,
         currentList: [],
         inputData: {
+          keywords: "",
           school: {
             option: "",
             list: ["全部", "赛迪思"]
@@ -120,6 +121,19 @@
         Object.keys(this.inputData).forEach((res) => {
           if (res === id) {
             this.inputData[res].option = item;
+          }
+        });
+      },
+      clearChoices() {
+        this.optionsClear();
+      },
+      optionsClear() {
+        // 如果是字符串则清空, 如果是对象则清空 option
+        Object.keys(this.inputData).forEach((res) => {
+          if (this.inputData[res].hasOwnProperty("option")) {
+            this.inputData[res].option = "";
+          } else {
+            this.inputData[res] = "";
           }
         });
       }

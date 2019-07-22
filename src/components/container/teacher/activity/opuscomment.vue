@@ -10,7 +10,7 @@
     <p>活动评论管理</p>
     <div class="filter">
       <div class="option">
-        <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者">
+        <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
         <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list" tips="请选择活动类型"
           id="activityType" @option="changeOption">
         </selectInput>
@@ -18,7 +18,7 @@
           @option="changeOption">
         </selectInput>
         <button type="button" class="btn-my">搜索</button>
-        <button type="button" class="btn-my">清空筛选</button>
+        <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
       </div>
     </div>
     <div class="panels">
@@ -62,6 +62,7 @@
         limit: 10,
         currentList: [],
         inputData: {
+          keywords: "",
           activityType: {
             option: "",
             list: ["全部", "通知公告", "班级活动", "辅导答疑", "布置作业"]
@@ -121,6 +122,19 @@
         Object.keys(this.inputData).forEach((res) => {
           if (res === id) {
             this.inputData[res].option = item;
+          }
+        });
+      },
+      clearChoices() {
+        this.optionsClear();
+      },
+      optionsClear() {
+        // 如果是字符串则清空, 如果是对象则清空 option
+        Object.keys(this.inputData).forEach((res) => {
+          if (this.inputData[res].hasOwnProperty("option")) {
+            this.inputData[res].option = "";
+          } else {
+            this.inputData[res] = "";
           }
         });
       }
