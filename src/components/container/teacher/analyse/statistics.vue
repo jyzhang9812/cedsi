@@ -85,7 +85,7 @@
         <button type="button" class="btn btn-default">否</button>
       </div>
 
-      <button class="btn btn-search" @click="search(formData)">搜索</button>
+      <button class="btn btn-search" @click="search(formData),afterSearch()">搜索</button>
       <button class="btn btn-clear" @click="clearChoices">清空筛选</button>
     </div>
     <div class="forth-floor">
@@ -96,14 +96,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(list,index) in realList " :key="index" class="content">
+          <tr v-for="(list,index) in currentList " :key="index" class="content">
             <td>{{index+1}}</td>
             <td>{{list.organName}}</td>
             <td>{{list.className}}</td>
             <td>{{list.studentName}}</td>
             <td>{{list.objName}}</td>
             <td>{{list.levelName}}</td>
-            <td width="180px">{{list.videoName}}</td>
+            <td width="200px">{{list.videoName}}</td>
             <td>{{list.isStart}}</td>
             <td width="90px">{{list.startTime}}</td>
             <td width="90px">{{list.learnTime}}</td>
@@ -115,43 +115,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="pag">
-        <ul class="pagination modal-2">
-          <li>
-            <a href="#" class="prev">&laquo;</a>
-          </li>
-          <li>
-            <a href="#" class="active">1</a>
-          </li>
-          <li>
-            <a href="#">2</a>
-          </li>
-          <li>
-            <a href="#">3</a>
-          </li>
-          <li>
-            <a href="#">4</a>
-          </li>
-          <li>
-            <a href="#">5</a>
-          </li>
-          <li>
-            <a href="#">6</a>
-          </li>
-          <li>
-            <a href="#">7</a>
-          </li>
-          <li>
-            <a href="#">8</a>
-          </li>
-          <li>
-            <a href="#">9</a>
-          </li>
-          <li>
-            <a href="#" class="next">&raquo;</a>
-          </li>
-        </ul>
-      </div>
+     <pagination :num="num" :limit="limit" @getNew="getNew"></pagination>
     </div>
   </div>
 </template>
@@ -159,11 +123,14 @@
 <script>
 import DatePicker from "../utils/datePicker";
 import SelectInput from "../utils/selectInput";
-
+ import pagination from "../utils/pagination.vue"
 export default {
   name: "remark",
   data() {
     return {
+       num: 0,
+       limit: 10,
+       currentList: [],
       chooseAll: true,
       comment: {
         commentStatus: 0,
@@ -269,6 +236,214 @@ export default {
           commitTime: "2019-05-27 16:57:55",
           homeworkStar: "3",
           commitNmm: "1"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
         },
         {
           organName: "师大三中",
@@ -407,7 +582,6 @@ export default {
       Object.keys(this.inputData).forEach(res => {
         if (res === id) {
           this.inputData[res].option = item;
-          console.log(id);
           if (id === "school") {
             this.formData.organName = item;
           }
@@ -422,9 +596,24 @@ export default {
           }
         }
       });
-    }
+    },
+      getNew(value) {
+        this.currentList = this.realList.slice(value, value + this.limit);
+         console.log("生成currentList");
+        },
+      
+      afterSearch(){
+         this.getNew(1);
+       this.num = this.realList.length;
+      }
   },
-  components: { SelectInput, DatePicker }
+  mounted() {
+    
+    this.getNew(1);
+       this.num = this.realList.length;
+      
+      },
+  components: { SelectInput, DatePicker,pagination }
 };
 </script>
 
@@ -580,69 +769,5 @@ table td {
 .select-input1 {
   margin-right: 8px;
 }
-.pag {
-  font-size: 13px;
-}
 
-.pagination {
-  list-style: none;
-  display: inline-block;
-  padding: 0;
-  margin-top: 10px;
-}
-
-.pagination li {
-  display: inline;
-  text-align: center;
-}
-
-.pagination a {
-  float: left;
-  display: block;
-  font-size: 13px;
-  text-decoration: none;
-  padding: 5px 12px;
-  color: #c2c4cc;
-  margin-left: -1px;
-  border: 1px solid transparent;
-  line-height: 1.5;
-}
-
-.pagination a.active {
-  cursor: default;
-}
-
-.pagination a:active {
-  outline: none;
-}
-
-.modal-2 li:first-child a {
-  -moz-border-radius: 50px 0 0 50px;
-  -webkit-border-radius: 50px;
-  border-radius: 50px 0 0 50px;
-}
-
-.modal-2 li:last-child a {
-  -moz-border-radius: 0 50px 50px 0;
-  -webkit-border-radius: 0;
-  border-radius: 0 50px 50px 0;
-}
-
-.modal-2 a {
-  border-color: #f4f4f5;
-  color: #c2c4cc;
-  background: #f4f4f5;
-}
-
-.modal-2 a:hover {
-  color: #fff;
-  background-color: #409eff;
-}
-
-.modal-2 a.active,
-.modal-2 a:active {
-  border-color: #409eff;
-  background: #409eff;
-  color: #fff;
-}
 </style>

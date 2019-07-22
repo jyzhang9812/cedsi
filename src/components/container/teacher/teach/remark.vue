@@ -46,12 +46,14 @@
                       :option="inputData.grade.option"
                       @option="changeOption"
                       :drop-down-list="inputData.grade.list">
-          <select-input id="order"
-                        tips="请选择课次"
-                        :option="inputData.order.option"
-                        @option="changeOption"
-                        :drop-down-list="inputData.order.list">
-          </select-input>
+        </select-input>
+      </div>
+      <div class="select-input">
+        <select-input id="order"
+                      tips="请选择课次"
+                      :option="inputData.order.option"
+                      @option="changeOption"
+                      :drop-down-list="inputData.order.list">
         </select-input>
       </div>
       <div class="select-input">
@@ -69,7 +71,7 @@
       <span class="comment no-comment"
             @click="changeComment('no')"
             :style="comment.noComment">未点评</span>
-      <button class="btn btn-search">搜索</button>
+      <button class="btn btn-search" @click="conditionSearch">搜索</button>
       <button class="btn btn-clear" @click="clearChoices">清空筛选</button>
     </div>
     <div class="forth-floor">
@@ -80,13 +82,20 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(line, seq) in tableData" class="content">
+        <tr v-for="(line, seq) in currentList" :key="seq" class="content">
           <td>{{seq + 1}}</td>
-          <td v-for="item in line">{{item}}</td>
-          <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
+          <td v-for="(item, index) in line" :key="index">{{item}}</td>
+          <td><span class="blue">编辑</span>&nbsp;&nbsp;
+            <span class="red">删除</span></td>
         </tr>
         </tbody>
       </table>
+    </div>
+    <div class="fifth-floor">
+      <pagination :num="tableData.length"
+                  @getNew="changeTablePages"
+                  :limit="limit">
+      </pagination>
     </div>
   </div>
 </template>
@@ -94,16 +103,18 @@
 <script>
   import DatePicker from "../utils/datePicker"
   import SelectInput from "../utils/selectInput";
+  import Pagination from "../utils/pagination";
 
   export default {
     name: "remark",
     data() {
       return {
-        chooseAll: true,
+        limit: 10,
+        chooseAll: false,
         comment: {
           commentStatus: 0,
-          hasComment: "background-color: #FFF; color: #000",
-          noComment: "background-color: #FFF; color: #000"
+          hasComment: this.whiteCommentStyle,
+          noComment: this.whiteCommentStyle
         },
         inputData: {
           telOrName: "",
@@ -143,42 +154,44 @@
           "状态",
           "操作"
         ],
-        tableData: [
+        originalTableData: [
 
-          [
-            "赛大迪",
-            "15252081872",
-            "2019-3-21 19:03",
-            "坦克大战",
-            "师大附小",
-            "9班",
-            "计算机网络",
-            "3",
-            "未点评"
-          ],
-          [
-            "李云龙",
-            "18896253728",
-            "2018-5-2 11:32",
-            "消灭病毒",
-            "师大附小",
-            "10班",
-            "计算机网络",
-            "2",
-            "已点评"
-          ],
-          [
-            "楚云飞",
-            "15652081872",
-            "2019-5-20 16:30",
-            "宾果消消消",
-            "邮电附小",
-            "2班",
-            "计算机网络",
-            "1",
-            "未点评"
-          ]
-        ]
+          {
+            authorName: "赛大迪",
+            tel: "15252081872",
+            submitTime: "2019-3-21 19:03",
+            workName: "坦克大战",
+            school: "师大附小",
+            classes: "9班",
+            course: "计算机网络",
+            grade: "3",
+            order: "未点评"
+          },
+          {
+            authorName: "李云龙",
+            tel: "18896253728",
+            submitTime: "2018-5-2 11:32",
+            workName: "消灭病毒",
+            school: "师大附小",
+            classes: "10班",
+            course: "计算机网络",
+            grade: "2",
+            order: "已点评"
+          },
+          {
+            authorName: "楚云飞",
+            tel: "15652081872",
+            submitTime: "2019-5-20 16:30",
+            workName: "宾果消消消",
+            school: "邮电附小",
+            className: "2班",
+            courseName: "计算机网络",
+            courseOrder: "1",
+            commentStat: "未点评"
+          }
+        ],
+        currentList: [],
+        tableData: []
       }
     },
     methods: {
@@ -190,14 +203,14 @@
           // 0: 均为选中  1:已评论   2: 未评论
           this.comment = {
             commentStatus: 1,
-            hasComment: "background-color: #409EFF; color: #FFF",
-            noComment: "background-color: #FFF; color: #000"
+            hasComment: this.blueCommentStyle,
+            noComment: this.whiteCommentStyle
           };
-        } else {
+        } else if (comment === "no") {
           this.comment = {
             commentStatus: 2,
-            hasComment: "background-color: #FFF; color: #000",
-            noComment: "background-color: #409EFF; color: #FFF"
+            hasComment: this.whiteCommentStyle,
+            noComment: this.blueCommentStyle
           };
         }
       },
@@ -211,39 +224,24 @@
       clearChoices() {
         this.inputData.startDate = "";
         this.inputData.endDate = "";
-        this.optionsInit();
+        this.optionsClear();
       },
-      optionsInit() {
-        this.inputData = {
-          telOrName: "",
-          startDate: "",
-          endDate: "",
-          school: {
-            option: "",
-            list: ["师大一中", "师大二中", "师大三中"]
-          },
-          classes: {
-            option: "",
-            list: ["1班", "2班", "3班", "4班", "5班"]
-          },
-          course: {
-            option: "",
-            list: ["课程一", "课程二", "课程三"]
-          },
-          grade: {
-            option: "",
-            list: ["1", "2", "3", "4"]
-          },
-          order: {
-            option: "",
-            list: ["开学第一课", "开学第二课", "开学第三课"]
+      optionsClear() {
+        // 如果是字符串则清空, 如果是对象则清空 option
+        Object.keys(this.inputData).forEach((res) => {
+          if (this.inputData[res].hasOwnProperty("option")) {
+            this.inputData[res].option = "";
+          } else {
+            this.inputData[res] = "";
           }
-        };
-        this.chooseAll = true;
+        });
+        // 全选按钮
+        this.chooseAll = false;
+        // 是否
         this.comment = {
           commentStatus: 0,
-          hasComment: "background-color: #FFF; color: #000",
-          noComment: "background-color: #FFF; color: #000"
+          hasComment: this.whiteCommentStyle,
+          noComment: this.whiteCommentStyle
         }
       },
       changeOption(item, id) {
@@ -252,9 +250,84 @@
             this.inputData[res].option = item;
           }
         });
+      },
+      changeTablePages(value) {
+        this.currentList = this.tableData.slice(value, value + this.limit);
+      },
+      timeFilter(startTime, endTime, tableList) {
+        if (startTime === "" && endTime === "") return tableList;
+        startTime = startTime === "" ? 0 : startTime;
+        // 今天是 2019-7-21 此系统若能运行1000年算我输
+        endTime = endTime === "" ? "3000-01-01 00:00" : endTime;
+        let restTableList = tableList.slice(0);
+        startTime = new Date(startTime);
+        endTime = new Date(endTime);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          let submitTime = new Date(restTableList[i].submitTime);
+          if (startTime > submitTime || submitTime > endTime) {
+            restTableList.splice(i, 1);
+            i -= 1;
+            j -= 1;
+          }
+        }
+        return restTableList;
+      },
+      telOrNameFilter(telOrName, tableList) {
+        if (telOrName === "") return tableList;
+        let testArg = "tel";
+        if (Number.isNaN(Number.parseInt(telOrName))) {
+          testArg = "authorName";
+        }
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          if (!new RegExp(telOrName).test(restTableList[i][testArg])) {
+            restTableList.splice(i, 1);
+            j -= 1;
+            i -= 1;
+          }
+        }
+        return restTableList;
+      },
+      conditionSearch() {
+        let temp = this.timeFilter(
+          this.inputData.startDate,
+          this.inputData.endDate,
+          this.originalTableData);
+        console.log(JSON.stringify(temp));
+        temp = this.telOrNameFilter(this.inputData.telOrName, temp);
+        this.tableData = temp;
+        this.changeTablePages(0);
       }
     },
-    components: {SelectInput, DatePicker}
+    computed: {
+      blueCommentStyle() {
+        return "background-color: #409EFF; color: #FFF";
+      },
+      whiteCommentStyle() {
+        return "background-color: #FFF; color: #000";
+      },
+      selectInputFilter() {
+        return function (inputData, tableList) {
+          Object.keys(inputData).forEach((res) => {
+            if (inputData[res].hasOwnProperty("option")) {
+              tableList.forEach((item, index) => {
+                if (item === inputData[res].option) {
+
+                }
+              });
+            }
+          });
+          return "something"
+        }
+      }
+    },
+    mounted() {
+      this.tableData = this.originalTableData;
+      this.changeTablePages(0);
+    },
+    components: {
+      Pagination, SelectInput, DatePicker
+    }
   }
 </script>
 

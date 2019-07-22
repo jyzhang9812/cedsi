@@ -2,7 +2,8 @@
   <div class="outside">
     <span>精选作品</span>
     <div class="tab-bar">
-      <span v-for="title in tabBarTitle"
+      <span v-for="(title, index) in tabBarTitle"
+            :key="index"
             @click="tabBarChange(title)">{{title}}
       </span>
     </div>
@@ -13,13 +14,16 @@
       <table class="table table-hover">
         <thead>
         <tr>
-          <th v-for="title in tableTitle_0" class="title">{{title}}</th>
+          <th v-for="(title,index) in tableTitle_0"
+              :key="index" class="title">{{title}}</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(line, index) in tableData_0" class="content">
+        <tr v-for="(line, index) in currentFirstList"
+            :key="index"
+            class="content">
           <td>{{index + 1}}</td>
-          <td v-for="item in line">{{item}}</td>
+          <td v-for="(item, index) in line" :key="index">{{item}}</td>
           <td>
             <span class="blue">查看作品</span> &nbsp;&nbsp;
             <span class="blue">审核</span> &nbsp;&nbsp;
@@ -28,32 +32,44 @@
         </tr>
         </tbody>
       </table>
+      <pagination :num="tableData_0.length"
+                  @getNew="changeFirstTablePages"
+                  :limit="limit">
+      </pagination>
     </div>
     <div class="uploadWorks" v-if="currentTabBarTitle === tabBarTitle[1]">
       <button>上传精选作品</button>
       <table class="table table-hover">
         <thead>
         <tr>
-          <th v-for="title in tableTitle_1" class="title">{{title}}</th>
+          <th v-for="(title, index) in tableTitle_1" class="title" :key="index">{{title}}</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(line, seq) in tableData_1" class="content">
+        <tr v-for="(line, seq) in currentSecondList" :key="seq" class="content">
           <td>{{seq + 1}}</td>
-          <td v-for="item in line">{{item}}</td>
+          <td v-for="(item, index) in line" :key="index">{{item}}</td>
           <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
         </tr>
         </tbody>
       </table>
+      <pagination :num="tableData_1.length"
+                  @getNew="changeSecondTablePages"
+                  :limit="limit">
+      </pagination>
     </div>
   </div>
 </template>
 
 <script>
+  import Pagination from "../utils/pagination";
+
   export default {
     name: "choiceness",
+    components: {Pagination},
     data() {
       return {
+        limit: 10,
         tabBarTitle: ["学生作品审核", "上传精选作品"],
         currentTabBarTitle: "学生作品审核",
         tableTitle_0: ["序号", "作者姓名", "手机号码", "提交时间", "作品", "所属学校", "状态", "操作"],
@@ -93,7 +109,9 @@
         tabBarStyle: {
           'width': "",
           'margin-left': ""
-        }
+        },
+        currentFirstList: [],
+        currentSecondList: []
       }
     },
     methods: {
@@ -104,11 +122,19 @@
         let subTabBarTitle = this.tabBarTitle.slice(0, index);
         let titlesLength = subTabBarTitle.join("").length;
         this.tabBarStyle["margin-left"] = (titlesLength * 14 + index * 30) + 'px';
+      },
+      changeFirstTablePages(value) {
+        this.currentFirstList = this.tableData_0.slice(value, value + this.limit);
+      },
+      changeSecondTablePages(value) {
+        this.currentSecondList = this.tableData_1.slice(value, value + this.limit)
       }
     },
     mounted() {
       this.tabBarStyle.width = this.currentTabBarTitle.length * 14 + 'px';
       this.tabBarStyle["margin-left"] = "0";
+      this.changeFirstTablePages(0);
+      this.changeSecondTablePages(0);
     }
   }
 </script>
