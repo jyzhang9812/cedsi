@@ -3,10 +3,10 @@
       <section class="section-control homepage note">
          <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="10000" data-warp="true" data-pause="true">
               <ol class="carousel-indicators">
-                  <li data-target="#myCarousel" v-for="n in 3" :key="n" data-slide-to="{n}" class="{n==1?'active':''}"></li>
+                  <li data-target="#myCarousel" v-for="n in 3"  data-slide-to="{n}" class="{n==1?'active':''}"></li>
               </ol>
               <div class="carousel-inner" >
-                  <div class="item" v-for="(item,index) in inner" :key="item" :class="[index==1?'active':'']">
+                  <div class="item" v-for="(item,index) in inner" :class="[index==1?'active':'']">
                       <img :src="item.background">
                       <div class=" carousel-caption">
                           <div class="zf-column col-md-5 ">
