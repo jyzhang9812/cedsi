@@ -122,7 +122,7 @@
           endDate: "",
           school: {
             option: "",
-            list: ["师大一中", "师大二中", "师大三中"]
+            list: ["邮电附小", "师大二中", "师大三中"]
           },
           classes: {
             option: "",
@@ -151,11 +151,11 @@
           "班级",
           "课程名称",
           "课程等级",
+          "课次",
           "状态",
           "操作"
         ],
         originalTableData: [
-
           {
             authorName: "赛大迪",
             tel: "15252081872",
@@ -165,7 +165,8 @@
             classes: "9班",
             course: "计算机网络",
             grade: "3",
-            order: "未点评"
+            order: "开学第一课",
+            commentStat: "已点评"
           },
           {
             authorName: "李云龙",
@@ -176,7 +177,8 @@
             classes: "10班",
             course: "计算机网络",
             grade: "2",
-            order: "已点评"
+            order: "开学第二课",
+            commentStat: "未点评"
           },
           {
             authorName: "楚云飞",
@@ -184,10 +186,11 @@
             submitTime: "2019-5-20 16:30",
             workName: "宾果消消消",
             school: "邮电附小",
-            className: "2班",
-            courseName: "计算机网络",
-            courseOrder: "1",
-            commentStat: "未点评"
+            classes: "2班",
+            course: "计算机网络",
+            grade: "1",
+            order: "开学第三课",
+            commentStat: "已点评"
           }
         ],
         currentList: [],
@@ -200,7 +203,7 @@
       },
       changeComment(comment) {
         if (comment === 'has') {
-          // 0: 均为选中  1:已评论   2: 未评论
+          // 0: 均未选中  1:已点评  2: 未点评
           this.comment = {
             commentStatus: 1,
             hasComment: this.blueCommentStyle,
@@ -254,6 +257,7 @@
       changeTablePages(value) {
         this.currentList = this.tableData.slice(value, value + this.limit);
       },
+      // 以下为过滤器, 采用递进式过滤方法, 数据随着过滤越来越少, 减轻了浏览器负担
       timeFilter(startTime, endTime, tableList) {
         if (startTime === "" && endTime === "") return tableList;
         startTime = startTime === "" ? 0 : startTime;
@@ -288,13 +292,48 @@
         }
         return restTableList;
       },
+      commentStatFilter(commentCode, tableList) {
+        if (!commentCode) return tableList;
+        let restTableList = tableList.slice(0);
+        let status = "未点评";
+        if (commentCode === 1) {
+          status = "已点评"
+        }
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          if (restTableList[i].commentStat !== status) {
+            restTableList.splice(i, 1);
+            j -= 1;
+            i -= 1;
+          }
+        }
+        return restTableList;
+      },
+      selectInputFilter(inputData, tableList) {
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          for (let res of Object.keys(inputData)) {
+            let condition1 = inputData[res].hasOwnProperty("option")
+              && inputData[res].option !== "";
+            let condition2 = restTableList[i].hasOwnProperty(res)
+              && restTableList[i][res] !== inputData[res].option;
+            if (condition1 && condition2) {
+              restTableList.splice(i, 1);
+              i -= 1;
+              j -= 1;
+              break;
+            }
+          }
+        }
+        return restTableList;
+      },
       conditionSearch() {
         let temp = this.timeFilter(
           this.inputData.startDate,
           this.inputData.endDate,
           this.originalTableData);
-        console.log(JSON.stringify(temp));
         temp = this.telOrNameFilter(this.inputData.telOrName, temp);
+        temp = this.commentStatFilter(this.comment.commentStatus, temp);
+        temp = this.selectInputFilter(this.inputData, temp);
         this.tableData = temp;
         this.changeTablePages(0);
       }
@@ -305,20 +344,6 @@
       },
       whiteCommentStyle() {
         return "background-color: #FFF; color: #000";
-      },
-      selectInputFilter() {
-        return function (inputData, tableList) {
-          Object.keys(inputData).forEach((res) => {
-            if (inputData[res].hasOwnProperty("option")) {
-              tableList.forEach((item, index) => {
-                if (item === inputData[res].option) {
-
-                }
-              });
-            }
-          });
-          return "something"
-        }
       }
     },
     mounted() {
