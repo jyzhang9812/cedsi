@@ -61,7 +61,7 @@
       },
       goPrePage() {
         if (!this.prePage) {
-          alert("first page!");
+          alert("这是第一页，亲~");
           return;
         }
         this.offset -= this.limit;
@@ -69,7 +69,7 @@
       },
       goNextPage() {
         if (!this.nextPage) {
-          alert("last page!");
+          alert("已经到最后一页了");
           return;
         }
         this.offset += this.limit;

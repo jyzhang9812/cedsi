@@ -503,6 +503,6 @@
   }
 
   .select-input {
-    margin-right: 8px;
+    margin-right: 0;
   }
 </style>

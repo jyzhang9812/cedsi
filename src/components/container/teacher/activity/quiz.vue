@@ -9,16 +9,16 @@
   <div class="body">
     <p>学生提问</p>
     <div class="filter">
-      <form class="form-inline">
-        <div class="form-group">
-          <label class="sr-only" for="exampleInputEmail3">type</label>
-          <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者">
-          <input type="text" class="form-control" id="typekey" placeholder="请选择学校">
-          <input type="text" class="form-control" id="typekey" placeholder="请选择在线班级">
-          <button type="button" class="btn btn-primary">搜索</button>
-          <button type="button" class="btn btn-primary">清空筛选</button>
-        </div>
-      </form>
+      <div class="option">
+        <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者">
+        <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
+          @option="changeOption">
+        </selectInput>
+        <selectInput :option="inputData.classOnline.option" :dropDownList="inputData.classOnline.list" tips="请选择线上班级"
+          id="classOnline" @option="changeOption"></selectInput>
+        <button type="button" class="btn-my">搜索</button>
+        <button type="button" class="btn-my">清空筛选</button>
+      </div>
     </div>
     <div class="panels">
       <table class="table table-hover" rules=rows frame=below>
@@ -51,7 +51,8 @@
 </template>
 
 <script>
-  import pagination from "../../teacher/utils/pagination.vue"
+  import pagination from "../utils/pagination.vue";
+  import selectInput from "../utils/selectInput";
   export default {
     name: 'quizList',
     data() {
@@ -59,6 +60,16 @@
         num: 0,
         limit: 10,
         currentList: [],
+        inputData: {
+          school: {
+            option: "",
+            list: ["全部", "赛迪思"]
+          },
+          classOnline: {
+            option: "",
+            list: ["全部", "赛迪思"]
+          }
+        },
         quizList: [{
             title: "函数如何书写",
             date: "2019-01-02 17:00",
@@ -98,11 +109,19 @@
       }
     },
     components: {
-      pagination
+      pagination,
+      selectInput
     },
     methods: {
       getNew(value) {
         this.currentList = this.quizList.slice(value, value + this.limit);
+      },
+      changeOption(item, id) {
+        Object.keys(this.inputData).forEach((res) => {
+          if (res === id) {
+            this.inputData[res].option = item;
+          }
+        });
       }
     },
     mounted() {
@@ -123,6 +142,18 @@
     justify-content: flex-start;
     font-size: 12px;
     color: #606266;
+  }
+
+  .option {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .option input {
+    width: 220px;
+    height: 32px;
   }
 
   .blue {
@@ -161,6 +192,16 @@
 
   table {
     border: #eeeeee;
+  }
+
+  .btn-my {
+    margin-right: 8px;
+    height: 32px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #ffffff;
+    background-color: #409eff;
+    border: 1px solid #409eff;
   }
 
 </style>

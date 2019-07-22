@@ -2,7 +2,7 @@
   <div class="subContainer">
     <span>作业点评</span>
     <div class="first-floor">
-      <div class="select-input">
+      <div class="select-input1">
         <input
           type="text"
           placeholder="请输入姓名、手机号"
@@ -764,6 +764,9 @@ table td {
 }
 
 .select-input {
+  margin-right:0;
+}
+.select-input1 {
   margin-right: 8px;
 }
 
