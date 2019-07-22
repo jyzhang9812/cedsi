@@ -10,18 +10,12 @@
     <p>作品评论</p>
     <div class="option">
       <input type="text" class="form-control" id="typekey" placeholder="请输入一级评论关键词">
-
-
-
       <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
         @option="changeOption">
       </selectInput>
-
-
       <button type="button" class="btn-my">搜索</button>
       <button type="button" class="btn-my">清空筛选</button>
     </div>
-
     <div class="panels">
       <table class="table table-hover" rules=rows frame=below>
         <thead>
@@ -49,7 +43,6 @@
       </table>
     </div>
     <pagination :num="num" :limit="limit" @getNew="getNew"></pagination>
-
   </div>
 </template>
 
@@ -63,7 +56,7 @@
         num: 0,
         limit: 10,
         currentList: [],
-        inputData: { 
+        inputData: {
           school: {
             option: "",
             list: ["全部", "赛迪思"]

@@ -11,15 +11,12 @@
     <div class="filter">
       <div class="option">
         <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者">
-
         <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list" tips="请选择活动类型"
           id="activityType" @option="changeOption">
         </selectInput>
-
         <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
           @option="changeOption">
         </selectInput>
-
         <button type="button" class="btn-my">搜索</button>
         <button type="button" class="btn-my">清空筛选</button>
       </div>

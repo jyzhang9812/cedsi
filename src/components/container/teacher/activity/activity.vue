@@ -9,26 +9,20 @@
   <div class="body">
     <p>活动管理</p>
     <div class="filter">
-
       <div class="option">
         <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者">
-
         <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list" tips="请选择活动类型"
           id="activityType" @option="changeOption">
         </selectInput>
-
         <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
           @option="changeOption">
         </selectInput>
-
         <selectInput :option="inputData.classOnline.option" :dropDownList="inputData.classOnline.list" tips="请选择线上班级"
           id="classOnline" @option="changeOption"></selectInput>
-
         <button type="button" class="btn-my">搜索</button>
         <button type="button" class="btn-my">清空筛选</button>
         <button type="button" class="btn-my">新增活动</button>
       </div>
-
     </div>
     <div class="panels">
       <table class="table table-hover" rules=rows frame=below>
@@ -1183,4 +1177,5 @@
     background-color: #409eff;
     border: 1px solid #409eff;
   }
+
 </style>

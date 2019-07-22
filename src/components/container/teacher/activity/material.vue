@@ -11,11 +11,9 @@
     <div class="filter">
       <div class="option">
         <input type="text" class="form-control" id="typekey" placeholder="请输入上传者名称">
-
         <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
           @option="changeOption">
         </selectInput>
-
         <button type="button" class="btn-my">搜索</button>
         <button type="button" class="btn-my">清空筛选</button>
         <button type="button" class="btn-my">新增</button>
