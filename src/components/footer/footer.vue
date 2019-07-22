@@ -1,7 +1,7 @@
 <template>
     <footer id="footer">
         <div>
-            <p>Copyright@2018 备案号：京ICP备17070826号-4</p>
+            <p>Copyright&nbsp;&copy;&nbsp;2018&nbsp;备案号：京ICP备17070826号-4</p>
         </div>
         <nav>
             <ul>

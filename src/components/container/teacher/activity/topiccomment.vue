@@ -9,16 +9,20 @@
   <div class="body">
     <p>活动评论管理</p>
     <div class="filter">
-      <form class="form-inline">
-        <div class="form-group">
-          <label class="sr-only" for="exampleInputEmail3">type</label>
-          <input type="text" class="form-control" id="typekey" placeholder="请选择学校">
-          <input type="text" class="form-control" id="typekey" placeholder="请选择活动类型">
-          <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者">
-          <button type="button" class="btn btn-primary">搜索</button>
-          <button type="button" class="btn btn-primary">清空筛选</button>
-        </div>
-      </form>
+      <div class="option">
+        <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者">
+
+        <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list" tips="请选择活动类型"
+          id="activityType" @option="changeOption">
+        </selectInput>
+
+        <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
+          @option="changeOption">
+        </selectInput>
+
+        <button type="button" class="btn-my">搜索</button>
+        <button type="button" class="btn-my">清空筛选</button>
+      </div>
     </div>
     <div class="panels">
       <table class="table table-hover" rules=rows frame=below>
@@ -51,7 +55,8 @@
 </template>
 
 <script>
-  import pagination from "../../teacher/utils/pagination.vue"
+  import pagination from "../utils/pagination.vue";
+  import selectInput from "../utils/selectInput";
   export default {
     name: 'commentList',
     data() {
@@ -59,6 +64,16 @@
         num: 0,
         limit: 10,
         currentList: [],
+        inputData: {
+          activityType: {
+            option: "",
+            list: ["全部", "通知公告", "班级活动", "辅导答疑", "布置作业"]
+          },
+          school: {
+            option: "",
+            list: ["全部", "赛迪思"]
+          }
+        },
         commentList: [{
             content: "这次活动不错",
             author: "小赛",
@@ -98,11 +113,19 @@
       }
     },
     components: {
-      pagination
+      pagination,
+      selectInput
     },
     methods: {
       getNew(value) {
         this.currentList = this.commentList.slice(value, value + this.limit);
+      },
+      changeOption(item, id) {
+        Object.keys(this.inputData).forEach((res) => {
+          if (res === id) {
+            this.inputData[res].option = item;
+          }
+        });
       }
     },
     mounted() {
@@ -125,6 +148,18 @@
     color: #606266;
   }
 
+  .option {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .option input {
+    width: 220px;
+    height: 32px;
+  }
+
   .blue {
     color: #409EFF;
   }
@@ -142,7 +177,6 @@
   .form-control {
     padding: 0px 30px 0 15px;
     font-size: 12px;
-    /* box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04) */
     margin-right: 5px;
   }
 
@@ -161,6 +195,16 @@
 
   table {
     border: #eeeeee;
+  }
+
+  .btn-my {
+    margin-right: 8px;
+    height: 32px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #ffffff;
+    background-color: #409eff;
+    border: 1px solid #409eff;
   }
 
 </style>

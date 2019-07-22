@@ -48,6 +48,11 @@
 
 <style scoped>
 
+  .dropdown {
+    /* margin-left: 5px; */
+    margin-right: 8px;
+  }
+
   /* 此项真实有效，可能 IDE 不能识别VUE的动态 class 绑定*/
   .beforeRotate {
     transition: all .3s;
