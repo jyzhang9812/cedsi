@@ -1,6 +1,6 @@
 <template>
   <div class="subContainer">
-    <span>作业点评</span>
+    <span>学情分析</span>
     <div class="first-floor">
       <div class="select-input1">
         <input
@@ -47,16 +47,14 @@
           :drop-down-list="inputData.grade.list"
         ></select-input>
       </div>
-
-      <!-- 这里要加一个课次 -->
-      <!-- <div class="select-input">
-        <select-input id="num"
+       <div class="select-input">
+        <select-input id="order"
                       tips="请选择课次"
-                      :option="inputData.grade.option"
+                      :option="inputData.order.option"
                       @option="changeOption"
-                      :drop-down-list="inputData.num.list">
+                      :drop-down-list="inputData.order.list">
         </select-input>
-      </div>-->
+      </div>
     </div>
     <div class="second-floor"></div>
 
@@ -74,17 +72,17 @@
         @changeDate="changeDate"
       ></date-picker>
 
-      <span>是否学习:</span>
-      <div class="btn-group btn-group-sm" role="group" aria-label="...">
-        <button type="button" class="btn btn-default">是</button>
-        <button type="button" class="btn btn-default">否</button>
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否学习:</span>
+      <div class="btn-group btn-group-sm" role="group">
+        <button type="button" class="btn btn-default" @click="studyOrNot(1)">是</button>
+        <button type="button" class="btn btn-default" @click="studyOrNot(0)">否</button>
       </div>
-      <span>是否做作业:</span>
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否做作业:</span>
       <div class="btn-group btn-group-sm" role="group" aria-label="...">
-        <button type="button" class="btn btn-default">是</button>
-        <button type="button" class="btn btn-default">否</button>
+        <button type="button" class="btn btn-default" @click="homeWorkOrNot(1)">是</button>
+        <button type="button" class="btn btn-default" @click="homeWorkOrNot(0)">否</button>
       </div>
-
+       <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
       <button class="btn btn-search" @click="search(formData),afterSearch()">搜索</button>
       <button class="btn btn-clear" @click="clearChoices">清空筛选</button>
     </div>
@@ -115,7 +113,7 @@
           </tr>
         </tbody>
       </table>
-     <pagination :num="num" :limit="limit" @getNew="getNew"></pagination>
+      <pagination :num="num" :limit="limit" @getNew="getNew"></pagination>
     </div>
   </div>
 </template>
@@ -123,14 +121,14 @@
 <script>
 import DatePicker from "../utils/datePicker";
 import SelectInput from "../utils/selectInput";
- import pagination from "../utils/pagination.vue"
+import pagination from "../utils/pagination.vue";
 export default {
   name: "remark",
   data() {
     return {
-       num: 0,
-       limit: 10,
-       currentList: [],
+      num: 0,
+      limit: 10,
+      currentList: [],
       chooseAll: true,
       comment: {
         commentStatus: 0,
@@ -143,7 +141,10 @@ export default {
         organName: "",
         className: "",
         objName: "",
-        levelName: ""
+        levelName: "",
+        studyOrNot:"",
+        videoName:"",
+        workOrNot:""
       },
       realList: [], //真正的数组，经过filter后的
       inputData: {
@@ -307,7 +308,7 @@ export default {
           studentName: "小明",
           objName: "课程三",
           levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          videoName: "开学第一课",
           isStart: "是",
           startTime: "2019-03-01 00:00:00 ",
           learnTime: "2019-04-03 20:00:06 ",
@@ -460,6 +461,22 @@ export default {
           commitTime: "2019-05-17 15:31:55",
           homeworkStar: "0",
           commitNmm: "2"
+        },
+         {
+          organName: "师大一中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "",
+          learnNmm: "",
+          learnNoteNmm: "",
+          commitTime: "",
+          homeworkStar: "",
+          commitNmm: ""
         }
       ]
     };
@@ -469,13 +486,26 @@ export default {
   },
   methods: {
     //真正的搜索
-    search({ telOrName, organName, className, objName, levelName }) {
-      this.realList = this.tableData.filter(item => {
+    search({
+      telOrName,
+      organName,
+      className,
+      objName,
+      levelName,
+      videoName,
+      studyOrNot,
+      workOrNot
+    }) {
+        let     temporaryList = this.tableData.filter(item => {
         let matchName = true;
         let matchOrganName = true;
         let matchClassName = true;
         let matchObjName = true;
         let matchLevelName = true;
+        let matchVideo=true;
+        let matchStudy=true;
+        let matchWork=true;
+
 
         if (telOrName) {
           // 姓名搜索;
@@ -498,15 +528,39 @@ export default {
           // 课程等级搜索;
           matchLevelName = item.levelName.match(levelName);
         }
-
+        if (videoName) {
+          // 课程等级搜索;
+          matchVideo = item.videoName.match(videoName);
+        }
+        //是否学习
+        if(studyOrNot){
+          if(studyOrNot==="yes"){
+            matchStudy=item.learnNmm;
+          }else
+           matchStudy=!item.learnNmm;
+        }
+        //是否做作业
+         if(workOrNot){
+          if(workOrNot==="yes"){
+            matchWork=item.commitNmm;
+          }else
+           matchWork=!item.commitNmm;
+        }
         return (
           matchName &&
           matchOrganName &&
           matchClassName &&
           matchObjName &&
-          matchLevelName
+          matchLevelName &&
+          matchVideo &&
+          matchStudy &&
+          matchWork
         );
-      });
+      })
+         this.realList=this.timeFilter(
+          this.inputData.startDate,
+          this.inputData.endDate,
+          temporaryList);
     },
 
     changeChoices() {
@@ -539,11 +593,16 @@ export default {
       this.inputData.startDate = "";
       this.inputData.endDate = "";
       this.optionsInit();
+      //清空搜索列表
       this.formData.telOrName = "";
       this.formData.organName = "";
       this.formData.className = "";
       this.formData.objName = "";
       this.formData.levelName = "";
+      this.formData.studyOrNot='';
+      this.formData.videoName='';
+      this.formData.workOrNot='';
+  
     },
     optionsInit() {
       this.inputData = {
@@ -581,39 +640,72 @@ export default {
     changeOption(item, id) {
       Object.keys(this.inputData).forEach(res => {
         if (res === id) {
-          this.inputData[res].option = item;
-          if (id === "school") {
+          this.inputData[res].option = item;                    
+          if (id === "school") {                                  //将下拉选项加入到搜索列表
             this.formData.organName = item;
-          }
+          }else
           if (id === "classes") {
             this.formData.className = item;
-          }
+          } else
           if (id === "course") {
             this.formData.objName = item;
-          }
+          } else
           if (id === "grade") {
             this.formData.levelName = item;
+          } else if(id==="order"){
+            this.formData.videoName = item;
           }
         }
       });
     },
-      getNew(value) {
-        this.currentList = this.realList.slice(value, value + this.limit);
-         console.log("生成currentList");
-        },
-      
-      afterSearch(){
-         this.getNew(1);
-       this.num = this.realList.length;
+    getNew(value) {
+      this.currentList = this.realList.slice(value, value + this.limit);
+    },
+    //在每次搜索后要重新生成分页
+    afterSearch() {
+      this.getNew(0);
+      this.num = this.realList.length;
+    },
+
+    studyOrNot(value) {
+      if (value) {
+        this.formData.studyOrNot = "yes";
+      } else {
+        this.formData.studyOrNot = "no";
+      }
+    },
+    homeWorkOrNot(value) {
+      if (value) {
+        this.formData.workOrNot = "yes";
+      } else {
+        this.formData.workOrNot = "no";
+      }
+    },
+     timeFilter(startTime, endTime, tableList) {
+        if (startTime === "" && endTime === "") return tableList;
+        startTime = startTime === "" ? 0 : startTime;
+        // 今天是 2019-7-21 此系统若能运行1000年算我输
+        endTime = endTime === "" ? "3000-01-01 00:00" : endTime;
+        let restTableList = tableList.slice(0);
+        startTime = new Date(startTime);
+        endTime = new Date(endTime);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          let submitTime = new Date(restTableList[i].commitTime);                   
+          if (startTime > submitTime || submitTime > endTime ||submitTime) {
+            console.log("sbmitTime"+submitTime);
+            restTableList.splice(i, 1);
+            i -= 1;
+            j -= 1;
+          }
+        }
+        return restTableList;
       }
   },
   mounted() {
-    
-    this.getNew(1);
-       this.num = this.realList.length;
-      
-      },
-  components: { SelectInput, DatePicker,pagination }
+    this.getNew(0);
+    this.num = this.realList.length;
+  },
+  components: { SelectInput, DatePicker, pagination }
 };
 </script>
 
@@ -764,10 +856,9 @@ table td {
 }
 
 .select-input {
-  margin-right:0;
+  margin-right: 0;
 }
 .select-input1 {
   margin-right: 8px;
 }
-
 </style>
