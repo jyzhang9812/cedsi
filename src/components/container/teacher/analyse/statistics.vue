@@ -74,13 +74,13 @@
 
       <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否学习:</span>
       <div class="btn-group btn-group-sm" role="group">
-        <button type="button" class="btn btn-default" @click="studyOrNot(1)">是</button>
-        <button type="button" class="btn btn-default" @click="studyOrNot(0)">否</button>
+        <button id="bt1" type="button" class="btn btn-default " @click="studyOrNot(1),changeButtonStyle(1)">是</button>
+        <button id="bt2" type="button" class="btn btn-default" @click="studyOrNot(0),changeButtonStyle(2)">否</button>
       </div>
       <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否做作业:</span>
       <div class="btn-group btn-group-sm" role="group" aria-label="...">
-        <button type="button" class="btn btn-default" @click="homeWorkOrNot(1)">是</button>
-        <button type="button" class="btn btn-default" @click="homeWorkOrNot(0)">否</button>
+        <button id="bt3" type="button" class="btn btn-default" @click="homeWorkOrNot(1),changeButtonStyle(3)">是</button>
+        <button id="bt4" type="button" class="btn btn-default" @click="homeWorkOrNot(0),changeButtonStyle(4)">否</button>
       </div>
        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
       <button class="btn btn-search" @click="search(formData),afterSearch()">搜索</button>
@@ -593,16 +593,8 @@ export default {
       this.inputData.startDate = "";
       this.inputData.endDate = "";
       this.optionsInit();
-      //清空搜索列表
-      this.formData.telOrName = "";
-      this.formData.organName = "";
-      this.formData.className = "";
-      this.formData.objName = "";
-      this.formData.levelName = "";
-      this.formData.studyOrNot='';
-      this.formData.videoName='';
-      this.formData.workOrNot='';
-  
+      this.cleanFormdata();
+      this.cleanButtonStyle();
     },
     optionsInit() {
       this.inputData = {
@@ -636,6 +628,46 @@ export default {
         hasComment: "background-color: #FFF; color: #000",
         noComment: "background-color: #FFF; color: #000"
       };
+    },
+    //操作是否单选按钮组
+    changeButtonStyle(id){
+      var bt1 = document.getElementById('bt1');   
+      var bt2 = document.getElementById('bt2');
+      var bt3 = document.getElementById('bt3'); 
+      var bt4 = document.getElementById('bt4');       
+    if(id==1){     
+        bt1.className = 'btn btn-default active';//选中它，给它添加active否则样式
+        bt2.className = 'btn btn-default ';//  清除同一个按钮组
+}
+    else if(id==2){        
+        bt2.className = 'btn btn-default active';
+        bt1.className = 'btn btn-default ';
+}
+    else if(id==3){     
+        bt3.className = 'btn btn-default active';  
+        bt4.className = 'btn btn-default ';
+}
+    else if(id==4){            
+        bt4.className = 'btn btn-default active';
+        bt3.className = 'btn btn-default ';  
+       
+}
+    },
+    //清空搜索列表
+    cleanFormdata(){
+     Object.keys(this.formData).forEach(res=>{
+       this.formData[res]="";
+     });
+    },
+    cleanButtonStyle(){           //清楚是否选择按钮状态
+       var bt1 = document.getElementById('bt1');      
+       var bt2 = document.getElementById('bt2');
+       var bt3 = document.getElementById('bt3');  
+       var bt4 = document.getElementById('bt4');               
+        bt1.className = 'btn btn-default ';
+        bt2.className = 'btn btn-default ';
+        bt3.className = 'btn btn-default ';
+        bt4.className = 'btn btn-default ';
     },
     changeOption(item, id) {
       Object.keys(this.inputData).forEach(res => {
@@ -704,9 +736,12 @@ export default {
   mounted() {
     this.getNew(0);
     this.num = this.realList.length;
+   
   },
   components: { SelectInput, DatePicker, pagination }
 };
+
+
 </script>
 
 <style scoped>
@@ -804,14 +839,14 @@ label {
 }
 
 .btn {
-  background: #409eff;
-  color: #fff;
+  
   height: 30px;
   border-radius: 5px;
   font-size: 12px;
   margin-bottom: 3px;
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
+
 
 .btn:focus {
   outline: none;
@@ -822,10 +857,14 @@ label {
 }
 
 .btn-search {
+  background: #409eff;
+  color: #fff;
   width: 54px;
 }
 
 .btn-clear {
+  background: #409eff;
+  color: #fff;
   width: 78px;
 }
 
