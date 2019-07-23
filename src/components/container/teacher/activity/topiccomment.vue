@@ -9,11 +9,11 @@
   <div class="body">
     <p>作品评论</p>
     <div class="option">
-      <input type="text" class="form-control" id="typekey" placeholder="请输入一级评论关键词" v-model="inputData.keywords">
+      <input type="text" class="form-control" id="keywords" placeholder="请输入评论关键词或作者" v-model="inputData.keywords">
       <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
         @option="changeOption">
       </selectInput>
-      <button type="button" class="btn-my">搜索</button>
+      <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
       <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
     </div>
     <div class="panels">
@@ -29,7 +29,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(list, index) in commentList">
+          <tr v-for="(list, index) in currentList">
             <td>{{index+1}}</td>
             <td>{{list.content}}</td>
             <td>{{list.auther}}</td>
@@ -42,7 +42,7 @@
         </tbody>
       </table>
     </div>
-    <pagination :num="num" :limit="limit" @getNew="getNew"></pagination>
+    <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
   </div>
 </template>
 
@@ -53,14 +53,14 @@
     name: 'commentList',
     data() {
       return {
-        num: 0,
         limit: 10,
         currentList: [],
+        tableData: [],
         inputData: {
           keywords: "",
           school: {
             option: "",
-            list: ["全部", "赛迪思"]
+            list: ["赛迪思","雁塔路小学","翠华路小学","回民街小学"]
           }
         },
         commentList: [{
@@ -73,7 +73,7 @@
             content: "还不错",
             auther: "小王",
             date: "2019-02-12 10:08",
-            school: "赛迪思"
+            school: "雁塔路小学"
           },
           {
             content: "凑合吧",
@@ -85,13 +85,13 @@
             content: "一般一般",
             auther: "小李",
             date: "2019-04-12 10:08",
-            school: "赛迪思"
+            school: "翠华路小学"
           },
           {
             content: "非常好",
             auther: "小张",
             date: "2019-06-12 10:08",
-            school: "赛迪思"
+            school: "回民街小学"
           }
         ]
       }
@@ -102,7 +102,7 @@
     },
     methods: {
       getNew(value) {
-        this.currentList = this.commentList.slice(value, value + this.limit);
+        this.currentList = this.tableData.slice(value, value + this.limit);
       },
       changeOption(item, id) {
         Object.keys(this.inputData).forEach((res) => {
@@ -115,7 +115,6 @@
         this.optionsClear();
       },
       optionsClear() {
-        // 如果是字符串则清空, 如果是对象则清空 option
         Object.keys(this.inputData).forEach((res) => {
           if (this.inputData[res].hasOwnProperty("option")) {
             this.inputData[res].option = "";
@@ -123,11 +122,48 @@
             this.inputData[res] = "";
           }
         });
+      },
+      titleOrAuthorFilter(titleOrAuthor, tableList) {
+        if (titleOrAuthor === "") return tableList;
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          if ((!new RegExp(titleOrAuthor).test(restTableList[i]["title"])) &&
+            (!new RegExp(titleOrAuthor).test(restTableList[i]["author"]))) {
+            restTableList.splice(i, 1);
+            j -= 1;
+            i -= 1;
+          }
+        }
+        return restTableList;
+      },
+      selectInputFilter(inputData, tableList) {
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          for (let res of Object.keys(inputData)) {
+            let condition1 = inputData[res].hasOwnProperty("option") &&
+              inputData[res].option !== "";
+            let condition2 = restTableList[i].hasOwnProperty(res) &&
+              restTableList[i][res] !== inputData[res].option;
+            if (condition1 && condition2) {
+              restTableList.splice(i, 1);
+              i -= 1;
+              j -= 1;
+              break;
+            }
+          }
+        }
+        return restTableList;
+      },
+      conditionSearch() {
+        let temp = this.titleOrAuthorFilter(this.inputData.keywords, this.commentList);
+        temp = this.selectInputFilter(this.inputData, temp);
+        this.tableData = temp;
+        this.getNew(0);
       }
     },
     mounted() {
-      this.getNew(1);
-      this.num = this.commentList.length;
+      this.tableData = this.commentList;
+      this.getNew(0);
     }
   }
 

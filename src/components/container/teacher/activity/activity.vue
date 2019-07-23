@@ -17,8 +17,6 @@
         <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
           @option="changeOption">
         </selectInput>
-        <!-- <selectInput :option="inputData.classOnline.option" :dropDownList="inputData.classOnline.list" tips="请选择线上班级"
-          id="classOnline" @option="changeOption"></selectInput> -->
         <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
         <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
         <button type="button" class="btn-my">新增活动</button>
@@ -72,11 +70,11 @@
           keywords: "",
           activityType: {
             option: "",
-            list: ["全部", "通知公告", "班级活动", "辅导答疑", "布置作业"]
+            list: ["通知公告", "班级活动", "辅导答疑", "布置作业"]
           },
           school: {
             option: "",
-            list: ["全部", "赛迪思"]
+            list: ["赛迪思","雁塔路小学","翠华路小学","回民街小学"]
           }
         },
         activityList: [{
@@ -94,7 +92,7 @@
             date: "2019-01-06 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "雁塔路小学",
             reply: "2",
             view: "6",
             status: "正常"
@@ -144,7 +142,7 @@
             date: "2019-04-01 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "翠华路小学",
             reply: "3",
             view: "6",
             status: "正常"
@@ -174,7 +172,7 @@
             date: "2019-04-01 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "翠华路小学",
             reply: "3",
             view: "6",
             status: "正常"
@@ -194,7 +192,7 @@
             date: "2019-04-01 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "翠华路小学",
             reply: "3",
             view: "6",
             status: "正常"
@@ -214,7 +212,7 @@
             date: "2019-04-01 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "雁塔路小学",
             reply: "3",
             view: "6",
             status: "正常"
@@ -294,7 +292,7 @@
             date: "2019-04-01 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "雁塔路小学",
             reply: "3",
             view: "6",
             status: "正常"
@@ -344,7 +342,7 @@
             date: "2019-04-01 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "翠华路小学",
             reply: "3",
             view: "6",
             status: "正常"
@@ -624,7 +622,7 @@
             date: "2019-04-01 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "翠华路小学",
             reply: "3",
             view: "6",
             status: "正常"
@@ -634,7 +632,7 @@
             date: "2019-04-01 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "翠华路小学",
             reply: "3",
             view: "6",
             status: "正常"
@@ -664,7 +662,7 @@
             date: "2019-04-01 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "翠华路小学",
             reply: "3",
             view: "6",
             status: "正常"
@@ -964,7 +962,7 @@
             date: "2019-04-01 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "回民街小学",
             reply: "3",
             view: "6",
             status: "正常"
@@ -994,7 +992,7 @@
             date: "2019-04-01 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "回民街小学",
             reply: "3",
             view: "6",
             status: "正常"
@@ -1034,7 +1032,7 @@
             date: "2019-04-01 12:00",
             author: "编程测试",
             activityType: "布置作业",
-            school: "赛迪思",
+            school: "回民街小学",
             reply: "3",
             view: "6",
             status: "正常"
@@ -1101,7 +1099,6 @@
         this.optionsClear();
       },
       optionsClear() {
-        // 如果是字符串则清空, 如果是对象则清空 option
         Object.keys(this.inputData).forEach((res) => {
           if (this.inputData[res].hasOwnProperty("option")) {
             this.inputData[res].option = "";
@@ -1149,7 +1146,6 @@
       }
     },
     mounted() {
-      this.num = this.activityList.length;
       this.tableData = this.activityList;
       this.getNew(0);
     }
