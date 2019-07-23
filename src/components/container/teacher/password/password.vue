@@ -71,6 +71,7 @@
         box-sizing: border-box;
         border: 0;
         outline: 0;
+        font-size: 12px;
         font-family: Helvetica, Arial, sans-serif;
     }
 
@@ -114,7 +115,7 @@
 
     .formlabel {
         width: 80px;
-        font-size: 18px;
+        font-size: 12px;
         line-height: 32px;
         margin-left: 10px;
         text-align: right;
@@ -123,8 +124,8 @@
     }
 
     .input {
-        width: 520px;
-        line-height: 32px;
+        width: 500px;
+        line-height: 15px;
         color: #000;
         padding: 5px 15px;
         border-radius: 5px;
@@ -145,7 +146,7 @@
     .buttonsubmit {
         margin-left: 260px;
         padding: 9px 15px;
-        font-size: 20px;
+        font-size: 12px;
         border-radius: 3px;
         color: #fff;
         background-color: #409eff;

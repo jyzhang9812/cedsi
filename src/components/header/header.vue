@@ -17,6 +17,9 @@
         <li>
           <router-link to="/console">Console</router-link>
         </li>
+        <li>
+          <router-link to="/EduAdmin">eduAdmin</router-link>
+        </li>
       </ul>
     </nav>
   </header>

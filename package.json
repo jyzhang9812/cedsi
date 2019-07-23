@@ -18,6 +18,7 @@
     "axios": "^0.19.0",
     "echarts": "^4.2.1",
     "jquery": "^3.4.1",
+    "v-charts": "^1.19.0",
     "video.js": "^7.6.0",
     "vue": "^2.5.2",
     "vue-localstorage": "^0.6.2",

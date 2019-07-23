@@ -1,29 +1,26 @@
 <template>
   <div class="row">
-    <div class="aside">
-      <ul class="menu">
-        <li v-for="item in aside" class="bg-hover">
-          <div class="item-name" @click="dropDownListListener(item)">
-            <i><img :alt="item.name" :src="item.iconSrc"></i>
-            <span>{{item.name}}</span>
-            <span
-              class="menuPosition"
-              :class="{'glyphicon glyphicon-menu-down':item.close,
-                'glyphicon glyphicon-menu-up':!item.close}"
-              v-show="item.children.length !== 0">
+    <div class="asidebg">
+      <div class="aside">
+        <ul class="menu">
+          <li v-for="item in aside" class="bg-hover">
+            <div class="item-name" @click="dropDownListListener(item)">
+              <i><img :alt="item.name" :src="item.iconSrc" class="aside-icon"></i>
+              <span>{{item.name}}</span>
+              <span class="menuPosition" :class="{'glyphicon glyphicon-menu-down':item.close,
+                'glyphicon glyphicon-menu-up':!item.close}" v-show="item.children.length !== 0">
               </span>
-          </div>
-          <div :class="{'collapse': item.close}">
-            <ul class="menu nav">
-              <li v-for="child in item.children"
-                  class="children"
-                  @click="$router.push(child.route)">
-                {{child.name}}
-              </li>
-            </ul>
-          </div>
-        </li>
-      </ul>
+            </div>
+            <div :class="{'collapse': item.close}">
+              <ul class="menu nav">
+                <li v-for="child in item.children" class="children" @click="$router.push(child.route)">
+                  {{child.name}}
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="sonContainer">
       <router-view></router-view>
@@ -32,59 +29,77 @@
 </template>
 
 <script>
-
   export default {
     name: "asider",
     data() {
       return {
         aside: [
           {
-            name: "工作台",
-            iconSrc: "../../../../static/images/aside/staging.png",
-            children: [],
-            close: true,
-            route: "/console/staging"
-          },
-          {
             name: "教学管理",
             iconSrc: "../../../../static/images/aside/teachingManagement.png",
             children: [
-              {name: "作业点评", route: "/console/homework"},
-              {name: "精选作品", route: "/console/choiceness"},
-              {name: "视频管理", route: "/console/video"}
+              {
+                name: "作业点评",
+                route: "/console/homework"
+              },
+              {
+                name: "精选作品",
+                route: "/console/choiceness"
+              },
+              {
+                name: "视频管理",
+                route: "/console/video"
+              }
             ],
             close: true
           },
           {
             name: "活动管理",
             iconSrc: "../../../../static/images/aside/activityManagement.png",
-            children: [
-              {name: "发布活动", route: "/console/activity"},
-              {name: "学生提问", route: "/console/question"},
-              {name: "活动评论", route: "/console/opuscomment"},
-              {name: "作品评论", route: "/console/topiccomment"},
-              {name: "辅导资料", route: "/console/material"}
+            children: [{
+              name: "发布活动",
+              route: "/console/activity"
+            },
+              {
+                name: "学生提问",
+                route: "/console/question"
+              },
+              // 2019-07-22
+              // 由于业务逻辑不清楚, 暂时关掉这两个页面
+              // {
+              //   name: "活动评论",
+              //   route: "/console/opuscomment"
+              // },
+              // {
+              //   name: "作品评论",
+              //   route: "/console/topiccomment"
+              // },
+              {
+                name: "辅导资料",
+                route: "/console/material"
+              }
             ],
             close: true
           },
           {
             name: "统计分析",
             iconSrc: "../../../../static/images/aside/statisticalAnalyses.png",
-            children: [
-              {name: "学情分析", route: "/console/statistics"}
-            ],
+            children: [{
+              name: "学情分析",
+              route: "/console/statistics"
+            }],
             close: true
           },
           {
             name: "个人中心",
-            iconSrc: "../../../../static/images/aside/statisticalAnalyses.png",
+            iconSrc: "../../../../static/images/aside/personalCenter.png",
             children: [],
             close: true,
             route: "/console/space"
           },
           {
             name: "修改密码",
-            iconSrc: "../../../../static/images/aside/statisticalAnalyses.png",
+            iconSrc: "../../../../static/images/aside/modifyPwd.png",
             children: [],
             close: true,
             route: "/console/password"
@@ -104,13 +119,16 @@
       }
     }
   }
+
 </script>
 
 <style scoped>
-
   .row {
-    height: 100%;
+    /* height: 100%; */
     margin: 0 !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
   }
 
   .menu {
@@ -129,8 +147,23 @@
     color: #FFF;
     background-color: #3766A6;
     width: 220px;
-    min-width: 170px;
-    height: 100%;
+    /* position: fixed; */
+    top: 0;
+    bottom: 0;
+    /* height: 100%; */
+    float: left;
+    display: table;
+    height: auto;
+  }
+
+  .asidebg {
+    background-color: #3766A6;
+    width: 220px;
+  }
+
+  .aside-icon {
+    width: 18px;
+    height: 18px;
   }
 
   .item-name {
@@ -154,13 +187,9 @@
   }
 
   .sonContainer {
-    position: fixed;
-    right: 0;
-    left: 250px;
-    bottom: 0;
-    top: 56px;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    margin-left: 20px;
+    padding: 0;
+    width: 100%;
   }
 
 </style>

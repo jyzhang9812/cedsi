@@ -2,25 +2,21 @@
  * @Email: rumosky@163.com
  * @Author: rumosky
  * @Github: https://github.com/rumosky
- * @Date: 2019-07-18 09:32:13
- * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 17:29:06
+ * @Date: 2019-07-19 13:44:06
+ * @Description: teacher角色学生提问页面
  -->
 <template>
   <div class="body">
     <p>学生提问</p>
     <div class="filter">
-
-      <form class="form-inline">
-        <div class="form-group">
-          <label class="sr-only" for="exampleInputEmail3">type</label>
-          <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者">
-          <input type="text" class="form-control" id="typekey" placeholder="请选择学校">
-          <input type="text" class="form-control" id="typekey" placeholder="请选择在线班级">
-          <button type="button" class="btn btn-primary">搜索</button>
-          <button type="button" class="btn btn-primary">清空筛选</button>
-        </div>
-      </form>
+      <div class="option">
+        <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
+        <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
+          @option="changeOption">
+        </selectInput>
+        <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
+        <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
+      </div>
     </div>
     <div class="panels">
       <table class="table table-hover" rules=rows frame=below>
@@ -36,11 +32,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(list, index) in quizList">
+          <tr v-for="(list, index) in currentList">
             <td>{{index+1}}</td>
             <td class="blue">{{list.title}}</td>
             <td>{{list.date}}</td>
-            <td>{{list.s_name}}</td>
+            <td>{{list.author}}</td>
             <td>{{list.school}}</td>
             <td>{{list.status}}</td>
             <td><span class="blue">解答</span>&nbsp;&nbsp;<span class="red">删除</span></td>
@@ -48,69 +44,133 @@
         </tbody>
       </table>
     </div>
-    <div class="pag">
-
-      <ul class="pagination modal-2">
-        <li><a href="#" class="prev">&laquo </a></li>
-        <li><a href="#" class="active">1</a></li>
-        <li> <a href="#">2</a></li>
-        <li> <a href="#">3</a></li>
-        <li> <a href="#">4</a></li>
-        <li> <a href="#">5</a></li>
-        <li> <a href="#">6</a></li>
-        <li> <a href="#">7</a></li>
-        <li> <a href="#">8</a></li>
-        <li> <a href="#">9</a></li>
-        <li><a href="#" class="next"> &raquo;</a></li>
-      </ul>
-
-
-    </div>
+    <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
   </div>
 </template>
 
 <script>
+  import pagination from "../utils/pagination.vue";
+  import selectInput from "../utils/selectInput";
   export default {
     name: 'quizList',
     data() {
       return {
+        limit: 10,
+        currentList: [],
+        tableData: [],
+        inputData: {
+          keywords: "",
+          school: {
+            option: "",
+            list: ["赛迪思","雁塔路小学","翠华路小学","回民街小学"]
+          }
+        },
         quizList: [{
             title: "函数如何书写",
             date: "2019-01-02 17:00",
-            s_name: "小赛",
-            school: "赛迪思",
+            author: "小赛",
+            school: "回民街小学",
             status: "已解答"
           },
           {
             title: "类是干什么的",
             date: "2019-02-02 17:00",
-            s_name: "小迪",
-            school: "赛迪思",
+            author: "小迪",
+            school: "雁塔路小学",
             status: "已解答"
           },
           {
             title: "不会啊",
             date: "2019-03-02 17:00",
-            s_name: "小李",
-            school: "赛迪思",
+            author: "小李",
+            school: "翠华路小学",
             status: "未解答"
           },
           {
             title: "好难",
             date: "2019-04-02 17:00",
-            s_name: "小王",
+            author: "小王",
             school: "赛迪思",
             status: "已解答"
           },
           {
             title: "辛苦",
             date: "2019-05-02 17:00",
-            s_name: "小刘",
+            author: "小刘",
             school: "赛迪思",
             status: "未解答"
           }
         ]
       }
+    },
+    components: {
+      pagination,
+      selectInput
+    },
+    methods: {
+      getNew(value) {
+        this.currentList = this.tableData.slice(value, value + this.limit);
+      },
+      changeOption(item, id) {
+        Object.keys(this.inputData).forEach((res) => {
+          if (res === id) {
+            this.inputData[res].option = item;
+          }
+        });
+      },
+      clearChoices() {
+        this.optionsClear();
+      },
+      optionsClear() {
+        Object.keys(this.inputData).forEach((res) => {
+          if (this.inputData[res].hasOwnProperty("option")) {
+            this.inputData[res].option = "";
+          } else {
+            this.inputData[res] = "";
+          }
+        });
+      },
+      titleOrAuthorFilter(titleOrAuthor, tableList) {
+        if (titleOrAuthor === "") return tableList;
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          if ((!new RegExp(titleOrAuthor).test(restTableList[i]["title"])) &&
+            (!new RegExp(titleOrAuthor).test(restTableList[i]["author"]))) {
+            restTableList.splice(i, 1);
+            j -= 1;
+            i -= 1;
+          }
+        }
+        return restTableList;
+      },
+      selectInputFilter(inputData, tableList) {
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          for (let res of Object.keys(inputData)) {
+            let condition1 = inputData[res].hasOwnProperty("option") &&
+              inputData[res].option !== "";
+            let condition2 = restTableList[i].hasOwnProperty(res) &&
+              restTableList[i][res] !== inputData[res].option;
+            if (condition1 && condition2) {
+              restTableList.splice(i, 1);
+              i -= 1;
+              j -= 1;
+              break;
+            }
+          }
+        }
+        return restTableList;
+      },
+      conditionSearch() {
+        let temp = this.titleOrAuthorFilter(this.inputData.keywords, this.quizList);
+        temp = this.selectInputFilter(this.inputData, temp);
+        this.tableData = temp;
+        this.getNew(0);
+      }
+    },
+    mounted() {
+      this.tableData = this.quizList;
+      this.getNew(0);
     }
   }
 
@@ -126,6 +186,18 @@
     justify-content: flex-start;
     font-size: 12px;
     color: #606266;
+  }
+
+  .option {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .option input {
+    width: 220px;
+    height: 32px;
   }
 
   .blue {
@@ -150,81 +222,30 @@
   }
 
   .panels {
-    margin-left: 10px;
+    text-align: center;
   }
 
   .panels tr {
     height: 40px;
+    text-align: center;
+  }
+
+  .panels th {
+    text-align: center;
   }
 
   table {
     border: #eeeeee;
   }
 
-  .pag {
+  .btn-my {
+    margin-right: 8px;
+    height: 32px;
+    border-radius: 4px;
     font-size: 13px;
-  }
-
-  .pagination {
-    list-style: none;
-    display: inline-block;
-    padding: 0;
-    margin-top: 10px;
-  }
-
-  .pagination li {
-    display: inline;
-    text-align: center;
-  }
-
-  .pagination a {
-    float: left;
-    display: block;
-    font-size: 13px;
-    text-decoration: none;
-    padding: 5px 12px;
-    color: #c2c4cc;
-    margin-left: -1px;
-    border: 1px solid transparent;
-    line-height: 1.5;
-  }
-
-  .pagination a.active {
-    cursor: default;
-  }
-
-  .pagination a:active {
-    outline: none;
-  }
-
-  .modal-2 li:first-child a {
-    -moz-border-radius: 50px 0 0 50px;
-    -webkit-border-radius: 50px;
-    border-radius: 50px 0 0 50px;
-  }
-
-  .modal-2 li:last-child a {
-    -moz-border-radius: 0 50px 50px 0;
-    -webkit-border-radius: 0;
-    border-radius: 0 50px 50px 0;
-  }
-
-  .modal-2 a {
-    border-color: #f4f4f5;
-    color: #c2c4cc;
-    background: #f4f4f5;
-  }
-
-  .modal-2 a:hover {
-    color: #FFF;
-    background-color: #409EFF;
-  }
-
-  .modal-2 a.active,
-  .modal-2 a:active {
-    border-color: #409EFF;
-    background: #409EFF;
-    color: #fff;
+    color: #ffffff;
+    background-color: #409eff;
+    border: 1px solid #409eff;
   }
 
 </style>

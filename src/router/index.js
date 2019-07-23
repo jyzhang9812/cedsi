@@ -19,17 +19,26 @@ import topiccomment from "../components/container/teacher/activity/topiccomment"
 import opuscomment from "../components/container/teacher/activity/opuscomment";
 import quiz from "../components/container/teacher/activity/quiz";
 import activity from "../components/container/teacher/activity/activity";
-import video from "../components/container/teacher/teach/video";
+import videos from "../components/container/teacher/teach/videos";
 import choiceness from "../components/container/teacher/teach/choiceness";
 import remark from "../components/container/teacher/teach/remark";
 import password from "../components/container/teacher/password/password";
 import space from "../components/container/teacher/space/space";
 import staging from "../components/container/teacher/staging/staging";
 import asider from "../components/container/teacher/sidebar"
+//以下是教务角色
+import eduAdmin from "../components/container/eduAdmin/eduSidebar"
+import eduActivity from "../components/container/eduAdmin/activity/activity"
+import classManagement from "../components/container/eduAdmin/office/classManagement"
+import stuManagement from "../components/container/eduAdmin/office/stuManagement"
+import teaching from "../components/container/eduAdmin/teaching/teaching"
+import eduStatistics from "../components/container/eduAdmin/statistics/statistics"
+import eduStaging from "../components/container/eduAdmin/edustaging/edustaging"
 
 Vue.use(Router);
 
 export default new Router({
+  mode: 'history',
   routes: [
     { path: '/', component: index },
     { path: '/signup', component: SignupPage },
@@ -44,7 +53,7 @@ export default new Router({
         { path: '/dashboard/question',component: question}
       ]
     },
-    { path:'/dashboard/map',component:map },  
+    { path:'/dashboard/map',component:map },
     {
       path: '/console',
       component: asider,
@@ -54,13 +63,25 @@ export default new Router({
           { path: '/console/password', component: password},
           { path: '/console/homework', component: remark },
           { path: '/console/choiceness', component: choiceness },
-          { path: '/console/video', component: video },
+          { path: '/console/video', component: videos },
           { path: '/console/activity', component: activity },
           { path: '/console/question', component: quiz },
           { path: '/console/opuscomment', component: opuscomment },
           { path: '/console/topiccomment', component: topiccomment },
           { path: '/console/material', component: material },
           { path: '/console/statistics', component: statistics }
+      ]
+    },
+    {
+      path:'/eduAdmin',
+      component:eduAdmin,
+      children:[
+        { path:'/eduAdmin/',component:eduStaging},
+        { path:'/eduAdmin/activity',component:eduActivity },
+        { path:'/eduAdmin/classManagement',component:classManagement },
+        { path:'/eduAdmin/stuManagement',component:stuManagement },
+        { path:'/eduAdmin/teaching',component:teaching },
+        { path:'/eduAdmin/eduStatistice',component:eduStatistics },
       ]
     }
   ]

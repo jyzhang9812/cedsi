@@ -1,361 +1,903 @@
 <template>
-  <div class="container-fluid">
-         
-            <strong>学情分析</strong>
-
-<div class="row">
-
-<div class="col-md-2">
+  <div class="subContainer">
+    <span>学情分析</span>
+    <div class="first-floor">
+      <div class="select-input1">
         <input
           type="text"
-          class="form-control"
-          placeholder="请输入学生姓名或手机号"
-          aria-describedby="basic-addon2"
+          placeholder="请输入姓名、手机号"
+          class="textBox"
+          id="tel-name"
+          v-model="formData.telOrName"
         />
-   </div>
-
-     
-
-  
-   <div class="col-md-2">
-  <button  class="btn btn-default  btn-group-justified dropdown-toggle"  type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    请选择学校
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-   </div>
-  
-
- 
-    <div class="col-md-2">
-  <button class="btn  btn-default  btn-group-justified dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    请选择班级
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-    </div>
-
-
-
-  
-    <div class="col-md-2">
-  <button class="btn btn-default  btn-group-justified dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    请选择课程
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-    </div>
-
-    <div class="col-md-2">
-  <button class="btn btn-default  btn-group-justified dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    请选择课程等级
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-</div>
-
-
-
- 
-    <div class="col-md-2">
-  <button class="btn btn-default  btn-group-justified dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    请选择课次
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-</div>
- 
-
-</div>
-
-<br>
-
-<div class="row">
-
-
-  
-
- 
-    <div class="col-md-2">
-  <input type="text" id="test12" class="form-control"
-          placeholder="选择开始日期">
-</div>
-
- 
- <div class="col-md-2">
-  <input type="text" id="test13" class="form-control"
-          placeholder="选择结束日期">
-</div>
-
-<div class="col-md-2">是否做作业:
-
-<div class="btn-group" role="group" aria-label="...">
-  <button type="button" class="btn btn-default">是</button>
-  <button type="button" class="btn btn-default">否</button>
-</div>
-</div>
-
-<div class="col-md-2">是否学习:
-
-<div class="btn-group" role="group" aria-label="...">
-  <button type="button" class="btn btn-default">是</button>
-  <button type="button" class="btn btn-default">否</button>
-</div>
-</div>
-
-<button type="button" class="btn btn-primary">清空筛选</button>
-<button type="button" class="btn btn-primary">搜索</button>
-
-
-
-
-
-
-</div>
-
-      
-
-      <div class="panel-body">
-
-        <table class="table table-hover">
-          <thead>
-            <th width="55">
-              <strong>
-                <span>序号</span>
-              </strong>
-            </th>
-            <th>
-              <strong>
-                <span>学校</span>
-              </strong>
-            </th>
-            <th>
-              <strong>
-                <span>线上班级</span>
-              </strong>
-            </th>
-            <th>
-              <strong>
-                <span>学生</span>
-              </strong>
-            </th>
-            <th>
-              <strong>
-                <span>课程</span>
-              </strong>
-            </th>
-            <th>
-              <strong>
-                <span>等级</span>
-              </strong>
-            </th>
-            <th>
-              <strong>
-                <span>课次</span>
-              </strong>
-            </th>
-            <th>
-              <strong>
-                <span>是否开课</span>
-              </strong>
-            </th>
-            <th>
-              <strong>
-                <span>年龄</span>
-              </strong>
-            </th>
-            <th>
-              <strong>
-                <span>开课时间</span>
-              </strong>
-            </th>
-            <th>
-              <strong>
-                <span>学习时间</span>
-              </strong>
-            </th>
-            <th width="50">
-              <strong>
-                <span>学习视频次数</span>
-              </strong>
-            </th>
-            <th width="50">
-              <strong>
-                <span>观看讲义次数</span>
-              </strong>
-            </th>
-            <th width="80">
-              <strong>
-                <span>首次作业提交时间</span>
-              </strong>
-            </th>
-            <th>
-              <strong>
-                <span>最新作业得星</span>
-              </strong>
-            </th>
-            <th>
-              <strong>
-                <span>提交作业次数</span>
-              </strong>
-            </th>
-          </thead>
-          
-                    <tbody>
-                        <!-- <tr v-for="(item,index) in myclassmate" :key="index"> -->
-                          <tr>
-                            <td>1</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-                            <td>snnu</td>
-
-                        </tr>
-
-          </tbody>
-        </table>
-        <hr />
-          
-<ul class="pagination modal-2">
-  <li><a href="#" class="prev">&laquo;</a></li>
-  <li><a href="#" class="active">1</a></li>
-  <li> <a href="#">2</a></li>
-  <li> <a href="#" >3</a></li>
-  <li> <a href="#">4</a></li>
-  <li> <a href="#">5</a></li>
-  <li> <a href="#">6</a></li>
-  <li> <a href="#">7</a></li>
-  <li> <a href="#">8</a></li>
-  <li> <a href="#">9</a></li>
-  <li><a href="#" class="next">  &raquo;</a></li>
-</ul><br>
-
-        
       </div>
-    
+      <div class="select-input">
+        <select-input
+          id="school"
+          tips="请选择学校"
+          :option="inputData.school.option"
+          @option="changeOption"
+          :drop-down-list="inputData.school.list"
+        ></select-input>
+      </div>
+      <div class="select-input">
+        <select-input
+          id="classes"
+          tips="请选择班级名称"
+          :option="inputData.classes.option"
+          @option="changeOption"
+          :drop-down-list="inputData.classes.list"
+        ></select-input>
+      </div>
+      <div class="select-input">
+        <select-input
+          id="course"
+          tips="请选择课程"
+          :option="inputData.course.option"
+          @option="changeOption"
+          :drop-down-list="inputData.course.list"
+        ></select-input>
+      </div>
+      <div class="select-input">
+        <select-input
+          id="grade"
+          tips="请选择课程等级"
+          :option="inputData.grade.option"
+          @option="changeOption"
+          :drop-down-list="inputData.grade.list"
+        ></select-input>
+      </div>
+       <div class="select-input">
+        <select-input id="order"
+                      tips="请选择课次"
+                      :option="inputData.order.option"
+                      @option="changeOption"
+                      :drop-down-list="inputData.order.list">
+        </select-input>
+      </div>
+    </div>
+    <div class="second-floor"></div>
+
+    <div class="third-floor">
+      <date-picker
+        tips="选择开始时间"
+        id="datePicker_start"
+        :date="inputData.startDate"
+        @changeDate="changeDate"
+      ></date-picker>
+      <date-picker
+        tips="选择结束时间"
+        id="datePicker_end"
+        :date="inputData.endDate"
+        @changeDate="changeDate"
+      ></date-picker>
+
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否学习:</span>
+      <div class="btn-group btn-group-sm" role="group">
+        <button id="bt1" type="button" class="btn btn-default " @click="studyOrNot(1),changeButtonStyle(1)">是</button>
+        <button id="bt2" type="button" class="btn btn-default" @click="studyOrNot(0),changeButtonStyle(2)">否</button>
+      </div>
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否做作业:</span>
+      <div class="btn-group btn-group-sm" role="group" aria-label="...">
+        <button id="bt3" type="button" class="btn btn-default" @click="homeWorkOrNot(1),changeButtonStyle(3)">是</button>
+        <button id="bt4" type="button" class="btn btn-default" @click="homeWorkOrNot(0),changeButtonStyle(4)">否</button>
+      </div>
+       <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <button class="btn btn-search" @click="search(formData),afterSearch()">搜索</button>
+      <button class="btn btn-clear" @click="clearChoices">清空筛选</button>
+    </div>
+    <div class="forth-floor">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th v-for="title in tableTitle" :key="title" class="title">{{title}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(list,index) in currentList " :key="index" class="content">
+            <td>{{index+1}}</td>
+            <td>{{list.organName}}</td>
+            <td>{{list.className}}</td>
+            <td>{{list.studentName}}</td>
+            <td>{{list.objName}}</td>
+            <td>{{list.levelName}}</td>
+            <td width="200px">{{list.videoName}}</td>
+            <td>{{list.isStart}}</td>
+            <td width="90px">{{list.startTime}}</td>
+            <td width="90px">{{list.learnTime}}</td>
+            <td width="60px">{{list.learnNmm}}</td>
+            <td width="60px">{{list.learnNoteNmm}}</td>
+            <td>{{list.commitTime}}</td>
+            <td>{{list.homeworkStar}}</td>
+            <td>{{list.commitNmm}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <pagination :num="num" :limit="limit" @getNew="getNew"></pagination>
+    </div>
   </div>
 </template>
 
-
-<style scoped>
-
-.ul {
-  padding: 0;
-  min-height: 0;
-  margin: auto;
-}
-
-.panel {
-  min-height: 620px;
-  width: 100%;
-  margin: 0;
-  border-radius: 0;
-  border: none;
-}
-
-.avastimg {
-  vertical-align: middle;
-  width: 20px;
-}
-
-.col-md-8 {
-  padding: 0;
-}
-
-.teacherimg {
-  vertical-align: middle;
-  width: 40px;
-}
-
-strong {
-  color: rgb(68, 153, 206);
-}
-
-.modal-2 li:first-child a {
-  -moz-border-radius: 50px 0 0 50px;
-  -webkit-border-radius: 50px;
-  border-radius: 50px 0 0 50px;
-}
-.modal-2 li:last-child a {
-  -moz-border-radius: 0 50px 50px 0;
-  -webkit-border-radius: 0;
-  border-radius: 0 50px 50px 0;
-}
-.modal-2 a {
-  border-color: #ddd;
-  color: #999;
-  background: #fff;
-}
-.modal-2 a:hover {
-  color: #E34E48;
-  background-color: #eee;
-}
-.modal-2 a.active, .modal-2 a:active {
-  border-color: #E34E48;
-  background: #E34E48;
-  color: #fff;
-}
-
-</style>
-
-
 <script>
-
+import DatePicker from "../utils/datePicker";
+import SelectInput from "../utils/selectInput";
+import pagination from "../utils/pagination.vue";
 export default {
-  name: "statistics",
-   mounted() {
-    laydate.render({
-  elem: '#test12'
-  ,format: 'dd/MM/yyyy'
-});
- laydate.render({
-  elem: '#test13'
-  ,format: 'dd/MM/yyyy'
-});
+  name: "remark",
+  data() {
+    return {
+      num: 0,
+      limit: 10,
+      currentList: [],
+      chooseAll: true,
+      comment: {
+        commentStatus: 0,
+        hasComment: "background-color: #FFF; color: #000",
+        noComment: "background-color: #FFF; color: #000"
+      },
+      //搜索条件
+      formData: {
+        telOrName: "",
+        organName: "",
+        className: "",
+        objName: "",
+        levelName: "",
+        studyOrNot:"",
+        videoName:"",
+        workOrNot:""
+      },
+      realList: [], //真正的数组，经过filter后的
+      inputData: {
+        telOrName: "",
+        startDate: "",
+        endDate: "",
+        school: {
+          option: "",
+          list: ["师大一中", "师大二中", "师大三中"]
+        },
+        classes: {
+          option: "",
+          list: ["1班", "2班", "3班", "4班", "5班"]
+        },
+        course: {
+          option: "",
+          list: ["课程一", "课程二", "课程三"]
+        },
+        grade: {
+          option: "",
+          list: ["1", "2", "3", "4"]
+        },
+        order: {
+          option: "",
+          list: ["开学第一课", "开学第二课", "开学第三课"]
+        }
+      },
+      tableTitle: [
+        "序号",
+        "学校",
+        "线上班级",
+        "学生",
+        "课程",
+        "等级",
+        "课次",
+        "是否开课",
+        "开课时间",
+        "学习时间",
+        "学习视频次数",
+        "观看讲义次数",
+        "首次作业提交时间",
+        "最新作业得星",
+        "提交作业次数"
+      ],
+      tableData: [
+        {
+          organName: "师大一中",
+          className: "赛迪思",
+          studentName: "小赛",
+          objName: "课程一",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大一中",
+          className: "赛迪思",
+          studentName: "小王",
+          objName: "课程一",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第2节课 | 初遇地球--重组机器人",
+          isStart: "是",
+          startTime: "2019-05-01 00:00:00",
+          learnTime: "2019-05-27 17:53:33",
+          learnNmm: "1",
+          learnNoteNmm: "1",
+          commitTime: "2019-05-27 16:57:55",
+          homeworkStar: "3",
+          commitNmm: "1"
+        },
+        {
+          organName: "师大二中",
+          className: "赛迪思",
+          studentName: "大红",
+          objName: "课程二",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第2节课 | 初遇地球--重组机器人",
+          isStart: "是",
+          startTime: "2019-05-01 00:00:00",
+          learnTime: "2019-05-27 17:53:33",
+          learnNmm: "1",
+          learnNoteNmm: "1",
+          commitTime: "2019-05-27 16:57:55",
+          homeworkStar: "3",
+          commitNmm: "1"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "开学第一课",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+        {
+          organName: "师大三中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "2019-04-03 20:00:06 ",
+          learnNmm: "17",
+          learnNoteNmm: "11",
+          commitTime: "2019-05-17 15:31:55",
+          homeworkStar: "0",
+          commitNmm: "2"
+        },
+         {
+          organName: "师大一中",
+          className: "赛迪思",
+          studentName: "小明",
+          objName: "课程三",
+          levelName: "Level 1",
+          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
+          isStart: "是",
+          startTime: "2019-03-01 00:00:00 ",
+          learnTime: "",
+          learnNmm: "",
+          learnNoteNmm: "",
+          commitTime: "",
+          homeworkStar: "",
+          commitNmm: ""
+        }
+      ]
+    };
+  },
+  created() {
+    this.search({});
+  },
+  methods: {
+    //真正的搜索
+    search({
+      telOrName,
+      organName,
+      className,
+      objName,
+      levelName,
+      videoName,
+      studyOrNot,
+      workOrNot
+    }) {
+        let     temporaryList = this.tableData.filter(item => {
+        let matchName = true;
+        let matchOrganName = true;
+        let matchClassName = true;
+        let matchObjName = true;
+        let matchLevelName = true;
+        let matchVideo=true;
+        let matchStudy=true;
+        let matchWork=true;
 
-  }
+
+        if (telOrName) {
+          // 姓名搜索;
+          matchName = item.studentName.match(telOrName);
+        }
+
+        if (organName) {
+          // 学校搜索;
+          matchOrganName = item.organName.match(organName);
+        }
+        if (className) {
+          // 班级搜索;
+          matchClassName = item.className.match(className);
+        }
+        if (objName) {
+          // 课程搜索;
+          matchObjName = item.objName.match(objName);
+        }
+        if (levelName) {
+          // 课程等级搜索;
+          matchLevelName = item.levelName.match(levelName);
+        }
+        if (videoName) {
+          // 课程等级搜索;
+          matchVideo = item.videoName.match(videoName);
+        }
+        //是否学习
+        if(studyOrNot){
+          if(studyOrNot==="yes"){
+            matchStudy=item.learnNmm;
+          }else
+           matchStudy=!item.learnNmm;
+        }
+        //是否做作业
+         if(workOrNot){
+          if(workOrNot==="yes"){
+            matchWork=item.commitNmm;
+          }else
+           matchWork=!item.commitNmm;
+        }
+        return (
+          matchName &&
+          matchOrganName &&
+          matchClassName &&
+          matchObjName &&
+          matchLevelName &&
+          matchVideo &&
+          matchStudy &&
+          matchWork
+        );
+      })
+         this.realList=this.timeFilter(
+          this.inputData.startDate,
+          this.inputData.endDate,
+          temporaryList);
+    },
+
+    changeChoices() {
+      this.chooseAll = !this.chooseAll;
+    },
+    changeComment(comment) {
+      if (comment === "has") {
+        // 0: 均为选中  1:已评论   2: 未评论
+        this.comment = {
+          commentStatus: 1,
+          hasComment: "background-color: #409EFF; color: #FFF",
+          noComment: "background-color: #FFF; color: #000"
+        };
+      } else {
+        this.comment = {
+          commentStatus: 2,
+          hasComment: "background-color: #FFF; color: #000",
+          noComment: "background-color: #409EFF; color: #FFF"
+        };
+      }
+    },
+    changeDate(value, id) {
+      if (id === "datePicker_start") {
+        this.inputData.startDate = value;
+      } else if (id === "datePicker_end") {
+        this.inputData.endDate = value;
+      }
+    },
+    clearChoices() {
+      this.inputData.startDate = "";
+      this.inputData.endDate = "";
+      this.optionsInit();
+      this.cleanFormdata();
+      this.cleanButtonStyle();
+    },
+    optionsInit() {
+      this.inputData = {
+        telOrName: "",
+        startDate: "",
+        endDate: "",
+        school: {
+          option: "",
+          list: ["师大一中", "师大二中", "师大三中"]
+        },
+        classes: {
+          option: "",
+          list: ["1班", "2班", "3班", "4班", "5班"]
+        },
+        course: {
+          option: "",
+          list: ["课程一", "课程二", "课程三"]
+        },
+        grade: {
+          option: "",
+          list: ["1", "2", "3", "4"]
+        },
+        order: {
+          option: "",
+          list: ["开学第一课", "开学第二课", "开学第三课"]
+        }
+      };
+      this.chooseAll = true;
+      this.comment = {
+        commentStatus: 0,
+        hasComment: "background-color: #FFF; color: #000",
+        noComment: "background-color: #FFF; color: #000"
+      };
+    },
+    //操作是否单选按钮组
+    changeButtonStyle(id){
+      var bt1 = document.getElementById('bt1');   
+      var bt2 = document.getElementById('bt2');
+      var bt3 = document.getElementById('bt3'); 
+      var bt4 = document.getElementById('bt4');       
+    if(id==1){     
+        bt1.className = 'btn btn-default active';//选中它，给它添加active否则样式
+        bt2.className = 'btn btn-default ';//  清除同一个按钮组
+}
+    else if(id==2){        
+        bt2.className = 'btn btn-default active';
+        bt1.className = 'btn btn-default ';
+}
+    else if(id==3){     
+        bt3.className = 'btn btn-default active';  
+        bt4.className = 'btn btn-default ';
+}
+    else if(id==4){            
+        bt4.className = 'btn btn-default active';
+        bt3.className = 'btn btn-default ';  
+       
+}
+    },
+    //清空搜索列表
+    cleanFormdata(){
+     Object.keys(this.formData).forEach(res=>{
+       this.formData[res]="";
+     });
+    },
+    cleanButtonStyle(){           //清楚是否选择按钮状态
+       var bt1 = document.getElementById('bt1');      
+       var bt2 = document.getElementById('bt2');
+       var bt3 = document.getElementById('bt3');  
+       var bt4 = document.getElementById('bt4');               
+        bt1.className = 'btn btn-default ';
+        bt2.className = 'btn btn-default ';
+        bt3.className = 'btn btn-default ';
+        bt4.className = 'btn btn-default ';
+    },
+    changeOption(item, id) {
+      Object.keys(this.inputData).forEach(res => {
+        if (res === id) {
+          this.inputData[res].option = item;                    
+          if (id === "school") {                                  //将下拉选项加入到搜索列表
+            this.formData.organName = item;
+          }else
+          if (id === "classes") {
+            this.formData.className = item;
+          } else
+          if (id === "course") {
+            this.formData.objName = item;
+          } else
+          if (id === "grade") {
+            this.formData.levelName = item;
+          } else if(id==="order"){
+            this.formData.videoName = item;
+          }
+        }
+      });
+    },
+    getNew(value) {
+      this.currentList = this.realList.slice(value, value + this.limit);
+    },
+    //在每次搜索后要重新生成分页
+    afterSearch() {
+      this.getNew(0);
+      this.num = this.realList.length;
+    },
+
+    studyOrNot(value) {
+      if (value) {
+        this.formData.studyOrNot = "yes";
+      } else {
+        this.formData.studyOrNot = "no";
+      }
+    },
+    homeWorkOrNot(value) {
+      if (value) {
+        this.formData.workOrNot = "yes";
+      } else {
+        this.formData.workOrNot = "no";
+      }
+    },
+     timeFilter(startTime, endTime, tableList) {
+        if (startTime === "" && endTime === "") return tableList;
+        startTime = startTime === "" ? 0 : startTime;
+        // 今天是 2019-7-21 此系统若能运行1000年算我输
+        endTime = endTime === "" ? "3000-01-01 00:00" : endTime;
+        let restTableList = tableList.slice(0);
+        startTime = new Date(startTime);
+        endTime = new Date(endTime);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          let submitTime = new Date(restTableList[i].commitTime);                   
+          if (startTime > submitTime || submitTime > endTime ||submitTime) {
+            console.log("sbmitTime"+submitTime);
+            restTableList.splice(i, 1);
+            i -= 1;
+            j -= 1;
+          }
+        }
+        return restTableList;
+      }
+  },
+  mounted() {
+    this.getNew(0);
+    this.num = this.realList.length;
+   
+  },
+  components: { SelectInput, DatePicker, pagination }
 };
 
 
 </script>
+
+<style scoped>
+.subContainer {
+  font-size: 12px;
+  color: #606266;
+}
+
+.second-floor {
+  margin-top: 20px;
+}
+
+.first-floor {
+  display: flex;
+  margin-left: 5px;
+  margin-top: 10px;
+}
+
+.third-floor {
+  margin-top: 20px;
+  vertical-align: middle;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.third-floor span {
+  line-height: 30px;
+}
+
+.forth-floor {
+  font-size: 12px;
+  color: #606266;
+  margin-top: 40px;
+}
+
+label {
+  display: inline;
+}
+
+.content td {
+  line-height: 30px;
+}
+
+.textBox {
+  width: 180px;
+  height: 32px;
+  font-size: 12px;
+  padding-left: 15px;
+  border: 1px solid #409eff;
+  border-radius: 5px;
+  margin-left: 5px;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.textBox:focus {
+  outline: none;
+}
+
+.textBox:hover {
+  border-color: #c0c4cc;
+}
+
+.choose-icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #409eff;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+/* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
+.choose {
+  background-image: url("../../../../../static/images/teach/choose.png");
+  background-repeat: no-repeat;
+  background-position: -1px -2px;
+}
+
+.comment {
+  width: 68px;
+  height: 32px;
+  display: inline-block;
+  border: 1px solid #dcdfe6;
+  text-align: center;
+  cursor: pointer;
+}
+
+.has-comment {
+  border-radius: 4px 0 0 4px;
+}
+
+.no-comment {
+  margin-right: 20px;
+  border-radius: 0 4px 4px 0;
+}
+
+.btn {
+  
+  height: 30px;
+  border-radius: 5px;
+  font-size: 12px;
+  margin-bottom: 3px;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:hover {
+  background: #66b1ff;
+}
+
+.btn-search {
+  background: #409eff;
+  color: #fff;
+  width: 54px;
+}
+
+.btn-clear {
+  background: #409eff;
+  color: #fff;
+  width: 78px;
+}
+
+.blue {
+  cursor: pointer;
+  color: #409eff;
+}
+
+.red {
+  cursor: pointer;
+  color: #ff6947;
+}
+
+table {
+  border: #eeeeee;
+}
+
+table tr {
+  text-align: center !important;
+}
+
+table td {
+  vertical-align: middle !important;
+}
+
+.title {
+  text-align: center;
+}
+
+.select-input {
+  margin-right: 0;
+}
+.select-input1 {
+  margin-right: 8px;
+}
+</style>

@@ -2,28 +2,25 @@
  * @Email: rumosky@163.com
  * @Author: rumosky
  * @Github: https://github.com/rumosky
- * @Date: 2019-07-18 09:32:13
- * @LastEditors: rumosky
- * @LastEditTime: 2019-07-18 17:24:56
+ * @Date: 2019-07-19 13:44:06
+ * @Description: teacher角色发布活动页面
  -->
 <template>
   <div class="body">
     <p>活动管理</p>
     <div class="filter">
-
-
-      <form class="form-inline">
-        <div class="form-group">
-          <label class="sr-only" for="exampleInputEmail3">type</label>
-          <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者">
-          <input type="text" class="form-control" id="typekey" placeholder="请选择活动类型">
-          <input type="text" class="form-control" id="typekey" placeholder="请选择学校">
-          <input type="text" class="form-control" id="typekey" placeholder="请选择线上班级">
-          <button type="button" class="btn btn-primary">搜索</button>
-          <button type="button" class="btn btn-primary">清空筛选</button>
-          <button type="button" class="btn btn-primary">新增活动</button>
-        </div>
-      </form>
+      <div class="option">
+        <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
+        <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list" tips="请选择活动类型"
+          id="activityType" @option="changeOption">
+        </selectInput>
+        <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
+          @option="changeOption">
+        </selectInput>
+        <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
+        <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
+        <button type="button" class="btn-my">新增活动</button>
+      </div>
     </div>
     <div class="panels">
       <table class="table table-hover" rules=rows frame=below>
@@ -36,66 +33,55 @@
             <th>活动类型</th>
             <th>所属学校</th>
             <th>回复/查看</th>
-            <th>是否置顶</th>
             <th>状态</th>
             <th>操作</th>
           </tr>
         </thead>
         <tbody>
-
-
-          <tr v-for="(list, index) in activityList">
-            <td>{{index+1}}</td>
+          <tr v-for="(list, index) in currentList">
+            <td>{{index + 1}}</td>
             <td class="blue">{{list.title}}</td>
             <td>{{list.date}}</td>
-            <td>{{list.auther}}</td>
-            <td>{{list.type}}</td>
+            <td>{{list.author}}</td>
+            <td>{{list.activityType}}</td>
             <td>{{list.school}}</td>
             <td>{{list.reply}}/{{list.view}}</td>
-            <td>
-              <div class="switch-box is-info">
-                <input id="info" class="switch-box-input" type="checkbox" checked />
-                <label for="info" class="switch-box-slider"></label>
-                <label for="info" class="switch-box-label"></label>
-              </div>
-            </td>
             <td>{{list.status}}</td>
             <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="pag">
-
-      <ul class="pagination modal-2">
-        <li><a href="#" class="prev">&laquo;</a></li>
-        <li><a href="#" class="active">1</a></li>
-        <li> <a href="#">2</a></li>
-        <li> <a href="#">3</a></li>
-        <li> <a href="#">4</a></li>
-        <li> <a href="#">5</a></li>
-        <li> <a href="#">6</a></li>
-        <li> <a href="#">7</a></li>
-        <li> <a href="#">8</a></li>
-        <li> <a href="#">9</a></li>
-        <li><a href="#" class="next"> &raquo;</a></li>
-      </ul>
-
-
-    </div>
+    <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
   </div>
 </template>
 
 <script>
+  import pagination from "../utils/pagination.vue";
+  import selectInput from "../utils/selectInput";
   export default {
     name: 'activity',
     data() {
       return {
+        limit: 10,
+        currentList: [],
+        tableData: [],
+        inputData: {
+          keywords: "",
+          activityType: {
+            option: "",
+            list: ["通知公告", "班级活动", "辅导答疑", "布置作业"]
+          },
+          school: {
+            option: "",
+            list: ["赛迪思","雁塔路小学","翠华路小学","回民街小学"]
+          }
+        },
         activityList: [{
             title: "test1",
             date: "2019-01-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "通知公告",
             school: "赛迪思",
             reply: "1",
             view: "6",
@@ -104,9 +90,9 @@
           {
             title: "test2",
             date: "2019-01-06 12:00",
-            auther: "编程测试",
-            type: "布置作业",
-            school: "赛迪思",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "雁塔路小学",
             reply: "2",
             view: "6",
             status: "正常"
@@ -114,8 +100,8 @@
           {
             title: "test3",
             date: "2019-03-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "通知公告",
             school: "赛迪思",
             reply: "0",
             view: "6",
@@ -124,8 +110,8 @@
           {
             title: "test4",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -134,15 +120,1034 @@
           {
             title: "test5",
             date: "2019-05-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "5",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test6",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "班级活动",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test7",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "翠华路小学",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test8",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "班级活动",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test9",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test10",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "翠华路小学",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test11",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test12",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "翠华路小学",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test13",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test14",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "雁塔路小学",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test15",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test16",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test17",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test18",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test19",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test20",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test21",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test22",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "雁塔路小学",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test23",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test24",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test25",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test26",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test27",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "翠华路小学",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test28",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test29",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test30",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test31",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test32",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test33",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test34",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test35",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test36",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test37",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test38",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test39",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test40",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test41",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test42",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test43",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test44",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test45",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test46",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test47",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test48",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test49",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test50",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test51",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test52",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test53",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test54",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test55",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "翠华路小学",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test56",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "翠华路小学",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test57",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test58",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test59",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "翠华路小学",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test60",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test61",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test62",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test63",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test64",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test65",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test66",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test67",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test68",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test69",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test70",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test71",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test72",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test73",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test74",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test75",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test76",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test77",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test78",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test79",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test80",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test81",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test82",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test83",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test84",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test85",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test86",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test87",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test88",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test89",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "回民街小学",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test90",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test91",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test92",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "回民街小学",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test93",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test94",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test95",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test96",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "回民街小学",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test97",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test98",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test99",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
+            view: "6",
+            status: "正常"
+          },
+          {
+            title: "test100",
+            date: "2019-04-01 12:00",
+            author: "编程测试",
+            activityType: "布置作业",
+            school: "赛迪思",
+            reply: "3",
             view: "6",
             status: "正常"
           }
         ]
       }
+    },
+    components: {
+      pagination,
+      selectInput
+    },
+    methods: {
+      getNew(value) {
+        this.currentList = this.tableData.slice(value, value + this.limit);
+      },
+      changeOption(item, id) {
+        Object.keys(this.inputData).forEach((res) => {
+          if (res === id) {
+            this.inputData[res].option = item;
+          }
+        });
+      },
+      clearChoices() {
+        this.optionsClear();
+      },
+      optionsClear() {
+        Object.keys(this.inputData).forEach((res) => {
+          if (this.inputData[res].hasOwnProperty("option")) {
+            this.inputData[res].option = "";
+          } else {
+            this.inputData[res] = "";
+          }
+        });
+      },
+      titleOrAuthorFilter(titleOrAuthor, tableList) {
+        if (titleOrAuthor === "") return tableList;
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          if ((!new RegExp(titleOrAuthor).test(restTableList[i]["title"])) &&
+            (!new RegExp(titleOrAuthor).test(restTableList[i]["author"]))) {
+            restTableList.splice(i, 1);
+            j -= 1;
+            i -= 1;
+          }
+        }
+        return restTableList;
+      },
+      selectInputFilter(inputData, tableList) {
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          for (let res of Object.keys(inputData)) {
+            let condition1 = inputData[res].hasOwnProperty("option") &&
+              inputData[res].option !== "";
+            let condition2 = restTableList[i].hasOwnProperty(res) &&
+              restTableList[i][res] !== inputData[res].option;
+            if (condition1 && condition2) {
+              restTableList.splice(i, 1);
+              i -= 1;
+              j -= 1;
+              break;
+            }
+          }
+        }
+        return restTableList;
+      },
+      conditionSearch() {
+        let temp = this.titleOrAuthorFilter(this.inputData.keywords, this.activityList);
+        temp = this.selectInputFilter(this.inputData, temp);
+        this.tableData = temp;
+        this.getNew(0);
+      }
+    },
+    mounted() {
+      this.tableData = this.activityList;
+      this.getNew(0);
     }
   }
 
@@ -160,14 +1165,24 @@
     color: #606266;
   }
 
+  .option {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .option input {
+    width: 220px;
+    height: 32px;
+  }
+
   .blue {
     color: #409EFF;
   }
 
   .red {
-
     color: #FF6947;
-
   }
 
   .filter {
@@ -177,139 +1192,34 @@
   .form-control {
     padding: 0px 30px 0 15px;
     font-size: 12px;
-    /* box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04) */
     margin-right: 5px;
   }
 
   .panels {
-    margin-left: 10px;
+    text-align: center;
   }
 
   .panels tr {
     height: 40px;
+    text-align: center;
+  }
+
+  .panels th {
+    text-align: center;
   }
 
   table {
     border: #eeeeee;
   }
 
-  .switch-box {
-    display: block;
-    padding-top: 8px;
-    padding-left: 8px;
-  }
-
-  .switch-box .switch-box-slider {
-    position: relative;
-    display: inline-block;
-    height: 8px;
-    width: 32px;
-    background: #d5d5d5;
-    border-radius: 8px;
-    cursor: pointer;
-    -webkit-transition: all 0.2s ease;
-    transition: all 0.2s ease;
-  }
-
-  .switch-box .switch-box-slider:after {
-    position: absolute;
-    left: -8px;
-    top: -8px;
-    display: block;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: #eeeeee;
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
-    content: '';
-    -webkit-transition: all 0.2s ease;
-    transition: all 0.2s ease;
-  }
-
-  .switch-box .switch-box-input {
-    display: none;
-  }
-
-  .switch-box .switch-box-input~.switch-box-label {
-    margin-left: 8px;
-  }
-
-  .switch-box .switch-box-input:checked~.switch-box-slider:after {
-    left: 16px;
-  }
-
-  .switch-box.is-info .switch-box-input:checked:not(:disabled)~.switch-box-slider {
-    background: #5faee3;
-  }
-
-  .switch-box.is-info .switch-box-input:checked:not(:disabled)~.switch-box-slider:after {
-    background: #3498db;
-  }
-
-  .pag {
+  .btn-my {
+    margin-right: 8px;
+    height: 32px;
+    border-radius: 4px;
     font-size: 13px;
-  }
-
-  .pagination {
-    list-style: none;
-    display: inline-block;
-    padding: 0;
-    margin-top: 10px;
-  }
-
-  .pagination li {
-    display: inline;
-    text-align: center;
-  }
-
-  .pagination a {
-    float: left;
-    display: block;
-    font-size: 13px;
-    text-decoration: none;
-    padding: 5px 12px;
-    color: #c2c4cc;
-    margin-left: -1px;
-    border: 1px solid transparent;
-    line-height: 1.5;
-  }
-
-  .pagination a.active {
-    cursor: default;
-  }
-
-  .pagination a:active {
-    outline: none;
-  }
-
-  .modal-2 li:first-child a {
-    -moz-border-radius: 50px 0 0 50px;
-    -webkit-border-radius: 50px;
-    border-radius: 50px 0 0 50px;
-  }
-
-  .modal-2 li:last-child a {
-    -moz-border-radius: 0 50px 50px 0;
-    -webkit-border-radius: 0;
-    border-radius: 0 50px 50px 0;
-  }
-
-  .modal-2 a {
-    border-color: #f4f4f5;
-    color: #c2c4cc;
-    background: #f4f4f5;
-  }
-
-  .modal-2 a:hover {
-    color: #FFF;
-    background-color: #409EFF;
-  }
-
-  .modal-2 a.active,
-  .modal-2 a:active {
-    border-color: #409EFF;
-    background: #409EFF;
-    color: #fff;
+    color: #ffffff;
+    background-color: #409eff;
+    border: 1px solid #409eff;
   }
 
 </style>
