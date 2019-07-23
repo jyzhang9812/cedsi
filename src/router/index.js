@@ -29,7 +29,8 @@ import asider from "../components/container/teacher/sidebar"
 //以下是教务角色
 import eduAdmin from "../components/container/eduAdmin/eduSidebar"
 import eduActivity from "../components/container/eduAdmin/activity/activity"
-import office from "../components/container/eduAdmin/office/classmanagement"
+import classManagement from "../components/container/eduAdmin/office/classManagement"
+import stuManagement from "../components/container/eduAdmin/office/stuManagement"
 import teaching from "../components/container/eduAdmin/teaching/teaching"
 import eduStatistics from "../components/container/eduAdmin/statistics/statistics"
 import eduStaging from "../components/container/eduAdmin/edustaging/edustaging"
@@ -77,7 +78,8 @@ export default new Router({
       children:[
         { path:'/eduAdmin/',component:eduStaging},
         { path:'/eduAdmin/activity',component:eduActivity },
-        { path:'/eduAdmin/classmanagement',component:office },
+        { path:'/eduAdmin/classManagement',component:classManagement },
+        { path:'/eduAdmin/stuManagement',component:stuManagement },
         { path:'/eduAdmin/teaching',component:teaching },
         { path:'/eduAdmin/eduStatistice',component:eduStatistics },
       ]
