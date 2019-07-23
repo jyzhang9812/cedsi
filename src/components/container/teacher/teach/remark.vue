@@ -56,12 +56,14 @@
                       :drop-down-list="inputData.order.list">
         </select-input>
       </div>
-      <div class="select-input">
-       <span @click="changeChoices">
-        <span :class="{'choose': chooseAll}" class="choose-icon"></span>
-        <span>全选</span>
-       </span>
-      </div>
+      <!--      2019-07-23-->
+      <!--      由于业务逻辑不清晰, 暂时关闭全选按钮-->
+      <!--      <div class="select-input">-->
+      <!--       <span @click="changeChoices">-->
+      <!--        <span :class="{'choose': chooseAll}" class="choose-icon"></span>-->
+      <!--        <span>全选</span>-->
+      <!--       </span>-->
+      <!--      </div>-->
     </div>
     <div class="third-floor">
       <span>点评状态</span>
@@ -84,12 +86,21 @@
         <tbody>
         <tr v-for="(line, seq) in currentList" :key="seq" class="content">
           <td>{{seq + 1}}</td>
-          <td v-for="(item, index) in line" :key="index">{{item}}</td>
-          <td><span class="blue">编辑</span>&nbsp;&nbsp;
-            <span class="red">删除</span></td>
+          <td v-for="(value, key, index) in line"
+              :key="index" v-if="key !== 'id'">
+            {{value}}
+          </td>
+          <td>
+            <span class="blue" @click="viewWork(line)">查看作品</span>&nbsp;&nbsp;
+            <span class="blue" @click="remarkWork(line)">点评</span>&nbsp;&nbsp;
+            <span class="red" @click="popModal('delete', line.id)">删除</span>
+          </td>
         </tr>
         </tbody>
       </table>
+      <delete-prompt :id="deletePromptId" @deleteWork="deleteWork"
+                     :work-id="currentWorkId">
+      </delete-prompt>
     </div>
     <div class="fifth-floor">
       <pagination :num="tableData.length"
@@ -104,12 +115,14 @@
   import DatePicker from "../utils/datePicker"
   import SelectInput from "../utils/selectInput";
   import Pagination from "../utils/pagination";
+  import DeletePrompt from "../utils/deletePrompt";
 
   export default {
     name: "remark",
     data() {
       return {
         limit: 10,
+        currentWorkId: "hello",
         chooseAll: false,
         comment: {
           commentStatus: 0,
@@ -157,6 +170,7 @@
         ],
         originalTableData: [
           {
+            id: "001",
             authorName: "赛大迪",
             tel: "15252081872",
             submitTime: "2019-3-21 19:03",
@@ -169,6 +183,7 @@
             commentStat: "已点评"
           },
           {
+            id: "002",
             authorName: "李云龙",
             tel: "18896253728",
             submitTime: "2018-5-2 11:32",
@@ -181,6 +196,7 @@
             commentStat: "未点评"
           },
           {
+            id: "003",
             authorName: "楚云飞",
             tel: "15652081872",
             submitTime: "2019-5-20 16:30",
@@ -191,7 +207,111 @@
             grade: "1",
             order: "开学第三课",
             commentStat: "已点评"
-          }
+          },
+          {
+            id: "004",
+            authorName: "张大彪",
+            tel: "15652081872",
+            submitTime: "2019-5-20 16:30",
+            workName: "宾果吃吃吃",
+            school: "邮电附小",
+            classes: "2班",
+            course: "计算机网络",
+            grade: "1",
+            order: "开学第三课",
+            commentStat: "已点评"
+          },
+          {
+            id: "005",
+            authorName: "孔捷",
+            tel: "15652081872",
+            submitTime: "2019-5-20 16:30",
+            workName: "宾果消消消",
+            school: "邮电附小",
+            classes: "2班",
+            course: "计算机网络",
+            grade: "1",
+            order: "开学第三课",
+            commentStat: "已点评"
+          },
+          {
+            id: "006",
+            authorName: "孔捷",
+            tel: "15652081872",
+            submitTime: "2019-5-20 16:30",
+            workName: "宾果消消消",
+            school: "邮电附小",
+            classes: "2班",
+            course: "计算机网络",
+            grade: "1",
+            order: "开学第三课",
+            commentStat: "已点评"
+          },
+          {
+            id: "007",
+            authorName: "孔捷",
+            tel: "15652081872",
+            submitTime: "2019-5-20 16:30",
+            workName: "宾果消消消",
+            school: "邮电附小",
+            classes: "2班",
+            course: "计算机网络",
+            grade: "1",
+            order: "开学第三课",
+            commentStat: "已点评"
+          },
+          {
+            id: "008",
+            authorName: "孔捷",
+            tel: "15652081872",
+            submitTime: "2019-5-20 16:30",
+            workName: "宾果消消消",
+            school: "邮电附小",
+            classes: "2班",
+            course: "计算机网络",
+            grade: "1",
+            order: "开学第三课",
+            commentStat: "已点评"
+          },
+          {
+            id: "009",
+            authorName: "孔捷",
+            tel: "15652081872",
+            submitTime: "2019-5-20 16:30",
+            workName: "宾果消消消",
+            school: "邮电附小",
+            classes: "2班",
+            course: "计算机网络",
+            grade: "1",
+            order: "开学第三课",
+            commentStat: "已点评"
+          },
+          {
+            id: "010",
+            authorName: "孔捷",
+            tel: "15652081872",
+            submitTime: "2019-5-20 16:30",
+            workName: "宾果消消消",
+            school: "邮电附小",
+            classes: "2班",
+            course: "计算机网络",
+            grade: "1",
+            order: "开学第三课",
+            commentStat: "已点评"
+          },
+          {
+            id: "011",
+            authorName: "孔捷",
+            tel: "15652081872",
+            submitTime: "2019-5-20 16:30",
+            workName: "宾果消消消",
+            school: "邮电附小",
+            classes: "2班",
+            course: "计算机网络",
+            grade: "1",
+            order: "开学第三课",
+            commentStat: "已点评"
+          },
         ],
         currentList: [],
         tableData: []
@@ -268,7 +388,7 @@
         endTime = new Date(endTime);
         for (let i = 0, j = restTableList.length; i < j; i++) {
           let submitTime = new Date(restTableList[i].submitTime);
-          if (startTime > submitTime || submitTime > endTime) {
+          if (startTime >= submitTime || submitTime >= endTime) {
             restTableList.splice(i, 1);
             i -= 1;
             j -= 1;
@@ -336,6 +456,37 @@
         temp = this.selectInputFilter(this.inputData, temp);
         this.tableData = temp;
         this.changeTablePages(0);
+      },
+      deleteWork(workId) {
+        setTimeout(() => {
+          alert("删除成功!" + workId)
+        }, 1000);
+        // 调用删除接口时, 考虑是否再拉取!
+        // this.axios.delete("url")
+        //   .then((res) => {
+        //     if (!condition) {
+        //       // 显示删除成功
+        //     } else {
+        //       // 显示删除失败原因
+        //     }
+        //   })
+        //   .catch((err) => {
+        //     // 显示异常原因
+        //   });
+      },
+      viewWork(item) {
+        let id = this.searchWorkId(item);
+        // 打开新窗口, 可能会传递sb3文件之类的参数
+      },
+      remarkWork(item) {
+        let id = this.searchWorkId(item);
+        // 弹框, 给个点评输入框即可
+      },
+      popModal(type, workId) {
+        this.currentWorkId = workId;
+        if (type === "delete") {
+          $('#' + this.deletePromptId).modal('show');
+        }
       }
     },
     computed: {
@@ -344,6 +495,9 @@
       },
       whiteCommentStyle() {
         return "background-color: #FFF; color: #000";
+      },
+      deletePromptId() {
+        return "remarkDeletePrompt";
       }
     },
     mounted() {
@@ -351,6 +505,7 @@
       this.changeTablePages(0);
     },
     components: {
+      DeletePrompt,
       Pagination, SelectInput, DatePicker
     }
   }

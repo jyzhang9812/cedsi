@@ -2,7 +2,7 @@
     <div class="searchBar">
         <div class="searchBoxContainer">
             <input class="searchBox" placeholder="课程名...">
-            <img class="searchImg" src="../../../../../static/images/dashboard/search.png">
+            <img class="searchImg" :src=searchImg>
         </div>
         <div>
             <button style="background: #ff8d1a"></button>
@@ -17,6 +17,7 @@
         },
         data() {
         return {
+            searchImg:'../../' + this.$store.state.url + 'dashboard/search.png',
             }
         },
 }   

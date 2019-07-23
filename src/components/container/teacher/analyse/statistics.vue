@@ -147,6 +147,7 @@ export default {
         workOrNot:""
       },
       realList: [], //真正的数组，经过filter后的
+      temporaryList: [],
       inputData: {
         telOrName: "",
         startDate: "",
@@ -202,7 +203,7 @@ export default {
           learnTime: "2019-04-03 20:00:06 ",
           learnNmm: "17",
           learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
+          commitTime: "2019-5-20 16:30",
           homeworkStar: "0",
           commitNmm: "2"
         },
@@ -266,7 +267,7 @@ export default {
           learnTime: "2019-04-03 20:00:06 ",
           learnNmm: "17",
           learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
+          commitTime: "2019-07-20 15:31",
           homeworkStar: "0",
           commitNmm: "2"
         },
@@ -495,8 +496,8 @@ export default {
       videoName,
       studyOrNot,
       workOrNot
-    }) {
-        let     temporaryList = this.tableData.filter(item => {
+    }) {    //temporary list 保存的是满足除时间以外所有搜索条件产生的数组
+        this.temporaryList = this.tableData.filter(item => {
         let matchName = true;
         let matchOrganName = true;
         let matchClassName = true;
@@ -511,7 +512,6 @@ export default {
           // 姓名搜索;
           matchName = item.studentName.match(telOrName);
         }
-
         if (organName) {
           // 学校搜索;
           matchOrganName = item.organName.match(organName);
@@ -532,14 +532,14 @@ export default {
           // 课程等级搜索;
           matchVideo = item.videoName.match(videoName);
         }
-        //是否学习
+        //是否学习(！！！当前是通过观看视频次数进行判断的)
         if(studyOrNot){
           if(studyOrNot==="yes"){
             matchStudy=item.learnNmm;
           }else
            matchStudy=!item.learnNmm;
         }
-        //是否做作业
+        //是否做作业（！！！当前通过提交作业次数进行判断）
          if(workOrNot){
           if(workOrNot==="yes"){
             matchWork=item.commitNmm;
@@ -556,11 +556,11 @@ export default {
           matchStudy &&
           matchWork
         );
-      })
+      })   //对temporaryList使用时间过滤器进行过滤，realList为全条件搜索结果
          this.realList=this.timeFilter(
           this.inputData.startDate,
           this.inputData.endDate,
-          temporaryList);
+          this.temporaryList);
     },
 
     changeChoices() {
@@ -722,9 +722,9 @@ export default {
         startTime = new Date(startTime);
         endTime = new Date(endTime);
         for (let i = 0, j = restTableList.length; i < j; i++) {
-          let submitTime = new Date(restTableList[i].commitTime);                   
-          if (startTime > submitTime || submitTime > endTime ||submitTime) {
-            console.log("sbmitTime"+submitTime);
+          let flag=restTableList[i].commitTime;               //用flag过滤掉没有数据的
+          let submitTime = new Date(restTableList[i].commitTime);
+          if (!flag || startTime > submitTime || submitTime > endTime ) {
             restTableList.splice(i, 1);
             i -= 1;
             j -= 1;

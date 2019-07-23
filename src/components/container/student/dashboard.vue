@@ -101,6 +101,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { error } from 'util';
 export default {
@@ -279,7 +280,7 @@ a {
 .col-md-10 {
   z-index: 1;
   position: relative;
-  width: 87%;
+  width: 83.3%;
   padding: 0;
   overflow-y: auto;
   display: block;
