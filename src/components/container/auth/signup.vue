@@ -135,17 +135,33 @@
           hobbies: this.hobbyInputs.map(hobby => hobby.value),
           terms: this.terms
         }
-        // console.log(formData);
+        console.log(formData);
+        this.$http.post("https://2oflic8loc.execute-api.us-east-2.amazonaws.com/prod/register", {"username":this.username,"password":this.password}).then(
+          response => {
+            console.log(response);
+          },
+          error => {
+            console.log(error);
+          }
+        );
         // this.$store.dispatch('signup', formData); //{email:formData.email,password:formData.password}
-        this.$store.dispatch('signupAWS', formData); 
+        // this.$store.dispatch('signupAWS', formData); 
       },
       onConfirm () {
         const confirmData = {
           username: this.username,
-          code: this.code
+          password: this.password
         }
         console.log(confirmData);
-        this.$store.dispatch('confirmUserAWS', confirmData); 
+        this.$http.post("", this.confirmData).then(
+          response => {
+            console.log(response);
+          },
+          error => {
+            console.log(error);
+          }
+        );
+        // this.$store.dispatch('confirmUserAWS', confirmData); 
       }
     }
   }
@@ -179,7 +195,7 @@
     width: 100%;
     padding: 6px 12px;
     box-sizing: border-box;
-    border: 1px solid #ccc;
+    border: 1px solid #eee;
   }
 
   .input.inline input {
@@ -188,18 +204,18 @@
 
   .input input:focus {
     outline: none;
-    border: 1px solid #521751;
-    background-color: #eee;
+    border: 1px solid #50b8ee;
+    background-color: #f4f9fa;
   }
 
   .input select {
-    border: 1px solid #ccc;
+    border: 1px solid #f4f9fa;
     font: inherit;
   }
 
   .hobbies button {
-    border: 1px solid #521751;
-    background: #521751;
+    border: 1px solid #50b8ee;
+    background: #50b8ee;
     color: white;
     padding: 6px;
     font: inherit;
@@ -208,7 +224,7 @@
 
   .hobbies button:hover,
   .hobbies button:active {
-    background-color: #8d4288;
+    background-color: #50b8ee;
   }
 
   .hobbies input {
@@ -216,8 +232,9 @@
   }
 
   .submit button {
-    border: 1px solid #521751;
-    color: #521751;
+    border: 1px solid #50b8ee;
+    color: #50b8ee;
+    background: #f4f9fa;
     padding: 10px 20px;
     font: inherit;
     cursor: pointer;
@@ -225,16 +242,16 @@
 
   .submit button:hover,
   .submit button:active {
-    background-color: #521751;
+    background-color: #50b8ee;
     color: white;
   }
 
   .submit button[disabled],
   .submit button[disabled]:hover,
   .submit button[disabled]:active {
-    border: 1px solid #ccc;
+    border: 1px solid #f4f9fa;
     background-color: transparent;
-    color: #ccc;
+    color: #f4f9fa;
     cursor: not-allowed;
   }
 </style>

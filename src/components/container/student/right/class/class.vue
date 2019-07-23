@@ -1,114 +1,57 @@
 <template>
-    <div class="col-md-8 col-md-offset-2">
-
-        <div class="panel panel-primary">
-
-            <ul class="nav nav-tabs" role="tablist">
-
-                <li role="presentation"><a href="#"><strong>赛迪斯</strong></a></li>
-                
-            </ul>
-
-            
-
-            <div class="panel-body">
-
+    <div class="limiter">
+        <div class="container-table100">
+            <div>
+                <button class="nameOfClass">{{name_of_class}}</button>
+            </div>
+            <div class="wrap-table100">
                 <div v-for="(item,index) in myteacher" :key="index">
-                    <img class="teacherimg" alt="" :src="item.headpicture">
-
+                    <img class="avastimg" alt="" :src="item.headpicture">
                     代课老师：{{item.teachername}}
                     <hr />
                 </div>
-
-                <table class="table table-hover  ">
-
-                    <thead>
-                        <th width="10%"><strong><span>序号</span></strong>
-                        </th>
-                        <th width="10%"><strong><span>头像</span></strong>
-                        </th>
-                        <th width="10%"><strong><span>我的同学</span></strong>
-                        </th>
-                        <th width="10%"><strong><span>性别</span></strong>
-                        </th>
-                        <th width="10%"><strong><span>年龄</span></strong>
-                        </th>
-                    </thead>
-
-                    <tbody>
-                        <tr v-for="(item,index) in myclassmate" :key="index">
-                            <td width="10%">{{index+1}}</td>
-                            <td width="10%"><img class="avastimg" :src="item.headpicture">
-                            </td>
-                            <td width="10%">{{item.name}}</td>
-                            <td width="10%">{{item.sex}}</td>
-                            <td width="10%">{{item.age}}</td>
-                        </tr>
-
-                    </tbody>
-
-                    </tbody>
-                </table>
-                <hr />
-                <ul class="pagination">
-                    <li><a href="#">&laquo;</a></li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#">&raquo;</a></li>
-                </ul>
+                <div class="table100 ver3 m-b-110">
+                    <table data-vertable="ver3">
+                        <thead>
+                            <tr class="row100 head">
+                                <th class="column100">序号</th>
+                                <th class="column100">头像</th>
+                                <th class="column100">我的同学</th>
+                                <th class="column100">性别</th>
+                                <th class="column100">年龄</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="row100" v-for="(item,index) in myclassmate" :key="index">
+                                <td class="column100">{{index+1}}</td>
+                                <td class="column100"><img class="avastimg" :src="item.headpicture"></td>
+                                <td class="column100">{{item.name}}</td>
+                                <td class="column100">{{item.sex}}</td>
+                                <td class="column100">{{item.age}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ul class="pagination">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
-
-<style>
-    .col-md-offset-2 {
-        width: 100%;
-        min-height: 620px;
-    }
-
-    ul{
-        padding: 0;
-        min-height: 0;
-    }
-
-    .panel {
-        min-height: 620px;
-        width: 100%;
-        margin: 0;
-        border-radius: 0;
-    }
-
-    .avastimg {
-        vertical-align: middle;
-        width: 20px;
-    }
-
-    .col-md-8 {
-        padding: 0;
-    }
-
-    .teacherimg {
-        vertical-align: middle;
-        width: 40px;
-    }
-
-    strong {
-        color:
-            rgb(68, 153, 206)
-    }
-</style>
-
 <script>
-
-    export default {
+  export default {
         name: 'class',
         data() {
             return {
+                name_of_class:'赛迪思',
                 myclassmate: [
                     {
 
@@ -152,3 +95,184 @@
 
     }
 </script>
+
+<style>
+.nameOfClass{
+    width:auto;
+    min-width: 100px;
+    background: #fff;
+    height: 40px;
+    font-size: 15px;
+    text-align: center;
+    margin-right: 10px;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #50b8ee;
+    border: 1px solid #50b8ee;
+    border-radius: 12px;
+}
+.nameOfClass:hover{
+    background: #50b8ee;
+    color: #f4f9fa;
+}
+.avastimg {
+    vertical-align: middle;
+    width: 40px;
+}
+/*[ RESTYLE TAG ]*/
+* {
+	margin: 0px; 
+	padding: 0px; 
+	box-sizing: border-box;
+}
+
+body, html {
+	height: 100%;
+	font-family: sans-serif;
+}
+
+/* ------------------------------------ */
+a {
+	margin: 0px;
+	transition: all 0.4s;
+	-webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+}
+
+a:focus {
+	outline: none !important;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+/* ------------------------------------ */
+h1,h2,h3,h4,h5,h6 {margin: 0px;}
+
+p {margin: 0px;}
+
+ul, li {
+	margin: 0px;
+	list-style-type: none;
+}
+
+/* ------------------------------------ */
+button {
+	outline: none !important;
+	border: none;
+	background: transparent;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+iframe {
+	border: none !important;
+}
+
+
+
+/*//////////////////////////////////////////////////////////////////
+[ Table ]*/
+
+.limiter {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.container-table100 {
+  width: 100%;
+  min-height: 100vh;
+  background: #f4f9fa;
+  /* display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; */
+  padding: 10px 30px;
+}
+
+.wrap-table100 {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ Table ]*/
+table {
+  width: 100%;
+  background-color: #fff;
+}
+
+th, td {
+  font-weight: unset;
+  padding-right: 10px;
+}
+
+.column100 {
+  width: 130px;
+  padding-left: 25px;
+  text-align: center;
+}
+
+/* .column100.column {
+  width: auto;
+  padding-left: 42px;
+} */
+
+.row100.head th {
+  padding-top: 24px;
+  padding-bottom: 20px;
+}
+
+.row100 td {
+  padding-top: 10px;
+  padding-bottom: 8px;
+}
+
+/*==================================================================
+[ Ver3 ]*/
+.table100.ver3 tbody tr {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.table100.ver3 td {
+  font-family: Montserrat-Regular;
+  font-size: 14px;
+  color: #808080;
+  line-height: 1.4;
+}
+
+.table100.ver3 th {
+  font-family: Montserrat-Medium;
+  font-size: 15px;
+  color: #fff;
+  line-height: 1;
+  text-transform: uppercase;
+
+  background-color: #6c7ae0;
+}
+
+.table100.ver3 .row100:hover td {
+  background-color: #fcebf5;
+}
+
+.table100.ver3 .hov-column-ver3 {
+  background-color: #fcebf5;
+}
+
+.table100.ver3 .hov-column-head-ver3 {
+  background-color: #7b88e3 !important;
+}
+
+.table100.ver3 .row100 td:hover {
+  background-color: #e03e9c;
+  color: #fff;
+}
+
+</style>

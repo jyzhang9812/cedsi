@@ -51,7 +51,8 @@
             name: "教务管理",
             iconSrc: "../../../../static/images/eduAdmin/icon-02.png",
             children: [
-               {name: "班级管理", route: "/eduAdmin/classmanagement"},
+               {name: "班级管理", route: "/eduAdmin/classManagement"},
+               {name: "学生管理", route: "/eduAdmin/stuManagement"},
             ],
             close: true
           },

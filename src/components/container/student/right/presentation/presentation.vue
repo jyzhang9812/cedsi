@@ -3,7 +3,7 @@
         <div class="threeImg">
             <div class="Containt">
                 <div class="iconleft" v-on:click="zuohua">
-                    <img class="el-icon-arrow" src="../../../../../../static/images/dashboard/left.png"></img>
+                    <img class="el-icon-arrow" :src=leftImg></img>
                 </div>
                 <ul :style="{'left':calleft + 'px'}">
                     <li class="course_card" v-for="(item,index) in superurl" :key="index" @mouseover="show(index)" @mouseleave="hidden(index)">
@@ -19,7 +19,7 @@
                     </li>
                 </ul>
                 <div class="iconright" v-on:click="youhua">
-                    <img class="el-icon-arrow" src="../../../../../../static/images/dashboard/right.png"></img>
+                    <img class="el-icon-arrow" :src=rightImg></img>
                 </div> 
             </div>
         </div>
@@ -45,6 +45,8 @@
         name:'presentation',
         data() {
             return {
+                leftImg:'../../../' + this.$store.state.url + 'dashboard/left.png',
+                rightImg:'../../../' + this.$store.state.url + 'dashboard/right.png',
                 superurl: [
                     {
                         url: 'https://www.tynker.com/image/dashboard/student/learn/tutorials/nasa-design-a-mission-patch.png?width=600&height=400&mode=cover&format=jpg&quality=75&cache=1m&v=1',
@@ -88,7 +90,7 @@
                 ],
                 currentData: [],
                 pagination: [],
-                currentType: "video_res"
+                currentType: "video_res",
             }
         },
         methods: {
@@ -133,8 +135,8 @@
             },
 
         show(index){
-        this.i = index;
-        this.isShow = true;
+            this.i = index;
+            this.isShow = true;
         },
         hidden(index){
             this.i = -1;
@@ -365,7 +367,7 @@
         border: none;
     }
 
-    .tag:hover,.tag:active {
+    .tag:hover,.tag:focus{
         background-color: #9196a1;
         text-align: center;
         text-decoration: none;
