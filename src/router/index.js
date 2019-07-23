@@ -19,6 +19,7 @@ import topiccomment from "../components/container/teacher/activity/topiccomment"
 import opuscomment from "../components/container/teacher/activity/opuscomment";
 import quiz from "../components/container/teacher/activity/quiz";
 import activity from "../components/container/teacher/activity/activity";
+import activityadd from "../components/container/teacher/activity/activityadd";
 import videos from "../components/container/teacher/teach/videos";
 import choiceness from "../components/container/teacher/teach/choiceness";
 import remark from "../components/container/teacher/teach/remark";
@@ -65,6 +66,7 @@ export default new Router({
           { path: '/console/choiceness', component: choiceness },
           { path: '/console/video', component: videos },
           { path: '/console/activity', component: activity },
+          { path: '/console/activityadd', component: activityadd },
           { path: '/console/question', component: quiz },
           { path: '/console/opuscomment', component: opuscomment },
           { path: '/console/topiccomment', component: topiccomment },
