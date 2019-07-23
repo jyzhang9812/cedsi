@@ -10,17 +10,17 @@
     <p>活动管理</p>
     <div class="filter">
       <div class="option">
-        <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者">
+        <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
         <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list" tips="请选择活动类型"
           id="activityType" @option="changeOption">
         </selectInput>
         <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
           @option="changeOption">
         </selectInput>
-        <selectInput :option="inputData.classOnline.option" :dropDownList="inputData.classOnline.list" tips="请选择线上班级"
-          id="classOnline" @option="changeOption"></selectInput>
-        <button type="button" class="btn-my">搜索</button>
-        <button type="button" class="btn-my">清空筛选</button>
+        <!-- <selectInput :option="inputData.classOnline.option" :dropDownList="inputData.classOnline.list" tips="请选择线上班级"
+          id="classOnline" @option="changeOption"></selectInput> -->
+        <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
+        <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
         <button type="button" class="btn-my">新增活动</button>
       </div>
     </div>
@@ -44,8 +44,8 @@
             <td>{{index + 1}}</td>
             <td class="blue">{{list.title}}</td>
             <td>{{list.date}}</td>
-            <td>{{list.auther}}</td>
-            <td>{{list.type}}</td>
+            <td>{{list.author}}</td>
+            <td>{{list.activityType}}</td>
             <td>{{list.school}}</td>
             <td>{{list.reply}}/{{list.view}}</td>
             <td>{{list.status}}</td>
@@ -54,7 +54,7 @@
         </tbody>
       </table>
     </div>
-    <pagination :num="num" :limit="limit" @getNew="getNew"></pagination>
+    <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
   </div>
 </template>
 
@@ -65,10 +65,11 @@
     name: 'activity',
     data() {
       return {
-        num: 0,
         limit: 10,
         currentList: [],
+        tableData: [],
         inputData: {
+          keywords: "",
           activityType: {
             option: "",
             list: ["全部", "通知公告", "班级活动", "辅导答疑", "布置作业"]
@@ -76,17 +77,13 @@
           school: {
             option: "",
             list: ["全部", "赛迪思"]
-          },
-          classOnline: {
-            option: "",
-            list: ["全部", "赛迪思"]
           }
         },
         activityList: [{
             title: "test1",
             date: "2019-01-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "通知公告",
             school: "赛迪思",
             reply: "1",
             view: "6",
@@ -95,8 +92,8 @@
           {
             title: "test2",
             date: "2019-01-06 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "2",
             view: "6",
@@ -105,8 +102,8 @@
           {
             title: "test3",
             date: "2019-03-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "通知公告",
             school: "赛迪思",
             reply: "0",
             view: "6",
@@ -115,8 +112,8 @@
           {
             title: "test4",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -125,8 +122,8 @@
           {
             title: "test5",
             date: "2019-05-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "5",
             view: "6",
@@ -135,8 +132,8 @@
           {
             title: "test6",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "班级活动",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -145,8 +142,8 @@
           {
             title: "test7",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -155,8 +152,8 @@
           {
             title: "test8",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "班级活动",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -165,8 +162,8 @@
           {
             title: "test9",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -175,8 +172,8 @@
           {
             title: "test10",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -185,8 +182,8 @@
           {
             title: "test11",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -195,8 +192,8 @@
           {
             title: "test12",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -205,8 +202,8 @@
           {
             title: "test13",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -215,8 +212,8 @@
           {
             title: "test14",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -225,8 +222,8 @@
           {
             title: "test15",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -235,8 +232,8 @@
           {
             title: "test16",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -245,8 +242,8 @@
           {
             title: "test17",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -255,8 +252,8 @@
           {
             title: "test18",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -265,8 +262,8 @@
           {
             title: "test19",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -275,8 +272,8 @@
           {
             title: "test20",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -285,8 +282,8 @@
           {
             title: "test21",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -295,8 +292,8 @@
           {
             title: "test22",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -305,8 +302,8 @@
           {
             title: "test23",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -315,8 +312,8 @@
           {
             title: "test24",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -325,8 +322,8 @@
           {
             title: "test25",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -335,8 +332,8 @@
           {
             title: "test26",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -345,8 +342,8 @@
           {
             title: "test27",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -355,8 +352,8 @@
           {
             title: "test28",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -365,8 +362,8 @@
           {
             title: "test29",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -375,8 +372,8 @@
           {
             title: "test30",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -385,8 +382,8 @@
           {
             title: "test31",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -395,8 +392,8 @@
           {
             title: "test32",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -405,8 +402,8 @@
           {
             title: "test33",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -415,8 +412,8 @@
           {
             title: "test34",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -425,8 +422,8 @@
           {
             title: "test35",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -435,8 +432,8 @@
           {
             title: "test36",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -445,8 +442,8 @@
           {
             title: "test37",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -455,8 +452,8 @@
           {
             title: "test38",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -465,8 +462,8 @@
           {
             title: "test39",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -475,8 +472,8 @@
           {
             title: "test40",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -485,8 +482,8 @@
           {
             title: "test41",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -495,8 +492,8 @@
           {
             title: "test42",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -505,8 +502,8 @@
           {
             title: "test43",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -515,8 +512,8 @@
           {
             title: "test44",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -525,8 +522,8 @@
           {
             title: "test45",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -535,8 +532,8 @@
           {
             title: "test46",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -545,8 +542,8 @@
           {
             title: "test47",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -555,8 +552,8 @@
           {
             title: "test48",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -565,8 +562,8 @@
           {
             title: "test49",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -575,8 +572,8 @@
           {
             title: "test50",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -585,8 +582,8 @@
           {
             title: "test51",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -595,8 +592,8 @@
           {
             title: "test52",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -605,8 +602,8 @@
           {
             title: "test53",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -615,8 +612,8 @@
           {
             title: "test54",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -625,8 +622,8 @@
           {
             title: "test55",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -635,8 +632,8 @@
           {
             title: "test56",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -645,8 +642,8 @@
           {
             title: "test57",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -655,8 +652,8 @@
           {
             title: "test58",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -665,8 +662,8 @@
           {
             title: "test59",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -675,8 +672,8 @@
           {
             title: "test60",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -685,8 +682,8 @@
           {
             title: "test61",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -695,8 +692,8 @@
           {
             title: "test62",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -705,8 +702,8 @@
           {
             title: "test63",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -715,8 +712,8 @@
           {
             title: "test64",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -725,8 +722,8 @@
           {
             title: "test65",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -735,8 +732,8 @@
           {
             title: "test66",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -745,8 +742,8 @@
           {
             title: "test67",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -755,8 +752,8 @@
           {
             title: "test68",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -765,8 +762,8 @@
           {
             title: "test69",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -775,8 +772,8 @@
           {
             title: "test70",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -785,8 +782,8 @@
           {
             title: "test71",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -795,8 +792,8 @@
           {
             title: "test72",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -805,8 +802,8 @@
           {
             title: "test73",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -815,8 +812,8 @@
           {
             title: "test74",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -825,8 +822,8 @@
           {
             title: "test75",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -835,8 +832,8 @@
           {
             title: "test76",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -845,8 +842,8 @@
           {
             title: "test77",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -855,8 +852,8 @@
           {
             title: "test78",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -865,8 +862,8 @@
           {
             title: "test79",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -875,8 +872,8 @@
           {
             title: "test80",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -885,8 +882,8 @@
           {
             title: "test81",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -895,8 +892,8 @@
           {
             title: "test82",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -905,8 +902,8 @@
           {
             title: "test83",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -915,8 +912,8 @@
           {
             title: "test84",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -925,8 +922,8 @@
           {
             title: "test85",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -935,8 +932,8 @@
           {
             title: "test86",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -945,8 +942,8 @@
           {
             title: "test87",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -955,8 +952,8 @@
           {
             title: "test88",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -965,8 +962,8 @@
           {
             title: "test89",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -975,8 +972,8 @@
           {
             title: "test90",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -985,8 +982,8 @@
           {
             title: "test91",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -995,8 +992,8 @@
           {
             title: "test92",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -1005,8 +1002,8 @@
           {
             title: "test93",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -1015,8 +1012,8 @@
           {
             title: "test94",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -1025,8 +1022,8 @@
           {
             title: "test95",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -1035,8 +1032,8 @@
           {
             title: "test96",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -1045,8 +1042,8 @@
           {
             title: "test97",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -1055,8 +1052,8 @@
           {
             title: "test98",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -1065,8 +1062,8 @@
           {
             title: "test99",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -1075,8 +1072,8 @@
           {
             title: "test100",
             date: "2019-04-01 12:00",
-            auther: "编程测试",
-            type: "布置作业",
+            author: "编程测试",
+            activityType: "布置作业",
             school: "赛迪思",
             reply: "3",
             view: "6",
@@ -1091,7 +1088,7 @@
     },
     methods: {
       getNew(value) {
-        this.currentList = this.activityList.slice(value, value + this.limit);
+        this.currentList = this.tableData.slice(value, value + this.limit);
       },
       changeOption(item, id) {
         Object.keys(this.inputData).forEach((res) => {
@@ -1099,11 +1096,62 @@
             this.inputData[res].option = item;
           }
         });
+      },
+      clearChoices() {
+        this.optionsClear();
+      },
+      optionsClear() {
+        // 如果是字符串则清空, 如果是对象则清空 option
+        Object.keys(this.inputData).forEach((res) => {
+          if (this.inputData[res].hasOwnProperty("option")) {
+            this.inputData[res].option = "";
+          } else {
+            this.inputData[res] = "";
+          }
+        });
+      },
+      titleOrAuthorFilter(titleOrAuthor, tableList) {
+        if (titleOrAuthor === "") return tableList;
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          if ((!new RegExp(titleOrAuthor).test(restTableList[i]["title"])) &&
+            (!new RegExp(titleOrAuthor).test(restTableList[i]["author"]))) {
+            restTableList.splice(i, 1);
+            j -= 1;
+            i -= 1;
+          }
+        }
+        return restTableList;
+      },
+      selectInputFilter(inputData, tableList) {
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          for (let res of Object.keys(inputData)) {
+            let condition1 = inputData[res].hasOwnProperty("option") &&
+              inputData[res].option !== "";
+            let condition2 = restTableList[i].hasOwnProperty(res) &&
+              restTableList[i][res] !== inputData[res].option;
+            if (condition1 && condition2) {
+              restTableList.splice(i, 1);
+              i -= 1;
+              j -= 1;
+              break;
+            }
+          }
+        }
+        return restTableList;
+      },
+      conditionSearch() {
+        let temp = this.titleOrAuthorFilter(this.inputData.keywords, this.activityList);
+        temp = this.selectInputFilter(this.inputData, temp);
+        this.tableData = temp;
+        this.getNew(0);
       }
     },
     mounted() {
-      this.getNew(1);
       this.num = this.activityList.length;
+      this.tableData = this.activityList;
+      this.getNew(0);
     }
   }
 
