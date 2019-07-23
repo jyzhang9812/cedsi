@@ -1,5 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import VueLocalStorage from 'vue-localstorage';
+
+Vue.use(VueLocalStorage);
 
 Vue.use(Vuex);
 //const url = '../../assets/images/'
