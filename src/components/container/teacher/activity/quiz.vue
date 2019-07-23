@@ -10,13 +10,11 @@
     <p>学生提问</p>
     <div class="filter">
       <div class="option">
-        <input type="text" class="form-control" id="typekey" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
+        <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
         <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
           @option="changeOption">
         </selectInput>
-        <selectInput :option="inputData.classOnline.option" :dropDownList="inputData.classOnline.list" tips="请选择线上班级"
-          id="classOnline" @option="changeOption"></selectInput>
-        <button type="button" class="btn-my">搜索</button>
+        <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
         <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
       </div>
     </div>
@@ -34,11 +32,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(list, index) in quizList">
+          <tr v-for="(list, index) in currentList">
             <td>{{index+1}}</td>
             <td class="blue">{{list.title}}</td>
             <td>{{list.date}}</td>
-            <td>{{list.s_name}}</td>
+            <td>{{list.author}}</td>
             <td>{{list.school}}</td>
             <td>{{list.status}}</td>
             <td><span class="blue">解答</span>&nbsp;&nbsp;<span class="red">删除</span></td>
@@ -46,7 +44,7 @@
         </tbody>
       </table>
     </div>
-    <pagination :num="num" :limit="limit" @getNew="getNew"></pagination>
+    <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
   </div>
 </template>
 
@@ -57,52 +55,48 @@
     name: 'quizList',
     data() {
       return {
-        num: 0,
         limit: 10,
         currentList: [],
+        tableData: [],
         inputData: {
           keywords: "",
           school: {
             option: "",
-            list: ["全部", "赛迪思"]
-          },
-          classOnline: {
-            option: "",
-            list: ["全部", "赛迪思"]
+            list: ["赛迪思","雁塔路小学","翠华路小学","回民街小学"]
           }
         },
         quizList: [{
             title: "函数如何书写",
             date: "2019-01-02 17:00",
-            s_name: "小赛",
-            school: "赛迪思",
+            author: "小赛",
+            school: "回民街小学",
             status: "已解答"
           },
           {
             title: "类是干什么的",
             date: "2019-02-02 17:00",
-            s_name: "小迪",
-            school: "赛迪思",
+            author: "小迪",
+            school: "雁塔路小学",
             status: "已解答"
           },
           {
             title: "不会啊",
             date: "2019-03-02 17:00",
-            s_name: "小李",
-            school: "赛迪思",
+            author: "小李",
+            school: "翠华路小学",
             status: "未解答"
           },
           {
             title: "好难",
             date: "2019-04-02 17:00",
-            s_name: "小王",
+            author: "小王",
             school: "赛迪思",
             status: "已解答"
           },
           {
             title: "辛苦",
             date: "2019-05-02 17:00",
-            s_name: "小刘",
+            author: "小刘",
             school: "赛迪思",
             status: "未解答"
           }
@@ -115,7 +109,7 @@
     },
     methods: {
       getNew(value) {
-        this.currentList = this.quizList.slice(value, value + this.limit);
+        this.currentList = this.tableData.slice(value, value + this.limit);
       },
       changeOption(item, id) {
         Object.keys(this.inputData).forEach((res) => {
@@ -128,7 +122,6 @@
         this.optionsClear();
       },
       optionsClear() {
-        // 如果是字符串则清空, 如果是对象则清空 option
         Object.keys(this.inputData).forEach((res) => {
           if (this.inputData[res].hasOwnProperty("option")) {
             this.inputData[res].option = "";
@@ -136,11 +129,48 @@
             this.inputData[res] = "";
           }
         });
+      },
+      titleOrAuthorFilter(titleOrAuthor, tableList) {
+        if (titleOrAuthor === "") return tableList;
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          if ((!new RegExp(titleOrAuthor).test(restTableList[i]["title"])) &&
+            (!new RegExp(titleOrAuthor).test(restTableList[i]["author"]))) {
+            restTableList.splice(i, 1);
+            j -= 1;
+            i -= 1;
+          }
+        }
+        return restTableList;
+      },
+      selectInputFilter(inputData, tableList) {
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          for (let res of Object.keys(inputData)) {
+            let condition1 = inputData[res].hasOwnProperty("option") &&
+              inputData[res].option !== "";
+            let condition2 = restTableList[i].hasOwnProperty(res) &&
+              restTableList[i][res] !== inputData[res].option;
+            if (condition1 && condition2) {
+              restTableList.splice(i, 1);
+              i -= 1;
+              j -= 1;
+              break;
+            }
+          }
+        }
+        return restTableList;
+      },
+      conditionSearch() {
+        let temp = this.titleOrAuthorFilter(this.inputData.keywords, this.quizList);
+        temp = this.selectInputFilter(this.inputData, temp);
+        this.tableData = temp;
+        this.getNew(0);
       }
     },
     mounted() {
-      this.getNew(1);
-      this.num = this.quizList.length;
+      this.tableData = this.quizList;
+      this.getNew(0);
     }
   }
 

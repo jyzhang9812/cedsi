@@ -33,6 +33,7 @@
 
 <script>
   // import axios from '../../axios-auth';
+
   export default {
     data () {
       return {
@@ -43,16 +44,26 @@
     },
     methods: {
       onSubmit () {
+        var idToken = ''
         const formData = {
-          email: this.email,
           password: this.password,
           username: this.username
         }
-        // console.log(formData);
-        // this.$store.dispatch('login',{email:formData.email,password:formData.password});
-        this.$store.dispatch('loginAWS',{email:formData.email,password:formData.password,username: formData.username});
-        // this.$store.dispatch('resetPassword',{email:formData.email,password:formData.password,username: formData.username});
+        console.log(formData);
+        this.$http.post("https://2oflic8loc.execute-api.us-east-2.amazonaws.com/prod/login",  {"username":this.username,"password":this.password}).then(
+          response => {
+            console.log(response);
+            idToken = response.body.token;
+            localStorage.setItem('idToken', idToken);
+          },
+          error => {
+            console.log(error);
+          }
+        );
         
+        // this.$store.dispatch('login',{email:formData.email,password:formData.password});
+        // this.$store.dispatch('',{email:formData.email,password:formData.password,username: formData.username});
+        // this.$store.dispatch('resetPassword',{email:formData.email,password:formData.password,username: formData.username});    
       }
     }
   }
@@ -85,35 +96,36 @@
     width: 100%;
     padding: 6px 12px;
     box-sizing: border-box;
-    border: 1px solid #ccc;
+    border: 1px solid #eee;
   }
 
   .input input:focus {
     outline: none;
-    border: 1px solid #521751;
-    background-color: #eee;
+    border: 1px solid #50b8ee;
+    background-color: #f4f9fa;
   }
 
   .submit button {
-    border: 1px solid #521751;
-    color: #521751;
+    border: 1px solid #50b8ee;
+    color: #50b8ee;
     padding: 10px 20px;
     font: inherit;
+    background: #f4f9fa;
     cursor: pointer;
   }
 
   .submit button:hover,
   .submit button:active {
-    background-color: #521751;
+    background-color: #50b8ee;
     color: white;
   }
 
   .submit button[disabled],
   .submit button[disabled]:hover,
   .submit button[disabled]:active {
-    border: 1px solid #ccc;
-    background-color: transparent;
-    color: #ccc;
+    border: 1px solid #f4f9fa;
+    background-color: #f4f9fa;
+    color: #f4f9fa;
     cursor: not-allowed;
   }
 </style>

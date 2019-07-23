@@ -9,23 +9,23 @@
               <img class="img" :style="style" :src="item.img_url">
               <div class="details" :style="style1" v-show="index==i">
                 <div class="detail_item">
-                  <img class="icon" src='../../../../../../static/images/dashboard/class.png'>
+                  <img class="icon" :src=classImg>
                   <span>开课进度: {{item.status.haveStarted}} / {{item.status.chaptersNum}}</span>
                 </div>
                 <div class="detail_item">
-                  <img class="icon" src='../../../../../../static/images/dashboard/learn.png'>
+                  <img class="icon" :src=learnImg>
                   <span>学习进度: {{item.status.haveLearned}} / {{item.status.chaptersNum}}</span>
                 </div>
                 <div class="detail_item">
-                  <img class="icon" src='../../../../../../static/images/dashboard/star_active.png'>
+                  <img class="icon" :src=starImg>
                   <span>总星数: {{item.status.homeworkStars}}</span>
                 </div>
                 <div class="detail_item">
-                  <img class="icon" src='../../../../../../static/images/dashboard/homework.png'>
+                  <img class="icon" :src=hwkImg>
                   <span>作业提交次数: {{item.status.homeworkNum}}</span>
                 </div>
                 <div class="detail_item">
-                  <img class="icon" src='../../../../../../static/images/dashboard/create.png'>
+                  <img class="icon" :src=createImg>
                   <span>自由创作次数: {{item.status.creationNums}}</span>
                 </div>
               </div>
@@ -48,6 +48,11 @@ export default {
     return {
       btn: "btn",
       btnh: "btnhover",
+      classImg:'../../../' + this.$store.state.url + 'dashboard/class.png',
+      learnImg:'../../../' + this.$store.state.url + 'dashboard/learn.png',
+      hwkImg:'../../../' + this.$store.state.url + 'dashboard/homework.png',
+      starImg:'../../../' + this.$store.state.url + 'dashboard/star_active.png',
+      createImg:'../../../' + this.$store.state.url + 'dashboard/create.png',
       isShow: false,
       inside_detail: [],
       calleft: 0,
@@ -107,6 +112,7 @@ export default {
 .inside {
   border-radius: 20px;
   color: #fff;
+  text-decoration: none;
 }
 .inside:hover {
   -webkit-transform: scale(1.05);
