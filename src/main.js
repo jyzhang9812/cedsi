@@ -8,14 +8,16 @@ import 'video.js/dist/video-js.css'
 import {store} from './store';
 import VueResource from 'vue-resource';
 import VCharts from 'v-charts'
+import axios from 'axios';
 
-Vue.use(VCharts)
+Vue.use(VCharts);
 Vue.use(VueResource);
 Vue.http.options.root = 'https://dk2nj7uhfi.execute-api.us-east-2.amazonaws.com/prod/studentinfo';
 
-Vue.prototype.$video = Video
+Vue.prototype.$video = Video;
+Vue.prototype.axios = axios;
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
@@ -25,4 +27,4 @@ new Vue({
   components: { App },
   template: '<App/>',
   render: h => h(App)
-})
+});
