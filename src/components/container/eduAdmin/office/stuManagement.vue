@@ -21,8 +21,9 @@
                 <div class="addcon">
                   <span class="keypoint">*</span>
                   <label class="addtitle">学生姓名</label>
-                  <input placeholder="请输入学生姓名" class="addinput" />
+                  <input placeholder="请输入学生姓名" :class="isName==false?'addinput':'addinput err'" v-model="studentName"/>
                 </div>
+                <span :class="isName==true?'inputtips':'inputerr'">不超过10个字符</span>
                 <div class="addcon">
                   <span class="keypoint">*</span>
                   <label class="addtitle">性别</label>
@@ -32,13 +33,9 @@
                     <input type="radio" name="sex" value="woman" class="sexradio1" />
                     <span class="sexname">女</span>
                   </div>
-                </div>
-                <div class="addcon">
-                  <span class="keypoint-white">*</span>
-                  <label class="addtitle">家长姓名</label>
-                  <input placeholder="请输入家长姓名" class="addinput" />
-                </div>
-                <div class="addcon">
+                  </div>
+                  <span class="inputerr"></span>
+                <!-- <div class="addcon">
                   <span class="keypoint-white">*</span>
                   <label class="addtitle">所属学校</label>
                   <select-input
@@ -49,44 +46,57 @@
                     @option="changeOption"
                     :drop-down-list="inputData.school.list"
                   ></select-input>
-                </div>
-                <div class="addcon">
-                  <span class="keypoint-white">*</span>
-                  <label class="addtitle">班级</label>
-                  <input placeholder="请输入班级" class="addinput" />
-                </div>
+                </div> -->
                 <div class="addcon">
                   <span class="keypoint">*</span>
                   <label class="addtitle">账号</label>
-                  <input class="addinput" />
+                  <input :class="isAccount==false?'addinput':'addinput err'" placeholder="请输入账号" v-model="studentAccount"/>
                 </div>
+                <span :class="isAccount==true?'inputtips':'inputerr'">不超过15个字符</span>
                 <div class="addcon">
                   <span class="keypoint">*</span>
                   <label class="addtitle">密码</label>
-                  <input class="addinput" />
+                  <input :class="isPassword==false?'addinput':'addinput err'" placeholder="请输入密码" type="password" v-model="studentPassword"/>
                 </div>
-              </div>
-              <div class="addinforson">
+                <span :class="isPassword==true?'inputtips':'inputerr'">不超过20个字符</span>
                 <div class="addcon">
                   <span class="keypoint">*</span>
                   <label class="addtitle">手机号码</label>
-                  <input class="addinput" />
+                  <input :class="isTel==false?'addinput':'addinput err'" placeholder="请输入手机号码" v-model="studentTel"/>
                 </div>
+                <span :class="isTel==true?'inputtips':'inputerr'">格式不正确</span>
+              </div>
+              <div class="addinforson">
+                <div class="addcon">
+                  <span class="keypoint-white">*</span>
+                  <label class="addtitle">班级</label>
+                  <input class="addinput" placeholder="请输入班级" v-model="studentClass"/>
+                </div>
+                <span class="inputerr"></span>
                 <div class="addcon">
                   <span class="keypoint-white">*</span>
                   <label class="addtitle">年龄</label>
-                  <input class="addinput" />
+                  <input class="addinput" placeholder="请输入年龄" v-model="studentAge"/>
                 </div>
+                <span class="inputerr"></span>
+                <div class="addcon">
+                  <span class="keypoint-white">*</span>
+                  <label class="addtitle">家长姓名</label>
+                  <input class="addinput" placeholder="请输入家长姓名" v-model="parentName"/>
+                </div>
+                <span class="inputerr"></span>
                 <div class="addcon">
                   <span class="keypoint-white">*</span>
                   <label class="addtitle">家长微信号</label>
-                  <input class="addinput" />
+                  <input class="addinput" placeholder="请输入家长微信号" v-model="parentWechat"/>
                 </div>
+                <span class="inputerr"></span>
                 <div class="addcon">
                   <span class="keypoint-white">*</span>
                   <label class="addtitle">年级</label>
-                  <input class="addinput" />
+                  <input class="addinput" placeholder="请输入年级" v-model="studentGrade"/>
                 </div>
+                <span class="inputerr"></span>
               </div>
             </div>
           </div>
@@ -205,7 +215,6 @@
         type="text"
         placeholder="请输入姓名、手机号"
         class="textBox"
-        id="tel-name"
         v-model="inputData.telOrName"
       />
       <div class="select-input">
@@ -233,7 +242,6 @@
         type="text"
         placeholder="请输入年级"
         class="textBox"
-        id="tel-name"
         v-model="inputData.telOrName"
       />
       <label for="tel-name"></label>
@@ -241,7 +249,6 @@
         type="text"
         placeholder="请输入班级"
         class="textBox"
-        id="tel-name"
         v-model="inputData.telOrName"
       />
       <button class="btn btn-search">搜索</button>
@@ -365,12 +372,65 @@ export default {
           name: "Scratch2",
           classCon: [
             ["赛迪思2", "2019-02-27 00:00"],
-            ["赛迪思3", "2019-02-27 00:00"]
+            ["赛迪思3", "2019-02-27 00:00"],
+            ["赛迪思2", "2019-02-27 00:00"],
+            ["赛迪思3", "2019-02-27 00:00"],
+            ["赛迪思2", "2019-02-27 00:00"],
+            ["赛迪思3", "2019-02-27 00:00"],
+            ["赛迪思2", "2019-02-27 00:00"],
+            ["赛迪思3", "2019-02-27 00:00"],
+            ["赛迪思2", "2019-02-27 00:00"],
+            ["赛迪思3", "2019-02-27 00:00"],
           ]
         }
       ],
-      classTableTitle: ["班级名称", "开课时间", "操作"]
+      classTableTitle: ["班级名称", "开课时间", "操作"],
+      //新增学生
+      studentName:"",
+      isName:true,
+      studentAccount:"",
+      isAccount:true,
+      studentPassword:"",
+      isPassword:true,
+      studentTel:"",
+      isTel:true,
+      studentClass:"",
+      studentAge:"",
+      parentName:"",
+      parentWechat:"",
+      studentGrade:"",
     };
+  },
+  watch:{
+    studentName(val,oldVal){
+      if(val.length<=10&&val.length>0){
+         this.isName=false
+      }else{
+        this.isName=true
+      }
+    },
+    studentAccount(val,oldVal){
+      if(val.length<=15&&val.length>0){
+         this.isAccount=false
+      }else{
+        this.isAccount=true
+      }
+    },
+    studentPassword(val,oldVal){
+      if(val.length<=20&&val.length>0){
+         this.isPassword=false
+      }else{
+        this.isPassword=true
+      }
+    },
+    studentTel(val,oldVal){
+      var reg= /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
+      if(val.length==11&&reg.test(val)){
+        this.isTel=false
+      }else[
+        this.isTel=true
+      ]
+    },
   },
   methods: {
     clearChoices() {
@@ -560,7 +620,7 @@ table td {
 .tips:hover {
   border: 1px solid #dcdfe6;
 }
-/*模态框*/
+/*添加学生模态框*/
 .modal-dialog {
   top: 100px;
   position: relative;
@@ -578,7 +638,7 @@ table td {
 .addinfo {
   margin: 0 auto;
   width: 100%;
-  height: 280px;
+  height: 220px;
 }
 .addinforson {
   width: 50%;
@@ -588,7 +648,6 @@ table td {
 .addcon {
   width: 100%;
   height: 33px;
-  margin-bottom: 10px;
 }
 .keypoint {
   color: red;
@@ -609,7 +668,16 @@ table td {
   width: 180px;
   height: 33px;
   margin-left: 10px;
-  padding-left: 20px;
+  padding-left: 10px;
+}
+.inputerr{
+  border: 1px solid #409eff;
+  border-radius: 5px;
+  width: 180px;
+  height: 33px;
+  margin-left: 10px;
+  padding-left: 10px;
+  visibility: hidden;
 }
 .addinput:focus {
   outline: none;
@@ -620,6 +688,7 @@ table td {
   display: inline-block;
   height: 33px;
   padding-left: 30px;
+  line-height: 33px;
 }
 .sexradio1 {
   margin-right: 10px;
@@ -653,5 +722,15 @@ table td {
 .arrangeblue {
   cursor: pointer;
   color: #409eff;
+}
+/*正则表达式*/
+.inputtips{
+  display: block;
+  font-size: 10px;
+  color: red;
+  margin-left: 90px;
+}
+.err{
+  border: 1px solid red;
 }
 </style>
