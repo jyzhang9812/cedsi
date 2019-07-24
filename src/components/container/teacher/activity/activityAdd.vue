@@ -9,20 +9,32 @@
   <div class="body">
     <form action="">
       <div class="item">
-        标题：<input type="text" placeholder="请输入标题">
-        状态：<input type="checkbox" name="normal" value="正常">正常
-        <input type="checkbox" name="draft" value="草稿">草稿
-        活动类型：<selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list"
-          tips="请选择活动类型" id="activityType" @option="changeOption">
+        <p>标题：</p><input type="text" class="form-control" placeholder="请输入标题">
+      </div>
+      <div class="item">
+        <p>活动类型：</p>
+        <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list" tips="请选择活动类型"
+          id="activityType" @option="changeOption">
         </selectInput>
-        发送学校：<selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校"
-          id="school" @option="changeOption">
+        <p>发送学校：</p>
+        <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
+          @option="changeOption">
         </selectInput>
+        <p>状态：</p><input type="checkbox" name="normal" value="正常" class="checkbox">
+        <p>正常</p>
+        <input type="checkbox" name="draft" value="草稿" class="checkbox">
+        <p>草稿</p>
+      </div>
+      <div class="item">
+        <p>缩略图：</p><input type="file" class="file">
+      </div>
+      <div class="item">
+        建议分辨率1024x720
       </div>
       <div class="item">
         <div ref="editor" class="editor"></div>
       </div>
-      <div class="item">
+      <div class="item1">
         <button type="button" class="btn-my">保存</button>
         <button type="button" class="btn-my">取消</button>
       </div>
@@ -67,6 +79,7 @@
     },
     mounted() {
       var editor = new E(this.$refs.editor)
+      editor.customConfig.uploadImgShowBase64 = true
       editor.customConfig.onchange = (html) => {
         this.editorContent = html
       }
@@ -82,13 +95,14 @@
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: flex-start;
-    margin-top: 20px;
-    margin-left: 30px;
+    margin-top: 10px;
+    margin-left: 20px;
     font-size: 13px;
     min-width: 850px;
-    /* box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
-    border: 1px solid #ebeef5;
-    border-radius: 4px; */
+  }
+
+  .form-control {
+    width: 750px;
   }
 
   .item {
@@ -98,11 +112,29 @@
     justify-content: flex-start;
     margin-top: 20px;
     margin-left: 20px;
-  vertical-align: middle;
   }
-.editor {
-  width: 800px;
-}
+
+  .item p {
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+
+  .file {
+    height: 32px;
+  }
+
+  .checkbox {
+    vertical-align: middle;
+    margin: 0;
+    height: 32px;
+  }
+
+  .editor {
+    width: 800px;
+  }
+
   .btn-my {
     margin-right: 8px;
     height: 32px;
@@ -111,6 +143,14 @@
     color: #ffffff;
     background-color: #409eff;
     border: 1px solid #409eff;
+  }
+  .item1 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 20px;
+    margin-left: 400px;
   }
 
 </style>

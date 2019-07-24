@@ -19,7 +19,7 @@
         </selectInput>
         <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
         <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
-        <button type="button" class="btn-my">新增活动</button>
+        <button type="button" class="btn-my" @click="addActivity">新增活动</button>
       </div>
     </div>
     <div class="panels">
@@ -1143,6 +1143,9 @@
         temp = this.selectInputFilter(this.inputData, temp);
         this.tableData = temp;
         this.getNew(0);
+      },
+      addActivity() {
+        this.$router.push("/console/activityadd");
       }
     },
     mounted() {
