@@ -6,66 +6,108 @@
  * @Description: teacher角色发布活动页面
  -->
 <template>
-  <div class="body">
-    <p>活动管理</p>
-    <div class="filter">
-      <div class="option">
-        <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
-        <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list" tips="请选择活动类型"
-          id="activityType" @option="changeOption">
-        </selectInput>
-        <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
-          @option="changeOption">
-        </selectInput>
-        <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
-        <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
-        <button type="button" class="btn-my" @click="addActivity">新增活动</button>
+  <div>
+    <div class="body" v-show="!addShown">
+      <p>活动管理</p>
+      <div class="filter">
+        <div class="option">
+          <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
+          <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list"
+            tips="请选择活动类型" id="activityType" @option="changeOption">
+          </selectInput>
+          <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
+            @option="changeOption">
+          </selectInput>
+          <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
+          <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
+          <button type="button" class="btn-my" @click="addActivityShow">新增活动</button>
+        </div>
       </div>
+      <div class="panels">
+        <table class="table table-hover" rules=rows frame=below>
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>活动标题</th>
+              <th>发布时间</th>
+              <th>作者</th>
+              <th>活动类型</th>
+              <th>所属学校</th>
+              <th>回复/查看</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(list, index) in currentList">
+              <td>{{index + 1}}</td>
+              <td class="blue">{{list.title}}</td>
+              <td>{{list.date}}</td>
+              <td>{{list.author}}</td>
+              <td>{{list.activityType}}</td>
+              <td>{{list.school}}</td>
+              <td>{{list.reply}}/{{list.view}}</td>
+              <td>{{list.status}}</td>
+              <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
     </div>
-    <div class="panels">
-      <table class="table table-hover" rules=rows frame=below>
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th>活动标题</th>
-            <th>发布时间</th>
-            <th>作者</th>
-            <th>活动类型</th>
-            <th>所属学校</th>
-            <th>回复/查看</th>
-            <th>状态</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(list, index) in currentList">
-            <td>{{index + 1}}</td>
-            <td class="blue">{{list.title}}</td>
-            <td>{{list.date}}</td>
-            <td>{{list.author}}</td>
-            <td>{{list.activityType}}</td>
-            <td>{{list.school}}</td>
-            <td>{{list.reply}}/{{list.view}}</td>
-            <td>{{list.status}}</td>
-            <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
-          </tr>
-        </tbody>
-      </table>
+
+
+    <div class="add" v-show="addShown">
+      <form action="">
+        <div class="item">
+          <p>标题：</p><input type="text" class="title" placeholder="请输入标题">
+        </div>
+        <div class="item">
+          <p>活动类型：</p>
+          <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list"
+            tips="请选择活动类型" id="activityType" @option="changeOption">
+          </selectInput>
+          <p>发送学校：</p>
+          <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
+            @option="changeOption">
+          </selectInput>
+          <p>状态：</p><input type="checkbox" name="normal" value="正常" class="checkbox">
+          <p>正常</p>
+          <input type="checkbox" name="draft" value="草稿" class="checkbox">
+          <p>草稿</p>
+        </div>
+        <div class="item">
+          <p>缩略图：</p><input type="file" class="file">
+        </div>
+        <div class="item">
+          建议分辨率1024x720
+        </div>
+        <div class="item">
+          <div ref="editor" class="editor"></div>
+        </div>
+        <div class="item1">
+          <button type="button" class="btn-my" @click="addActivitySave">保存</button>
+          <button type="button" class="btn-my" @click="addActivityShow">取消</button>
+        </div>
+      </form>
     </div>
-    <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
   </div>
 </template>
 
 <script>
   import pagination from "../utils/pagination.vue";
   import selectInput from "../utils/selectInput";
+  import deletePrompt from "../utils/deletePrompt";
+  import E from 'wangeditor';
   export default {
     name: 'activity',
     data() {
       return {
         limit: 10,
+        addShown: false,
         currentList: [],
         tableData: [],
+        editorContent: '',
         inputData: {
           keywords: "",
           activityType: {
@@ -74,7 +116,7 @@
           },
           school: {
             option: "",
-            list: ["赛迪思","雁塔路小学","翠华路小学","回民街小学"]
+            list: ["赛迪思", "雁塔路小学", "翠华路小学", "回民街小学"]
           }
         },
         activityList: [{
@@ -1082,7 +1124,8 @@
     },
     components: {
       pagination,
-      selectInput
+      selectInput,
+      deletePrompt
     },
     methods: {
       getNew(value) {
@@ -1144,19 +1187,50 @@
         this.tableData = temp;
         this.getNew(0);
       },
-      addActivity() {
-        this.$router.push("/console/activityadd");
+      addActivityShow() {
+        this.addShown = !this.addShown;
+      },
+      addActivitySave() {
+        this.addActivityShow();
       }
     },
     mounted() {
       this.tableData = this.activityList;
       this.getNew(0);
+      let editor = new E(this.$refs.editor);
+      editor.customConfig.uploadImgShowBase64 = true;
+      editor.customConfig.onchange = (html) => {
+        this.editorContent = html
+      };
+      editor.customConfig.menus = [
+          'head', // 标题
+          'bold', // 粗体
+          'fontSize', // 字号
+          'fontName', // 字体
+          'italic', // 斜体
+          'underline', // 下划线
+          'strikeThrough', // 删除线
+          'foreColor', // 文字颜色
+          'backColor', // 背景颜色
+          'link', // 插入链接
+          'list', // 列表
+          'justify', // 对齐方式
+          'quote', // 引用
+          'emoticon', // 表情
+          'image', // 插入图片
+          'table', // 表格
+          'video', // 插入视频
+          'code', // 插入代码
+          'undo', // 撤销
+          'redo' // 重复
+        ],
+        editor.create();
+      editor.txt.html('<p>请输入内容</p>');
     }
   }
 
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .body {
     background-color: #ffffff;
@@ -1166,6 +1240,7 @@
     justify-content: flex-start;
     font-size: 12px;
     color: #606266;
+    min-width: 850px;
   }
 
   .option {
@@ -1223,6 +1298,72 @@
     color: #ffffff;
     background-color: #409eff;
     border: 1px solid #409eff;
+  }
+
+  .add {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    font-size: 13px;
+    min-width: 850px;
+  }
+
+  .title {
+    width: 750px;
+    display: block;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  }
+
+  .item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 20px;
+  }
+
+  .item p {
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+
+  .file {
+    height: 32px;
+  }
+
+  .checkbox {
+    vertical-align: middle;
+    margin: 0;
+    height: 32px;
+  }
+
+  .editor {
+    width: 800px;
+  }
+
+  .item1 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 20px;
+    margin-left: 356px;
   }
 
 </style>
