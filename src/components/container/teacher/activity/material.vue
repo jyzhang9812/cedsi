@@ -16,7 +16,7 @@
         </selectInput>
         <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
         <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
-        <button type="button" class="btn-my">新增</button>
+        <!-- <button type="button" class="btn-my">新增</button> -->
       </div>
     </div>
     <div class="panels">
