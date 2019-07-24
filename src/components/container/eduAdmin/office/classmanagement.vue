@@ -9,7 +9,7 @@
       aria-labelledby="myModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
+      <div class="modal-dialog addwidth">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -20,11 +20,16 @@
               <div class="add">
                 <span class="keypoint">*</span>
                 <span class="addtitle">班级名称</span>
-                <input class="addcon" placeholder="请输入班级名称" />
+                <input
+                  :class="isName==false?'addcon':'addcon err'"
+                  placeholder="请输入班级名称"
+                  v-model="addClassName"
+                />
+                <span :class="isName==true?'inputtips':'inputerr'">不超过10个字符</span>
               </div>
               <div class="add">
                 <span class="keypoint">*</span>
-                <span class="addtitle">开课时间</span>
+                <span class="addtitles">开课时间</span>
                 <date-picker
                   tips="选择开始时间"
                   id="datePicker_start"
@@ -32,7 +37,8 @@
                   @changeDate="changeDate"
                 ></date-picker>
               </div>
-              <div class="add">
+              <span class="inputtips"></span>
+              <!-- <div class="add">
                 <span class="keypoint">*</span>
                 <span class="addtitle">指定学校</span>
                 <select-input
@@ -43,7 +49,7 @@
                   @option="changeOption"
                   :drop-down-list="addClassData.school.list"
                 ></select-input>
-              </div>
+              </div>-->
               <div class="add">
                 <span class="keypoint">*</span>
                 <span class="addtitle">指定教师</span>
@@ -98,9 +104,6 @@
                   :key="index"
                   :id="course.name"
                 >
-                  <!-- <span >
-                  {{courseson.sonConName}}
-                  </span>-->
                   <div
                     class="course-content"
                     v-for="(courseson,index) in course.courseContent"
@@ -138,7 +141,7 @@
       ref="checkStudent"
     >
       <div class="modal-dialog tablewidth">
-        <div class="modal-content  tablewidth">
+        <div class="modal-content tablewidth">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">查看学生</h4>
@@ -155,7 +158,7 @@
                   <td>{{seq}}</td>
                   <td v-for="(item,index) in line" :key="index">{{item}}</td>
                   <td style="width:150px">
-                      <input class="tips">
+                    <input class="tips" />
                   </td>
                 </tr>
               </tbody>
@@ -166,74 +169,7 @@
       </div>
       <!-- /.modal -->
     </div>
-     <!-- 编辑模态框（Modal） -->
-    <div
-      class="modal fade"
-      id="addClass"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="myModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">编辑</h4>
-          </div>
-          <div class="modal-body">
-            <div class="content">
-              <div class="add">
-                <span class="keypoint">*</span>
-                <span class="addtitle">班级名称</span>
-                <input class="addcon" placeholder="请输入班级名称" />
-              </div>
-              <div class="add">
-                <span class="keypoint">*</span>
-                <span class="addtitle">开课时间</span>
-                <date-picker
-                  tips="选择开始时间"
-                  id="datePicker_start"
-                  :date="addClassData.startDate"
-                  @changeDate="changeDate"
-                ></date-picker>
-              </div>
-              <div class="add">
-                <span class="keypoint">*</span>
-                <span class="addtitle">指定学校</span>
-                <select-input
-                  class="modal-select-input"
-                  id="school"
-                  tips="请选择学校"
-                  :option="addClassData.school.option"
-                  @option="changeOption"
-                  :drop-down-list="addClassData.school.list"
-                ></select-input>
-              </div>
-              <div class="add">
-                <span class="keypoint">*</span>
-                <span class="addtitle">指定教师</span>
-                <select-input
-                  class="modal-select-input"
-                  id="teacher"
-                  tips="请选择教师"
-                  :option="addClassData.teacher.option"
-                  @option="changeOption"
-                  :drop-down-list="addClassData.teacher.list"
-                ></select-input>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary">确定</button>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
-    <!-- 编辑模态框（Modal） -->
+    <!-- 批量导入（Modal） -->
     <div
       class="modal fade"
       id="addStudents"
@@ -248,10 +184,8 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">批量导入学生</h4>
           </div>
-          <div class="modal-body">
-            
-          </div>
-          
+          <div class="modal-body"></div>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             <button type="button" class="btn btn-primary">确定</button>
@@ -276,7 +210,7 @@
         id="class-name"
         v-model="inputData.className"
       />
-      <div class="select-input">
+      <!-- <div class="select-input">
         <select-input
           id="school"
           tips="请选择学校"
@@ -284,7 +218,7 @@
           @option="changeOption"
           :drop-down-list="inputData.school.list"
         ></select-input>
-      </div>
+      </div>-->
       <button class="btn btn-search">搜索</button>
       <button class="btn btn-clear" @click="clearChoices">清空筛选</button>
       <button class="btn btn-clear" data-toggle="modal" data-target="#addClass">新增班级</button>
@@ -321,26 +255,16 @@ export default {
   components: { SelectInput, DatePicker },
   data() {
     return {
-      //上传文件
-      files:"",
-      fileName: '',
-      fileList: [],
       inputData: {
-        className: "",
-        school: {
-          option: "",
-          list: ["师大一中", "师大二中", "师大三中"]
-        }
+        className: ""
+        // school: {
+        //   option: "",
+        //   list: ["师大一中", "师大二中", "师大三中"]
+        // }
       },
       addClassData: {
         addClassName: "",
         startDate: "",
-        endDate: "",
-        middleDate: "",
-        school: {
-          option: "",
-          list: ["师大一中", "师大二中", "师大四中"]
-        },
         teacher: {
           option: "",
           list: ["祁老师", "程老师"]
@@ -362,7 +286,7 @@ export default {
         ["赛小迪", "JAVA", "2019-07-20", "祁老师", "操作系统", "计算机网络"],
         ["赛小迪", "JAVA", "2019-07-20", "祁老师", "操作系统", "计算机网络"]
       ],
-      studentTitle:[
+      studentTitle: [
         "序号",
         "学生姓名",
         "账号",
@@ -371,13 +295,45 @@ export default {
         "班级",
         "录入时间",
         "手机号",
-        "备注",
+        "备注"
       ],
-      studentData:[
-        ["小赛","赛迪思","赛迪思","初一","6班","2019-02-27 16:25:03","111111111"],
-        ["小赛","赛迪思","赛迪思","初一","6班","2019-02-27 16:25:03","111111111"],
-        ["小赛","赛迪思","赛迪思","初一","6班","2019-02-27 16:25:03","111111111"],
-        ["小赛","赛迪思","赛迪思","初一","6班","2019-02-27 16:25:03","111111111"]
+      studentData: [
+        [
+          "小赛",
+          "赛迪思",
+          "赛迪思",
+          "初一",
+          "6班",
+          "2019-02-27 16:25:03",
+          "111111111"
+        ],
+        [
+          "小赛",
+          "赛迪思",
+          "赛迪思",
+          "初一",
+          "6班",
+          "2019-02-27 16:25:03",
+          "111111111"
+        ],
+        [
+          "小赛",
+          "赛迪思",
+          "赛迪思",
+          "初一",
+          "6班",
+          "2019-02-27 16:25:03",
+          "111111111"
+        ],
+        [
+          "小赛",
+          "赛迪思",
+          "赛迪思",
+          "初一",
+          "6班",
+          "2019-02-27 16:25:03",
+          "111111111"
+        ]
       ],
       courseList: [
         {
@@ -406,8 +362,22 @@ export default {
             }
           ]
         }
-      ]
+      ],
+      //添加新班级
+      addClassName: "",
+      isName: true
     };
+  },
+  watch: {
+    addClassName(val, oldVal) {
+      if (val.length <= 10 && val.length > 0) {
+        this.isName = false;
+        console.log(this.isName);
+      } else {
+        this.isName = true;
+        console.log(this.isName);
+      }
+    }
   },
   methods: {
     optionsInit() {
@@ -421,9 +391,9 @@ export default {
       };
     },
     changeOption(item, id) {
-      Object.keys(this.inputData).forEach(res => {
+      Object.keys(this.addClassData).forEach(res => {
         if (res === id) {
-          this.inputData[res].option = item;
+          this.addClassData[res].option = item;
         }
       });
     },
@@ -436,11 +406,8 @@ export default {
       } else if (id === "datePicker_end") {
         this.inputData.endDate = value;
       }
-    },
-    changeClassDate(course, index) {
-      console.log(course, index);
     }
-  },
+  }
 };
 </script>
 
@@ -557,7 +524,10 @@ table td {
 .select-input {
   margin-right: 8px;
 }
-/*模态框*/
+/*添加班级模态框*/
+.addwidth{
+  width: 35%
+}
 .modal-dialog {
   top: 100px;
   position: relative;
@@ -569,9 +539,7 @@ table td {
   border-top-right-radius: 5px;
 }
 .add {
-  width: 50%;
-  float: left;
-  margin-bottom: 20px;
+  width: 100%;
 }
 .keypoint {
   color: red;
@@ -580,7 +548,7 @@ table td {
   color: #606266;
 }
 .addcon {
-  width: 64%;
+  width: 72%;
   border: 1px solid #409eff;
   border-radius: 5px;
   height: 32px;
@@ -588,16 +556,16 @@ table td {
   margin-left: 5px;
   padding: 0 20px;
 }
-.addcon:hover{
+.addcon:hover {
   border: 1px solid #dcdfe6;
 }
-.addcon:focus{
+.addcon:focus {
   outline: none;
 }
 
 .content {
   margin: 0 auto;
-  width: 100%;
+  width: 55%;
   height: 100%;
 }
 .modal-footer {
@@ -635,19 +603,35 @@ table td {
   margin-right: 20px;
 }
 /*查看学生模态框*/
-.tablewidth{
+.tablewidth {
   width: 90%;
   margin: 0 auto;
 }
-.tips{
-  border-radius:5px;
+.tips {
+  border-radius: 5px;
   border: 1px solid #409eff;
   padding-left: 10px;
 }
-.tips:focus{
+.tips:focus {
   outline: none;
 }
-.tips:hover{
+.tips:hover {
   border: 1px solid #dcdfe6;
+}
+/*正则判断*/
+.inputtips {
+  display: inline-block;
+  color: red;
+  margin-left: 80px;
+  height: 10px;
+  width: 100%;
+}
+.err {
+  border: 1px solid red;
+}
+.inputerr{
+  visibility: hidden;
+  height: 10px;
+  width: 100%;
 }
 </style>

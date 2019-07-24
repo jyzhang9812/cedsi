@@ -53,6 +53,7 @@
             children: [
                {name: "班级管理", route: "/eduAdmin/classManagement"},
                {name: "学生管理", route: "/eduAdmin/stuManagement"},
+               {name: "教师管理", route: "/eduAdmin/teacherManagement"},
             ],
             close: true
           },
