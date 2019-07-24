@@ -95,14 +95,13 @@
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: flex-start;
-    margin-top: 10px;
-    margin-left: 20px;
     font-size: 13px;
     min-width: 850px;
   }
 
   .form-control {
     width: 750px;
+    height: 32px;
   }
 
   .item {
@@ -111,7 +110,6 @@
     flex-wrap: wrap;
     justify-content: flex-start;
     margin-top: 20px;
-    margin-left: 20px;
   }
 
   .item p {
@@ -144,13 +142,14 @@
     background-color: #409eff;
     border: 1px solid #409eff;
   }
+
   .item1 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
     margin-top: 20px;
-    margin-left: 400px;
+    margin-left: 356px;
   }
 
 </style>
