@@ -44,7 +44,7 @@
             <div class="add">
                 <span class="keypointwhite">*</span>
                 <span class="addtitle">职称</span>
-                <input type="password" class="addcon" placeholder="请输入职称" v-model="teacherTitle"/>
+                <input class="addcon" placeholder="请输入职称" v-model="teacherTitle"/>
             </div>
           </div>
           </div>
@@ -54,6 +54,36 @@
           </div>
         </div>
       </div>
+    </div>
+        <!-- 提示模态框（Modal） -->
+    <div
+      class="modal fade"
+      id="alterModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog alterwidth">
+        <div class="modal-content">
+          <div class="modal-header alterheader">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">提示</h4>
+          </div>
+          <div class="modal-body">
+            <div class="altercontent" aria-hidden="true">
+              <img :src="alterimg" class="alterimg" />
+              <span>{{alterMes}}</span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="submitDelete()">确定</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal -->
     </div>
     <div class="classroute">
       <ol class="breadcrumb">
@@ -71,7 +101,7 @@
         v-model="inputData.teacherName"
       />
       <button class="btn btn-search">搜索</button>
-      <button class="btn btn-clear" data-toggle="modal" data-target="#addTeacher">新增教师</button>
+      <button class="btn btn-clear" data-toggle="modal" data-target="#addTeacher" @click="addTeacher()">新增教师</button>
     </div>
     <div class="second-floor">
       <table class="table table-hover">
@@ -95,8 +125,8 @@
               >{{teacher.status}}</button>
             </td>
             <td>
-              <span class="blue" data-toggle="modal" data-target="#updateClass">编辑</span>&nbsp;&nbsp;
-              <span class="red">删除</span>
+              <span class="blue" data-toggle="modal" data-target="#addTeacher" @click="updateTeacher(seq)">编辑</span>&nbsp;&nbsp;
+              <span class="red" data-toggle="modal" data-target="#alterModal" @click="deleteTeacher(seq)">删除</span>
             </td>
           </tr>
         </tbody>
@@ -107,10 +137,9 @@
 
 <script>
 import SelectInput from "../utils/selectInput";
-import DatePicker from "../utils/datePicker";
 export default {
   name: "classmanagement",
-  components: { SelectInput, DatePicker },
+  components: { SelectInput},
   data() {
     return {
       inputData: {
@@ -161,6 +190,10 @@ export default {
       isPassword:true,
       teacherDuty:"",
       teacherTitle:"",
+      //提示框
+      alterimg: this.$store.state.url + "eduAdmin/alter.png",
+      alterMes: "",
+      index:-1,
     };
   },
   watch:{
@@ -206,19 +239,35 @@ export default {
     clearChoices() {
       this.optionsInit();
     },
-    changeDate(value, id) {
-      if (id === "datePicker_start") {
-        this.inputData.startDate = value;
-      } else if (id === "datePicker_end") {
-        this.inputData.endDate = value;
-      }
-    },
     changeTeacherStatus(seq) {
       if (this.tableData[seq].status == "启用") {
         this.tableData[seq].status = "禁用";
       } else {
         this.tableData[seq].status = "启用";
       }
+    },
+    deleteTeacher(seq){
+      this.index=seq
+      this.alterMes="确认删除吗？"
+    },
+    submitDelete(){
+      this.tableData.splice(this.index,1)
+    },
+    //编辑教师
+    updateTeacher(seq){
+      this.index=seq
+      this.teacherName=this.tableData[seq].name
+      this.teacherAccount="hhh"
+      this.teacherPassword="xxxx"
+      this.teacherDuty=this.tableData[seq].duty
+      this.teacherTitle=this.tableData[seq].titles
+    },
+    addTeacher(){
+      this.teacherName=""
+      this.teacherAccount=""
+      this.teacherPassword=""
+      this.teacherDuty=""
+      this.teacherTitle=""
     }
   }
 };
@@ -425,5 +474,17 @@ table td {
   visibility: hidden;
   height: 20px;
   margin-bottom: 10px;
+}
+.alterwidth {
+  width: 30%;
+}
+.altercontent {
+  width: 300px;
+  margin: 0 auto;
+}
+.alterimg {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
 }
 </style>
