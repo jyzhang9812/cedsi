@@ -34,6 +34,7 @@ import stuManagement from "../components/container/eduAdmin/office/stuManagement
 import teaching from "../components/container/eduAdmin/teaching/teaching"
 import eduStatistics from "../components/container/eduAdmin/statistics/statistics"
 import eduStaging from "../components/container/eduAdmin/edustaging/edustaging"
+import teacherManagement from "../components/container/eduAdmin/office/teacherManagement"
 
 Vue.use(Router);
 
@@ -82,6 +83,7 @@ export default new Router({
         { path:'/eduAdmin/stuManagement',component:stuManagement },
         { path:'/eduAdmin/teaching',component:teaching },
         { path:'/eduAdmin/eduStatistice',component:eduStatistics },
+        { path:'/eduAdmin/teacherManagement',component:teacherManagement}
       ]
     }
   ]

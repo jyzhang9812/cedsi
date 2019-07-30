@@ -9,7 +9,8 @@
       aria-labelledby="myModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
+    <!-- <div class="alert alert-success" role="alert">哈哈哈</div> -->
+      <div class="modal-dialog addwidth">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -20,19 +21,26 @@
               <div class="add">
                 <span class="keypoint">*</span>
                 <span class="addtitle">班级名称</span>
-                <input class="addcon" placeholder="请输入班级名称" />
+                <input
+                  :class="isName==false?'addcon':'addcon err'"
+                  placeholder="请输入班级名称"
+                  v-model="addClassName"
+                />
+                <span :class="isName==true?'inputtips':'inputerr'">不超过10个字符</span>
               </div>
               <div class="add">
                 <span class="keypoint">*</span>
-                <span class="addtitle">开课时间</span>
+                <span class="addtitles">开课时间</span>
                 <date-picker
                   tips="选择开始时间"
                   id="datePicker_start"
                   :date="addClassData.startDate"
                   @changeDate="changeDate"
+                  v-model="addClassData.startDate"
                 ></date-picker>
               </div>
-              <div class="add">
+              <span class="inputtips"></span>
+              <!-- <div class="add">
                 <span class="keypoint">*</span>
                 <span class="addtitle">指定学校</span>
                 <select-input
@@ -43,7 +51,7 @@
                   @option="changeOption"
                   :drop-down-list="addClassData.school.list"
                 ></select-input>
-              </div>
+              </div>-->
               <div class="add">
                 <span class="keypoint">*</span>
                 <span class="addtitle">指定教师</span>
@@ -54,13 +62,28 @@
                   :option="addClassData.teacher.option"
                   @option="changeOption"
                   :drop-down-list="addClassData.teacher.list"
+                  v-model="addClassData.teacher.option"
+                ></select-input>
+              </div>
+              <span class="inputtips"></span>
+              <div class="add">
+                <span class="keypoint">*</span>
+                <span class="addtitle">选择课程</span>
+                <select-input
+                  class="modal-select-input"
+                  id="course"
+                  tips="请选择课程"
+                  :option="addClassData.course.option"
+                  @option="changeOption"
+                  :drop-down-list="addClassData.course.list"
+                  v-model="addClassData.course.option"
                 ></select-input>
               </div>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary">确定</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="submit()">确定</button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -98,9 +121,6 @@
                   :key="index"
                   :id="course.name"
                 >
-                  <!-- <span >
-                  {{courseson.sonConName}}
-                  </span>-->
                   <div
                     class="course-content"
                     v-for="(courseson,index) in course.courseContent"
@@ -137,8 +157,9 @@
       aria-hidden="true"
       ref="checkStudent"
     >
+    <div v-html="message" :class="isShowAlter==true?'isshow':'notshow'">{{message}}</div>
       <div class="modal-dialog tablewidth">
-        <div class="modal-content  tablewidth">
+        <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">查看学生</h4>
@@ -151,11 +172,17 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(line, seq) in studentData" :key="seq" class="content">
-                  <td>{{seq}}</td>
-                  <td v-for="(item,index) in line" :key="index">{{item}}</td>
+                <tr v-for="(student, seq) in studentData" :key="seq" class="content">
+                  <td>{{seq+1}}</td>
+                  <td>{{student.name}}</td>
+                  <td>{{student.account}}</td>
+                  <td>{{student.school}}</td>
+                  <td>{{student.grade}}</td>
+                  <td>{{student.className}}</td>
+                  <td>{{student.addTime}}</td>
+                  <td>{{student.tel}}</td>
                   <td style="width:150px">
-                      <input class="tips">
+                    <input class="tips"  @focus="updateRemark(seq)" :value="student.remark" @blur="submitRemark()"/>
                   </td>
                 </tr>
               </tbody>
@@ -166,74 +193,7 @@
       </div>
       <!-- /.modal -->
     </div>
-     <!-- 编辑模态框（Modal） -->
-    <div
-      class="modal fade"
-      id="addClass"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="myModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">编辑</h4>
-          </div>
-          <div class="modal-body">
-            <div class="content">
-              <div class="add">
-                <span class="keypoint">*</span>
-                <span class="addtitle">班级名称</span>
-                <input class="addcon" placeholder="请输入班级名称" />
-              </div>
-              <div class="add">
-                <span class="keypoint">*</span>
-                <span class="addtitle">开课时间</span>
-                <date-picker
-                  tips="选择开始时间"
-                  id="datePicker_start"
-                  :date="addClassData.startDate"
-                  @changeDate="changeDate"
-                ></date-picker>
-              </div>
-              <div class="add">
-                <span class="keypoint">*</span>
-                <span class="addtitle">指定学校</span>
-                <select-input
-                  class="modal-select-input"
-                  id="school"
-                  tips="请选择学校"
-                  :option="addClassData.school.option"
-                  @option="changeOption"
-                  :drop-down-list="addClassData.school.list"
-                ></select-input>
-              </div>
-              <div class="add">
-                <span class="keypoint">*</span>
-                <span class="addtitle">指定教师</span>
-                <select-input
-                  class="modal-select-input"
-                  id="teacher"
-                  tips="请选择教师"
-                  :option="addClassData.teacher.option"
-                  @option="changeOption"
-                  :drop-down-list="addClassData.teacher.list"
-                ></select-input>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary">确定</button>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
-    <!-- 编辑模态框（Modal） -->
+    <!-- 批量导入（Modal） -->
     <div
       class="modal fade"
       id="addStudents"
@@ -248,10 +208,8 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">批量导入学生</h4>
           </div>
-          <div class="modal-body">
-            
-          </div>
-          
+          <div class="modal-body"></div>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             <button type="button" class="btn btn-primary">确定</button>
@@ -276,7 +234,7 @@
         id="class-name"
         v-model="inputData.className"
       />
-      <div class="select-input">
+      <!-- <div class="select-input">
         <select-input
           id="school"
           tips="请选择学校"
@@ -284,10 +242,15 @@
           @option="changeOption"
           :drop-down-list="inputData.school.list"
         ></select-input>
-      </div>
+      </div>-->
       <button class="btn btn-search">搜索</button>
       <button class="btn btn-clear" @click="clearChoices">清空筛选</button>
-      <button class="btn btn-clear" data-toggle="modal" data-target="#addClass">新增班级</button>
+      <button
+        class="btn btn-clear"
+        data-toggle="modal"
+        data-target="#addClass"
+        @click="addClass()"
+      >新增班级</button>
     </div>
     <div class="second-floor">
       <table class="table table-hover">
@@ -297,13 +260,23 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(line, seq) in tableData" :key="seq" class="content">
-            <td>{{seq}}</td>
-            <td v-for="(item,index) in line" :key="index">{{item}}</td>
+          <tr v-for="(classes, seq) in tableData" :key="seq" class="content">
+            <td>{{seq+1}}</td>
+            <td>{{classes.school}}</td>
+            <td>{{classes.className}}</td>
+            <td>{{classes.addDate}}</td>
+            <td>{{classes.teacher}}</td>
+            <td>{{classes.perCourse}}</td>
+            <td>{{classes.endCourse}}</td>
             <td style="width:150px">
               <span class="blue" data-toggle="modal" data-target="#courseScheduling">排课</span>&nbsp;&nbsp;
               <span class="blue" data-toggle="modal" data-target="#checkStudent">查看学生</span>&nbsp;&nbsp;
-              <span class="blue" data-toggle="modal" data-target="#updateClass">编辑</span>&nbsp;&nbsp;
+              <span
+                class="blue"
+                data-toggle="modal"
+                data-target="#addClass"
+                @click="updateClass(seq)"
+              >编辑</span>&nbsp;&nbsp;
               <span class="blue" data-toggle="modal" data-target="#addStudents">批量导入学生</span>
             </td>
           </tr>
@@ -321,29 +294,23 @@ export default {
   components: { SelectInput, DatePicker },
   data() {
     return {
-      //上传文件
-      files:"",
-      fileName: '',
-      fileList: [],
       inputData: {
-        className: "",
-        school: {
-          option: "",
-          list: ["师大一中", "师大二中", "师大三中"]
-        }
+        className: ""
+        // school: {
+        //   option: "",
+        //   list: ["师大一中", "师大二中", "师大三中"]
+        // }
       },
       addClassData: {
         addClassName: "",
         startDate: "",
-        endDate: "",
-        middleDate: "",
-        school: {
-          option: "",
-          list: ["师大一中", "师大二中", "师大四中"]
-        },
         teacher: {
           option: "",
           list: ["祁老师", "程老师"]
+        },
+        course:{
+          option:"",
+          list:["JAVA","操作系统"]
         }
       },
       tableTitle: [
@@ -357,12 +324,40 @@ export default {
         "操作"
       ],
       tableData: [
-        ["赛小迪", "JAVA", "2019-07-20", "祁老师", "操作系统", "计算机网络"],
-        ["赛小迪", "JAVA", "2019-07-20", "祁老师", "操作系统", "计算机网络"],
-        ["赛小迪", "JAVA", "2019-07-20", "祁老师", "操作系统", "计算机网络"],
-        ["赛小迪", "JAVA", "2019-07-20", "祁老师", "操作系统", "计算机网络"]
+        {
+          school: "赛小迪",
+          className: "JAVA",
+          addDate: "2019-07-20 00:00",
+          teacher: "祁老师",
+          perCourse: "操作系统",
+          endCourse: "计算机网络"
+        },
+        {
+          school: "赛小迪",
+          className: "JAVA",
+          addDate: "2019-07-20 00:00",
+          teacher: "祁老师",
+          perCourse: "操作系统",
+          endCourse: "计算机网络"
+        },
+        {
+          school: "赛小迪",
+          className: "JAVA",
+          addDate: "2019-07-20 00:00",
+          teacher: "祁老师",
+          perCourse: "操作系统",
+          endCourse: "计算机网络"
+        },
+        {
+          school: "赛小迪",
+          className: "JAVA",
+          addDate: "2019-07-20 00:00",
+          teacher: "祁老师",
+          perCourse: "操作系统",
+          endCourse: "计算机网络"
+        }
       ],
-      studentTitle:[
+      studentTitle: [
         "序号",
         "学生姓名",
         "账号",
@@ -371,13 +366,49 @@ export default {
         "班级",
         "录入时间",
         "手机号",
-        "备注",
+        "备注"
       ],
-      studentData:[
-        ["小赛","赛迪思","赛迪思","初一","6班","2019-02-27 16:25:03","111111111"],
-        ["小赛","赛迪思","赛迪思","初一","6班","2019-02-27 16:25:03","111111111"],
-        ["小赛","赛迪思","赛迪思","初一","6班","2019-02-27 16:25:03","111111111"],
-        ["小赛","赛迪思","赛迪思","初一","6班","2019-02-27 16:25:03","111111111"]
+      studentData: [
+        {
+          name: "小赛",
+          account: "赛迪思",
+          school: "赛迪思",
+          grade: "初一",
+          className: "6班",
+          addTime: "2019-02-27 16:25:03",
+          tel: "111111111",
+          remark: "是个好孩子"
+        },
+        {
+          name: "小赛",
+          account: "赛迪思",
+          school: "赛迪思",
+          grade: "初一",
+          className: "6班",
+          addTime: "2019-02-27 16:25:03",
+          tel: "111111111",
+          remark: ""
+        },
+        {
+          name: "小赛",
+          account: "赛迪思",
+          school: "赛迪思",
+          grade: "初一",
+          className: "6班",
+          addTime: "2019-02-27 16:25:03",
+          tel: "111111111",
+          remark: ""
+        },
+        {
+          name: "小赛",
+          account: "赛迪思",
+          school: "赛迪思",
+          grade: "初一",
+          className: "6班",
+          addTime: "2019-02-27 16:25:03",
+          tel: "111111111",
+          remark: "好"
+        }
       ],
       courseList: [
         {
@@ -406,8 +437,25 @@ export default {
             }
           ]
         }
-      ]
+      ],
+      //添加新班级
+      addClassName: "",
+      isName: true,
+      updateIndex: -1,
+      remark:"",
+      //修改备注成功弹出标签
+      message:"<div class='alert alert-success alter-width' role='alert'>修改成功!</div>",
+      isShowAlter:false
     };
+  },
+  watch: {
+    addClassName(val, oldVal) {
+      if (val.length <= 10 && val.length > 0) {
+        this.isName = false;
+      } else {
+        this.isName = true;
+      }
+    }
   },
   methods: {
     optionsInit() {
@@ -421,9 +469,9 @@ export default {
       };
     },
     changeOption(item, id) {
-      Object.keys(this.inputData).forEach(res => {
+      Object.keys(this.addClassData).forEach(res => {
         if (res === id) {
-          this.inputData[res].option = item;
+          this.addClassData[res].option = item;
         }
       });
     },
@@ -432,15 +480,55 @@ export default {
     },
     changeDate(value, id) {
       if (id === "datePicker_start") {
-        this.inputData.startDate = value;
-      } else if (id === "datePicker_end") {
-        this.inputData.endDate = value;
+        this.addClassData.startDate = value;
       }
     },
-    changeClassDate(course, index) {
-      console.log(course, index);
+    //编辑班级
+    updateClass(seq) {
+      this.updateIndex = seq;
+      this.addClassName = this.tableData[seq].className;
+      this.addClassData.startDate = this.tableData[seq].addDate;
+      this.addClassData.teacher.option = this.tableData[seq].teacher;
+    },
+    //添加班级
+    addClass() {
+      this.updateIndex = -1;
+      this.addClassName = "";
+      this.addClassData.startDate = "";
+      this.addClassData.teacher.option = "";
+    },
+    //编辑或更改提交
+    submit() {
+      var newClass = {};
+      console.log(this.updateIndex);
+      if (this.updateIndex > 0) {
+        this.tableData[this.updateIndex].className = this.addClassName;
+        this.tableData[this.updateIndex].addDate = this.addClassData.startDate;
+        this.tableData[this.updateIndex].teacher = this.addClassData.teacher.option;
+      } else {
+        newClass.school = "赛迪斯",
+        newClass.className = this.addClassName,
+        newClass.addDate = this.addClassData.startDate,
+        newClass.teacher = this.addClassData.teacher.option;
+        newClass.perCourse = "";
+        newClass.endCourse = "";
+        this.tableData.push(newClass);
+      }
+    },
+    //更改学生备注
+    updateRemark(seq){
+      this.studentData[seq].remark=this.remark
+    },
+    submitRemark(){
+      this.isShowAlter=true
+      //console.log("修改成功")
+      setTimeout(function () {
+          this.isShowAlter=false
+          console.log("我改了"+this.isShowAlter)
+      }, 2000);
+
     }
-  },
+  }
 };
 </script>
 
@@ -533,11 +621,6 @@ label {
   color: #409eff;
 }
 
-.red {
-  cursor: pointer;
-  color: #ff6947;
-}
-
 table {
   border: #eeeeee;
 }
@@ -557,7 +640,10 @@ table td {
 .select-input {
   margin-right: 8px;
 }
-/*模态框*/
+/*添加班级模态框*/
+.addwidth {
+  width: 500px;
+}
 .modal-dialog {
   top: 100px;
   position: relative;
@@ -569,9 +655,7 @@ table td {
   border-top-right-radius: 5px;
 }
 .add {
-  width: 50%;
-  float: left;
-  margin-bottom: 20px;
+  width: 100%;
 }
 .keypoint {
   color: red;
@@ -580,7 +664,7 @@ table td {
   color: #606266;
 }
 .addcon {
-  width: 64%;
+  width: 180px;
   border: 1px solid #409eff;
   border-radius: 5px;
   height: 32px;
@@ -588,16 +672,16 @@ table td {
   margin-left: 5px;
   padding: 0 20px;
 }
-.addcon:hover{
+.addcon:hover {
   border: 1px solid #dcdfe6;
 }
-.addcon:focus{
+.addcon:focus {
   outline: none;
 }
 
 .content {
   margin: 0 auto;
-  width: 100%;
+  width: 55%;
   height: 100%;
 }
 .modal-footer {
@@ -635,19 +719,47 @@ table td {
   margin-right: 20px;
 }
 /*查看学生模态框*/
-.tablewidth{
+.tablewidth {
   width: 90%;
   margin: 0 auto;
 }
-.tips{
-  border-radius:5px;
+.tips {
+  border-radius: 5px;
   border: 1px solid #409eff;
   padding-left: 10px;
 }
-.tips:focus{
+.tips:focus {
   outline: none;
 }
-.tips:hover{
+.tips:hover {
   border: 1px solid #dcdfe6;
+}
+/*正则判断*/
+.inputtips {
+  display: inline-block;
+  color: red;
+  margin-left: 80px;
+  height: 10px;
+  width: 100%;
+}
+.err {
+  border: 1px solid red;
+}
+.inputerr {
+  visibility: hidden;
+  height: 10px;
+  width: 100%;
+}
+/*修改成功弹出框*/
+.isshow{
+  width: 30%;
+  position: relative;
+  margin: 20px auto;
+}
+.notshow{
+  width: 40%;
+  position: relative;
+  margin: 20px auto;
+  visibility: hidden;
 }
 </style>
