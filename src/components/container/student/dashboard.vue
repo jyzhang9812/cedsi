@@ -104,6 +104,8 @@
 
 <script>
 import { error } from 'util';
+import globalAxios from 'axios'
+
 export default {
   name: "dashboard",
   data() {
@@ -204,18 +206,23 @@ export default {
     this.height=document.documentElement.clientHeight
     this.style='min-height:'+(this.height-56)+'px;'
     console.log(this.height)
-    this.$http.get("").then(
-      response => {
+
+    var token = window.localStorage.getItem('idToken')
+    globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/studentinfo',
+        {headers: {
+            'Content-Type':'application/json',
+            'Authorization': token
+          }}
+      ).then(response => {
         console.log(response);
-        this.user=response.body;
+        this.user=response.data;
         console.log(this.user);
         this.getsex();
         return response.json();
       },
       error => {
         console.log(error);
-      }
-    );
+      })
   },
 
 };

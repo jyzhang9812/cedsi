@@ -50,11 +50,12 @@
           username: this.username
         }
         console.log(formData);
-        this.$http.post("https://2oflic8loc.execute-api.us-east-2.amazonaws.com/prod/login",  {"username":this.username,"password":this.password}).then(
+        this.$http.post("https://aogtavn4ul.execute-api.cn-northwest-1.amazonaws.com.cn/prod/user/login",  {"username":this.username,"password":this.password}).then(
           response => {
             console.log(response);
             idToken = response.body.token;
             localStorage.setItem('idToken', idToken);
+            this.$router.push({path:'/dashboard'})
           },
           error => {
             console.log(error);

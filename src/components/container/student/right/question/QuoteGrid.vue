@@ -37,7 +37,7 @@
 </template>
 
 <script>
-    import Quote from './Quote.vue';
+    import Quote from './quote.vue';
     export default {
         props:['quotes'],
         components:{

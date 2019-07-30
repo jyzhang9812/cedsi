@@ -1,17 +1,17 @@
 <template>
     <div class="limiter">
+        <div class="class_header">
+            <button class="nameOfClass">{{name_of_class}}</button>
+        </div>
         <div class="container-table100">
-            <div>
-                <button class="nameOfClass">{{name_of_class}}</button>
-            </div>
             <div class="wrap-table100">
                 <div v-for="(item,index) in myteacher" :key="index">
                     <img class="avastimg" alt="" :src="item.headpicture">
                     代课老师：{{item.teachername}}
                     <hr />
                 </div>
-                <div class="table100 ver3 m-b-110">
-                    <table data-vertable="ver3">
+                <div class="table100 ver1 m-b-110">
+                    <table data-vertable="ver1">
                         <thead>
                             <tr class="row100 head">
                                 <th class="column100">序号</th>
@@ -31,15 +31,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <ul class="pagination">
-                        <li><a href="#">&laquo;</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">&raquo;</a></li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -97,23 +88,32 @@
 </script>
 
 <style>
+.class_header{
+    background-color: #00bcd4;
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100px;  
+}
 .nameOfClass{
     width:auto;
     min-width: 100px;
-    background: #fff;
+    background: #ff8d1a;
     height: 40px;
     font-size: 15px;
     text-align: center;
-    margin-right: 10px;
-    margin-top: 10px;
+    margin: 10px 10px 0 30px;
     font-weight: bold;
-    color: #50b8ee;
+    color: #fff;
     border: 1px solid #50b8ee;
     border-radius: 12px;
 }
 .nameOfClass:hover{
-    background: #50b8ee;
-    color: #f4f9fa;
+    color: #50b8ee;
+    background: #fff;
 }
 .avastimg {
     vertical-align: middle;
@@ -236,42 +236,38 @@ th, td {
 }
 
 /*==================================================================
-[ Ver3 ]*/
-.table100.ver3 tbody tr {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.table100.ver3 td {
+[ Ver1 ]*/
+.table100.ver1 td {
   font-family: Montserrat-Regular;
   font-size: 14px;
   color: #808080;
   line-height: 1.4;
 }
 
-.table100.ver3 th {
+.table100.ver1 th {
   font-family: Montserrat-Medium;
   font-size: 15px;
   color: #fff;
-  line-height: 1;
+  line-height: 1.4;
   text-transform: uppercase;
 
+  background-color: #36304a;
+}
+
+.table100.ver1 .row100:hover {
+  background-color: #f2f2f2;
+}
+
+.table100.ver1 .hov-column-ver1 {
+  background-color: #f2f2f2;
+}
+
+.table100.ver1 .hov-column-head-ver1 {
+  background-color: #484848 !important;
+}
+
+.table100.ver1 .row100 td:hover {
   background-color: #6c7ae0;
-}
-
-.table100.ver3 .row100:hover td {
-  background-color: #fcebf5;
-}
-
-.table100.ver3 .hov-column-ver3 {
-  background-color: #fcebf5;
-}
-
-.table100.ver3 .hov-column-head-ver3 {
-  background-color: #7b88e3 !important;
-}
-
-.table100.ver3 .row100 td:hover {
-  background-color: #e03e9c;
   color: #fff;
 }
 

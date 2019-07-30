@@ -214,7 +214,7 @@ export default {
   created: function() {
     this.$http
       .get(
-        "https://jt6s63r7of.execute-api.us-east-2.amazonaws.com/prod/courses/123/chapters"
+        "https://aogtavn4ul.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses/{id}/chapters"
       )
       .then(
         response => {

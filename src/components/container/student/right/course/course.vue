@@ -14,10 +14,9 @@
             courseCard,
             searchBar,
         },
-        data() {
-        return {
-            }
-        },
+        // mounted(){
+        //     this.$store.commit('add',1)
+        // }
 }   
 </script>
 

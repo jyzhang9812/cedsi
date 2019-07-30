@@ -1,7 +1,12 @@
 <template>
     <div class="container-fluid">
+        <div class="menu">
+            <button  @click="tab(index)"
+            v-for="(item,index) in items" class="tag"
+            :class="{active : index===curId}">{{item.item}}</button>
+        </div>
         <div class="row">
-            <div class="col-md-4" v-for="(item,index) in homework" :key="index" @mouseover="show(index)" @mouseleave="hidden(index)">
+            <div class="col-md-4" v-show="0===curId" v-for="(item,index) in currentList" :key="index" @mouseover="show(index)" @mouseleave="hidden(index)">
                 <div class="inside">
                     <img class="img" :style="style" :src="item.img_url"/>
                     <div class='details' v-show="index==i">
@@ -29,124 +34,186 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4" v-for="(item,index) in product" :key="'info-'+index" @mouseover="show0(index)" @mouseleave="hidden0(index)">
-                    <div class="inside">
-                        <img class="img" :style="style" :src="item.img_url"/>
-                        <div class='details' v-show="index==j">
-                            <div class="detail_item">
-                                <img class="icon" v-for='i in item.star_num'  :src=star_active />
-                                <img class="icon" v-for='i in 5-item.star_num':src=star />
-                                <span> {{item.teacher_remark}}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="outside">
-                        <div class="left">
-                            <div class="up">
-                                <img class="work_type" :src=products />
-                                <h5>{{item.product_name}}</h5>
-                            </div>
-                            <div class="down">
-                                <img class="icon" :src=clock />
-                                <span>{{item.create_time}}</span>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <button class="edit">编辑</button>
-                            <button class="delete" v-on:click='del(index)'>删除</button>
+            <div class="col-md-4" v-show="1===curId" v-for="(item,index) in currentList" :key="'info-'+index" @mouseover="show0(index)" @mouseleave="hidden0(index)">
+                <div class="inside">
+                    <img class="img" :style="style" :src="item.img_url"/>
+                    <div class='details' v-show="index==j">
+                        <div class="detail_item">
+                            <img class="icon" v-for='i in item.star_num'  :src=star_active />
+                            <img class="icon" v-for='i in 5-item.star_num':src=star />
+                            <span> {{item.teacher_remark}}</span>
                         </div>
                     </div>
                 </div>
-        </div>
-        
+                <div class="outside">
+                    <div class="left">
+                        <div class="up">
+                            <img class="work_type" :src=products />
+                            <h5>{{item.product_name}}</h5>
+                        </div>
+                        <div class="down">
+                            <img class="icon" :src=clock />
+                            <span>{{item.create_time}}</span>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <button class="edit">编辑</button>
+                        <button class="delete" v-on:click='del(index)'>删除</button>
+                    </div>
+                </div>
+            </div>
+        </div>   
+        <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
     </div>
 </template>
 
 
 <script>
+    import pagination from'../pagination.vue'
     export default{
         name:'rollPic',
+        components:{
+            pagination,
+        },
         data() {
-        return {
-            btn:'btn',
-            btnh:'btnhover',
-            isShow:false,
-            comment:'',
-            clock:'../' + this.$store.state.url + 'dashboard/clock.png',
-            zuopin:'../' + this.$store.state.url + 'dashboard/zuopin.png',
-            products:'../' + this.$store.state.url + 'dashboard/xiangmu.png',
-            star_active:'../' + this.$store.state.url + 'dashboard/star_active.png',
-            star:'../' + this.$store.state.url + 'dashboard/star.png',
-            homework: [],
-            product:[],
-            isdelete:false,
-            calleft:0,
-            i:-1,
-            j:-1
-        }
-    },
-    methods:{
-        show(index){
-            this.i = index;
-            this.isShow = true;
-        },
-        hidden(index){
-            this.i = -1;
-            this.isShow = false;
-        },
-        show0(index){
-            this.j = index;
-            this.isShow = true;
-        },
-        hidden0(index){
-            this.j = -1;
-            this.isShow = false;
-        },
-        del(index) {   
-            var e = confirm("将永久删除该作品，您确定该操作吗？")
-            if (e==true) {
-                this.inside_detail.splice(index, 1);
+            return {
+                curId: 0,
+                items:[{item: '作业'},{item: '项目'},],
+                limit: 15,
+                currentList: [],
+                tableData:[],
+                btn:'btn',
+                btnh:'btnhover',
+                isShow:false,
+                comment:'',
+                clock:'../' + this.$store.state.url + 'dashboard/clock.png',
+                zuopin:'../' + this.$store.state.url + 'dashboard/zuopin.png',
+                products:'../' + this.$store.state.url + 'dashboard/xiangmu.png',
+                star_active:'../' + this.$store.state.url + 'dashboard/star_active.png',
+                star:'../' + this.$store.state.url + 'dashboard/star.png',
+                homework: [],
+                product:[],
+                isdelete:false,
+                calleft:0,
+                i:-1,
+                j:-1
             }
-            else {
-                // return false;
-            }
-        }
-    },
-    created: function() {
-    //let that = this.$router;
-    this.style='height:'+(document.documentElement.clientWidth*0.17)+'px;'
-    this.style1='height:'+(document.documentElement.clientWidth*0.17)+'px;margin-top:-'+(document.documentElement.clientWidth*0.17)+'px;'
-    this.$http
-      .get("https://dmx62xxcu2.execute-api.us-east-2.amazonaws.com/prod/products").then(response => {
-          var arr1=[];
-          var arr2=[];
-          console.log(response.body);
-          for(var i = 0;i<response.body.homework.length;i++){
-            arr1.push(response.body.homework[i])
-          }
-          this.homework = arr1;
-          for(var i = 0;i<response.body.product.length;i++){
-            arr2.push(response.body.product[i])
-          }
-          this.product = arr2;
-          return response.json();
         },
-        error => {
-  
-          console.log(error);
+        methods:{
+            show(index){
+                this.i = index;
+                this.isShow = true;
+            },
+            hidden(index){
+                this.i = -1;
+                this.isShow = false;
+            },
+            show0(index){
+                this.j = index;
+                this.isShow = true;
+            },
+            hidden0(index){
+                this.j = -1;
+                this.isShow = false;
+            },
+            del(index) {   
+                var e = confirm("将永久删除该作品，您确定该操作吗？")
+                if (e==true) {
+                    this.inside_detail.splice(index, 1);
+                }
+                else {
+                    // return false;
+                }
+            },
+            tab (index) {
+                this.curId = index;
+                if(this.curId==0){
+                    this.tableData = this.homework;
+                    this.getNew(0);
+                }else{
+                    this.tableData = this.product;
+                    this.getNew(0);
+                }
+            },      
+            getNew(value) {
+                this.currentList = this.tableData.slice(value, value + this.limit);
+            },
+        },
+        created: function() {
+            //let that = this.$router;
+            this.style='height:'+(document.documentElement.clientWidth*0.17)+'px;'
+            this.style1='height:'+(document.documentElement.clientWidth*0.17)+'px;margin-top:-'+(document.documentElement.clientWidth*0.17)+'px;'
+            this.$http
+            .get("https://aogtavn4ul.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/works").then(response => {
+                var arr1=[];
+                var arr2=[];
+                
+                for(var i = 0;i<response.body.homework.length;i++){
+                    arr1.push(response.body.homework[i])
+                }
+                this.homework = arr1;
+                for(var i = 0;i<response.body.product.length;i++){
+                    arr2.push(response.body.product[i])
+                }
+                this.product = arr2;
+
+                this.tableData = arr1;
+                this.getNew(0);
+
+                return response.json();
+                },
+                error => {
+                    console.log(error);
+                }
+            );
+        },
+        mounted() {
+            if(this.curId==0){
+                this.tableData = this.homework;
+            }else{
+                this.tableData = this.product;
+            }
+            this.getNew(0);
         }
-      );
     }
-}
 </script>
 
 
 <style scoped>
-    .row{
-        padding-top: 20px;
+    .menu {
+        background-color: #f4f9fa;
+        height: auto;
+        padding-top: 10px;
+        padding-left: 40px;
+        padding-right: 40px;
         display: flex;
+        flex-direction: row;
         flex-wrap: wrap;
-        float: left;
+        justify-content: center;
+    }
+    .tag {
+        background-color: #fff;
+        color: #9196a1;
+        padding: 15px 32px;
+        margin: 10px 4px 0px;
+        text-align: center;
+        text-decoration: none;
+        padding: 4px 10px;
+        font-size: 15px;
+        border-radius: 20px;
+        border: none;
+    }
+
+    .tag:hover,.active{
+        background-color: #9196a1;
+        text-align: center;
+        text-decoration: none;
+        padding: 4px 10px;
+        margin: 10px 4px 0px;
+        font-size: 15px;
+        border-radius: 20px;
+        border: none;
+        color: #fff;
     }
     .col-md-4{
         margin-top: 10px;

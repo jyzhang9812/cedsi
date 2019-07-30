@@ -15,6 +15,7 @@
       
 <style scoped>
 #footer {
+    width: 100%;
     height: 53px;
     display: flex;
     flex-flow: row;

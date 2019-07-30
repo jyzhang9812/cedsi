@@ -12,9 +12,9 @@
   </template>
   
   <script>
-  import QuoteGrid from './QuoteGrid.vue';
-  import NewQuote from './NewQuote.vue';
-  import Header from './QuoteHeader.vue';
+  import QuoteGrid from './quoteGrid.vue';
+  import NewQuote from './newQuote.vue';
+  import Header from './quoteHeader.vue';
   
   export default {
     data: function(){
