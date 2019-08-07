@@ -218,7 +218,7 @@ export default {
         this.user=response.data;
         console.log(this.user);
         this.getsex();
-        return response.json();
+        // return response.json();
       },
       error => {
         console.log(error);

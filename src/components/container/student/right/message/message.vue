@@ -250,7 +250,8 @@
 <script>
     import searchBar from'../searchBar.vue'
     import pagination from'../pagination.vue'
-
+    import globalAxios from 'axios'
+    
     export default {
         name: 'message',
         components:{
@@ -349,6 +350,26 @@
         },
         created() {
             this.tableData = this.contents[0];
+            var token = window.localStorage.getItem('idToken')
+            globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/message/{type}',
+                {headers: {
+                    'Content-Type':'application/json',
+                    'Authorization': token
+                }}
+            ).then(response => {
+                console.log(response);
+                // var arr=[];
+                // this.name_of_class = response.data.className;
+                // this.myteacher = response.data.teacherName;
+                // for(var i = 0;i<response.data.classmates.length;i++){
+                //     arr.push(response.data.classmates[i])
+                // }
+                // this.myclassmate = arr;
+                },
+                error => {
+                    console.log(error);
+                }
+            );
         },
         mounted() {
             this.tableData = this.contents[0];

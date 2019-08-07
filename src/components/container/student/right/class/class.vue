@@ -5,9 +5,9 @@
         </div>
         <div class="container-table100">
             <div class="wrap-table100">
-                <div v-for="(item,index) in myteacher" :key="index">
-                    <img class="avastimg" alt="" :src="item.headpicture">
-                    代课老师：{{item.teachername}}
+                <div>
+                    <img class="avastimg" alt="" :src="myteacher.avatar">
+                    代课老师：{{myteacher.teacher_name}}
                     <hr />
                 </div>
                 <div class="table100 ver1 m-b-110">
@@ -24,9 +24,9 @@
                         <tbody>
                             <tr class="row100" v-for="(item,index) in myclassmate" :key="index">
                                 <td class="column100">{{index+1}}</td>
-                                <td class="column100"><img class="avastimg" :src="item.headpicture"></td>
-                                <td class="column100">{{item.name}}</td>
-                                <td class="column100">{{item.sex}}</td>
+                                <td class="column100"><img class="avastimg" :src="item.avatar"></td>
+                                <td class="column100">{{item.student_name}}</td>
+                                <td class="column100">{{item.gender}}</td>
                                 <td class="column100">{{item.age}}</td>
                             </tr>
                         </tbody>
@@ -38,52 +38,38 @@
 </template>
 
 <script>
+  import globalAxios from 'axios'
   export default {
         name: 'class',
         data() {
             return {
-                name_of_class:'赛迪思',
-                myclassmate: [
-                    {
-
-                        headpicture: 'https://public-change-online.oss-cn-beijing.aliyuncs.com/xlsx/icon.png',
-                        name: '小赛',
-                        sex: '男',
-                        age: '0',
-                    },
-                    {
-
-                        headpicture: 'https://public-change-online.oss-cn-beijing.aliyuncs.com/xlsx/icon.png',
-                        name: '小迪',
-                        sex: '男',
-                        age: '0',
-                    },
-                    {
-
-                        headpicture: 'https://public-change-online.oss-cn-beijing.aliyuncs.com/xlsx/icon.png',
-                        name: '小斯',
-                        sex: '男',
-                        age: '0',
-                    },
-                    {
-
-                        headpicture: 'https://public-change-online.oss-cn-beijing.aliyuncs.com/xlsx/icon.png',
-                        name: '小艾',
-                        sex: '男',
-                        age: '0',
-                    },
-
-                ],
-                myteacher: [
-                    {
-                        teachername: "程老师",
-                        headpicture: 'data:image/png;base64,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',
-                    }
-
-                ],
+                name_of_class:'',
+                myclassmate: [],
+                myteacher: {},
             }
         },
-
+        created: function() {      
+            var token = window.localStorage.getItem('idToken')
+            globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/class',
+                {headers: {
+                    'Content-Type':'application/json',
+                    'Authorization': token
+                }}
+            ).then(response => {
+                console.log(response);
+                var arr=[];
+                this.name_of_class = response.data.className;
+                this.myteacher = response.data.teacher;
+                for(var i = 0;i<response.data.classmates.length;i++){
+                    arr.push(response.data.classmates[i])
+                }
+                this.myclassmate = arr;
+                },
+                error => {
+                    console.log(error);
+                }
+            );
+        },
     }
 </script>
 
@@ -106,6 +92,7 @@
     font-size: 15px;
     text-align: center;
     margin: 10px 10px 0 30px;
+    padding: 0 10px;
     font-weight: bold;
     color: #fff;
     border: 1px solid #50b8ee;

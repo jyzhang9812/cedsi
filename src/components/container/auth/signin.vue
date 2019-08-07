@@ -58,6 +58,7 @@
             this.$router.push({path:'/dashboard'})
           },
           error => {
+            this.$router.push({path:'/404'})
             console.log(error);
           }
         );

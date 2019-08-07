@@ -139,8 +139,10 @@
         this.$http.post("https://aogtavn4ul.execute-api.cn-northwest-1.amazonaws.com.cn/prod/user/register", {"username":this.username,"password":this.password}).then(
           response => {
             console.log(response);
+            this.$router.push({path:'/signin'})
           },
           error => {
+            this.$router.push({path:'/404'})
             console.log(error);
           }
         );

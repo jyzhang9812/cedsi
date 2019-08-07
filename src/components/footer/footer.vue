@@ -24,6 +24,7 @@
     background-color: #293037;
     padding: 0 20px;
     color: #999;
+    bottom: 0;
 }
 p{
     margin: 0;

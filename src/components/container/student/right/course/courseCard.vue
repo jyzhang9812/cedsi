@@ -1,10 +1,10 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid layout">
     <div class="row">
         <div class="col-md-4" 
           v-for="(item,index) in currentList"
           :key="index">
-          <router-link to="/dashboard/map" class="box">
+          <router-link :to="{name:'coursemap',params:{id:item.course_id}}" class="box">
             <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
               <img class="img" :style="style" :src="item.img_url">
               <div class="details" :style="style1" v-show="index==i">
@@ -87,23 +87,24 @@ export default {
     this.style1='height:'+(document.documentElement.clientWidth*0.17)+'px;margin-top:-'+(document.documentElement.clientWidth*0.17)+'px;'
     
     var token = window.localStorage.getItem('idToken')
-    globalAxios.get('https://aogtavn4ul.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses',
+    globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses',
         {headers: {
             'Content-Type':'application/json',
-            'idToken': token
+            'Authorization': token
           }}
       ).then(response => {
         var arr=[];
-        console.log(response.body);
-        for(var i = 0;i<response.body.length;i++){
-          arr.push(response.body[i])
+        console.log(response);
+        for(var i = 0;i<response.data.length;i++){
+          arr.push(response.data[i])
         }
         this.inside_detail = arr;
         this.tableData = this.inside_detail;
         this.getNew(0);
-        return response.json();
+        // return response.json();
       },
       error => {
+        // this.$router.push({path:'/404'})
         console.log(error);
       })
     },
@@ -117,7 +118,11 @@ export default {
 
 
 <style scoped>
+.layout{
+  margin: 0;
+}
 .row{
+  width: 100%;
   padding-top: 20px;
   display: flex;
   flex-wrap: wrap;

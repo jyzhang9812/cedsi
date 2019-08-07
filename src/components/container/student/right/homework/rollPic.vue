@@ -5,7 +5,7 @@
             v-for="(item,index) in items" class="tag"
             :class="{active : index===curId}">{{item.item}}</button>
         </div>
-        <div class="row">
+        <div class="row" style="margin-top: 10px">
             <div class="col-md-4" v-show="0===curId" v-for="(item,index) in currentList" :key="index" @mouseover="show(index)" @mouseleave="hidden(index)">
                 <div class="inside">
                     <img class="img" :style="style" :src="item.img_url"/>
@@ -70,6 +70,7 @@
 
 <script>
     import pagination from'../pagination.vue'
+    import globalAxios from 'axios'
     export default{
         name:'rollPic',
         components:{
@@ -143,17 +144,23 @@
             //let that = this.$router;
             this.style='height:'+(document.documentElement.clientWidth*0.17)+'px;'
             this.style1='height:'+(document.documentElement.clientWidth*0.17)+'px;margin-top:-'+(document.documentElement.clientWidth*0.17)+'px;'
-            this.$http
-            .get("https://aogtavn4ul.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/works").then(response => {
+           
+            var token = window.localStorage.getItem('idToken')
+            globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/works',
+                {headers: {
+                    'Content-Type':'application/json',
+                    'Authorization': token
+                }}
+            ).then(response => {
                 var arr1=[];
                 var arr2=[];
-                
-                for(var i = 0;i<response.body.homework.length;i++){
-                    arr1.push(response.body.homework[i])
+                console.log(response);
+                for(var i = 0;i<response.data.homework.length;i++){
+                    arr1.push(response.data.homework[i])
                 }
                 this.homework = arr1;
-                for(var i = 0;i<response.body.product.length;i++){
-                    arr2.push(response.body.product[i])
+                for(var i = 0;i<response.data.product.length;i++){
+                    arr2.push(response.data.product[i])
                 }
                 this.product = arr2;
 
