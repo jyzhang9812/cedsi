@@ -2,9 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import index from '../components/container/index/index.vue'
 
-import ErrorPage from '../components/container/auth/errorPage.vue'
-import coursemap from '../components/container/student/right/course/coursemap.vue'
-
 //Webpack懒加载
 const sidebar = resolve =>{
   require.ensure(['../components/container/student/dashboard.vue'],()=>{
@@ -51,11 +48,18 @@ const SigninPage = resolve =>{
     resolve(require('../components/container/auth/signin.vue'));
   });
 };
-const map = resolve =>{
-  require.ensure(['../components/container/student/right/course/map.vue'],()=>{
-    resolve(require('../components/container/student/right/course/map.vue'));
+const coursemap = resolve =>{
+  require.ensure(['../components/container/student/right/course/coursemap.vue'],()=>{
+    resolve(require('../components/container/student/right/course/coursemap.vue'));
   });
 };
+//import ErrorPage from '../components/container/auth/errorPage.vue'
+const ErrorPage = resolve =>{
+  require.ensure(['../components/container/auth/errorPage.vue'],()=>{
+    resolve(require('../components/container/auth/errorPage.vue'));
+  });
+};
+
 
 // 以下是教师角色
 const statistics = resolve =>{
