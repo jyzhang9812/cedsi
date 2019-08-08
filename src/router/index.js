@@ -169,6 +169,33 @@ const teacherManagement = resolve =>{
   });
 };
 import { resolve } from 'url';
+//以下是超级管理员角色
+const superAdmin = resolve =>{
+  require.ensure(['../components/container/superAdmin/superAdminSidebar.vue'],()=>{
+    resolve(require('../components/container/superAdmin/superAdminSidebar.vue'));
+  });
+};
+const adminManagement = resolve =>{
+  require.ensure(['../components/container/superAdmin/adminManagement/adminManagement.vue'],()=>{
+    resolve(require('../components/container/superAdmin/adminManagement/adminManagement.vue'));
+  });
+};
+//以下是管理员角色
+const Admin = resolve =>{
+  require.ensure(['../components/container/Admin/adminSidebar.vue'],()=>{
+    resolve(require('../components/container/Admin/adminSidebar.vue'));
+  });
+};
+const eduAdminManagement = resolve =>{
+  require.ensure(['../components/container/Admin/eduAdminManagement/eduAdminManagement.vue'],()=>{
+    resolve(require('../components/container/Admin/eduAdminManagement/eduAdminManagement.vue'));
+  });
+};
+const videoManagement = resolve =>{
+  require.ensure(['../components/container/Admin/videoManagement/videoManagement.vue'],()=>{
+    resolve(require('../components/container/Admin/videoManagement/videoManagement.vue'));
+  });
+};
 
 Vue.use(Router);
 
@@ -219,6 +246,21 @@ export default new Router({
         { path:'/eduAdmin/teaching',component:teaching },
         { path:'/eduAdmin/eduStatistice',component:eduStatistics },
         { path:'/eduAdmin/teacherManagement',component:teacherManagement}
+      ]
+    },
+    {
+      path:'/superAdmin',
+      component:superAdmin,
+      children:[
+        { path:'/superAdmin/',component:adminManagement},
+      ]
+    },
+    {
+      path:'/Admin',
+      component:Admin,
+      children:[
+        { path:'/Admin/',component:eduAdminManagement},
+        { path:'/Admin/videoManagement',component:videoManagement},
       ]
     }
   ]
