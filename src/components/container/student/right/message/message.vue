@@ -6,20 +6,20 @@
             v-for="(item,index) in items" class="tag"
             :class="{active : index===curId}">{{item.item}}</button>
         </div>
-        <div class="main" v-show="index===curId" v-for="(content, index) in contents">
-            <div class="cardbox" v-for="(content, index) in currentList">
+        <div class="main"> <!--  v-show="index===curId" v-for="(content, index) in contents"-->
+            <div class="cardbox" v-for="(item,index) in currentList">
                 <div class="card_header">
                     <img style="cursor: pointer" src="" alt="">
                 </div>
                 <div class="card_content">
-                    {{content.message}}
+                    {{item.message_content}}
                 </div>
                 <div class="card_footer">
                     <span>
-                        <b>{{content.teacher}}</b><br>
-                        {{content.date}}
+                        <b>{{item.teacher_name}}</b><br>
+                        {{item.dispatch_date}}
                     </span>
-                    <img class="avast" src="">
+                    <img class="avast" :src="item.avatar">
                 </div>
             </div>
         </div>
@@ -268,67 +268,7 @@
                     {item: '辅导答疑'},
                     {item: '我的作业'},
                 ],
-                contents:[
-                    [
-                        { message: "系统消息1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "系统消息2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                        { message: "系统消息3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                        { message: "系统消息4", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "系统消息5", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
-                        { message: "系统消息6", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "系统消息7", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                        { message: "系统消息8", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                        { message: "系统消息9", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "系统消息10", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
-                        { message: "系统消息11", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "系统消息12", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                        { message: "系统消息13", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                        { message: "系统消息14", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "系统消息15", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
-                        { message: "系统消息16", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "系统消息17", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                        { message: "系统消息18", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                        { message: "系统消息19", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "系统消息20", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" }
-                    ],
-                    [
-                        { message: "通知公告1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "通知公告2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                        { message: "通知公告3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                        { message: "通知公告4", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "通知公告5", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
-                        { message: "通知公告6", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "通知公告7", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                        { message: "通知公告8", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                        { message: "通知公告9", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "通知公告10", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
-                        { message: "通知公告11", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "通知公告12", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                        { message: "通知公告13", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                        { message: "通知公告14", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "通知公告15", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
-                        { message: "通知公告16", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "通知公告17", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                        { message: "通知公告18", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                        { message: "通知公告19", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "通知公告20", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" }
-                    ],
-                    [
-                        { message: "活动1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "活动2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                        { message: "活动3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                        { message: "活动4", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" }
-                    ],
-                    [
-                        { message: "问题1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "问题2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                        { message: "问题3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                    ],
-                    [
-                        { message: "作业1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                        { message: "作业2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                    ],
-                ],
+                contents:[],
                 limit: 6,
                 currentList: [],
                 tableData:[],
@@ -343,36 +283,65 @@
             },
             tab (index) {
                 this.curId = index;
-                this.tableData = this.contents[index];
+                
+                var token = window.localStorage.getItem('idToken')
+                var arr =  'https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/message/'+(this.curId+1)
+                console.log(arr)
+                globalAxios.get(arr,
+                    {headers: {
+                        'Content-Type':'application/json',
+                        'Authorization': token
+                    }}
+                ).then(
+                    response => {
+                        console.log(response);
+                        var arr=[];
+                        for(var i = 0;i<response.data.length;i++){
+                            arr.push(response.data[i])
+                        }
+                        this.contents = arr;
+                        this.tableData = this.contents;
+                        // return response.json();
+                    },
+                    error => {
+                        console.log(error);
+                    }
+                );
                 this.getNew(0);
             },      
 
         },
-        created() {
-            this.tableData = this.contents[0];
+            
+        created: function() {
+            // this.tableData = this.contents[0];
             var token = window.localStorage.getItem('idToken')
-            globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/message/{type}',
+            var arr =  'https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/message/'+(this.curId+1)
+            console.log(arr)
+            globalAxios.get(arr,
                 {headers: {
                     'Content-Type':'application/json',
                     'Authorization': token
                 }}
-            ).then(response => {
+            ).then(
+                response => {
                 console.log(response);
-                // var arr=[];
-                // this.name_of_class = response.data.className;
-                // this.myteacher = response.data.teacherName;
-                // for(var i = 0;i<response.data.classmates.length;i++){
-                //     arr.push(response.data.classmates[i])
-                // }
-                // this.myclassmate = arr;
+                var arr=[];
+                for(var i = 0;i<response.data.length;i++){
+                    arr.push(response.data[i])
+                }
+                this.contents = arr;
+                this.tableData = this.contents;
+                this.getNew(0);
+                // return response.json();
                 },
                 error => {
-                    console.log(error);
+                console.log(error);
                 }
             );
         },
+
         mounted() {
-            this.tableData = this.contents[0];
+            this.tableData = this.contents;
             this.getNew(0);
         }
     }
