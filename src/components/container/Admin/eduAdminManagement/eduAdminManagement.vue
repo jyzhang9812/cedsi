@@ -1,9 +1,9 @@
 <template>
   <div class="subContainer">
-    <!-- 添加管理员模态框（Modal） -->
+    <!-- 添加教务模态框（Modal） -->
     <div
       class="modal fade"
-      id="addAdmin"
+      id="addEduAdmin"
       tabindex="-1"
       role="dialog"
       aria-labelledby="myModalLabel"
@@ -13,7 +13,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">新增管理员</h4>
+            <h4 class="modal-title" id="myModalLabel">新增教务</h4>
           </div>
           <div class="modal-body">
             <div class="content">
@@ -21,12 +21,12 @@
                 <span class="keypoint">*</span>
                 <span class="addtitle">账号</span>
                 <input
-                  :class="isUserName==false?'addcon':'addcon err'"
+                  :class="isAccount==false?'addcon':'addcon err'"
                   placeholder="请输入管理员账号"
-                  v-model="adminUserName"
+                  v-model="adminAccount"
                 />
               </div>
-              <span :class="isUserName==true?'inputtips':'inputerr'">不超过15个字符</span>
+              <span :class="isAccount==true?'inputtips':'inputerr'">不超过15个字符</span>
               <div class="add">
                 <span class="keypoint">*</span>
                 <span class="addtitle">密码</span>
@@ -90,18 +90,18 @@
       <label for="class-name"></label>
       <input
         type="text"
-        placeholder="请输入管理员账号"
+        placeholder="请输入教务账号"
         class="textBox"
         id="class-name"
-        v-model="inputData.adminUserName"
+        v-model="inputData.eduAdminAccount"
       />
       <button class="btn btn-search">搜索</button>
       <button
         class="btn btn-clear"
         data-toggle="modal"
-        data-target="#addAdmin"
-        @click="addAdmin()"
-      >新增管理员</button>
+        data-target="#addEduAdmin"
+        @click="addEduAdmin()"
+      >新增教务</button>
     </div>
     <div class="second-floor">
       <table class="table table-hover">
@@ -111,22 +111,29 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(admin, seq) in currentList" :key="seq" class="content">
+          <tr v-for="(eduAdmin, seq) in currentList" :key="seq" class="content">
             <td>{{seq+1}}</td>
-            <td>{{admin.username}}</td>
-            <td>{{admin.character}}</td>
+            <td>{{eduAdmin.account}}</td>
+            <td>{{eduAdmin.password}}</td>
+            <td>{{eduAdmin.character}}</td>
             <td>
               <button
-                :class="admin.status==='启用'?'btnactive btn-success':'btnactive btn-warning'"
-                @click="changeAdminStatus(seq)"
-              >{{admin.status}}</button>
+                :class="eduAdmin.status==='启用'?'btnactive btn-success':'btnactive btn-warning'"
+                @click="changeEduAdminStatus(seq)"
+              >{{eduAdmin.status}}</button>
             </td>
             <td>
+              <span
+                class="blue"
+                data-toggle="modal"
+                data-target="#addEduAdmin"
+                @click="updateEduAdmin(seq)"
+              >编辑</span>&nbsp;&nbsp;
               <span
                 class="red"
                 data-toggle="modal"
                 data-target="#alterModal"
-                @click="deleteAdmin(seq)"
+                @click="deleteEduAdmin(seq)"
               >删除</span>
             </td>
           </tr>
@@ -139,78 +146,86 @@
 
 <script>
 import pagination from "../../teacher/utils/pagination.vue";
-import globalAxios from "axios";
 export default {
-  name: "adminManagement",
+  name: "eduAdminManagement",
   components: { pagination },
   data() {
     return {
       limit: 3,
       currentList: [],
       inputData: {
-        adminUserName: ""
+        eduAdminAccount: ""
       },
-      tableTitle: ["序号", "账号", "角色", "状态", "操作"],
+      tableTitle: ["序号", "账号", "密码", "角色", "状态", "操作"],
       tableData: [
         {
-          username: "root1",
+          account: "root1",
+          password: "123456",
           character: "管理员",
           status: "启用"
         },
         {
-          username: "root2",
+          account: "root2",
+          password: "1234567",
           character: "管理员",
           status: "禁用"
         },
         {
-          username: "root3",
+          account: "root3",
+          password: "12345678",
           character: "管理员",
           status: "启用"
         },
         {
-          username: "root1",
+          account: "root1",
+          password: "123456",
           character: "管理员",
           status: "启用"
         },
         {
-          username: "root2",
+          account: "root2",
+          password: "1234567",
           character: "管理员",
           status: "禁用"
         },
         {
-          username: "root1",
+          account: "root1",
+          password: "123456",
           character: "管理员",
           status: "启用"
         },
         {
-          username: "root2",
+          account: "root2",
+          password: "1234567",
           character: "管理员",
           status: "禁用"
         },
         {
-          username: "root3",
+          account: "root3",
+          password: "12345678",
           character: "管理员",
           status: "启用"
         }
       ],
       //新增管理员
-      adminUserName: "",
-      isUserName: true,
+      adminAccount: "",
+      isAccount: true,
       adminPassword: "",
       isPassword: true,
       //提示框
       alterimg: this.$store.state.url + "eduAdmin/alter.png",
       alterMes: "",
+      index: -1,
       //当前页码
       currentPage: 0
     };
   },
   watch: {
-    adminUserName(val, oldVal) {
+    adminAccount(val, oldVal) {
       if (val.length <= 15 && val.length > 0) {
-        this.isUserName = false;
+        this.isAccount = false;
       } else {
-        this.isUserName = true;
+        this.isAccount = true;
       }
     },
     adminPassword(val, oldVal) {
@@ -229,52 +244,47 @@ export default {
         }
       });
     },
-    changeAdminStatus(seq) {
+    changeEduAdminStatus(seq) {
       if (this.tableData[seq].status == "启用") {
         this.tableData[seq].status = "禁用";
       } else {
         this.tableData[seq].status = "启用";
       }
     },
-    deleteAdmin(seq) {
+    deleteEduAdmin(seq) {
       this.index = seq;
       this.alterMes = "确认删除吗？";
     },
     submitDelete() {
       this.tableData.splice(this.index, 1);
     },
-    addAdmin() {
-      this.adminUserName = "";
+    //编辑教师
+    updateEduAdmin(seq) {
+      this.index = seq + this.currentPage * this.limit;
+      //console.log(this.index);
+      this.adminAccount = this.tableData[this.index].account;
+      this.adminPassword = this.tableData[this.index].password;
+    },
+    addEduAdmin() {
+      this.index = -1;
+      this.adminAccount = "";
       this.adminPassword = "";
     },
-    //提交
+    //编辑或更改提交
     submit() {
-      var newAdmin = {};
-      newAdmin.username = this.adminUserName;
-      newAdmin.character = "管理员";
-      newAdmin.status = "启用";
-      this.tableData.push(newAdmin);
-      //console.log(newAdmin);
-      var data = { username: this.adminUserName, password: this.adminPassword };
-      //console.log(data);
-      var token = window.localStorage.getItem("idToken");
-      console.log(token)
-      this.$http
-        .post(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",{username: this.adminUserName, password: this.adminPassword },
-          {
-            "Content-Type": "application/json",
-            Authorization: token
-          },
-        )
-        .then(
-          response => {
-            console.log(response);
-          },
-          error => {
-            console.log(error);
-          }
-        );
+      console.log(this.index);
+      if (this.index >= 0) {
+        this.tableData[this.index].account = this.adminAccount;
+        this.tableData[this.index].password = this.adminPassword;
+      } else {
+        var newAdmin = {};
+        newAdmin.account = this.adminAccount;
+        newAdmin.password = this.adminPassword;
+        newAdmin.character = "管理员";
+        newAdmin.status = "启用";
+        this.tableData.push(newAdmin);
+      }
+      console.log(newAdmin);
     },
     //换页
     changeTablePages(value) {
