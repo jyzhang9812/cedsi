@@ -1,9 +1,9 @@
 <template>
   <div class="subContainer">
-    <!-- 添加班级模态框（Modal） -->
+    <!-- 添加教务模态框（Modal） -->
     <div
       class="modal fade"
-      id="addTeacher"
+      id="addEduAdmin"
       tabindex="-1"
       role="dialog"
       aria-labelledby="myModalLabel"
@@ -13,27 +13,17 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">新增教师</h4>
+            <h4 class="modal-title" id="myModalLabel">新增教务</h4>
           </div>
           <div class="modal-body">
             <div class="content">
               <div class="add">
                 <span class="keypoint">*</span>
-                <span class="addtitle">姓名</span>
-                <input
-                  :class="isName==false?'addcon':'addcon err'"
-                  placeholder="请输入教师姓名"
-                  v-model="teacherName"
-                />
-              </div>
-              <span :class="isName==true?'inputtips':'inputerr'">不超过10个字符</span>
-              <div class="add">
-                <span class="keypoint">*</span>
                 <span class="addtitle">账号</span>
                 <input
                   :class="isAccount==false?'addcon':'addcon err'"
-                  placeholder="请输入教师账号"
-                  v-model="teacherAccount"
+                  placeholder="请输入管理员账号"
+                  v-model="adminAccount"
                 />
               </div>
               <span :class="isAccount==true?'inputtips':'inputerr'">不超过15个字符</span>
@@ -41,29 +31,17 @@
                 <span class="keypoint">*</span>
                 <span class="addtitle">密码</span>
                 <input
-                  type="password"
                   :class="isPassword==false?'addcon':'addcon err'"
                   placeholder="请输入密码"
-                  v-model="teacherPassword"
+                  v-model="adminPassword"
                 />
               </div>
               <span :class="isPassword==true?'inputtips':'inputerr'">不超过20个字符</span>
-              <div class="add">
-                <span class="keypointwhite">*</span>
-                <span class="addtitle">职务</span>
-                <input class="addcon" placeholder="请输入职务" v-model="teacherDuty" />
-              </div>
-              <span class="inputerr"></span>
-              <div class="add">
-                <span class="keypointwhite">*</span>
-                <span class="addtitle">职称</span>
-                <input class="addcon" placeholder="请输入职称" v-model="teacherTitle" />
-              </div>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary">确定</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="submit()">确定</button>
           </div>
         </div>
       </div>
@@ -105,26 +83,25 @@
     </div>
     <div class="classroute">
       <ol class="breadcrumb">
-        <li>教务管理</li>
-        <li>教师管理</li>
+        <li>管理员管理</li>
       </ol>
     </div>
     <div class="first-floor">
       <label for="class-name"></label>
       <input
         type="text"
-        placeholder="请输入教师姓名"
+        placeholder="请输入教务账号"
         class="textBox"
         id="class-name"
-        v-model="inputData.teacherName"
+        v-model="inputData.eduAdminAccount"
       />
       <button class="btn btn-search">搜索</button>
       <button
         class="btn btn-clear"
         data-toggle="modal"
-        data-target="#addTeacher"
-        @click="addTeacher()"
-      >新增教师</button>
+        data-target="#addEduAdmin"
+        @click="addEduAdmin()"
+      >新增教务</button>
     </div>
     <div class="second-floor">
       <table class="table table-hover">
@@ -134,31 +111,29 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(teacher, seq) in currentList" :key="seq" class="content">
+          <tr v-for="(eduAdmin, seq) in currentList" :key="seq" class="content">
             <td>{{seq+1}}</td>
-            <td>{{teacher.name}}</td>
-            <td>{{teacher.duty}}</td>
-            <td>{{teacher.titles}}</td>
-            <td>{{teacher.character}}</td>
-            <td>{{teacher.school}}</td>
+            <td>{{eduAdmin.account}}</td>
+            <td>{{eduAdmin.password}}</td>
+            <td>{{eduAdmin.character}}</td>
             <td>
               <button
-                :class="teacher.status==='启用'?'btnactive btn-success':'btnactive btn-warning'"
-                @click="changeTeacherStatus(seq)"
-              >{{teacher.status}}</button>
+                :class="eduAdmin.status==='启用'?'btnactive btn-success':'btnactive btn-warning'"
+                @click="changeEduAdminStatus(seq)"
+              >{{eduAdmin.status}}</button>
             </td>
             <td>
               <span
                 class="blue"
                 data-toggle="modal"
-                data-target="#addTeacher"
-                @click="updateTeacher(seq)"
+                data-target="#addEduAdmin"
+                @click="updateEduAdmin(seq)"
               >编辑</span>&nbsp;&nbsp;
               <span
                 class="red"
                 data-toggle="modal"
                 data-target="#alterModal"
-                @click="deleteTeacher(seq)"
+                @click="deleteEduAdmin(seq)"
               >删除</span>
             </td>
           </tr>
@@ -171,84 +146,89 @@
 
 <script>
 import pagination from "../../teacher/utils/pagination.vue";
-import SelectInput from "../utils/selectInput";
 export default {
-  name: "classmanagement",
-  components: { SelectInput, pagination },
+  name: "eduAdminManagement",
+  components: { pagination },
   data() {
     return {
-      limit: 2,
+      limit: 3,
       currentList: [],
       inputData: {
-        teacherName: ""
+        eduAdminAccount: ""
       },
-      tableTitle: [
-        "序号",
-        "姓名",
-        "职务",
-        "职称",
-        "所属角色",
-        "所属学校",
-        "状态",
-        "操作"
-      ],
+      tableTitle: ["序号", "账号", "密码", "角色", "状态", "操作"],
       tableData: [
         {
-          name: "祁老师",
-          duty: "任课教师",
-          titles: "副教授",
-          character: "教师",
-          school: "赛迪斯",
+          account: "root1",
+          password: "123456",
+          character: "管理员",
           status: "启用"
         },
         {
-          name: "祁老师",
-          duty: "任课教师",
-          titles: "副教授",
-          character: "教师",
-          school: "赛迪斯",
+          account: "root2",
+          password: "1234567",
+          character: "管理员",
           status: "禁用"
         },
         {
-          name: "祁老师",
-          duty: "任课教师",
-          titles: "副教授",
-          character: "教师",
-          school: "赛迪斯",
+          account: "root3",
+          password: "12345678",
+          character: "管理员",
+          status: "启用"
+        },
+        {
+          account: "root1",
+          password: "123456",
+          character: "管理员",
+          status: "启用"
+        },
+        {
+          account: "root2",
+          password: "1234567",
+          character: "管理员",
+          status: "禁用"
+        },
+        {
+          account: "root1",
+          password: "123456",
+          character: "管理员",
+          status: "启用"
+        },
+        {
+          account: "root2",
+          password: "1234567",
+          character: "管理员",
+          status: "禁用"
+        },
+        {
+          account: "root3",
+          password: "12345678",
+          character: "管理员",
           status: "启用"
         }
       ],
-      //新增教师
-      teacherName: "",
-      isName: true,
-      teacherAccount: "",
+      //新增管理员
+      adminAccount: "",
       isAccount: true,
-      teacherPassword: "",
+      adminPassword: "",
       isPassword: true,
-      teacherDuty: "",
-      teacherTitle: "",
       //提示框
       alterimg: this.$store.state.url + "eduAdmin/alter.png",
       alterMes: "",
-      index: -1
+      index: -1,
+      //当前页码
+      currentPage: 0
     };
   },
   watch: {
-    teacherName(val, oldVal) {
-      if (val.length <= 10 && val.length > 0) {
-        this.isName = false;
-      } else {
-        this.isName = true;
-      }
-    },
-    teacherAccount(val, oldVal) {
+    adminAccount(val, oldVal) {
       if (val.length <= 15 && val.length > 0) {
         this.isAccount = false;
       } else {
         this.isAccount = true;
       }
     },
-    teacherPassword(val, oldVal) {
+    adminPassword(val, oldVal) {
       if (val.length <= 20 && val.length > 0) {
         this.isPassword = false;
       } else {
@@ -257,15 +237,6 @@ export default {
     }
   },
   methods: {
-    optionsInit() {
-      this.inputData = {
-        teacherName: ""
-        // school: {
-        //   option: "",
-        //   list: ["师大一中", "师大二中", "师大三中"]
-        // }
-      };
-    },
     changeOption(item, id) {
       Object.keys(this.inputData).forEach(res => {
         if (res === id) {
@@ -273,17 +244,14 @@ export default {
         }
       });
     },
-    clearChoices() {
-      this.optionsInit();
-    },
-    changeTeacherStatus(seq) {
+    changeEduAdminStatus(seq) {
       if (this.tableData[seq].status == "启用") {
         this.tableData[seq].status = "禁用";
       } else {
         this.tableData[seq].status = "启用";
       }
     },
-    deleteTeacher(seq) {
+    deleteEduAdmin(seq) {
       this.index = seq;
       this.alterMes = "确认删除吗？";
     },
@@ -291,22 +259,39 @@ export default {
       this.tableData.splice(this.index, 1);
     },
     //编辑教师
-    updateTeacher(seq) {
-      this.index = seq;
-      this.teacherName = this.tableData[seq].name;
-      this.teacherAccount = "hhh";
-      this.teacherPassword = "xxxx";
-      this.teacherDuty = this.tableData[seq].duty;
-      this.teacherTitle = this.tableData[seq].titles;
+    updateEduAdmin(seq) {
+      this.index = seq + this.currentPage * this.limit;
+      //console.log(this.index);
+      this.adminAccount = this.tableData[this.index].account;
+      this.adminPassword = this.tableData[this.index].password;
     },
-    addTeacher() {
-      this.teacherName = "";
-      this.teacherAccount = "";
-      this.teacherPassword = "";
-      this.teacherDuty = "";
-      this.teacherTitle = "";
+    addEduAdmin() {
+      this.index = -1;
+      this.adminAccount = "";
+      this.adminPassword = "";
     },
+    //编辑或更改提交
+    submit() {
+      console.log(this.index);
+      if (this.index >= 0) {
+        this.tableData[this.index].account = this.adminAccount;
+        this.tableData[this.index].password = this.adminPassword;
+      } else {
+        var newAdmin = {};
+        newAdmin.account = this.adminAccount;
+        newAdmin.password = this.adminPassword;
+        newAdmin.character = "管理员";
+        newAdmin.status = "启用";
+        this.tableData.push(newAdmin);
+      }
+      console.log(newAdmin);
+    },
+    //换页
     changeTablePages(value) {
+      //console.log(value)
+      var currentPage = value / this.limit;
+      this.currentPage = currentPage;
+      //console.log(currentPage)
       this.currentList = this.tableData.slice(value, value + this.limit);
     }
   },
@@ -398,7 +383,7 @@ label {
 }
 
 .btn-clear {
-  width: 78px;
+  width: 88px;
 }
 
 .blue {

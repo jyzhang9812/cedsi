@@ -18,7 +18,13 @@
           <router-link to="/console">Console</router-link>
         </li>
         <li>
-          <router-link to="/EduAdmin">eduAdmin</router-link>
+          <router-link to="/eduAdmin">eduAdmin</router-link>
+        </li>
+        <li>
+          <router-link to="/superAdmin">superAdmin</router-link>
+        </li>
+        <li>
+          <router-link to="/Admin">Admin</router-link>
         </li>
       </ul>
     </nav>

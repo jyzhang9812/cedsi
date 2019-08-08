@@ -9,7 +9,7 @@
       aria-labelledby="myModalLabel"
       aria-hidden="true"
     >
-    <!-- <div class="alert alert-success" role="alert">哈哈哈</div> -->
+      <!-- <div class="alert alert-success" role="alert">哈哈哈</div> -->
       <div class="modal-dialog addwidth">
         <div class="modal-content">
           <div class="modal-header">
@@ -157,7 +157,7 @@
       aria-hidden="true"
       ref="checkStudent"
     >
-    <div v-html="message" :class="isShowAlter==true?'isshow':'notshow'">{{message}}</div>
+      <div v-html="message" :class="isShowAlter==true?'isshow':'notshow'">{{message}}</div>
       <div class="modal-dialog tablewidth">
         <div class="modal-content">
           <div class="modal-header">
@@ -182,7 +182,12 @@
                   <td>{{student.addTime}}</td>
                   <td>{{student.tel}}</td>
                   <td style="width:150px">
-                    <input class="tips"  @focus="updateRemark(seq)" :value="student.remark" @blur="submitRemark()"/>
+                    <input
+                      class="tips"
+                      @focus="updateRemark(seq)"
+                      :value="student.remark"
+                      @blur="submitRemark()"
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -243,8 +248,8 @@
           :drop-down-list="inputData.school.list"
         ></select-input>
       </div>-->
-      <button class="btn btn-search">搜索</button>
-      <button class="btn btn-clear" @click="clearChoices">清空筛选</button>
+      <button class="btn btn-search" @click="conditionSearch">搜索</button>
+      <!-- <button class="btn btn-clear" @click="clearChoices">清空筛选</button> -->
       <button
         class="btn btn-clear"
         data-toggle="modal"
@@ -260,7 +265,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(classes, seq) in tableData" :key="seq" class="content">
+          <tr v-for="(classes, seq) in currentList" :key="seq" class="content">
             <td>{{seq+1}}</td>
             <td>{{classes.school}}</td>
             <td>{{classes.className}}</td>
@@ -283,17 +288,20 @@
         </tbody>
       </table>
     </div>
+    <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit"></pagination>
   </div>
 </template>
 
 <script>
+import pagination from "../../teacher/utils/pagination.vue";
 import SelectInput from "../utils/selectInput";
 import DatePicker from "../utils/datePicker";
 export default {
   name: "classmanagement",
-  components: { SelectInput, DatePicker },
+  components: { SelectInput, DatePicker, pagination },
   data() {
     return {
+      limit: 2,
       inputData: {
         className: ""
         // school: {
@@ -308,9 +316,9 @@ export default {
           option: "",
           list: ["祁老师", "程老师"]
         },
-        course:{
-          option:"",
-          list:["JAVA","操作系统"]
+        course: {
+          option: "",
+          list: ["JAVA", "操作系统"]
         }
       },
       tableTitle: [
@@ -325,7 +333,7 @@ export default {
       ],
       tableData: [
         {
-          school: "赛小迪",
+          school: "哈哈哈",
           className: "JAVA",
           addDate: "2019-07-20 00:00",
           teacher: "祁老师",
@@ -334,7 +342,7 @@ export default {
         },
         {
           school: "赛小迪",
-          className: "JAVA",
+          className: "JAVA1",
           addDate: "2019-07-20 00:00",
           teacher: "祁老师",
           perCourse: "操作系统",
@@ -442,10 +450,12 @@ export default {
       addClassName: "",
       isName: true,
       updateIndex: -1,
-      remark:"",
+      remark: "",
       //修改备注成功弹出标签
-      message:"<div class='alert alert-success alter-width' role='alert'>修改成功!</div>",
-      isShowAlter:false
+      message:
+        "<div v-show='isShowAlter' class='alert alert-success alter-width' role='alert'>修改成功!</div>",
+      isShowAlter: false,
+      currentList: []
     };
   },
   watch: {
@@ -504,30 +514,60 @@ export default {
       if (this.updateIndex > 0) {
         this.tableData[this.updateIndex].className = this.addClassName;
         this.tableData[this.updateIndex].addDate = this.addClassData.startDate;
-        this.tableData[this.updateIndex].teacher = this.addClassData.teacher.option;
+        this.tableData[
+          this.updateIndex
+        ].teacher = this.addClassData.teacher.option;
       } else {
-        newClass.school = "赛迪斯",
-        newClass.className = this.addClassName,
-        newClass.addDate = this.addClassData.startDate,
-        newClass.teacher = this.addClassData.teacher.option;
+        (newClass.school = "赛迪斯"),
+          (newClass.className = this.addClassName),
+          (newClass.addDate = this.addClassData.startDate),
+          (newClass.teacher = this.addClassData.teacher.option);
         newClass.perCourse = "";
         newClass.endCourse = "";
         this.tableData.push(newClass);
       }
     },
     //更改学生备注
-    updateRemark(seq){
-      this.studentData[seq].remark=this.remark
+    updateRemark(seq) {
+      this.studentData[seq].remark = this.remark;
     },
-    submitRemark(){
-      this.isShowAlter=true
+    submitRemark() {
+      this.isShowAlter = true;
       //console.log("修改成功")
-      setTimeout(function () {
-          this.isShowAlter=false
-          console.log("我改了"+this.isShowAlter)
+      setTimeout(function() {
+        this.isShowAlter = false;
+        console.log("我改了" + this.isShowAlter);
       }, 2000);
-
-    }
+    },
+    changeTablePages(value) {
+      this.currentList = this.tableData.slice(value, value + this.limit);
+    },
+    //搜索
+    conditionSearch() {
+        let temp = this.telOrNameFilter(this.inputData.className, temp);
+        this.tableData = temp;
+        this.changeTablePages(0);
+      },
+    telOrNameFilter(telOrName, tableList) {
+        if (telOrName === "") return tableList;
+        let testArg = "tel";
+        if (Number.isNaN(Number.parseInt(telOrName))) {
+          testArg = "authorName";
+        }
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          if (!new RegExp(telOrName).test(restTableList[i][testArg])) {
+            restTableList.splice(i, 1);
+            j -= 1;
+            i -= 1;
+          }
+        }
+        return restTableList;
+      },
+  },
+  mounted() {
+    //this.tableData = this.originalTableData;
+    this.changeTablePages(0);
   }
 };
 </script>
@@ -751,12 +791,12 @@ table td {
   width: 100%;
 }
 /*修改成功弹出框*/
-.isshow{
+.isshow {
   width: 30%;
   position: relative;
   margin: 20px auto;
 }
-.notshow{
+.notshow {
   width: 40%;
   position: relative;
   margin: 20px auto;

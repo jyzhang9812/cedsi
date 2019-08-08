@@ -299,7 +299,12 @@
       <input type="text" placeholder="请输入班级" class="textBox" v-model="inputData.telOrName" />
       <button class="btn btn-search">搜索</button>
       <button class="btn btn-clear" @click="clearChoices">清空筛选</button>
-      <button class="btn btn-clear" data-toggle="modal" data-target="#addStudent" @click="addStudent()">新增学生</button>
+      <button
+        class="btn btn-clear"
+        data-toggle="modal"
+        data-target="#addStudent"
+        @click="addStudent()"
+      >新增学生</button>
     </div>
     <div class="forth-floor">
       <table class="table table-hover">
@@ -309,7 +314,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(student, seq) in tableData" class="content" :key="seq">
+          <tr v-for="(student, seq) in currentList" class="content" :key="seq">
             <td>{{seq + 1}}</td>
             <td>{{student.account}}</td>
             <td>{{student.name}}</td>
@@ -343,10 +348,12 @@
         </tbody>
       </table>
     </div>
+    <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit"></pagination>
   </div>
 </template>
 
 <script>
+import pagination from "../../teacher/utils/pagination.vue";
 import DatePicker from "../utils/datePicker";
 import SelectInput from "../utils/selectInput";
 
@@ -354,6 +361,8 @@ export default {
   name: "stuManagement",
   data() {
     return {
+      limit: 2,
+      currentList: [],
       inputData: {
         telOrName: "",
         // school: {
@@ -539,7 +548,7 @@ export default {
       //console.log(this.checkSex)
     },
     //添加学生
-    addStudent(){
+    addStudent() {
       this.studentName = "";
       this.studentAccount = "";
       this.studentPassword = "";
@@ -564,9 +573,16 @@ export default {
     //警告内容
     addAlterMes() {
       this.alterMes = "停课后该学生将无法正常观看视频";
+    },
+    changeTablePages(value) {
+      this.currentList = this.tableData.slice(value, value + this.limit);
     }
   },
-  components: { SelectInput, DatePicker }
+  mounted() {
+    //this.tableData = this.originalTableData;
+    this.changeTablePages(0);
+  },
+  components: { SelectInput, DatePicker, pagination }
 };
 </script>
 
