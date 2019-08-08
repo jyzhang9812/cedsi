@@ -1,40 +1,165 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-import sidebar from '../components/container/student/dashboard.vue'
-import course from '../components/container/student/right/course/course.vue'
-import homework from '../components/container/student/right/homework/homework.vue'
-import myclass from '../components/container/student/right/class/class.vue'
-import message from '../components/container/student/right/message/message.vue'
-import question from '../components/container/student/right/question/question'
-import presentation from '../components/container/student/right/presentation/presentation.vue'
 import index from '../components/container/index/index.vue'
-import SignupPage from '../components/container/auth/signup.vue'
-import SigninPage from '../components/container/auth/signin.vue'
-import map from '../components/container/student/right/course/map.vue'
+//Webpack懒加载
+const sidebar = resolve =>{
+  require.ensure(['../components/container/student/dashboard.vue'],()=>{
+    resolve(require('../components/container/student/dashboard.vue'));
+  });
+};
+const course = resolve =>{
+  require.ensure(['../components/container/student/right/course/course.vue'],()=>{
+    resolve(require('../components/container/student/right/course/course.vue'));
+  });
+};
+const homework = resolve =>{
+  require.ensure(['../components/container/student/right/homework/homework.vue'],()=>{
+    resolve(require('../components/container/student/right/homework/homework.vue'));
+  });
+};
+const myclass = resolve =>{
+  require.ensure(['../components/container/student/right/class/class.vue'],()=>{
+    resolve(require('../components/container/student/right/class/class.vue'));
+  });
+};
+const message = resolve =>{
+  require.ensure(['../components/container/student/right/message/message.vue'],()=>{
+    resolve(require('../components/container/student/right/message/message.vue'));
+  });
+};
+const question = resolve =>{
+  require.ensure(['../components/container/student/right/question/question.vue'],()=>{
+    resolve(require('../components/container/student/right/question/question.vue'));
+  });
+};
+const presentation = resolve =>{
+  require.ensure(['../components/container/student/right/presentation/presentation.vue'],()=>{
+    resolve(require('../components/container/student/right/presentation/presentation.vue'));
+  });
+};
+const SignupPage = resolve =>{
+  require.ensure(['../components/container/auth/signup.vue'],()=>{
+    resolve(require('../components/container/auth/signup.vue'));
+  });
+};
+const SigninPage = resolve =>{
+  require.ensure(['../components/container/auth/signin.vue'],()=>{
+    resolve(require('../components/container/auth/signin.vue'));
+  });
+};
+const map = resolve =>{
+  require.ensure(['../components/container/student/right/course/map.vue'],()=>{
+    resolve(require('../components/container/student/right/course/map.vue'));
+  });
+};
 // 以下是教师角色
-import statistics from "../components/container/teacher/analyse/statistics";
-import material from "../components/container/teacher/activity/material";
-import topiccomment from "../components/container/teacher/activity/topiccomment";
-import opuscomment from "../components/container/teacher/activity/opuscomment";
-import quiz from "../components/container/teacher/activity/quiz";
-import activity from "../components/container/teacher/activity/activity";
-import videos from "../components/container/teacher/teach/videos";
-import choiceness from "../components/container/teacher/teach/choiceness";
-import remark from "../components/container/teacher/teach/remark";
-import password from "../components/container/teacher/password/password";
-import space from "../components/container/teacher/space/space";
-import staging from "../components/container/teacher/staging/staging";
-import asider from "../components/container/teacher/sidebar"
+const statistics = resolve =>{
+  require.ensure(['../components/container/teacher/analyse/statistics.vue'],()=>{
+    resolve(require('../components/container/teacher/analyse/statistics.vue'));
+  });
+};
+const material = resolve =>{
+  require.ensure(['../components/container/teacher/activity/material.vue'],()=>{
+    resolve(require('../components/container/teacher/activity/material.vue'));
+  });
+};
+const topiccomment = resolve =>{
+  require.ensure(['../components/container/teacher/activity/topiccomment.vue'],()=>{
+    resolve(require('../components/container/teacher/activity/topiccomment.vue'));
+  });
+};
+const opuscomment = resolve =>{
+  require.ensure(['../components/container/teacher/activity/opuscomment.vue'],()=>{
+    resolve(require('../components/container/teacher/activity/opuscomment.vue'));
+  });
+};
+const quiz = resolve =>{
+  require.ensure(['../components/container/teacher/activity/quiz.vue'],()=>{
+    resolve(require('../components/container/teacher/activity/quiz.vue'));
+  });
+};
+const activity = resolve =>{
+  require.ensure(['../components/container/teacher/activity/activity.vue'],()=>{
+    resolve(require('../components/container/teacher/activity/activity.vue'));
+  });
+};
+const videos = resolve =>{
+  require.ensure(['../components/container/teacher/teach/videos.vue'],()=>{
+    resolve(require('../components/container/teacher/teach/videos.vue'));
+  });
+};
+const choiceness = resolve =>{
+  require.ensure(['../components/container/teacher/teach/choiceness.vue'],()=>{
+    resolve(require('../components/container/teacher/teach/choiceness.vue'));
+  });
+};
+const remark = resolve =>{
+  require.ensure(['../components/container/teacher/teach/remark.vue'],()=>{
+    resolve(require('../components/container/teacher/teach/remark.vue'));
+  });
+};
+const password = resolve =>{
+  require.ensure(['../components/container/teacher/password/password.vue'],()=>{
+    resolve(require('../components/container/teacher/password/password.vue'));
+  });
+};
+const space = resolve =>{
+  require.ensure(['../components/container/teacher/space/space.vue'],()=>{
+    resolve(require('../components/container/teacher/space/space.vue'));
+  });
+};
+const staging = resolve =>{
+  require.ensure(['../components/container/teacher/staging/staging.vue'],()=>{
+    resolve(require('../components/container/teacher/staging/staging.vue'));
+  });
+};
+const asider = resolve =>{
+  require.ensure(['../components/container/teacher/sidebar.vue'],()=>{
+    resolve(require('../components/container/teacher/sidebar.vue'));
+  });
+};
 //以下是教务角色
-import eduAdmin from "../components/container/eduAdmin/eduSidebar"
-import eduActivity from "../components/container/eduAdmin/activity/activity"
-import classManagement from "../components/container/eduAdmin/office/classManagement"
-import stuManagement from "../components/container/eduAdmin/office/stuManagement"
-import teaching from "../components/container/eduAdmin/teaching/teaching"
-import eduStatistics from "../components/container/eduAdmin/statistics/statistics"
-import eduStaging from "../components/container/eduAdmin/edustaging/edustaging"
-import teacherManagement from "../components/container/eduAdmin/office/teacherManagement"
+const eduAdmin = resolve =>{
+  require.ensure(['../components/container/eduAdmin/eduSidebar.vue'],()=>{
+    resolve(require('../components/container/eduAdmin/eduSidebar.vue'));
+  });
+};
+const eduActivity = resolve =>{
+  require.ensure(['../components/container/eduAdmin/activity/activity.vue'],()=>{
+    resolve(require('../components/container/eduAdmin/activity/activity.vue'));
+  });
+};
+const classManagement = resolve =>{
+  require.ensure(['../components/container/eduAdmin/office/classManagement.vue'],()=>{
+    resolve(require('../components/container/eduAdmin/office/classManagement.vue'));
+  });
+};
+const stuManagement = resolve =>{
+  require.ensure(['../components/container/eduAdmin/office/stuManagement.vue'],()=>{
+    resolve(require('../components/container/eduAdmin/office/stuManagement.vue'));
+  });
+};
+const teaching = resolve =>{
+  require.ensure(['../components/container/eduAdmin/teaching/teaching.vue'],()=>{
+    resolve(require('../components/container/eduAdmin/teaching/teaching.vue'));
+  });
+};
+const eduStatistics = resolve =>{
+  require.ensure(['../components/container/eduAdmin/statistics/statistics.vue'],()=>{
+    resolve(require('../components/container/eduAdmin/statistics/statistics.vue'));
+  });
+};
+const eduStaging = resolve =>{
+  require.ensure(['../components/container/eduAdmin/edustaging/edustaging.vue'],()=>{
+    resolve(require('../components/container/eduAdmin/edustaging/edustaging.vue'));
+  });
+};
+const teacherManagement = resolve =>{
+  require.ensure(['../components/container/eduAdmin/office/teacherManagement.vue'],()=>{
+    resolve(require('../components/container/eduAdmin/office/teacherManagement.vue'));
+  });
+};
+import { resolve } from 'url';
 
 Vue.use(Router);
 
