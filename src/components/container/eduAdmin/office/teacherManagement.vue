@@ -20,33 +20,46 @@
               <div class="add">
                 <span class="keypoint">*</span>
                 <span class="addtitle">姓名</span>
-                <input :class="isName==false?'addcon':'addcon err'" placeholder="请输入教师姓名" v-model="teacherName"/>
+                <input
+                  :class="isName==false?'addcon':'addcon err'"
+                  placeholder="请输入教师姓名"
+                  v-model="teacherName"
+                />
               </div>
-            <span :class="isName==true?'inputtips':'inputerr'">不超过10个字符</span>
-            <div class="add">
+              <span :class="isName==true?'inputtips':'inputerr'">不超过10个字符</span>
+              <div class="add">
                 <span class="keypoint">*</span>
                 <span class="addtitle">账号</span>
-                <input :class="isAccount==false?'addcon':'addcon err'" placeholder="请输入教师账号" v-model="teacherAccount"/>
-            </div>
-            <span :class="isAccount==true?'inputtips':'inputerr'">不超过15个字符</span>
-            <div class="add">
+                <input
+                  :class="isAccount==false?'addcon':'addcon err'"
+                  placeholder="请输入教师账号"
+                  v-model="teacherAccount"
+                />
+              </div>
+              <span :class="isAccount==true?'inputtips':'inputerr'">不超过15个字符</span>
+              <div class="add">
                 <span class="keypoint">*</span>
                 <span class="addtitle">密码</span>
-                <input type="password" :class="isPassword==false?'addcon':'addcon err'" placeholder="请输入密码" v-model="teacherPassword"/>
-            </div>
-            <span :class="isPassword==true?'inputtips':'inputerr'">不超过20个字符</span>
-            <div class="add">
+                <input
+                  type="password"
+                  :class="isPassword==false?'addcon':'addcon err'"
+                  placeholder="请输入密码"
+                  v-model="teacherPassword"
+                />
+              </div>
+              <span :class="isPassword==true?'inputtips':'inputerr'">不超过20个字符</span>
+              <div class="add">
                 <span class="keypointwhite">*</span>
                 <span class="addtitle">职务</span>
-                <input class="addcon" placeholder="请输入职务" v-model="teacherDuty"/>
-            </div>
-            <span class="inputerr"></span>
-            <div class="add">
+                <input class="addcon" placeholder="请输入职务" v-model="teacherDuty" />
+              </div>
+              <span class="inputerr"></span>
+              <div class="add">
                 <span class="keypointwhite">*</span>
                 <span class="addtitle">职称</span>
-                <input class="addcon" placeholder="请输入职称" v-model="teacherTitle"/>
+                <input class="addcon" placeholder="请输入职称" v-model="teacherTitle" />
+              </div>
             </div>
-          </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -55,7 +68,7 @@
         </div>
       </div>
     </div>
-        <!-- 提示模态框（Modal） -->
+    <!-- 提示模态框（Modal） -->
     <div
       class="modal fade"
       id="alterModal"
@@ -78,7 +91,12 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="submitDelete()">确定</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              @click="submitDelete()"
+            >确定</button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -101,7 +119,12 @@
         v-model="inputData.teacherName"
       />
       <button class="btn btn-search">搜索</button>
-      <button class="btn btn-clear" data-toggle="modal" data-target="#addTeacher" @click="addTeacher()">新增教师</button>
+      <button
+        class="btn btn-clear"
+        data-toggle="modal"
+        data-target="#addTeacher"
+        @click="addTeacher()"
+      >新增教师</button>
     </div>
     <div class="second-floor">
       <table class="table table-hover">
@@ -111,7 +134,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(teacher, seq) in tableData" :key="seq" class="content">
+          <tr v-for="(teacher, seq) in currentList" :key="seq" class="content">
             <td>{{seq+1}}</td>
             <td>{{teacher.name}}</td>
             <td>{{teacher.duty}}</td>
@@ -125,23 +148,37 @@
               >{{teacher.status}}</button>
             </td>
             <td>
-              <span class="blue" data-toggle="modal" data-target="#addTeacher" @click="updateTeacher(seq)">编辑</span>&nbsp;&nbsp;
-              <span class="red" data-toggle="modal" data-target="#alterModal" @click="deleteTeacher(seq)">删除</span>
+              <span
+                class="blue"
+                data-toggle="modal"
+                data-target="#addTeacher"
+                @click="updateTeacher(seq)"
+              >编辑</span>&nbsp;&nbsp;
+              <span
+                class="red"
+                data-toggle="modal"
+                data-target="#alterModal"
+                @click="deleteTeacher(seq)"
+              >删除</span>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit"></pagination>
   </div>
 </template>
 
 <script>
+import pagination from "../../teacher/utils/pagination.vue";
 import SelectInput from "../utils/selectInput";
 export default {
   name: "classmanagement",
-  components: { SelectInput},
+  components: { SelectInput, pagination },
   data() {
     return {
+      limit: 2,
+      currentList: [],
       inputData: {
         teacherName: ""
       },
@@ -182,47 +219,47 @@ export default {
         }
       ],
       //新增教师
-      teacherName:"",
-      isName:true,
-      teacherAccount:"",
-      isAccount:true,
-      teacherPassword:"",
-      isPassword:true,
-      teacherDuty:"",
-      teacherTitle:"",
+      teacherName: "",
+      isName: true,
+      teacherAccount: "",
+      isAccount: true,
+      teacherPassword: "",
+      isPassword: true,
+      teacherDuty: "",
+      teacherTitle: "",
       //提示框
       alterimg: this.$store.state.url + "eduAdmin/alter.png",
       alterMes: "",
-      index:-1,
+      index: -1
     };
   },
-  watch:{
-    teacherName(val,oldVal){
-      if(val.length<=10&&val.length>0){
-         this.isName=false
-      }else{
-        this.isName=true
+  watch: {
+    teacherName(val, oldVal) {
+      if (val.length <= 10 && val.length > 0) {
+        this.isName = false;
+      } else {
+        this.isName = true;
       }
     },
-    teacherAccount(val,oldVal){
-      if(val.length<=15&&val.length>0){
-         this.isAccount=false
-      }else{
-        this.isAccount=true
+    teacherAccount(val, oldVal) {
+      if (val.length <= 15 && val.length > 0) {
+        this.isAccount = false;
+      } else {
+        this.isAccount = true;
       }
     },
-    teacherPassword(val,oldVal){
-      if(val.length<=20&&val.length>0){
-         this.isPassword=false
-      }else{
-        this.isPassword=true
+    teacherPassword(val, oldVal) {
+      if (val.length <= 20 && val.length > 0) {
+        this.isPassword = false;
+      } else {
+        this.isPassword = true;
       }
-    },
+    }
   },
   methods: {
     optionsInit() {
       this.inputData = {
-        teacherName: "",
+        teacherName: ""
         // school: {
         //   option: "",
         //   list: ["师大一中", "师大二中", "师大三中"]
@@ -246,29 +283,36 @@ export default {
         this.tableData[seq].status = "启用";
       }
     },
-    deleteTeacher(seq){
-      this.index=seq
-      this.alterMes="确认删除吗？"
+    deleteTeacher(seq) {
+      this.index = seq;
+      this.alterMes = "确认删除吗？";
     },
-    submitDelete(){
-      this.tableData.splice(this.index,1)
+    submitDelete() {
+      this.tableData.splice(this.index, 1);
     },
     //编辑教师
-    updateTeacher(seq){
-      this.index=seq
-      this.teacherName=this.tableData[seq].name
-      this.teacherAccount="hhh"
-      this.teacherPassword="xxxx"
-      this.teacherDuty=this.tableData[seq].duty
-      this.teacherTitle=this.tableData[seq].titles
+    updateTeacher(seq) {
+      this.index = seq;
+      this.teacherName = this.tableData[seq].name;
+      this.teacherAccount = "hhh";
+      this.teacherPassword = "xxxx";
+      this.teacherDuty = this.tableData[seq].duty;
+      this.teacherTitle = this.tableData[seq].titles;
     },
-    addTeacher(){
-      this.teacherName=""
-      this.teacherAccount=""
-      this.teacherPassword=""
-      this.teacherDuty=""
-      this.teacherTitle=""
+    addTeacher() {
+      this.teacherName = "";
+      this.teacherAccount = "";
+      this.teacherPassword = "";
+      this.teacherDuty = "";
+      this.teacherTitle = "";
+    },
+    changeTablePages(value) {
+      this.currentList = this.tableData.slice(value, value + this.limit);
     }
+  },
+  mounted() {
+    //this.tableData = this.originalTableData;
+    this.changeTablePages(0);
   }
 };
 </script>
@@ -392,8 +436,8 @@ table td {
   line-height: 20px;
   height: 22px;
 }
-.btnactive:focus{
-    outline: none;
+.btnactive:focus {
+  outline: none;
 }
 
 /*添加教师模态框*/
@@ -416,8 +460,8 @@ table td {
 .keypoint {
   color: red;
 }
-.keypointwhite{
-    color: #fff;
+.keypointwhite {
+  color: #fff;
 }
 .addtitle {
   color: #606266;
@@ -456,17 +500,17 @@ table td {
   padding: 0;
 }
 /*正则表达式*/
-.err{
-    border: 1px solid red;
+.err {
+  border: 1px solid red;
 }
-.inputtips{
+.inputtips {
   display: block;
   font-size: 10px;
   color: red;
   margin-left: 60px;
   margin-bottom: 10px;
 }
-.inputerr{
+.inputerr {
   display: block;
   font-size: 10px;
   color: red;

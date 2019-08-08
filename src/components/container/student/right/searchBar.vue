@@ -2,25 +2,33 @@
     <div class="searchBar">
         <div class="searchBoxContainer">
             <input class="searchBox" placeholder="课程名...">
-            <img class="searchImg" :src=searchImg>
+            <img class="searchImg" :src=searchImg @click="searchData">
         </div>
         <div>
-            <button style="background: #ff8d1a"></button>
+            <button class="button">
+                TRY EVERYTHING
+            </button>
         </div>
     </div>
 </template>
 
 <script>
+    // import Bus from '../../../../store/bus.js'
     export default {
         name: 'searchBar',
         components:{
         },
         data() {
-        return {
-            searchImg:'../../' + this.$store.state.url + 'dashboard/search.png',
+            return {
+                searchImg:'../../' + this.$store.state.url + 'dashboard/search.png',
             }
         },
-}   
+        methods:{
+            searchData(){
+                return this.$store.state.currentIndex;
+            }
+        },
+    }   
 </script>
 
 <style>
@@ -30,6 +38,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: space-between;
         width: 100%;
         height: 100px;
     }
@@ -62,5 +71,23 @@
         margin: 8px;
         width: 25px;
         height: 25px;
+        cursor: pointer;
+    }
+    .button{
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 30px;
+        font-family: inherit;
+        padding: .85em 1em;
+        -webkit-appearance: none;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        transition: background-color .25s ease-out,color .25s ease-out;
+        font-size: 1.5rem;
+        line-height: 1;
+        text-align: center;
+        cursor: pointer;
+        background: #ff8d1a;
+        color: #fff;
     }
 </style>

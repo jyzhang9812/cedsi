@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import index from '../components/container/index/index.vue'
+
+import ErrorPage from '../components/container/auth/errorPage.vue'
+import coursemap from '../components/container/student/right/course/coursemap.vue'
+
 //Webpack懒加载
 const sidebar = resolve =>{
   require.ensure(['../components/container/student/dashboard.vue'],()=>{
@@ -52,6 +56,7 @@ const map = resolve =>{
     resolve(require('../components/container/student/right/course/map.vue'));
   });
 };
+
 // 以下是教师角色
 const statistics = resolve =>{
   require.ensure(['../components/container/teacher/analyse/statistics.vue'],()=>{
@@ -169,6 +174,7 @@ export default new Router({
     { path: '/', component: index },
     { path: '/signup', component: SignupPage },
     { path: '/signin', component: SigninPage },
+    { path: '/404', component: ErrorPage },
     {
       path: '/dashboard', component: sidebar, children: [
         { path: '/dashboard/class', component: myclass },
@@ -179,7 +185,7 @@ export default new Router({
         { path: '/dashboard/question',component: question}
       ]
     },
-    { path:'/dashboard/map',component:map },
+    { path:'/dashboard/coursemap', name:'coursemap',component:coursemap },
     {
       path: '/console',
       component: asider,

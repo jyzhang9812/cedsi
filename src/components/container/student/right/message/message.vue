@@ -2,38 +2,28 @@
     <div class="body">
         <searchBar></searchBar>
         <div class="menu">
-            <button class="tag" @click="change('message_system', 1)">系统消息</button>
-            <button class="tag" @click="change('message_inform', 1)">通知公告</button>
-            <button class="tag" @click="change('message_activity', 1)">活动安排</button>
-            <button class="tag" @click="change('message_question', 1)">辅导答疑</button>
-            <button class="tag" @click="change('message_homework', 1)">我的作业</button>
+            <button  @click="tab(index)"
+            v-for="(item,index) in items" class="tag"
+            :class="{active : index===curId}">{{item.item}}</button>
         </div>
-        <div class="main">
-            <div class="cardbox" v-for="card in currentData">
+        <div class="main" v-show="index===curId" v-for="(content, index) in contents">
+            <div class="cardbox" v-for="(content, index) in currentList">
                 <div class="card_header">
-                    <img @click="delcard" style="cursor: pointer" src="" alt="">
+                    <img style="cursor: pointer" src="" alt="">
                 </div>
                 <div class="card_content">
-                    {{card.message}}
+                    {{content.message}}
                 </div>
                 <div class="card_footer">
                     <span>
-                        <b>{{card.teacher}}</b><br>
-                        {{card.date}}
+                        <b>{{content.teacher}}</b><br>
+                        {{content.date}}
                     </span>
                     <img class="avast" src="">
                 </div>
             </div>
         </div>
-        <div class="footer">
-            <ul class="pagination modal-6">
-                <li><a href="#" class="prev">&laquo</a></li>
-                <li v-for="item in pagination" @click="change(currentType, item.num)">
-                    <a href="#" :class="item.cls">{{item.num}}</a>
-                </li>
-                <li><a href="#" class="next">&raquo;</a></li>
-            </ul>
-        </div>
+        <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
     </div>
 </template>
 
@@ -68,7 +58,7 @@
         font-weight: 550;
     }
 
-    .tag:hover, .tag:active {
+    .tag:hover, .active {
         color: #00bcd4;
     }
 
@@ -259,145 +249,131 @@
 
 <script>
     import searchBar from'../searchBar.vue'
+    import pagination from'../pagination.vue'
+    import globalAxios from 'axios'
+    
     export default {
         name: 'message',
         components:{
             searchBar,
+            pagination,
         },
         data() {
             return {
-                message_system: [
-                    { message: "系统消息1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "系统消息2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                    { message: "系统消息3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                    { message: "系统消息4", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "系统消息5", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
-                    { message: "系统消息6", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "系统消息7", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                    { message: "系统消息8", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                    { message: "系统消息9", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "系统消息10", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
-                    { message: "系统消息11", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "系统消息12", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                    { message: "系统消息13", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                    { message: "系统消息14", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "系统消息15", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
-                    { message: "系统消息16", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "系统消息17", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                    { message: "系统消息18", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                    { message: "系统消息19", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "系统消息20", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" }
+                curId: 0,
+                items: [
+                    {item: '系统消息'},
+                    {item: '通知公告'},
+                    {item: '活动安排'},
+                    {item: '辅导答疑'},
+                    {item: '我的作业'},
                 ],
-                message_inform: [
-                    { message: "通知公告1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "通知公告2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                    { message: "通知公告3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                    { message: "通知公告4", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "通知公告5", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
-                    { message: "通知公告6", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "通知公告7", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                    { message: "通知公告8", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                    { message: "通知公告9", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "通知公告10", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
-                    { message: "通知公告11", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "通知公告12", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                    { message: "通知公告13", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                    { message: "通知公告14", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "通知公告15", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
-                    { message: "通知公告16", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "通知公告17", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                    { message: "通知公告18", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                    { message: "通知公告19", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "通知公告20", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" }
+                contents:[
+                    [
+                        { message: "系统消息1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "系统消息2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                        { message: "系统消息3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
+                        { message: "系统消息4", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "系统消息5", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
+                        { message: "系统消息6", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "系统消息7", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                        { message: "系统消息8", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
+                        { message: "系统消息9", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "系统消息10", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
+                        { message: "系统消息11", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "系统消息12", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                        { message: "系统消息13", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
+                        { message: "系统消息14", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "系统消息15", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
+                        { message: "系统消息16", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "系统消息17", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                        { message: "系统消息18", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
+                        { message: "系统消息19", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "系统消息20", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" }
+                    ],
+                    [
+                        { message: "通知公告1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "通知公告2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                        { message: "通知公告3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
+                        { message: "通知公告4", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "通知公告5", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
+                        { message: "通知公告6", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "通知公告7", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                        { message: "通知公告8", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
+                        { message: "通知公告9", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "通知公告10", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
+                        { message: "通知公告11", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "通知公告12", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                        { message: "通知公告13", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
+                        { message: "通知公告14", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "通知公告15", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" },
+                        { message: "通知公告16", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "通知公告17", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                        { message: "通知公告18", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
+                        { message: "通知公告19", teacher: "刘老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "通知公告20", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" }
+                    ],
+                    [
+                        { message: "活动1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "活动2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                        { message: "活动3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
+                        { message: "活动4", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" }
+                    ],
+                    [
+                        { message: "问题1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "问题2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                        { message: "问题3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
+                    ],
+                    [
+                        { message: "作业1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
+                        { message: "作业2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
+                    ],
                 ],
-                message_activity: [
-                    { message: "活动1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "活动2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                    { message: "活动3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                    { message: "活动4", teacher: "孙老师", date: "2019-6-9", avast: "../assets/avast/avast2.png" }
-                ],
-                message_question: [
-                    { message: "问题1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "问题2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                    { message: "问题3", teacher: "赵老师", date: "2019-6-5", avast: "../assets/avast/avast3.png" },
-                ],
-                message_homework: [
-                    { message: "作业1", teacher: "李老师", date: "2019-6-8", avast: "../assets/avast/avast1.png" },
-                    { message: "作业2", teacher: "王老师", date: "2019-6-6", avast: "../assets/avast/avast2.png" },
-                ],
-                currentData: [],
-                pagination: [],
-                currentType: "message_system"
+                limit: 6,
+                currentList: [],
+                tableData:[],
             }
         },
         methods: {
-            delcard() {
-                this.currentData.splice(0, 1);
+            // delcard() {
+            //     this.tableData.splice(0, 1);
+            // },
+            getNew(value) {
+                this.currentList = this.tableData.slice(value, value + this.limit);
             },
-            change(message_type, currentPage) {
-                this.currentType = message_type;
-                let mes_sys_len = this.message_system.length;
-                let mes_info_len = this.message_inform.length;
-                let mes_act_len = this.message_activity.length;
-                let mes_qus_len = this.message_question.length;
-                let mes_hwk_len = this.message_homework.length;
-                let per_page = 6;
-                if (message_type === "message_system") {
-                    if (mes_info_len === 0) {
-                        console.log("您还没有系统消息！");
-                    } else {
-                        this.pagination = new Array(Math.ceil(mes_sys_len / per_page));
-                        for (let i = 0; i < this.pagination.length; i += 1) {
-                            this.pagination[i] = (i + 1) === currentPage ? { cls: "active", num: i + 1 } : { cls: "better", num: i + 1 };
-                        }
-                        this.currentData = this.message_system.slice((currentPage - 1) * per_page, currentPage * per_page);
-                    }
-                }else if (message_type === "message_activity") {
-                    if (mes_act_len === 0) {
-                        console.log("您还没有活动消息！");
-                    } else {
-                        this.pagination = new Array(Math.ceil(mes_act_len / per_page));
-                        for (let i = 0; i < this.pagination.length; i += 1) {
-                            this.pagination[i] = (i + 1) === currentPage ? { cls: "active", num: i + 1 } : { cls: "better", num: i + 1 };
-                        }
-                        this.currentData = this.message_activity.slice((currentPage - 1) * per_page, currentPage * per_page);
-                    }
-                }else if (message_type === "message_question") {
-                    if (mes_qus_len === 0) {
-                        console.log("您还没有收到辅导答疑！");
-                    } else {
-                        this.pagination = new Array(Math.ceil(mes_qus_len / per_page));
-                        for (let i = 0; i < this.pagination.length; i += 1) {
-                            this.pagination[i] = (i + 1) === currentPage ? { cls: "active", num: i + 1 } : { cls: "better", num: i + 1 };
-                        }
-                        this.currentData = this.message_question.slice((currentPage - 1) * per_page, currentPage * per_page);
-                    }
-                }else if (message_type === "message_homework") {
-                    if (mes_hwk_len === 0) {
-                        console.log("您还没有作业消息！");
-                    } else {
-                        this.pagination = new Array(Math.ceil(mes_hwk_len / per_page));
-                        for (let i = 0; i < this.pagination.length; i += 1) {
-                            this.pagination[i] = (i + 1) === currentPage ? { cls: "active", num: i + 1 } : { cls: "better", num: i + 1 };
-                        }
-                        this.currentData = this.message_homework.slice((currentPage - 1) * per_page, currentPage * per_page);
-                    }
-                }else{
-                    if (mes_info_len === 0) {
-                        console.log("您还没有通知消息！");
-                    } else {
-                        this.pagination = new Array(Math.ceil(mes_sys_len / per_page));
-                        for (let i = 0; i < this.pagination.length; i += 1) {
-                            this.pagination[i] = (i + 1) === currentPage ? { cls: "active", num: i + 1 } : { cls: "better", num: i + 1 };
-                        }
-                        this.currentData = this.message_inform.slice((currentPage - 1) * per_page, currentPage * per_page);
-                    }
-                }
-            }
+            tab (index) {
+                this.curId = index;
+                this.tableData = this.contents[index];
+                this.getNew(0);
+            },      
 
         },
         created() {
-            this.change('message_system', 2);
+            this.tableData = this.contents[0];
+            var token = window.localStorage.getItem('idToken')
+            globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/message/{type}',
+                {headers: {
+                    'Content-Type':'application/json',
+                    'Authorization': token
+                }}
+            ).then(response => {
+                console.log(response);
+                // var arr=[];
+                // this.name_of_class = response.data.className;
+                // this.myteacher = response.data.teacherName;
+                // for(var i = 0;i<response.data.classmates.length;i++){
+                //     arr.push(response.data.classmates[i])
+                // }
+                // this.myclassmate = arr;
+                },
+                error => {
+                    console.log(error);
+                }
+            );
+        },
+        mounted() {
+            this.tableData = this.contents[0];
+            this.getNew(0);
         }
     }
 </script>

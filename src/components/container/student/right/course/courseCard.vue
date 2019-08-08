@@ -1,10 +1,10 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid layout">
     <div class="row">
         <div class="col-md-4" 
-          v-for="(item,index) in inside_detail"
+          v-for="(item,index) in currentList"
           :key="index">
-          <router-link to="/dashboard/map" class="box">
+          <router-link :to="{name:'coursemap',params:{id:item.course_id}}" class="box">
             <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
               <img class="img" :style="style" :src="item.img_url">
               <div class="details" :style="style1" v-show="index==i">
@@ -37,15 +37,24 @@
         </router-link>
       </div>
     </div>
+    <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
   </div>
 </template>
 
 
 <script>
+import pagination from'../pagination.vue'
+import globalAxios from 'axios'
 export default {
   name: "courseCard",
+  components:{
+      pagination,
+  },
   data() {
     return {
+      limit: 15,
+      currentList: [],
+      tableData:[],
       btn: "btn",
       btnh: "btnhover",
       classImg:'../../../' + this.$store.state.url + 'dashboard/class.png',
@@ -67,34 +76,53 @@ export default {
     hidden(index) {
       this.i = -1;
       this.isShow = false;
-    }
+    },
+    getNew(value) {
+        this.currentList = this.tableData.slice(value, value + this.limit);
+    },
   },
   created: function() {
-    //let that = this.$router;
+    // let _this = this.$router;
     this.style='height:'+(document.documentElement.clientWidth*0.17)+'px;'
     this.style1='height:'+(document.documentElement.clientWidth*0.17)+'px;margin-top:-'+(document.documentElement.clientWidth*0.17)+'px;'
-    this.$http
-      .get("https://jt6s63r7of.execute-api.us-east-2.amazonaws.com/prod/courses").then(response => {
-          var arr=[];
-          console.log(response.body);
-          for(var i = 0;i<response.body.length;i++){
-            arr.push(response.body[i])
-          }
-          this.inside_detail = arr;
-          return response.json();
-        },
-        error => {
-  
-          console.log(error);
+    
+    var token = window.localStorage.getItem('idToken')
+    globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses',
+        {headers: {
+            'Content-Type':'application/json',
+            'Authorization': token
+          }}
+      ).then(response => {
+        var arr=[];
+        console.log(response);
+        for(var i = 0;i<response.data.length;i++){
+          arr.push(response.data[i])
         }
-      );
+        this.inside_detail = arr;
+        this.tableData = this.inside_detail;
+        this.getNew(0);
+        // return response.json();
+      },
+      error => {
+        // this.$router.push({path:'/404'})
+        console.log(error);
+      })
+    },
+    
+    mounted() {
+        this.tableData = this.inside_detail;
+        this.getNew(0);
     }
 }
 </script>
 
 
 <style scoped>
+.layout{
+  margin: 0;
+}
 .row{
+  width: 100%;
   padding-top: 20px;
   display: flex;
   flex-wrap: wrap;

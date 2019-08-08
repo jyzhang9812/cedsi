@@ -25,14 +25,14 @@
         </div>
         <div>
             <div class="menu">
-                <button class="tag" @click="change('video_res', 1)">视频</button>
-                <button class="tag" @click="change('ppt_res', 1)">PPT</button>
-                <button class="tag" @click="change('word_res', 1)">文档</button>
+                <button  @click="tab(index)"
+                v-for="(item,index) in items" class="tag"
+                :class="{active : index===curId}">{{item.item}}</button>
             </div>
-            <div class="presentation">
-                <div class="presentation_item" v-for="item in currentData">
-                    <img class="item_img" :src="item.src"></img>
-                    <span>{{item.name}}</span>
+            <div class="presentation" v-show="index===curId" v-for="(content, index) in contents">
+                <div class="presentation_item"v-for="(content, index) in contents[index]">
+                    <img class="item_img" :src="content.src"></img>
+                    <span>{{content.name}}</span>
                 </div>
             </div>
         </div>
@@ -41,8 +41,13 @@
     
     
 <script>
+    import pagination from'../pagination.vue'
+
     export default{
         name:'presentation',
+        components:{
+            pagination,
+        },
         data() {
             return {
                 leftImg:'../../../' + this.$store.state.url + 'dashboard/left.png',
@@ -75,96 +80,67 @@
                 ],
                 calleft:0,
                 i:-1,
-                video_res: [
-                    { name:"video1", src:"../../../../../../static/images/presentation/mp4.png" },
-                    { name:"video2", src:"../../../../../../static/images/presentation/mp4.png" },
+                curId: 0,
+                items: [
+                    {item: '视频'},
+                    {item: 'PPT'},
+                    {item: '文档'},
                 ],
-                ppt_res: [
-                    { name:"ppt1", src:"../../../../../../static/images/presentation/ppt.png" },
-                    { name:"ppt2", src:"../../../../../../static/images/presentation/ppt.png" },
+                contents:[
+                    [
+                        { name:"video1", src:"../../../../../../static/images/presentation/mp4.png" },
+                        { name:"video2", src:"../../../../../../static/images/presentation/mp4.png" },
+                    ],
+                    [
+                        { name:"ppt1", src:"../../../../../../static/images/presentation/ppt.png" },
+                        { name:"ppt2", src:"../../../../../../static/images/presentation/ppt.png" },
+                    ],
+                    [
+                        { name:"word1", src:"../../../../../../static/images/presentation/word.png" },
+                        { name:"word2", src:"../../../../../../static/images/presentation/word.png" },
+                        { name:"word2", src:"../../../../../../static/images/presentation/word.png" },
+                    ],
                 ],
-                word_res: [
-                    { name:"word1", src:"../../../../../../static/images/presentation/word.png" },
-                    { name:"word2", src:"../../../../../../static/images/presentation/word.png" },
-                    { name:"word2", src:"../../../../../../static/images/presentation/word.png" },
-                ],
-                currentData: [],
-                pagination: [],
-                currentType: "video_res",
+                limit: 12,
+                currentList: [],
+                tableData:[],
             }
         },
         methods: {
-            change(res_type, currentPage) {
-                this.currentType = res_type;
-                let video_len = this.video_res.length;
-                let ppt_len = this.ppt_res.length;
-                let word_len = this.word_res.length;
-                let per_page = 6;
-                if (res_type === "video_res") {
-                    if (video_len === 0) {
-                        console.log("该课程暂无视频资源");
-                    } else {
-                        this.pagination = new Array(Math.ceil(video_len / per_page));
-                        for (let i = 0; i < this.pagination.length; i += 1) {
-                            this.pagination[i] = (i + 1) === currentPage ? { cls: "active", num: i + 1 } : { cls: "better", num: i + 1 };
-                        }
-                        this.currentData = this.video_res.slice((currentPage - 1) * per_page, currentPage * per_page);
-                    }
-                }
-                else if (res_type === "word_res") {
-                    if (word_len === 0) {
-                        console.log("该课程暂无WORD资源");
-                    } else {
-                        this.pagination = new Array(Math.ceil(word_len / per_page));
-                        for (let i = 0; i < this.pagination.length; i += 1) {
-                            this.pagination[i] = (i + 1) === currentPage ? { cls: "active", num: i + 1 } : { cls: "better", num: i + 1 };
-                        }
-                        this.currentData = this.word_res.slice((currentPage - 1) * per_page, currentPage * per_page);
-                    }
-                }else{
-                    if (ppt_len === 0) {
-                        console.log("该课程暂无PPT资源");
-                    } else {
-                        this.pagination = new Array(Math.ceil(ppt_len / per_page));
-                        for (let i = 0; i < this.pagination.length; i += 1) {
-                            this.pagination[i] = (i + 1) === currentPage ? { cls: "active", num: i + 1 } : { cls: "better", num: i + 1 };
-                        }
-                        this.currentData = this.ppt_res.slice((currentPage - 1) * per_page, currentPage * per_page);
-                    }
+            tab (index) {
+                this.curId = index;
+            },
+            show(index){
+                this.i = index;
+                this.isShow = true;
+            },
+            hidden(index){
+                this.i = -1;
+                this.isShow = false;
+            },
+            //点击按钮左移
+            zuohua() {
+                this.calleft -= 340;
+                if (this.calleft < -1200) {
+                    this.calleft = 0
                 }
             },
-
-        show(index){
-            this.i = index;
-            this.isShow = true;
-        },
-        hidden(index){
-            this.i = -1;
-            this.isShow = false;
-        },
-        //点击按钮左移
-        zuohua() {
-            this.calleft -= 340;
-            if (this.calleft < -1200) {
-                this.calleft = 0
-            }
-        },
-        //点击按钮右移
-        youhua() {
-            this.calleft += 340;
-            if (this.calleft > 0) {
-                this.calleft = -1020
-            }
-        },
-    },
-    created() {
-        this.change('video_res', 2);
+            //点击按钮右移
+            youhua() {
+                this.calleft += 340;
+                if (this.calleft > 0) {
+                    this.calleft = -1020
+                }
+            },
+         },
+        // created() {
+        //     this.change('video_res', 2);
+        // }
     }
-}
 </script>
     
     
-<style scoped>   
+<style scoped>
     .container{
         display: flex;
         flex-direction: column;
@@ -367,7 +343,7 @@
         border: none;
     }
 
-    .tag:hover,.tag:focus{
+    .tag:hover,.active{
         background-color: #9196a1;
         text-align: center;
         text-decoration: none;
