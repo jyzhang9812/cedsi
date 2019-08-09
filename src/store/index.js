@@ -11,10 +11,10 @@ Vue.use(router);
 
 export const store =new Vuex.Store({
     state:{
-        idToken: "null",
-        userId: "null",
-        user: "null",
-        status:"null",
+        idToken: null,
+        userId: null,
+        user: null,
+        status:null,
         roles:['/dashboard','/console','/EduAdmin','/Admin','/superAdmin'],
         roleId:0
     },
