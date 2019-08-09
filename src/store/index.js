@@ -21,7 +21,10 @@ export const store =new Vuex.Store({
     getters:{
         isAuthenticated(state) {
             return state.idToken !== null
-          }
+          },
+        whichRole(state){
+            return state.roles[state.roleId-1]
+        }
     },
     mutations:{
         authUser(state, userData) {
@@ -47,11 +50,11 @@ export const store =new Vuex.Store({
               localStorage.setItem('idToken', state.idToken);
               state.status = response.data.status;
               if(state.status=='fail'){
-                this.error=true;
+                console.log('error')
               }
               else{
                 state.roleId = response.data.role;
-                router.push({path:state.roles[state.roleId-1]})
+                router.replace({path:state.roles[state.roleId-1]})
               }
             },
             error => {
@@ -59,7 +62,14 @@ export const store =new Vuex.Store({
               console.log(error);
             }
         );
-        }
+      },
+      logout: ({ commit }) => {
+        commit('clearAuthData');
+        localStorage.removeItem('idToken');
+        localStorage.removeItem('userId');
+        router.replace('/')
+        // localStorage.removeItem('userId');
+      }
         
     },
     

@@ -5,31 +5,43 @@
     </div>
     <nav>
       <ul>
-        <li>
+        <li v-if="!auth">
           <router-link to="/signup">Sign Up</router-link>
         </li>
-        <li>
+        <li v-if="!auth">
           <router-link to="/signin">Sign In</router-link>
         </li>
-        <li>
-          <router-link to="/dashboard">Dashboard</router-link>
+        <li v-if="auth">
+          <button @click="role">Dashboard</button>
         </li>
-        <li>
-          <router-link to="/console">Console</router-link>
-        </li>
-        <li>
-          <router-link to="/eduAdmin">eduAdmin</router-link>
-        </li>
-        <li>
-          <router-link to="/superAdmin">superAdmin</router-link>
-        </li>
-        <li>
-          <router-link to="/Admin">Admin</router-link>
+        <li v-if="auth">
+          <button @click="signout">Sign out</button>
         </li>
       </ul>
     </nav>
   </header>
 </template>
+
+<script>
+  export default {
+    computed:{
+      auth(){
+        return this.$store.getters.isAuthenticated
+      }
+    },
+    methods:{
+      signout(){
+        this.$store.dispatch('logout');
+      },
+      role(){
+        this.$router.replace(this.$store.getters.whichRole)
+      }
+    },
+    created:function(){
+      this.Authenticated = this.$store.getters.isAuthenticated
+    }  
+  }
+</script>
 
 <style scoped>
   #header {
@@ -70,14 +82,19 @@
     margin: 0 16px;
   }
 
-  li a {
+  li a ,
+  li button{
     text-decoration: none;
     color: #50b8ee;
+    background: none;
+    border: none;
   }
 
   li a:hover,
   li a:active,
-  li a.router-link-active {
+  li a.router-link-active,
+  li button:hover,
+  li button:active{
     color: #fa923f;
   }
 </style>

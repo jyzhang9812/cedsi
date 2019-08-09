@@ -161,7 +161,7 @@
           {"username":this.username,"password":this.password,"role":this.role}).then(
             response => {
               console.log(response);
-              this.$router.push({path:'/signin'})
+              this.$router.replace({path:'/signin'})
             },
             error => {
               this.$router.push({path:'/404'})
@@ -256,7 +256,7 @@
       overflow: hidden;
       padding: 55px 55px 37px 55px;
       
-      background: #9152f8;
+      /* background: #9152f8; */
       background: -webkit-linear-gradient(top, #7579ff, #b224ef);
       background: -o-linear-gradient(top, #7579ff, #b224ef);
       background: -moz-linear-gradient(top, #7579ff, #b224ef);

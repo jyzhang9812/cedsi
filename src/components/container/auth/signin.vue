@@ -36,7 +36,7 @@
             Remember me
           </label>
         </div> -->
-        <div class="text-center p-t-90" v-show='error'>
+        <div class="text-center p-t-90" v-if='error'>
           <p style="color: #f87c56">
             用户名或密码错误 请重试
           </p>
@@ -61,7 +61,7 @@
         email: '',
         password: '',
         username:'',
-        error:false
+        error:0
       }
     },
     methods: {
@@ -70,9 +70,10 @@
           password: this.password,
           username: this.username
         }
+        this.error = this.$store.getters.isAuthenticated;
         this.$store.dispatch('login',formData);
       }
-    }
+    },
   }
 </script>
 
@@ -116,7 +117,7 @@
     overflow: hidden;
     padding: 55px 55px 37px 55px;
 
-    background: #9152f8;
+    /* background: #9152f8; */
     background: -webkit-linear-gradient(top, #7579ff, #b224ef);
     background: -o-linear-gradient(top, #7579ff, #b224ef);
     background: -moz-linear-gradient(top, #7579ff, #b224ef);
