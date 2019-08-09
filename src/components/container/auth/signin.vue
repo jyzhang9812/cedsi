@@ -64,7 +64,7 @@
         password: '',
         username:'',
         error:false,
-        routes:['/dashboard','/console','/EduAdmin','/EduAdmin','/EduAdmin']
+        routes:['/dashboard','/console','/EduAdmin','/Admin','/superAdmin']
       }
     },
     methods: {
