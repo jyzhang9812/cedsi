@@ -192,22 +192,28 @@ export default {
     changeAdminStatus(seq) {
       this.index = this.currentPage * this.limit + seq;
       //console.log(this.index,this.currentPage)
+      console.log(this.tableData[this.index].status)
       if (this.tableData[this.index].status == "启用") {
         this.tableData[this.index].status = "禁用";
       } else {
         this.tableData[this.index].status = "启用";
       }
-      var updateAdmin = this.tableData[this.index];
+      var updateAdmin = JSON.parse(JSON.stringify(this.tableData[this.index]));
+      if(this.tableData[this.index].status=="禁用")
+        updateAdmin.status="disable"
+      else
+        updateAdmin.status="active"
+      console.log(this.tableData[this.index].status)
       console.log(updateAdmin);
       var token = window.localStorage.getItem("idToken");
       console.log(token);
       globalAxios
         .put(
           "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-          { userId: updateAdmin.id },
-          {
+          { userId: updateAdmin.id ,status:updateAdmin.status },
+          {headers:{
             "Content-Type": "application/json",
-            Authorization: token
+            Authorization: token}
           }
         )
         .then(
@@ -231,11 +237,10 @@ export default {
       console.log(token);
       this.$http
         .delete(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-          { userId: deleteAdmin.id },
-          {
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin?userId="+deleteAdmin.id,
+          {headers:{
             "Content-Type": "application/json",
-            Authorization: token
+            Authorization: token}
           }
         )
         .then(
@@ -312,7 +317,7 @@ export default {
       )
       .then(
         response => {
-          //console.log(response.data.data);
+          console.log(response.data.data);
           var admin_arr = response.data.data;
           var admin_table = [];
           for (var i = 0; i < admin_arr.length; i++) {
