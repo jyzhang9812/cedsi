@@ -145,54 +145,13 @@ export default {
   components: { pagination },
   data() {
     return {
-      limit: 3,
+      limit: 10,
       currentList: [],
       inputData: {
         adminUserName: ""
       },
       tableTitle: ["序号", "账号", "角色", "状态", "操作"],
-      tableData: [
-        {
-          username: "root1",
-          character: "管理员",
-          status: "启用"
-        },
-        {
-          username: "root2",
-          character: "管理员",
-          status: "禁用"
-        },
-        {
-          username: "root3",
-          character: "管理员",
-          status: "启用"
-        },
-        {
-          username: "root1",
-          character: "管理员",
-          status: "启用"
-        },
-        {
-          username: "root2",
-          character: "管理员",
-          status: "禁用"
-        },
-        {
-          username: "root1",
-          character: "管理员",
-          status: "启用"
-        },
-        {
-          username: "root2",
-          character: "管理员",
-          status: "禁用"
-        },
-        {
-          username: "root3",
-          character: "管理员",
-          status: "启用"
-        }
-      ],
+      tableData: [], //页面表格内容
       //新增管理员
       adminUserName: "",
       isUserName: true,
@@ -202,7 +161,8 @@ export default {
       alterimg: this.$store.state.url + "eduAdmin/alter.png",
       alterMes: "",
       //当前页码
-      currentPage: 0
+      currentPage: 0,
+      index: 0
     };
   },
   watch: {
@@ -230,18 +190,64 @@ export default {
       });
     },
     changeAdminStatus(seq) {
-      if (this.tableData[seq].status == "启用") {
-        this.tableData[seq].status = "禁用";
+      this.index = this.currentPage * this.limit + seq;
+      //console.log(this.index,this.currentPage)
+      if (this.tableData[this.index].status == "启用") {
+        this.tableData[this.index].status = "禁用";
       } else {
-        this.tableData[seq].status = "启用";
+        this.tableData[this.index].status = "启用";
       }
+      var updateAdmin = this.tableData[this.index];
+      console.log(updateAdmin);
+      var token = window.localStorage.getItem("idToken");
+      console.log(token);
+      globalAxios
+        .put(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
+          { userId: updateAdmin.id },
+          {
+            "Content-Type": "application/json",
+            Authorization: token
+          }
+        )
+        .then(
+          response => {
+            console.log(response);
+          },
+          error => {
+            console.log(error);
+          }
+        );
     },
     deleteAdmin(seq) {
-      this.index = seq;
+      this.index = this.currentPage * this.limit + seq;
+      console.log(this.index);
       this.alterMes = "确认删除吗？";
     },
     submitDelete() {
-      this.tableData.splice(this.index, 1);
+      var deleteAdmin = this.tableData[this.index];
+      console.log(deleteAdmin);
+      var token = window.localStorage.getItem("idToken");
+      console.log(token);
+      this.$http
+        .delete(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
+          { userId: deleteAdmin.id },
+          {
+            "Content-Type": "application/json",
+            Authorization: token
+          }
+        )
+        .then(
+          response => {
+            console.log(response);
+            this.tableData.splice(this.index, 1);
+          },
+          error => {
+            console.log(error);
+          }
+        );
+      this.getNew(this.currentPage * this.limit);
     },
     addAdmin() {
       this.adminUserName = "";
@@ -253,28 +259,31 @@ export default {
       newAdmin.username = this.adminUserName;
       newAdmin.character = "管理员";
       newAdmin.status = "启用";
-      this.tableData.push(newAdmin);
       //console.log(newAdmin);
       var data = { username: this.adminUserName, password: this.adminPassword };
       //console.log(data);
       var token = window.localStorage.getItem("idToken");
-      console.log(token)
+      console.log(token);
       this.$http
         .post(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",{username: this.adminUserName, password: this.adminPassword },
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
+          { username: this.adminUserName, password: this.adminPassword },
           {
             "Content-Type": "application/json",
             Authorization: token
-          },
+          }
         )
         .then(
           response => {
-            console.log(response);
+            //console.log(response);
+            this.tableData.splice(0, 0, newAdmin);
+            this.getNew(this.currentPage * this.limit);
           },
           error => {
             console.log(error);
           }
         );
+      //console.log(this.currentPage*this.limit)
     },
     //换页
     changeTablePages(value) {
@@ -283,7 +292,49 @@ export default {
       this.currentPage = currentPage;
       //console.log(currentPage)
       this.currentList = this.tableData.slice(value, value + this.limit);
+    },
+    getNew(value) {
+      this.currentList = this.tableData.slice(value, value + this.limit);
+      //console.log(this.currentList)
     }
+  },
+  created() {
+    var token = window.localStorage.getItem("idToken");
+    globalAxios
+      .get(
+        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token
+          }
+        }
+      )
+      .then(
+        response => {
+          //console.log(response.data.data);
+          var admin_arr = response.data.data;
+          var admin_table = [];
+          for (var i = 0; i < admin_arr.length; i++) {
+            var admin = {};
+            admin.username = admin_arr[i].USER_NAME;
+            admin.id = admin_arr[i].USER_ID;
+            if (admin_arr[i].USER_STATUS == "active") admin.status = "启用";
+            else admin.status = "禁用";
+            admin.character = "管理员";
+            //console.log(admin)
+            admin_table.push(admin);
+          }
+          //console.log(admin_table)
+          // return response.json();
+          this.tableData = admin_table;
+          this.getNew(0);
+          //console.log(this.tableData)
+        },
+        error => {
+          console.log(error);
+        }
+      );
   },
   mounted() {
     //this.tableData = this.originalTableData;
