@@ -202,6 +202,7 @@ Vue.use(Router);
 export default new Router({
   mode: 'history',
   routes: [
+    { path: '*', component: ErrorPage }, //重定向
     { path: '/', component: index },
     { path: '/signup', component: SignupPage },
     { path: '/signin', component: SigninPage },
