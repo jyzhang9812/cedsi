@@ -55,47 +55,22 @@
 </template>
 
 <script>
-  // import axios from '../../axios-auth';
-
   export default {
     data () {
       return {
         email: '',
         password: '',
         username:'',
-        error:false,
-        routes:['/dashboard','/console','/EduAdmin','/Admin','/superAdmin']
+        error:false
       }
     },
     methods: {
       onSubmit () {
-        var idToken = ''
-        var status = ''
-        var roleId = 0
         const formData = {
           password: this.password,
           username: this.username
         }
-        console.log(formData);
-        this.$http.post("https://aogtavn4ul.execute-api.cn-northwest-1.amazonaws.com.cn/prod/user/login",  {"username":this.username,"password":this.password}).then(
-          response => {
-            console.log(response);
-            idToken = response.body.token;
-            localStorage.setItem('idToken', idToken);
-            status = response.body.status;
-            if(status=='fail'){
-              this.error=true;
-            }
-            else{
-              roleId = response.body.role;
-              this.$router.push({path:this.routes[roleId-1]})
-            }
-          },
-          error => {
-            this.$router.push({path:'/404'})
-            console.log(error);
-          }
-        );
+        this.$store.dispatch('login',formData);
       }
     }
   }
