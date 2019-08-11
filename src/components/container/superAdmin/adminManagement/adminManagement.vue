@@ -159,8 +159,7 @@ export default {
       alterMes: "",
       //当前页码
       currentPage: 0,
-      index: 0,
-      currentList:[]
+      index: 0
     };
   },
   watch: {
@@ -189,8 +188,6 @@ export default {
     },
     changeAdminStatus(seq) {
       this.index = this.currentPage * this.limit + seq;
-      //console.log(this.index,this.currentPage)
-      console.log(this.tableData[this.index].status)
       if (this.tableData[this.index].status == "启用") {
         this.tableData[this.index].status = "禁用";
       } else {
@@ -201,27 +198,10 @@ export default {
         updateAdmin.status="disable"
       else
         updateAdmin.status="active"
-      console.log(this.tableData[this.index].status)
-      console.log(updateAdmin);
-      var token = window.localStorage.getItem("idToken");
-      console.log(token);
-      globalAxios
-        .put(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-          { userId: updateAdmin.id ,status:updateAdmin.status },
-          {headers:{
-            "Content-Type": "application/json",
-            Authorization: token}
-          }
-        )
-        .then(
-          response => {
-            console.log(response);
-          },
-          error => {
-            console.log(error);
-          }
-        );
+      var data={}
+      data.userId=updateAdmin.id
+      data.status=updateAdmin.status
+      this.$store.dispatch("updateAdminStatus",data)
     },
     deleteAdmin(seq) {
       this.index = this.currentPage * this.limit + seq;
@@ -230,27 +210,11 @@ export default {
     },
     submitDelete() {
       var deleteAdmin = this.tableData[this.index];
-      console.log(deleteAdmin);
-      var token = window.localStorage.getItem("idToken");
-      console.log(token);
-      this.$http
-        .delete(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin?userId="+deleteAdmin.id,
-          {headers:{
-            "Content-Type": "application/json",
-            Authorization: token}
-          }
-        )
-        .then(
-          response => {
-            console.log(response);
-            this.tableData.splice(this.index, 1);
-          },
-          error => {
-            console.log(error);
-          }
-        );
-      this.getNew(this.currentPage * this.limit);
+      var data={}
+      data.id=deleteAdmin.id
+      data.index=this.index
+      data.page=this.currentPage
+      this.$store.dispatch("deleteAdmin",data)
     },
     addAdmin() {
       this.adminUserName = "";
@@ -258,92 +222,23 @@ export default {
     },
     //提交
     submit() {
-      var newAdmin = {};
-      newAdmin.username = this.adminUserName;
-      newAdmin.character = "管理员";
-      newAdmin.status = "启用";
-      //console.log(newAdmin);
-      var data = { username: this.adminUserName, password: this.adminPassword };
-      //console.log(data);
-      var token = window.localStorage.getItem("idToken");
-      console.log(token);
-      this.$http
-        .post(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-          { username: this.adminUserName, password: this.adminPassword },
-          {
-            "Content-Type": "application/json",
-            Authorization: token
-          }
-        )
-        .then(
-          response => {
-            //console.log(response);
-            this.tableData.splice(0, 0, newAdmin);
-            this.getNew(this.currentPage * this.limit);
-          },
-          error => {
-            console.log(error);
-          }
-        );
-      //console.log(this.currentPage*this.limit)
+      var data = { username: this.adminUserName, password: this.adminPassword ,page:this.currentPage};
+      this.$store.dispatch("addAdmin",data)
     },
     //换页
     changeTablePages(value) {
-      //console.log(value)
       var currentPage = value / this.limit;
       this.currentPage = currentPage;
-      //console.log(currentPage)
-      this.currentList = this.tableData.slice(value, value + this.limit);
+      this.$store.commit("changeAdminCurrentList",this.currentPage*this.limit)
     },
-    getNew(value) {
-      this.currentList = this.tableData.slice(value, value + this.limit);
-      //console.log(this.currentList)
-    }
   },
   created() {
     this.$store.dispatch('getAdmin')
-    // var token = window.localStorage.getItem("idToken");
-    // globalAxios
-    //   .get(
-    //     "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Authorization: token
-    //       }
-    //     }
-    //   )
-    //   .then(
-    //     response => {
-    //       //console.log(response.data.data);
-    //       var admin_arr = response.data.data;
-    //       var admin_table = [];
-    //       for (var i = 0; i < admin_arr.length; i++) {
-    //         var admin = {};
-    //         admin.username = admin_arr[i].USER_NAME;
-    //         admin.id = admin_arr[i].USER_ID;
-    //         if (admin_arr[i].USER_STATUS == "active") admin.status = "启用";
-    //         else admin.status = "禁用";
-    //         admin.character = "管理员";
-    //         //console.log(admin)
-    //         admin_table.push(admin);
-    //       }
-    //       //console.log(admin_table)
-    //       // return response.json();
-    //       this.tableData = admin_table;
-           this.getNew(0);
-    //       //console.log(this.tableData)
-    //     },
-    //     error => {
-    //       console.log(error);
-    //     }
-    //   );
   },
   computed:{
-    // currentList(){
-    //   return this.$store.state.adminCurrentList
-    // },
+    currentList(){
+      return this.$store.state.adminCurrentList
+    },
     tableData(){
       return this.$store.state.adminList
     },
@@ -351,10 +246,6 @@ export default {
       return this.$store.state.limit
     }
   },
-  mounted() {
-    //this.tableData = this.originalTableData;
-    //this.changeTablePages(0);
-  }
 };
 </script>
 
