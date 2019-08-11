@@ -105,7 +105,7 @@ logout: ({ commit }) => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: localStorage.idToken
+            Authorization: state.idToken
           }
         }
       )
@@ -144,7 +144,7 @@ logout: ({ commit }) => {
           {
             header: {
               "Content-Type": "application/json",
-              Authorization: localStorage.idToken
+              Authorization: state.idToken
             }
           }
         )
@@ -173,7 +173,7 @@ logout: ({ commit }) => {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: localStorage.idToken
+              Authorization: state.idToken
             }
           }
         )
@@ -197,7 +197,7 @@ logout: ({ commit }) => {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: localStorage.idToken
+              Authorization: state.idToken
             }
           }
         )
