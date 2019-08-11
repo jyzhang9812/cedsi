@@ -26,8 +26,8 @@ export const store = new Vuex.Store({
     isAuthenticated(state) {
       return state.idToken !== null
     },
-    whichRole(state){
-      return state.roles[state.roleId-1]
+    whichRole(state) {
+      return state.roles[state.roleId - 1]
     }
   },
   mutations: {
@@ -51,52 +51,52 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
-    login({ commit, dispatch,state }, authData) {
-      globalAxios.post("/user/login",  
-    {"username":authData.username,"password":authData.password})
-    .then(
-      response => {
-        console.log(response);
-        state.idToken = response.data.token;
-        localStorage.setItem('idToken', state.idToken);
-        state.status = response.data.status;
-        if(state.status=='fail'){
-          console.log('error')
-        }
-        else{
-          state.roleId = response.data.role;
-          router.replace({path:state.roles[state.roleId-1]})
-        }
-      },
-      error => {
-        router.push({path:'/404'})
-        console.log(error);
+    login({ commit, dispatch, state }, authData) {
+      globalAxios.post("/user/login",
+        { "username": authData.username, "password": authData.password })
+        .then(
+          response => {
+            console.log(response);
+            state.idToken = response.data.token;
+            localStorage.setItem('idToken', state.idToken);
+            state.status = response.data.status;
+            if (state.status == 'fail') {
+              console.log('error')
+            }
+            else {
+              state.roleId = response.data.role;
+              router.replace({ path: state.roles[state.roleId - 1] })
+            }
+          },
+          error => {
+            router.push({ path: '/404' })
+            console.log(error);
+          }
+        );
+    },
+    tryAutoLogin({ commit, state }) {
+      const token = localStorage.getItem('idToken');
+      if (!token) {
+        return;
       }
-  );
-},
-tryAutoLogin({commit, state }) {
-  const token = localStorage.getItem('idToken');
-  if (!token) {
-    return;
-  }
-  // const expirationDate = localStorage.getItem('expirationDate');
-  // const now = new Date();
-  // if (now >= expirationDate) {
-  //   return;
-  // }
-  const userId = localStorage.getItem('userId');
-  commit('authUser', {
-    token: token,
-    userId: userId
-  })
-},
-logout: ({ commit }) => {
-  commit('clearAuthData');
-  localStorage.removeItem('idToken');
-  localStorage.removeItem('userId');
-  router.replace('/')
-  // localStorage.removeItem('userId');
-},
+      // const expirationDate = localStorage.getItem('expirationDate');
+      // const now = new Date();
+      // if (now >= expirationDate) {
+      //   return;
+      // }
+      const userId = localStorage.getItem('userId');
+      commit('authUser', {
+        token: token,
+        userId: userId
+      })
+    },
+    logout: ({ commit }) => {
+      commit('clearAuthData');
+      localStorage.removeItem('idToken');
+      localStorage.removeItem('userId');
+      router.replace('/')
+      // localStorage.removeItem('userId');
+    },
     //superAdmin方法
     //superAdmin get Admin 
     getAdmin({ commit, state }) {
@@ -136,7 +136,7 @@ logout: ({ commit }) => {
         )
     },
     //superAdmin add Admin
-    addAdmin({ commit, state }, addAdmin) {
+    addAdmin({ commit, state ,dispatch}, addAdmin) {
       globalAxios
         .post(
           "/superadmin/admin",
@@ -151,13 +151,14 @@ logout: ({ commit }) => {
         .then(
           response => {
             console.log(response);
-            var newAdmin = {}
-            newAdmin.username = addAdmin.username
-            newAdmin.password = addAdmin.password
-            newAdmin.status = "启用"
-            newAdmin.character = "管理员"
-            state.adminList.splice(0, 0, newAdmin);
-            commit("changeAdminCurrentList", (addAdmin.page * state.limit));
+            // var newAdmin = {}
+            // newAdmin.username = addAdmin.username
+            // newAdmin.password = addAdmin.password
+            // newAdmin.status = "启用"
+            // newAdmin.character = "管理员"
+            // state.adminList.splice(0, 0, newAdmin);
+            // commit("changeAdminCurrentList", (addAdmin.page * state.limit));
+            dispatch("getAdmin")
           },
           error => {
             console.log(error);
