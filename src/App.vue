@@ -23,7 +23,8 @@
     },
     created: function () {
       this.height = document.documentElement.clientHeight,
-        this.screenHeight = 'min-height:' + (this.height - 56) + 'px;'
+      this.screenHeight = 'min-height:' + (this.height - 56) + 'px;';
+      this.$store.dispatch('tryAutoLogin');
     }
   }
 </script>

@@ -63,6 +63,22 @@ export const store =new Vuex.Store({
             }
         );
       },
+      tryAutoLogin({ commit }) {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          return;
+        }
+        // const expirationDate = localStorage.getItem('expirationDate');
+        // const now = new Date();
+        // if (now >= expirationDate) {
+        //   return;
+        // }
+        const userId = localStorage.getItem('userId');
+        commit('authUser', {
+          token: token,
+          userId: userId
+        })
+      },
       logout: ({ commit }) => {
         commit('clearAuthData');
         localStorage.removeItem('idToken');
