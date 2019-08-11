@@ -74,8 +74,8 @@ export const store =new Vuex.Store({
             }
         );
       },
-      tryAutoLogin({ commit }) {
-        const token = localStorage.getItem('token');
+      tryAutoLogin({commit, state }) {
+        const token = localStorage.getItem('idToken');
         if (!token) {
           return;
         }
