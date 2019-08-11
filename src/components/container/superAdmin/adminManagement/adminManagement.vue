@@ -145,13 +145,10 @@ export default {
   components: { pagination },
   data() {
     return {
-      limit: 10,
-      currentList: [],
       inputData: {
         adminUserName: ""
       },
       tableTitle: ["序号", "账号", "角色", "状态", "操作"],
-      tableData: [], //页面表格内容
       //新增管理员
       adminUserName: "",
       isUserName: true,
@@ -162,7 +159,8 @@ export default {
       alterMes: "",
       //当前页码
       currentPage: 0,
-      index: 0
+      index: 0,
+      currentList:[]
     };
   },
   watch: {
@@ -304,46 +302,58 @@ export default {
     }
   },
   created() {
-    var token = window.localStorage.getItem("idToken");
-    globalAxios
-      .get(
-        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token
-          }
-        }
-      )
-      .then(
-        response => {
-          console.log(response.data.data);
-          var admin_arr = response.data.data;
-          var admin_table = [];
-          for (var i = 0; i < admin_arr.length; i++) {
-            var admin = {};
-            admin.username = admin_arr[i].USER_NAME;
-            admin.id = admin_arr[i].USER_ID;
-            if (admin_arr[i].USER_STATUS == "active") admin.status = "启用";
-            else admin.status = "禁用";
-            admin.character = "管理员";
-            //console.log(admin)
-            admin_table.push(admin);
-          }
-          //console.log(admin_table)
-          // return response.json();
-          this.tableData = admin_table;
-          this.getNew(0);
-          //console.log(this.tableData)
-        },
-        error => {
-          console.log(error);
-        }
-      );
+    this.$store.dispatch('getAdmin')
+    // var token = window.localStorage.getItem("idToken");
+    // globalAxios
+    //   .get(
+    //     "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: token
+    //       }
+    //     }
+    //   )
+    //   .then(
+    //     response => {
+    //       //console.log(response.data.data);
+    //       var admin_arr = response.data.data;
+    //       var admin_table = [];
+    //       for (var i = 0; i < admin_arr.length; i++) {
+    //         var admin = {};
+    //         admin.username = admin_arr[i].USER_NAME;
+    //         admin.id = admin_arr[i].USER_ID;
+    //         if (admin_arr[i].USER_STATUS == "active") admin.status = "启用";
+    //         else admin.status = "禁用";
+    //         admin.character = "管理员";
+    //         //console.log(admin)
+    //         admin_table.push(admin);
+    //       }
+    //       //console.log(admin_table)
+    //       // return response.json();
+    //       this.tableData = admin_table;
+           this.getNew(0);
+    //       //console.log(this.tableData)
+    //     },
+    //     error => {
+    //       console.log(error);
+    //     }
+    //   );
+  },
+  computed:{
+    // currentList(){
+    //   return this.$store.state.adminCurrentList
+    // },
+    tableData(){
+      return this.$store.state.adminList
+    },
+    limit(){
+      return this.$store.state.limit
+    }
   },
   mounted() {
     //this.tableData = this.originalTableData;
-    this.changeTablePages(0);
+    //this.changeTablePages(0);
   }
 };
 </script>
