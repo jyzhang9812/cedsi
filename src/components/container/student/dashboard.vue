@@ -208,7 +208,7 @@ export default {
     console.log(this.height)
 
     var token = window.localStorage.getItem('idToken')
-    globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/studentinfo',
+    globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/studentInfo',
         {headers: {
             'Content-Type':'application/json',
             'Authorization': token

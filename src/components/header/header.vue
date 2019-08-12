@@ -82,7 +82,7 @@
     margin: 0 16px;
   }
 
-  li a ,
+  li router-link ,li a,
   li button{
     text-decoration: none;
     color: #50b8ee;
