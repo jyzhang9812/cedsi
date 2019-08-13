@@ -43,7 +43,6 @@
 
 <script>
   import SelectInput from "../../teacher/utils/selectInput";
-  import fs from 'fs';
   import AWS from 'aws-sdk'
 
   export default {
@@ -74,19 +73,6 @@
       },
       getFile(event) {
         this.file = event.target.files[0]
-        const extension = this.file.name.split('.')[1] === 'mp4'
-        const extension2 = this.file.name.split('.')[1] === 'ppt'
-        const extension3 = this.file.name.split('.')[1] === 'pdf'
-        const extension4 = this.file.name.split('.')[1] === 'jpg'
-        const isLt2M = this.file.size / 1024 / 1024 < 5
-        // if (!extension && !extension2 && !extension3 && !extension4) {
-        //   // this.$message.warning('上传模板只能是 mp4、ppt、pdf、swf、格式!')
-        //   return
-        // }
-        // if (!isLt2M) {
-        //   // this.$message.warning('上传模板大小不能超过 1000MB!')
-        //   return
-        // }
         console.log(this.file.name)
         this.fileName = this.file.name
       },
@@ -103,7 +89,7 @@
         formData.append('hour', this.hour)
         formData.append('particulars', this.particulars)
         formData.append('content', this.file)
-        console.log(this.fileName)
+        console.log(window.localStorage.getItem('user'))
         const reader = new FileReader();
         var content = reader.readAsArrayBuffer(this.file);
         var params = {
@@ -113,7 +99,7 @@
           Key: "" + this.fileName,
           ContentType: 'video/mp4',
           Metadata: {
-            'uploader': 'liwenhao'
+            'uploader': window.localStorage.getItem('user')
           }
         };
         s3.putObject(params, function (err, data) {

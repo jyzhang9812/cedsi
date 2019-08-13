@@ -61,6 +61,8 @@ export const store = new Vuex.Store({
             state.idToken = response.data.token;
             localStorage.setItem('idToken', state.idToken)
             state.roleId = response.data.role;
+            state.user = authData.username
+            localStorage.setItem('user',state.user)
             localStorage.setItem('roleId',state.roleId)
             state.status = response.data.status
             if (state.status == 'fail') {

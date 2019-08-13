@@ -7,28 +7,70 @@
     <div class="upload upload-height">
       <span class="upload-title">课程描述:</span>
       <textarea class="upload-textarea" rows="8" cols="70" placeholder="请输入视频描述" />
-    </div>
+      </div>
     <div class="upload">
       <span class="upload-title">请选择封面:</span>
-      <button class="btn upload-btn">选择文件</button>
+      <input type="file" @change="getFile($event)">
     </div>
     <div class="upload-footer">
-      <button class="btn upload-btn">确定</button>
+      <button class="btn upload-btn" @click="submit1($event)">确定</button>
       <button class="btn upload-btn">取消</button>
     </div>
   </div>
 </template>
-<script>
 
-export default {
-  name: "uploadVideo",
-  data() {
-    return {
-    };
-  },
-  methods:{
-  }
-};
+<script>
+  import AWS from 'aws-sdk'
+  export default {
+    name: "uploadVideo",
+    data() {
+      return {
+        file: null,
+        fileName: '',
+      };
+    },
+    methods: {
+      getFile(event) {
+        this.file = event.target.files[0]
+        console.log(this.file.name)
+        this.fileName = this.file.name
+      },
+      submit1(event) {
+        AWS.config = new AWS.Config({
+          accessKeyId: 'AKIAS6QS63NLMGJEODPO',
+          secretAccessKey: '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',
+          region: 'cn-northwest-1'
+        })
+        var s3 = new AWS.S3();
+        let formData = new FormData()
+
+        formData.append('caption', this.caption)
+        formData.append('hour', this.hour)
+        formData.append('particulars', this.particulars)
+        formData.append('content', this.file)
+        console.log(window.localStorage.getItem('user'))
+        const reader = new FileReader();
+        var content = reader.readAsArrayBuffer(this.file);
+        var params = {
+          ACL: 'public-read',
+          Bucket: "cedsi",
+          Body: formData.get('content'),
+          Key: "" + this.fileName,
+          ContentType: 'video/mp4',
+          Metadata: {
+            'uploader': window.localStorage.getItem('user')
+          }
+        };
+        s3.putObject(params, function (err, data) {
+          if (err) {
+            console.log(err, err.stack);
+          } else {
+            console.log(data);
+          }
+        })
+      },
+    }
+  };
 </script>
 <style>
 .upload-video {
@@ -109,5 +151,3 @@ export default {
     color: #fff
 }
 </style>
-
-
