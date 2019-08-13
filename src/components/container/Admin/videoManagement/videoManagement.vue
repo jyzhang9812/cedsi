@@ -1,6 +1,8 @@
 <template>
     <div class="body">
-        <span>课程视频管理</span>
+        <div>
+            <button class="btn btn-clear" @click='gotoUpload'>上传视频</button>
+        </div>
         <div class="outside">
             <table class="table table-hover">
                 <thead>
@@ -15,8 +17,7 @@
                             {{item}}
                         </td>
                         <td>
-                            <input type="file" ref='file' @change="getFile($event)">
-                            <button @click="submit1($event)">上传</button>
+                            <button class="btn btn-clear">编辑</button>
                         </td>
                     </tr>
                 </tbody>
@@ -42,6 +43,7 @@
             return {
                 file: null,
                 limit: 10,
+                fileName: '',
                 videoData: [
                     [
                         "Scratch入门课 | 第1节课 | 大炮打僵尸--僵尸移动",
@@ -100,66 +102,8 @@
             changeTablePages(value) {
                 this.currentList = this.videoData.slice(value, value + this.limit);
             },
-            getFile(event) {
-                this.file = event.target.files[0]
-                const extension = this.file.name.split('.')[1] === 'mp4'
-                const extension2 = this.file.name.split('.')[1] === 'ppt'
-                const extension3 = this.file.name.split('.')[1] === 'pdf'
-                const extension4 = this.file.name.split('.')[1] === 'jpg'
-                const isLt2M = this.file.size / 1024 / 1024 < 5
-                if (!extension && !extension2 && !extension3 && !extension4) {
-                    // this.$message.warning('上传模板只能是 mp4、ppt、pdf、swf、格式!')
-                    return
-                }
-                if (!isLt2M) {
-                    // this.$message.warning('上传模板大小不能超过 1000MB!')
-                    return
-                }
-                console.log(event)
-                this.fileName = this.file.name
-            },
-            submit1(event) {
-                // var AWS = require('aws-sdk');
-                //var fs = require('fs');
-                AWS.config = new AWS.Config({
-                    accessKeyId: 'AKIAS6QS63NLMGJEODPO',
-                    secretAccessKey: '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',
-                    region: 'cn-northwest-1'
-                })
-                var s3 = new AWS.S3();
-
-                //exports.handler = (event, context, callback) => {
-                //var content= fs.readFileSync('‪C:\\Users\\12574\\Desktop\\movement.mp4','utf8');
-                /// let data = window.URL.createObjectURL(new Blob([event.target.result]))
-
-                let formData = new FormData()
-                //var formData = new URLSearchParams()
-                // let data = window.URL.createObjectURL(new Blob([event.target.result]))
-
-                formData.append('caption', this.caption)
-                formData.append('hour', this.hour)
-                formData.append('particulars', this.particulars)
-                formData.append('content', this.file)
-
-                const reader = new FileReader();
-                var content = reader.readAsArrayBuffer(this.file);
-                var params = {
-                    ACL: 'public-read',
-                    Bucket: "cedsi",
-                    Body: formData.get('content'),
-                    Key: "" + this.fileName,
-                    ContentType: 'video/mp4',
-                    Metadata: {
-                        'uploader': 'liwenhao'
-                    }
-                };
-                s3.putObject(params, function (err, data) {
-                    if (err) {
-                        console.log(err, err.stack);
-                    } else {
-                        console.log(data);
-                    }
-                })
+            gotoUpload(){
+                this.$router.replace({ path: '/Admin/uploadVideo' })
             },
             submit(event) {
                 console.log(event)
@@ -270,5 +214,30 @@
         color: #409eff;
         margin: 0 3px;
         cursor: pointer;
+    }
+
+    .btn {
+        background: #409eff;
+        color: #fff;
+        height: 30px;
+        border-radius: 5px;
+        font-size: 12px;
+        transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    }
+
+    .btn:focus {
+        outline: none;
+    }
+
+    .btn:hover {
+        background: #66b1ff;
+    }
+
+    .btn-search {
+        width: 54px;
+    }
+
+    .btn-clear {
+        width: 88px;
     }
 </style>

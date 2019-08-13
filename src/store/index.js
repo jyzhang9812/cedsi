@@ -76,6 +76,20 @@ export const store = new Vuex.Store({
           }
         );
     },
+    signup({ commit, dispatch }, authData) {
+      globalAxios.post("/user/register",
+        { "username": authData.username, "password": authData.password})
+        .then(
+          response => {
+            console.log(response);
+            this.$router.replace({ path: '/signin' })
+          },
+          error => {
+            router.push({ path: '/404' })
+            console.log(error);
+          }
+        );
+    },
     tryAutoLogin({ commit, state }) {
       const token = localStorage.getItem('idToken');
       if (!token) {
@@ -96,6 +110,7 @@ export const store = new Vuex.Store({
       commit('clearAuthData');
       localStorage.removeItem('idToken');
       localStorage.removeItem('userId');
+      localStorage.removeItem('roleId');
       router.replace('/')
       // localStorage.removeItem('userId');
     },
