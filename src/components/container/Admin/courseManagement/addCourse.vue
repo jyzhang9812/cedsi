@@ -1,37 +1,15 @@
 <template>
   <div class="upload-video">
     <div class="upload">
-      <span class="upload-title">视频名称:</span>
+      <span class="upload-title">课程名称:</span>
       <input class="upload-input" placeholder="请输入视频名称" />
     </div>
     <div class="upload upload-height">
-      <span class="upload-title">视频描述:</span>
+      <span class="upload-title">课程描述:</span>
       <textarea class="upload-textarea" rows="8" cols="70" placeholder="请输入视频描述" />
       </div>
     <div class="upload">
-      <span class="upload-title">请选择课程:</span>
-        <select-input
-          class="upload-select"
-          id="course"
-          tips="请选择课程"
-          :option="inputData.course.option"
-          @option="changeOption"
-          :drop-down-list="inputData.course.list"
-        ></select-input>
-      </div>
-    <div class="upload">
-      <span class="upload-title">请选择章节:</span>
-      <select-input
-          class="upload-select"
-          id="chapter"
-          tips="请选章节"
-          :option="inputData.chapter.option"
-          @option="changeOption"
-          :drop-down-list="inputData.chapter.list"
-        ></select-input>
-    </div>
-    <div class="upload">
-      <span class="upload-title">请选择视频:</span>
+      <span class="upload-title">请选择封面:</span>
       <input type="file" @change="getFile($event)">
     </div>
     <div class="upload-footer">
@@ -42,35 +20,16 @@
 </template>
 
 <script>
-  import SelectInput from "../../teacher/utils/selectInput";
   import AWS from 'aws-sdk'
-
   export default {
     name: "uploadVideo",
     data() {
       return {
         file: null,
         fileName: '',
-        inputData: {
-          course: {
-            option: "",
-            list: ["课程一", "课程二", "课程三"]
-          },
-          chapter: {
-            option: "",
-            list: ["开学第一课", "开学第二课", "开学第三课"]
-          }
-        }
       };
     },
     methods: {
-      changeOption(item, id) {
-        Object.keys(this.inputData).forEach((res) => {
-          if (res === id) {
-            this.inputData[res].option = item;
-          }
-        });
-      },
       getFile(event) {
         this.file = event.target.files[0]
         console.log(this.file.name)
@@ -110,11 +69,9 @@
           }
         })
       },
-    },
-    components: { SelectInput }
+    }
   };
 </script>
-
 <style>
 .upload-video {
   width: 98%;

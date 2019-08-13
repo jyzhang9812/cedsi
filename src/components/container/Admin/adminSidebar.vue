@@ -47,12 +47,19 @@
             close: true,
             route: "/Admin/"
           },
-                    {
+          {
             name: "视频管理",
             iconSrc: "../../../../static/images/aside/teachingManagement.png",
             children: [],
             close: true,
             route: "/Admin/videoManagement"
+          },
+          {
+            name: "课程管理",
+            iconSrc: "../../../../static/images/aside/activityManagement.png",
+            children: [],
+            close: true,
+            route: "/Admin/courseManagement"
           },
         ],
         height: 0,

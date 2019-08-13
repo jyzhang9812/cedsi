@@ -98,18 +98,7 @@
         }
         console.log(formData);
         if (this.checkusr() && this.checkpwd() && this.onConfirm()) {
-          console.log(this.checkusr(), this.checkpwd(), this.onConfirm())
-          this.$http.post("https://aogtavn4ul.execute-api.cn-northwest-1.amazonaws.com.cn/prod/user/register",
-            { "username": this.username, "password": this.password, "role": this.role }).then(
-              response => {
-                console.log(response);
-                this.$router.replace({ path: '/signin' })
-              },
-              error => {
-                this.$router.push({ path: '/404' })
-                console.log(error);
-              }
-            );
+          this.$store.dispatch('signup',formData);
         } else {
           console.log('aaa');
         }

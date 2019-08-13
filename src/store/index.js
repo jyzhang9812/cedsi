@@ -61,6 +61,8 @@ export const store = new Vuex.Store({
             state.idToken = response.data.token;
             localStorage.setItem('idToken', state.idToken)
             state.roleId = response.data.role;
+            state.user = authData.username
+            localStorage.setItem('user',state.user)
             localStorage.setItem('roleId',state.roleId)
             state.status = response.data.status
             if (state.status == 'fail') {
@@ -69,6 +71,20 @@ export const store = new Vuex.Store({
             else {
               router.replace({ path: state.roles[state.roleId - 1] })
             }
+          },
+          error => {
+            router.push({ path: '/404' })
+            console.log(error);
+          }
+        );
+    },
+    signup({ commit, dispatch }, authData) {
+      globalAxios.post("/user/register",
+        { "username": authData.username, "password": authData.password})
+        .then(
+          response => {
+            console.log(response);
+            this.$router.replace({ path: '/signin' })
           },
           error => {
             router.push({ path: '/404' })
@@ -96,6 +112,7 @@ export const store = new Vuex.Store({
       commit('clearAuthData');
       localStorage.removeItem('idToken');
       localStorage.removeItem('userId');
+      localStorage.removeItem('roleId');
       router.replace('/')
       // localStorage.removeItem('userId');
     },

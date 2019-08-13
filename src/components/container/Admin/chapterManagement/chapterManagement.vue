@@ -1,7 +1,7 @@
 <template>
     <div class="body">
         <div>
-            <button class="btn btn-clear" @click='gotoUpload'>上传视频</button>
+            <button class="btn btn-clear" @click='gotoUpload'>新建章节</button>
         </div>
         <div class="outside">
             <table class="table table-hover">
@@ -78,8 +78,8 @@
                 ],
                 tableTitle: [
                     "序号",
-                    "课程名称",
-                    "操作说明",
+                    "章节名称",
+                    "章节说明",
                     "上传时间",
                     "创建人",
                     "操作"
@@ -103,12 +103,16 @@
                 this.currentList = this.videoData.slice(value, value + this.limit);
             },
             gotoUpload(){
-                this.$router.replace({ path: '/Admin/uploadVideo' })
+                this.$router.push({ path: '/Admin/chapterManagement/'+this.courseName+'/addChapter' })
             },
         },
         mounted() {
             this.changeTablePages(0);
         },
+        created(){
+            console.log(this.$route.params.courseName)
+            this.courseName=this.$route.params.courseName
+        }
     }
 </script>
 

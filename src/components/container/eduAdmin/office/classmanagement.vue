@@ -569,6 +569,7 @@
     padding: 10px;
   }
 
+
   .first-floor {
     margin-top: 20px;
   }
@@ -578,6 +579,7 @@
     color: #606266;
     margin-top: 20px;
   }
+
 
   .select-input {
     display: inline-block;
@@ -602,6 +604,7 @@
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   }
 
+
   .textBox:focus {
     outline: none;
   }
@@ -616,7 +619,6 @@
     background-repeat: no-repeat;
     background-position: -1px -2px;
   }
-
   .btn {
     background: #409eff;
     color: #fff;
@@ -625,6 +627,7 @@
     font-size: 12px;
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   }
+
 
   .btn:focus {
     outline: none;
@@ -646,6 +649,7 @@
     cursor: pointer;
     color: #409eff;
   }
+
 
   table {
     border: #eeeeee;
@@ -684,6 +688,7 @@
     border-top-right-radius: 5px;
   }
 
+
   .add {
     width: 100%;
   }
@@ -705,6 +710,7 @@
     margin-left: 5px;
     padding: 0 20px;
   }
+
 
   .addcon:hover {
     border: 1px solid #dcdfe6;
@@ -730,6 +736,7 @@
     margin-left: 5px;
   }
 
+
   .inputBox {
     padding: 0;
   }
@@ -741,6 +748,7 @@
     background-color: #409eff;
     margin-bottom: 10px;
   }
+
 
   .tab-content {
     margin: 0 auto;
@@ -773,6 +781,7 @@
     border: 1px solid #409eff;
     padding-left: 10px;
   }
+
 
   .tips:focus {
     outline: none;
