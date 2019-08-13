@@ -79,34 +79,25 @@
         const extension3 = this.file.name.split('.')[1] === 'pdf'
         const extension4 = this.file.name.split('.')[1] === 'jpg'
         const isLt2M = this.file.size / 1024 / 1024 < 5
-        if (!extension && !extension2 && !extension3 && !extension4) {
-          // this.$message.warning('上传模板只能是 mp4、ppt、pdf、swf、格式!')
-          return
-        }
-        if (!isLt2M) {
-          // this.$message.warning('上传模板大小不能超过 1000MB!')
-          return
-        }
+        // if (!extension && !extension2 && !extension3 && !extension4) {
+        //   // this.$message.warning('上传模板只能是 mp4、ppt、pdf、swf、格式!')
+        //   return
+        // }
+        // if (!isLt2M) {
+        //   // this.$message.warning('上传模板大小不能超过 1000MB!')
+        //   return
+        // }
         console.log(this.file.name)
         this.fileName = this.file.name
       },
       submit1(event) {
-        // var AWS = require('aws-sdk');
-        //var fs = require('fs');
         AWS.config = new AWS.Config({
           accessKeyId: 'AKIAS6QS63NLMGJEODPO',
           secretAccessKey: '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',
           region: 'cn-northwest-1'
         })
         var s3 = new AWS.S3();
-
-        //exports.handler = (event, context, callback) => {
-        //var content= fs.readFileSync('‪C:\\Users\\12574\\Desktop\\movement.mp4','utf8');
-        /// let data = window.URL.createObjectURL(new Blob([event.target.result]))
-
         let formData = new FormData()
-        //var formData = new URLSearchParams()
-        // let data = window.URL.createObjectURL(new Blob([event.target.result]))
 
         formData.append('caption', this.caption)
         formData.append('hour', this.hour)

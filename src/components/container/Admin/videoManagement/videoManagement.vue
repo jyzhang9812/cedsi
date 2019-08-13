@@ -33,6 +33,8 @@
 <script>
     import Pagination from "../utils/pagination";
     import globalAxios from 'axios';
+    import fs from 'fs';
+    import AWS from 'aws-sdk'
 
     export default {
         name: "videos",
