@@ -33,8 +33,6 @@
 <script>
     import Pagination from "../utils/pagination";
     import globalAxios from 'axios';
-    import fs from 'fs';
-    import AWS from 'aws-sdk'
 
     export default {
         name: "videos",
@@ -105,78 +103,6 @@
             gotoUpload(){
                 this.$router.replace({ path: '/Admin/uploadVideo' })
             },
-            submit(event) {
-                console.log(event)
-                if (this.fileName == '') {
-                    this.$notify({
-                        title: '警告',
-                        message: '请选择要上传的文件',
-                        type: 'warning'
-                    })
-                    return false
-                } else if (this.particulars == '') {
-                    this.$notify({
-                        title: '警告',
-                        message: '请输入课程详情',
-                        type: 'warning'
-                    })
-                } else if (this.caption == '') {
-                    this.$notify({
-                        title: '警告',
-                        message: '请输入课程标题',
-                        type: 'warning'
-                    })
-                } else if (this.hour == '') {
-                    this.$notify({
-                        title: '警告',
-                        message: '请输入课时',
-                        type: 'warning'
-                    })
-                } else {
-                    event.preventDefault()
-                    let formData = new FormData()
-                    //var formData = new URLSearchParams()
-                    // let data = window.URL.createObjectURL(new Blob([event.target.result]))
-
-                    formData.append('caption', this.caption)
-                    formData.append('hour', this.hour)
-                    formData.append('particulars', this.particulars)
-                    formData.append('content', this.file)
-                    console.log(formData.get('content'))
-                    // let config = {
-                    // headers: {
-                    //     'Content-Type': 'multipart/form-data'
-                    //     }
-                    // }
-                    var token = window.localStorage.getItem('idToken')
-                    globalAxios({
-                        url: 'https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/video',
-                        method: 'POST',
-                        headers: {
-                            // 'Content-Type': 'multipart/form-data',
-                            'Authorization': token
-                        },
-                        data: formData,
-                        // processData: false,
-                        // contentType: false
-                    }).then(response => {
-                        // this.$notify({
-                        // title: '成功',
-                        // message: '上穿成功等待审核',
-                        // type: 'success'
-                        // })
-                        console.log(response)
-                    }, error => {
-                        // this.$notify({
-                        // title: '警告',
-                        // message: '对不起服务器繁忙上传失败请稍后重试！',
-                        // type: 'warning'
-                        // })
-                        console.log(error)
-                    }
-                    )
-                }
-            }
         },
         mounted() {
             this.changeTablePages(0);

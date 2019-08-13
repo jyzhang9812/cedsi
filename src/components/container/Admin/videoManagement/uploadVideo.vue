@@ -43,6 +43,8 @@
 
 <script>
   import SelectInput from "../../teacher/utils/selectInput";
+  import fs from 'fs';
+  import AWS from 'aws-sdk'
 
   export default {
     name: "uploadVideo",
