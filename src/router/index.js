@@ -196,7 +196,11 @@ const videoManagement = resolve => {
     resolve(require('../components/container/Admin/videoManagement/videoManagement.vue'));
   });
 };
-
+const uploadVideo = resolve => {
+  require.ensure(['../components/container/Admin/videoManagement/uploadVideo.vue'], () => {
+    resolve(require('../components/container/Admin/videoManagement/uploadVideo.vue'));
+  });
+};
 const courseManagement = resolve => {
   require.ensure(['../components/container/Admin/courseManagement/courseManagement.vue'], () => {
     resolve(require('../components/container/Admin/courseManagement/courseManagement.vue'));
@@ -205,10 +209,6 @@ const courseManagement = resolve => {
 const addCourse = resolve => {
   require.ensure(['../components/container/Admin/courseManagement/addCourse.vue'], () => {
     resolve(require('../components/container/Admin/courseManagement/addCourse.vue'));
-
-const uploadVideo = resolve => {
-  require.ensure(['../components/container/Admin/videoManagement/uploadVideo.vue'], () => {
-    resolve(require('../components/container/Admin/videoManagement/uploadVideo.vue'));
   });
 };
 
@@ -538,40 +538,6 @@ export default new Router({
           }, component: videoManagement
         },
         {
-          path: '/Admin/courseManagement', beforeEnter(to, from, next) {
-
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: uploadVideo
-        },
-
-          }, 
-          component: courseManagement,
-        },
-        {
-          path: '/Admin/courseManagement/addCourse', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, 
-          component: addCourse,
-        },
-        {
-          path: '/Admin/courseManagement/addCourse', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, 
-          component: addCourse,
-        },
-        {
           path: '/Admin/uploadVideo', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
@@ -579,6 +545,24 @@ export default new Router({
               next('/signin')
             }
           }, component: uploadVideo
+        },
+        {
+          path: '/Admin/courseManagement', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: courseManagement
+        },
+        {
+          path: '/Admin/courseManagement/addCourse', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: addCourse
         },
       ]
     }
