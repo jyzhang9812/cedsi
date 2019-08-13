@@ -219,6 +219,7 @@
   import DatePicker from "../utils/datePicker";
   import globalAxios from 'axios';
   import XLSX from 'xlsx'
+
   export default {
     name: "classmanagement",
     components: { SelectInput, DatePicker, pagination },
@@ -559,6 +560,7 @@
     color: #606266;
     margin-bottom: 0;
   }
+
   .subContainer {
     font-size: 12px;
     color: #606266;
@@ -566,23 +568,31 @@
     margin: 0 auto;
     padding: 10px;
   }
+
+
   .first-floor {
     margin-top: 20px;
   }
+
   .second-floor {
     font-size: 12px;
     color: #606266;
     margin-top: 20px;
   }
+
+
   .select-input {
     display: inline-block;
   }
+
   label {
     display: inline;
   }
+
   .content td {
     line-height: 30px;
   }
+
   .textBox {
     width: 180px;
     height: 32px;
@@ -593,12 +603,16 @@
     margin-left: 5px;
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   }
+
+
   .textBox:focus {
     outline: none;
   }
+
   .textBox:hover {
     border-color: #409eff;
   }
+
   /* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
   .choose {
     background-image: url("../../../../../static/images/teach/choose.png");
@@ -613,60 +627,80 @@
     font-size: 12px;
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   }
+
+
   .btn:focus {
     outline: none;
   }
+
   .btn:hover {
     background: #66b1ff;
   }
+
   .btn-search {
     width: 54px;
   }
+
   .btn-clear {
     width: 78px;
   }
+
   .blue {
     cursor: pointer;
     color: #409eff;
   }
+
+
   table {
     border: #eeeeee;
   }
+
   table tr {
     text-align: center !important;
   }
+
   table td {
     vertical-align: middle !important;
   }
+
   .title {
     text-align: center;
   }
+
   .select-input {
     margin-right: 8px;
   }
+
   /*添加班级模态框*/
   .addwidth {
     width: 500px;
   }
+
   .modal-dialog {
     top: 100px;
     position: relative;
   }
+
   .modal-header {
     background-color: #409eff;
     color: #fff;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
   }
+
+
   .add {
     width: 100%;
   }
+
   .keypoint {
     color: red;
   }
+
   .addtitle {
     color: #606266;
   }
+
   .addcon {
     width: 180px;
     border: 1px solid #409eff;
@@ -676,28 +710,37 @@
     margin-left: 5px;
     padding: 0 20px;
   }
+
+
   .addcon:hover {
     border: 1px solid #dcdfe6;
   }
+
   .addcon:focus {
     outline: none;
   }
+
   .content {
     margin: 0 auto;
     width: 55%;
     height: 100%;
   }
+
   .modal-footer {
     border: none;
     text-align: center;
   }
+
   .modal-select-input {
     display: inline-block;
     margin-left: 5px;
   }
+
+
   .inputBox {
     padding: 0;
   }
+
   /*排课模态框*/
   .nav-pills>li.active>a,
   .nav-pills>li.active>a:focus,
@@ -705,38 +748,49 @@
     background-color: #409eff;
     margin-bottom: 10px;
   }
+
+
   .tab-content {
     margin: 0 auto;
   }
+
   .course-content {
     height: 30px;
     line-height: 30px;
     margin-bottom: 10px;
   }
+
   .course-time {
     display: inline-block;
     width: 250px;
     text-align: left;
   }
+
   .datepicker {
     margin-right: 20px;
   }
+
   /*查看学生模态框*/
   .tablewidth {
     width: 90%;
     margin: 0 auto;
   }
+
   .tips {
     border-radius: 5px;
     border: 1px solid #409eff;
     padding-left: 10px;
   }
+
+
   .tips:focus {
     outline: none;
   }
+
   .tips:hover {
     border: 1px solid #dcdfe6;
   }
+
   /*正则判断*/
   .inputtips {
     display: inline-block;
@@ -745,20 +799,24 @@
     height: 10px;
     width: 100%;
   }
+
   .err {
     border: 1px solid red;
   }
+
   .inputerr {
     visibility: hidden;
     height: 10px;
     width: 100%;
   }
+
   /*修改成功弹出框*/
   .isshow {
     width: 30%;
     position: relative;
     margin: 20px auto;
   }
+
   .notshow {
     width: 40%;
     position: relative;
