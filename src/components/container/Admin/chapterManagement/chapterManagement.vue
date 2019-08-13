@@ -103,7 +103,7 @@
                 this.currentList = this.videoData.slice(value, value + this.limit);
             },
             gotoUpload(){
-                this.$router.push({ path: '/Admin/chapterManagement/addChatper' })
+                this.$router.push({ path: '/Admin/chapterManagement/'+this.courseName+'/addChapter' })
             },
         },
         mounted() {
@@ -111,6 +111,7 @@
         },
         created(){
             console.log(this.$route.params.courseName)
+            this.courseName=this.$route.params.courseName
         }
     }
 </script>

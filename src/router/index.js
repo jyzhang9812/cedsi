@@ -584,7 +584,7 @@ export default new Router({
           }, component: chapterManagement
         },
         {
-          path: '/Admin/chapterManagement/addChatper', beforeEnter(to, from, next) {
+          path: '/Admin/chapterManagement/:courseName/addChapter', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {
