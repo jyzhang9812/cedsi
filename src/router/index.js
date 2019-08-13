@@ -211,6 +211,16 @@ const addCourse = resolve => {
     resolve(require('../components/container/Admin/courseManagement/addCourse.vue'));
   });
 };
+const chapterManagement = resolve => {
+  require.ensure(['../components/container/Admin/chapterManagement/chapterManagement.vue'], () => {
+    resolve(require('../components/container/Admin/chapterManagement/chapterManagement.vue'));
+  });
+};
+const addChapter = resolve => {
+  require.ensure(['../components/container/Admin/chapterManagement/addChapter.vue'], () => {
+    resolve(require('../components/container/Admin/chapterManagement/addChapter.vue'));
+  });
+};
 
 Vue.use(Router);
 //增加了导航钩子，如果没有token则不能进入页面
@@ -564,6 +574,24 @@ export default new Router({
             }
           }, component: addCourse
         },
+        {
+          path: '/Admin/chapterManagement/:courseName', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: chapterManagement
+        },
+        {
+          path: '/Admin/chapterManagement/addChatper', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: addChapter
+        }
       ]
     }
   ]
