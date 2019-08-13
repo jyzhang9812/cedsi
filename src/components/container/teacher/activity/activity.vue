@@ -30,7 +30,7 @@
               <th>序号</th>
               <th>活动标题</th>
               <th>发布时间</th>
-              <th>作者</th>
+              <th>负责人</th>
               <th>活动类型</th>
               <th>所属学校</th>
               <th>回复/查看</th>
@@ -48,7 +48,7 @@
               <td>{{list.school}}</td>
               <td>{{list.reply}}/{{list.view}}</td>
               <td>{{list.status}}</td>
-              <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
+              <td><span class="blue">编辑</span></td>
             </tr>
           </tbody>
         </table>
