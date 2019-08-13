@@ -196,6 +196,16 @@ const videoManagement = resolve => {
     resolve(require('../components/container/Admin/videoManagement/videoManagement.vue'));
   });
 };
+const courseManagement = resolve => {
+  require.ensure(['../components/container/Admin/courseManagement/courseManagement.vue'], () => {
+    resolve(require('../components/container/Admin/courseManagement/courseManagement.vue'));
+  });
+};
+const addCourse = resolve => {
+  require.ensure(['../components/container/Admin/courseManagement/addCourse.vue'], () => {
+    resolve(require('../components/container/Admin/courseManagement/addCourse.vue'));
+  });
+};
 
 Vue.use(Router);
 //增加了导航钩子，如果没有token则不能进入页面
@@ -522,6 +532,27 @@ export default new Router({
             }
           }, component: videoManagement
         },
+        {
+          path: '/Admin/courseManagement', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, 
+          component: courseManagement,
+        },
+        {
+          path: '/Admin/courseManagement/addCourse', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, 
+          component: addCourse,
+        },
+
       ]
     }
   ]
