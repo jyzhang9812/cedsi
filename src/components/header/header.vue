@@ -34,7 +34,8 @@
         this.$store.dispatch('logout');
       },
       role(){
-        this.$router.replace(this.$store.getters.whichRole)
+        var roldId = window.localStorage.getItem('roleId')
+        this.$router.replace(this.$store.state.roles[roldId-1])
       }
     },
     created:function(){

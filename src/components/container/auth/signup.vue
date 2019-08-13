@@ -43,7 +43,7 @@
             </div>
             <div class="text-center p-t-90" v-if='submit && !checkpwd()'>
               <p style="color: #f87c56">
-                密码不能为空或少于六位
+                密码少于六位
               </p>
             </div>
             <div class="wrap-input100 validate-input">
