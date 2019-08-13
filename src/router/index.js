@@ -196,7 +196,7 @@ const videoManagement = resolve => {
     resolve(require('../components/container/Admin/videoManagement/videoManagement.vue'));
   });
 };
-<<<<<<< HEAD
+
 const courseManagement = resolve => {
   require.ensure(['../components/container/Admin/courseManagement/courseManagement.vue'], () => {
     resolve(require('../components/container/Admin/courseManagement/courseManagement.vue'));
@@ -205,11 +205,10 @@ const courseManagement = resolve => {
 const addCourse = resolve => {
   require.ensure(['../components/container/Admin/courseManagement/addCourse.vue'], () => {
     resolve(require('../components/container/Admin/courseManagement/addCourse.vue'));
-=======
+
 const uploadVideo = resolve => {
   require.ensure(['../components/container/Admin/videoManagement/uploadVideo.vue'], () => {
     resolve(require('../components/container/Admin/videoManagement/uploadVideo.vue'));
->>>>>>> a3eadd96a0d08f927024cfad6b2e9379657ff74a
   });
 };
 
@@ -539,17 +538,16 @@ export default new Router({
           }, component: videoManagement
         },
         {
-<<<<<<< HEAD
           path: '/Admin/courseManagement', beforeEnter(to, from, next) {
-=======
-          path: '/Admin/uploadVideo', beforeEnter(to, from, next) {
->>>>>>> a3eadd96a0d08f927024cfad6b2e9379657ff74a
+
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {
               next('/signin')
             }
-<<<<<<< HEAD
+          }, component: uploadVideo
+        },
+
           }, 
           component: courseManagement,
         },
@@ -563,11 +561,25 @@ export default new Router({
           }, 
           component: addCourse,
         },
-
-=======
+        {
+          path: '/Admin/courseManagement/addCourse', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, 
+          component: addCourse,
+        },
+        {
+          path: '/Admin/uploadVideo', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
           }, component: uploadVideo
         },
->>>>>>> a3eadd96a0d08f927024cfad6b2e9379657ff74a
       ]
     }
   ]
