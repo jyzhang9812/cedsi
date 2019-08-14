@@ -2,9 +2,7 @@
   <div class="outside">
     <span>精选作品</span>
     <div class="tab-bar">
-      <span v-for="(title, index) in tabBarTitle"
-            :key="index"
-            @click="tabBarChange(title)">{{title}}
+      <span v-for="(title, index) in tabBarTitle" :key="index" @click="tabBarChange(title)">{{title}}
       </span>
     </div>
     <div class="divider">
@@ -13,60 +11,101 @@
     <div class="panels" v-if="currentTabBarTitle === tabBarTitle[0]">
       <table class="table table-hover">
         <thead>
-        <tr>
-          <th v-for="(title,index) in tableTitle_0"
-              :key="index" class="title">{{title}}</th>
-        </tr>
+          <tr>
+            <th v-for="(title,index) in tableTitle_0" :key="index" class="title">{{title}}</th>
+          </tr>
         </thead>
         <tbody>
-        <tr v-for="(line, index) in currentFirstList"
-            :key="index"
-            class="content">
-          <td>{{index + 1}}</td>
-          <td v-for="(item, index) in line" :key="index">{{item}}</td>
-          <td>
-            <span class="blue">查看作品</span> &nbsp;&nbsp;
-            <span class="blue">审核</span> &nbsp;&nbsp;
-            <span class="red">删除</span>
-          </td>
-        </tr>
+          <tr v-for="(line, index) in currentFirstList" :key="index" class="content">
+            <td>{{index + 1}}</td>
+            <td v-for="(item, index) in line" :key="index">{{item}}</td>
+            <td>
+              <span class="blue">查看作品</span> &nbsp;&nbsp;
+              <span class="blue">审核</span> &nbsp;&nbsp;
+              <span class="red">删除</span>
+            </td>
+          </tr>
         </tbody>
       </table>
-      <pagination :num="tableData_0.length"
-                  @getNew="changeFirstTablePages"
-                  :limit="limit">
+      <pagination :num="tableData_0.length" @getNew="changeFirstTablePages" :limit="limit">
       </pagination>
     </div>
     <div class="uploadWorks" v-if="currentTabBarTitle === tabBarTitle[1]">
-      <button>上传精选作品</button>
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th v-for="(title, index) in tableTitle_1" class="title" :key="index">{{title}}</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(line, seq) in currentSecondList" :key="seq" class="content">
-          <td>{{seq + 1}}</td>
-          <td v-for="(item, index) in line" :key="index">{{item}}</td>
-          <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
-        </tr>
-        </tbody>
-      </table>
-      <pagination :num="tableData_1.length"
-                  @getNew="changeSecondTablePages"
-                  :limit="limit">
-      </pagination>
+      <div v-show="!isUploadWorks">
+        <button @click="isUploadWorks = !isUploadWorks">上传精选作品</button>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th v-for="(title, index) in tableTitle_1" class="title" :key="index">{{title}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(line, seq) in currentSecondList" :key="seq" class="content">
+              <td>{{seq + 1}}</td>
+              <td v-for="(item, index) in line" :key="index">{{item}}</td>
+              <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination :num="tableData_1.length" @getNew="changeSecondTablePages" :limit="limit">
+        </pagination>
+      </div>
+      <div v-show="isUploadWorks" class="uploadWorks-page">
+        <div>
+          <span>选择文件</span>
+          <button>选择作品</button>
+          <label>
+            liuxingyu.sb3
+          </label>
+        </div>
+        <div>
+          <span>作者</span>
+          <input type="text" placeholder="请填写作者" v-model="uploadWorks.author">
+        </div>
+        <div>
+          <span>所属学校</span>
+          <div style="display: inline">
+            <select-input id="uploadWorks_school" :tips="uploadWorks.tips" :dropDownList="uploadWorks.school"
+              :option="uploadWorks.option">
+            </select-input>
+          </div>
+        </div>
+        <div>
+          <span>作品名称</span>
+          <input type="text" placeholder="请填写作品名称" v-model="uploadWorks.workName">
+        </div>
+        <div>
+          <span>作品介绍</span>
+          <textarea placeholder="介绍一下你的作品吧!" v-model="uploadWorks.workIntroduction"></textarea>
+        </div>
+        <div>
+          <span>操作说明</span>
+          <textarea placeholder="如果你的作品需要操作互动,请不要忘记告诉大家操作方法哦!" v-model="uploadWorks.operatingInstruction"></textarea>
+        </div>
+        <div>
+          <span>上传封面</span>
+          <button>选择封面</button>
+          <label>
+            <img src="/static/images/auth/bg-02.jpg" alt="">
+            henrenx.png
+          </label>
+        </div>
+        <div class="btn-uploadWorks">
+          <button>确认上传</button>
+          <button @click="cancelUploadWorks">取消上传</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import Pagination from "../utils/pagination";
+  import selectInput from "../utils/selectInput";
 
   export default {
     name: "choiceness",
-    components: {Pagination},
+    components: { Pagination, selectInput },
     data() {
       return {
         limit: 10,
@@ -111,7 +150,19 @@
           'margin-left': ""
         },
         currentFirstList: [],
-        currentSecondList: []
+        currentSecondList: [],
+        isUploadWorks: false,
+        uploadWorks: {
+          school: ['师大一中', '师大二中', '师大三中'],
+          option: '师大一中',
+          tips: '请选择',
+          workFile: "",
+          author: "",
+          workName: "",
+          workIntroduction: "",
+          operatingInstruction: "",
+          coverFile: ""
+        }
       }
     },
     methods: {
@@ -128,6 +179,11 @@
       },
       changeSecondTablePages(value) {
         this.currentSecondList = this.tableData_1.slice(value, value + this.limit)
+      },
+      cancelUploadWorks() {
+        this.isUploadWorks = !this.isUploadWorks;
+        // 清空文件
+        // 清空输入
       }
     },
     mounted() {
@@ -216,7 +272,7 @@
   }
 
   .uploadWorks button {
-    width: 105px;
+    padding: 0 15px;
     border: none;
     background: #409eff;
     color: #FFF;
@@ -224,7 +280,6 @@
     border-radius: 5px;
     font-size: 12px;
     transition: all .3s cubic-bezier(.645, .045, .355, 1);
-    margin-bottom: 10px;
   }
 
   .uploadWorks button:focus {
@@ -235,4 +290,64 @@
     background: #66b1FF;
   }
 
+  .btn-uploadWorks {
+    display: flex;
+    justify-content: center;
+    width: 720px;
+  }
+
+  .btn-uploadWorks>button {
+    margin: 0 15px;
+  }
+
+  .uploadWorks-page {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .uploadWorks-page>div {
+    display: flex;
+    align-items: center;
+    width: 720px;
+    margin-top: 20px;
+  }
+
+  .uploadWorks-page>div>span {
+    width: 100px;
+    display: inline-block;
+  }
+
+  .uploadWorks-page>div>span::before {
+    content: "*";
+    color: #FF6947;
+    margin-right: 4px;
+  }
+
+  .uploadWorks-page>div>input,
+  textarea {
+    width: 620px;
+    border: 1px solid #409EFF;
+    border-radius: 4px;
+    padding-left: 15px;
+    outline: none;
+  }
+
+  .uploadWorks-page>div>input {
+    height: 32px;
+  }
+
+  .uploadWorks-page>div>textarea {
+    padding-top: 5px;
+    height: 64px;
+  }
+
+  .uploadWorks-page>div>label {
+    margin-left: 20px;
+  }
+
+  .uploadWorks-page>div>label>img {
+    width: 150px;
+    height: 150px;
+    margin: 0 20px;
+  }
 </style>
