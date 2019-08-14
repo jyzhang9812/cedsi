@@ -4,9 +4,9 @@
         <div class="col-md-4" 
           v-for="(item,index) in currentList"
           :key="index">
-          <router-link :to="{name:'coursemap',params:{id:item.course_id}}" class="box">
+          <router-link :to="{name:'coursemap',params:{id:item.ID}}" class="box">
             <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
-              <img class="img" :style="style" :src="item.img_url">
+              <img class="img" :style="style" :src="item.COVER">
               <div class="details" :style="style1" v-show="index==i">
                 <div class="detail_item">
                   <img class="icon" :src=classImg>
@@ -31,7 +31,7 @@
               </div>
             </div>
             <div class="outside">
-              <h4>{{item.course_name}}</h4>
+              <h4>{{item.NAME}}</h4>
               <button :class="(index==i)?btnh:btn">开始学习</button>
             </div>  
         </router-link>
@@ -153,9 +153,10 @@ export default {
     /*右边阴影*/ 0px 10px 10px 2px #ccc; /*下边阴影*/
 }
 .btn {
-  background: #51c79f;
-  color: #fff;
-  height: 30px;
+  color: #51c79f;
+  background: #fff;
+  border: 1px solid #51c79f;
+  height: 35px;
   width: 90px;
   font-size: 13px;
   text-align: center;
@@ -164,11 +165,11 @@ export default {
   font-weight: bold;
 }
 .btnhover {
+  height: 35px;
+  width: 90px;
   background: #51c79f;
   color: #fff;
-  height: 35px;
-  width: 95px;
-  font-size: 12px;
+  font-size: 15px;
   text-align: center;
   margin-right: 10px;
   margin-top: 10px;

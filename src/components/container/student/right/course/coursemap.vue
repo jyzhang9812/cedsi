@@ -40,7 +40,7 @@
           </div>
           <div class="rightBox">
             <p class="pro">课程介绍</p>
-            <p class="pro-1">{{coursedetail.chapter_desc}}</p>
+            <p class="pro-1">{{coursedetail.CP_DESCRIPTION}}</p>
             <p class="pro-2" :style="warn">
               &nbsp;&nbsp;&nbsp;&nbsp;不要忘记交作业呀！!
               <br>&nbsp;&nbsp;&nbsp;&nbsp;1.点击视频右下方【我要做作业】
@@ -195,7 +195,7 @@ export default {
     transferdata(index) {
       console.log(index);
       this.coursedetail = this.msgs[index];
-      this.videosrc=this.coursedetail.video_url;
+      this.videosrc=this.coursedetail.CP_VIDEO_URL;
       console.log(this.videosrc)
     },
     deletevideo(){

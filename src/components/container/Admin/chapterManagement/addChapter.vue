@@ -18,10 +18,11 @@
     </div>
   </div>
 </template>
+
 <script>
 
 export default {
-  name: "uploadVideo",
+  name: "addChapter",
   data() {
     return {
     };
@@ -30,6 +31,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .upload-video {
   width: 98%;

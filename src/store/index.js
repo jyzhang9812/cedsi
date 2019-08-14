@@ -11,6 +11,7 @@ Vue.use(router);
 
 export const store = new Vuex.Store({
   state: {
+    url:'../../../../static/images/',
     idToken: null,
     userId: null,
     user: null,
