@@ -158,13 +158,96 @@ export default {
   components: { pagination,SelectInput },
   data() {
     return {
-      limit: 10,
+      limit: 20,
       currentList: [],
       inputData: {
         eduAdminUserName: ""
       },
       tableTitle: ["序号", "账号", "所属学校", "状态", "操作"],
-      tableData: [], //页面表格内容
+      tableData: [
+        {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+              {
+        account:"xxx",
+        character:"lll",
+        status:"启用"
+      },
+
+      ], //页面表格内容
       //新增管理员
       eduAdminUserName: "",
       isUserName: true,
@@ -317,44 +400,44 @@ export default {
       //console.log(this.currentList)
     }
   },
-  created() {
-    var token = window.localStorage.getItem("idToken");
-    globalAxios
-      .get(
-        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token
-          }
-        }
-      )
-      .then(
-        response => {
-          //console.log(response.data.data);
-          var eduadmin_arr = response.data.data;
-          var eduadmin_table = [];
-          for (var i = 0; i < eduadmin_arr.length; i++) {
-            var eduadmin = {};
-            eduadmin.username = eduadmin_arr[i].USER_NAME;
-            eduadmin.id = eduadmin_arr[i].USER_ID;
-            if (eduadmin_arr[i].USER_STATUS == "active") eduadmin.status = "启用";
-            else eduadmin.status = "禁用";
-            eduadmin.character = "管理员";
-            //console.log(admin)
-            eduadmin_table.push(eduadmin);
-          }
-          //console.log(admin_table)
-          // return response.json();
-          this.tableData = eduadmin_table;
-          this.getNew(0);
-          //console.log(this.tableData)
-        },
-        error => {
-          console.log(error);
-        }
-      );
-  },
+  // created() {
+  //   var token = window.localStorage.getItem("idToken");
+  //   globalAxios
+  //     .get(
+  //       "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: token
+  //         }
+  //       }
+  //     )
+  //     .then(
+  //       response => {
+  //         //console.log(response.data.data);
+  //         var eduadmin_arr = response.data.data;
+  //         var eduadmin_table = [];
+  //         for (var i = 0; i < eduadmin_arr.length; i++) {
+  //           var eduadmin = {};
+  //           eduadmin.username = eduadmin_arr[i].USER_NAME;
+  //           eduadmin.id = eduadmin_arr[i].USER_ID;
+  //           if (eduadmin_arr[i].USER_STATUS == "active") eduadmin.status = "启用";
+  //           else eduadmin.status = "禁用";
+  //           eduadmin.character = "管理员";
+  //           //console.log(admin)
+  //           eduadmin_table.push(eduadmin);
+  //         }
+  //         //console.log(admin_table)
+  //         // return response.json();
+  //         this.tableData = eduadmin_table;
+  //         this.getNew(0);
+  //         //console.log(this.tableData)
+  //       },
+  //       error => {
+  //         console.log(error);
+  //       }
+  //     );
+  // },
   mounted() {
     //this.tableData = this.originalTableData;
     this.changeTablePages(0);
