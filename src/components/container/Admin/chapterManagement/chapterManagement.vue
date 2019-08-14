@@ -103,7 +103,7 @@
                 this.currentList = this.videoData.slice(value, value + this.limit);
             },
 
-            gotoUpload(){
+            gotoAddChapter(){
                 this.$router.push({ path: '/Admin/chapterManagement/'+this.courseName+'/addChapter' })
             },
         },
