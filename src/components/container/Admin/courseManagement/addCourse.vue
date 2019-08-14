@@ -50,7 +50,7 @@
         this.fileName = '';
         this.name = '';
         this.description = '';
-        this.$router.push({ path: '/Admin/courseManagement/' });
+        this.$router.replace({ path: '/Admin/courseManagement/' });
       },
       getFile(event) {
         this.file = event.target.files[0]
@@ -89,6 +89,12 @@
               console.log(err, err.stack);
             } else {
               console.log(data);
+              if (data.hasOwnProperty('ETag')) {
+                alert("上传成功!");
+                this.$router.replace({ path: '/Admin/courseManagement/' });
+              } else {
+                alert("上传失败!");
+              }
             }
           });
         }

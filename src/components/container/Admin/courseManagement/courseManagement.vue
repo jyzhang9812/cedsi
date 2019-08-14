@@ -71,10 +71,10 @@
         this.courseNum = this.courseList[index].num;
       },
       addCourse() {
-        this.$router.push({ path: '/Admin/courseManagement/addCourse' })
+        this.$router.replace({ path: '/Admin/courseManagement/addCourse' })
       },
       gotoChapter(index) {
-        this.$router.push({ path: '/Admin/chapterManagement/' + this.courseList[index].name })
+        this.$router.replace({ path: '/Admin/chapterManagement/' + this.courseList[index].name })
       }
     },
     mounted() {
