@@ -600,7 +600,11 @@ export default new Router({
           }, component: chapterManagement
         },
         {
+<<<<<<< HEAD
           path: '/Admin/chapterManagement/addChapter', beforeEnter(to, from, next) {
+=======
+          path: '/Admin/chapterManagement/:courseName/addChapter', beforeEnter(to, from, next) {
+>>>>>>> d22d9b22a26ab5d06951da5565d28aa5dd17bba8
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {

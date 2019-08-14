@@ -2,15 +2,24 @@
   <div class="upload-video">
     <div class="upload">
       <span class="upload-title">课程名称:</span>
-      <input class="upload-input" placeholder="请输入视频名称" />
+      <input class="upload-input" placeholder="请输入课程名称" />
     </div>
     <div class="upload upload-height">
       <span class="upload-title">课程描述:</span>
-      <textarea class="upload-textarea" rows="8" cols="70" placeholder="请输入视频描述" />
-      </div>
+      <textarea class="upload-textarea" rows="8" cols="70" placeholder="请输入课程描述" />
+    </div>
     <div class="upload">
       <span class="upload-title">请选择封面:</span>
-      <input type="file" @change="getFile($event)">
+      <div class="upload-cover-btn">
+        上传文件
+      <input type="file" class="" @change="getFile($event)" style="opacity: 0">
+      </div>
+    </div>
+    <div class="upload upload-height">
+      <span class="upload-title">预览:</span>
+      <div class="upload-cover-img" >
+        <img id="headimage" :src="headsculpture" class="cover-image" alt="">
+      </div>
     </div>
     <div class="upload-footer">
       <button class="btn upload-btn" @click="submit1($event)">确定</button>
@@ -27,6 +36,7 @@
       return {
         file: null,
         fileName: '',
+        headsculpture: this.$store.state.url + '/teacher/headsculpture.jpg',
       };
     },
     methods: {
@@ -34,6 +44,12 @@
         this.file = event.target.files[0]
         console.log(this.file.name)
         this.fileName = this.file.name
+        var reader = new FileReader();
+        var that = this;
+        reader.readAsDataURL(this.file);
+        reader.onload = function (e) {
+          that.headsculpture = this.result
+        }
       },
       submit1(event) {
         AWS.config = new AWS.Config({
@@ -149,5 +165,35 @@
 .upload-btn:focus{
     outline:none;
     color: #fff
+}
+.upload-cover-btn{
+  margin-left: 10px;
+  width: 80px;
+  height: 35px;
+  display: inline-block;
+  background-color: #409eff;
+  color: #fff;
+  border-radius:5px; 
+  line-height: 35px;
+  text-align: center
+}
+input[type=file]{
+  width: 80px;
+  height: 35px;
+  position: relative;
+  top:-35px;
+}
+.upload-cover-img{
+  display: inline-block;
+  border: 1px dashed #dcdfe6;
+  width: 290px;
+  height: 150px;
+  margin-left: 10px;
+  border-radius:5px; 
+  background-color: #f5f7fa;
+}
+.cover-image{
+  width: 100%;
+  height: 100%;
 }
 </style>

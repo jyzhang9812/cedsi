@@ -47,8 +47,8 @@
       <button class="btn btn-search">搜索</button>
       <button class="btn btn-clear" @click="addCourse">新增课程</button>
     </div>
-    <div class="second-floor">
-      <div class="course" v-for="(course,index) in courseList" :key="index" @click="gotoChapter(index)">
+    <div class="second-floor row">
+      <div class="course col-md-4" v-for="(course,index) in courseList" :key="index" @click="gotoChapter(index)">
         <div class="course-card">
           <img src="../../../../../static/images/index/amoeba-blue.png" class="course-image" />
         </div>
@@ -82,7 +82,7 @@ export default {
           introduction:
             "这是一门市面上很难找到的统计学课程，特别之处在于：课程不止是将统计学的内容讲的清晰完整，而且在各个章节中，加入了编程的部分，更有助于程序员理解统计学。课程将深入浅出地讲解统计学的重要概念和知识点，让同学们彻底学会统计分析。是一门机器学习工程师、数据挖掘工程师、数据分析师等前沿职位必须掌握的统计学课程。",
           num: 1000
-        }
+        },
       ],
       courseName:"",
       courseIntro:"",
@@ -169,7 +169,6 @@ export default {
   margin: 20px auto;
 }
 .course {
-  float: left;
   margin-right: 40px;
   width: 30%;
   height: 300px;

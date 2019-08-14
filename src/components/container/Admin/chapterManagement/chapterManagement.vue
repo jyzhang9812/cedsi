@@ -102,8 +102,13 @@
             changeTablePages(value) {
                 this.currentList = this.videoData.slice(value, value + this.limit);
             },
+<<<<<<< HEAD
             gotoAddChapter(){
                 this.$router.push({ path: '/Admin/chapterManagement/addChapter' })
+=======
+            gotoUpload(){
+                this.$router.push({ path: '/Admin/chapterManagement/'+this.courseName+'/addChapter' })
+>>>>>>> d22d9b22a26ab5d06951da5565d28aa5dd17bba8
             },
         },
         mounted() {
@@ -111,6 +116,7 @@
         },
         created(){
             console.log(this.$route.params.courseName)
+            this.courseName=this.$route.params.courseName
         }
     }
 </script>
