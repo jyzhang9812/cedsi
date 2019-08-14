@@ -61,7 +61,7 @@ export const store = new Vuex.Store({
         .then(
           response => {
             console.log(response);
-            state.expirationDate=response.data.expirationDate;
+            state.expirationDate=response.data.exp;
             state.idToken = response.data.token;
             localStorage.setItem('idToken', state.idToken)
             state.roleId = response.data.role;
@@ -99,14 +99,14 @@ export const store = new Vuex.Store({
     },
     tryAutoLogin({ commit, state }) {
       const token = localStorage.getItem('idToken');
-       const expirationDate = new Date(localStorage.getItem('expirationDate'));
+       const expirationDate = Number(localStorage.getItem('expirationDate'));
       const now = new Date();
       let flag=1;
-      if (now.getTime>= expirationDate.getTime){
-        console.log("过期");
-      }else{
-        console.log("未过期");
+      if (now.getTime()<= expirationDate){
+        console.log("token未过期");     
                 flag=0;
+      }else{
+        console.log("token已过期");
       }
       if (!token||flag) {
         return;
