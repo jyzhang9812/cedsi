@@ -24,10 +24,10 @@
                         <tbody>
                             <tr class="row100" v-for="(item,index) in myclassmate" :key="index">
                                 <td class="column100">{{index+1}}</td>
-                                <td class="column100"><img class="avastimg" :src="item.avatar"></td>
-                                <td class="column100">{{item.student_name}}</td>
-                                <td class="column100">{{item.gender}}</td>
-                                <td class="column100">{{item.age}}</td>
+                                <td class="column100"><img class="avastimg" :src="item.AVATAR"></td>
+                                <td class="column100">{{item.STUDENT_NAME}}</td>
+                                <td class="column100">{{item.GENDER}}</td>
+                                <td class="column100">{{item.AGE}}</td>
                             </tr>
                         </tbody>
                     </table>

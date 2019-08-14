@@ -1,7 +1,7 @@
 <template>
     <div class="body">
         <div>
-            <button class="btn btn-clear" @click='gotoUpload'>新建章节</button>
+            <button class="btn btn-clear" @click='gotoAddChapter'>新建章节</button>
         </div>
         <div class="outside">
             <table class="table table-hover">
@@ -102,8 +102,8 @@
             changeTablePages(value) {
                 this.currentList = this.videoData.slice(value, value + this.limit);
             },
-            gotoUpload(){
-                this.$router.push({ path: '/Admin/chapterManagement/addChatper' })
+            gotoAddChapter(){
+                this.$router.push({ path: '/Admin/chapterManagement/addChapter' })
             },
         },
         mounted() {
