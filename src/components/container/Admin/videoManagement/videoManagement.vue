@@ -1,5 +1,8 @@
 <template>
     <div class="body">
+        <div class="course-nav">
+            <button v-for="(course,index) in courseList" :key="index" :class="course.isActive==true?'course-active-btn course-btn':'course-inactive-btn course-btn'" @click="changeCourse(index)">{{course.name,}}</button>
+        </div>
         <div>
             <button class="btn btn-clear" @click='gotoUpload'>上传视频</button>
         </div>
@@ -11,11 +14,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(line, seq) in currentList" :key="seq" class="content">
-                        <td :style="{'width': tableWidth[0] + 'px'}">{{seq + 1}}</td>
-                        <td v-for="(item, index) in line" :key="index" :style="{'width': tableWidth[index + 1] + 'px'}">
-                            {{item}}
-                        </td>
+                    <tr v-for="(video, seq) in currentList" :key="seq" class="content">
+                        <td>{{seq + 1}}</td>
+                        <td>{{video.chapterName}}</td>
+                        <td style="width:400px">{{video.introduction}}</td>
+                        <td>{{video.date}}</td>
+                        <td>{{video.uploadAdmin}}</td>
                         <td>
                             <button class="btn btn-clear">编辑</button>
                         </td>
@@ -41,40 +45,43 @@
         components: { Pagination },
         data() {
             return {
+                courseList:[
+                    {
+                        name:"第一节课",
+                        isActive:false
+                    },
+                    {
+                        name:"第二节课",
+                        isActive:false
+                    },
+                    {
+                        name:"第三节课",
+                        isActive:false
+                    }
+                ],
                 file: null,
                 limit: 10,
                 fileName: '',
                 videoData: [
-                    [
-                        "Scratch入门课 | 第1节课 | 大炮打僵尸--僵尸移动",
-                        "本节课主要是控制一个僵尸进行移动，其中会学到【移动10步】、【面向90度】、【移到x：0 y：0】、【重复执行10】、【等待1秒】和【下一个造型】等6个程序模块。通过这6个程序模块的组合使用，模拟单个僵尸入侵我们的小木屋的过程。",
-                        "2019-01-10 13:42:46",
-                        "超级管理员"
-                    ],
-                    [
-                        "Scratch入门课 | 第2节课 | 大炮打僵尸--成群僵尸",
-                        "上一节课，我们学到了单个小僵尸入侵我们的小木屋，本节课我们来实现成群的僵尸入侵我们的小木屋。期间我们会复习旧知识，并且学习【当我被克隆】、【克隆一个】、【如果…那么… ]、【重复执行】、【碰到】和【停止全部】等新知识。",
-                        "2019-01-10 13:43:11",
-                        "超级管理员"
-                    ],
-                    [
-                        "Scratch入门课 | 第3课 | 大炮打僵尸--发射炮弹",
-                        "前面的课程一直是僵尸来入侵我们的小木屋，我们只能眼睁睁看着，显得非常无力。本节课我们终于能够进行反击了，而且是大炮！我们利用前面所学知识，实现炮弹的不断发射。虽然没有增加新模块的学习，但是温故而知新，只有学会的知识才是自己的！",
-                        "2019-01-10 13:43:48",
-                        "超级管理员"
-                    ],
-                    [
-                        "Scratch入门课 | 第4节课 | 大炮打僵尸--控制炮台",
-                        "前面的课程一直是僵尸来入侵我们的小木屋，我们只能眼睁睁看着，显得非常无力。本节课我们终于能够进行反击了，而且是大炮！我们利用前面所学知识，实现炮弹的不断发射。虽然没有增加新模块的学习，但是温故而知新，只有学会的知识才是自己的！",
-                        "2019-01-10 13:43:48",
-                        "超级管理员"
-                    ],
-                    [
-                        "Scratch入门课 | 第5节课 | 大炮打僵尸--毕业设计",
-                        "经过前面的学习，我们已经成功掌握了基本的软件使用方法，和简单的游戏小制作。我们何不成热打铁，小试牛刀一番。最好的学习方式是记忆+练习+拓展。前面的学习，我们已经做到了记忆+练习，本节课就开始你的拓展之旅吧",
-                        "2019-01-10 13:45:13",
-                        "超级管理员"
-                    ]
+                    {
+                        chapterName:"大炮打僵尸--僵尸移动",
+                        introduction:"本节课主要是控制一个僵尸进行移动，其中会学到【移动10步】、【面向90度】、【移到x：0 y：0】、【重复执行10】、【等待1秒】和【下一个造型】等6个程序模块。通过这6个程序模块的组合使用，模拟单个僵尸入侵我们的小木屋的过程。",
+                        date:"2019-01-10 13:42:46",
+                        uploadAdmin:"超级管理员"
+                    },
+                    {
+                        chapterName:"大炮打僵尸--僵尸移动",
+                        introduction:"本节课主要是控制一个僵尸进行移动，其中会学到【移动10步】、【面向90度】、【移到x：0 y：0】、【重复执行10】、【等待1秒】和【下一个造型】等6个程序模块。通过这6个程序模块的组合使用，模拟单个僵尸入侵我们的小木屋的过程。",
+                        date:"2019-01-10 13:42:46",
+                        uploadAdmin:"超级管理员"
+                    },
+                    {
+                        chapterName:"大炮打僵尸--僵尸移动",
+                        introduction:"本节课主要是控制一个僵尸进行移动，其中会学到【移动10步】、【面向90度】、【移到x：0 y：0】、【重复执行10】、【等待1秒】和【下一个造型】等6个程序模块。通过这6个程序模块的组合使用，模拟单个僵尸入侵我们的小木屋的过程。",
+                        date:"2019-01-10 13:42:46",
+                        uploadAdmin:"超级管理员",
+                    }
+                    
                 ],
                 tableTitle: [
                     "序号",
@@ -84,7 +91,6 @@
                     "创建人",
                     "操作"
                 ],
-                tableWidth: [48, 290, 300, 210, 210, 180],
                 currentList: []
             }
         },
@@ -105,6 +111,14 @@
             gotoUpload(){
                 this.$router.replace({ path: '/Admin/uploadVideo' })
             },
+            changeCourse(index){
+                console.log(index);
+                for(var i=0;i<this.courseList.length;i++){
+                    this.courseList[i].isActive=false
+                }
+                this.courseList[index].isActive=true
+            },
+            
         },
         mounted() {
             this.changeTablePages(0);
@@ -118,6 +132,32 @@
         color: #606266;
         width: 98%;
         margin: 0 auto;
+    }
+    .course-nav{
+        width: 100%;
+        height: 50px;
+        text-align: center;
+    }
+    .course-btn{
+        font-size: 14px;
+        margin-right:10px;
+        width: 100px;
+        height: 40px;
+        line-height: 35px;
+        border-radius: 30px;
+        color: #fff
+    }
+    .course-btn:focus{
+        outline: none;
+    }
+    .course-inactive-btn{
+        background-color: #eee;
+        border: 1px solid #eee;
+        color: #666;
+    }
+    .course-active-btn{
+        background-color: #409eff;
+        border: 1px solid #409eff;
     }
 
     .title {
