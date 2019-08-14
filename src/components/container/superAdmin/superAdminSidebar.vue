@@ -72,7 +72,6 @@
 <style scoped>
 
   .row {
-    height: 100%;
     margin: 0 !important;
     width: 100%;
     display: flex;
@@ -95,7 +94,6 @@
     background-color: #3766A6;
     width: 220px;
     min-width: 170px;
-    height: 100%;
   }
 
   .item-name {
