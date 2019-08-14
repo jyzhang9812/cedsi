@@ -2,12 +2,12 @@
   <div class="upload-video">
     <div class="upload">
       <span class="upload-title">课程名称:</span>
-      <input class="upload-input" placeholder="请输入课程名称" />
+      <input class="upload-input" v-model='name' placeholder="请输入课程名称" />
     </div>
     <div class="upload upload-height">
       <span class="upload-title">课程描述:</span>
-      <textarea class="upload-textarea" rows="8" cols="70" placeholder="请输入课程描述" />
-    </div>
+      <textarea class="upload-textarea" rows="8" cols="70" v-model='description' placeholder="请输入课程描述" />
+      </div>
     <div class="upload">
       <span class="upload-title">请选择封面:</span>
       <div class="upload-cover-btn">
@@ -18,31 +18,43 @@
     <div class="upload upload-height">
       <span class="upload-title">预览:</span>
       <div class="upload-cover-img" >
-        <img id="headimage" :src="headsculpture" class="cover-image" alt="">
+        <img id="headimage" :src="headsculpture" class="cover-image" alt="" v-show="headsculpture!==''">
       </div>
     </div>
     <div class="upload-footer">
       <button class="btn upload-btn" @click="submit1($event)">确定</button>
-      <button class="btn upload-btn">取消</button>
+      <button class="btn upload-btn" @click="calcelUpload">取消</button>
     </div>
   </div>
 </template>
 
 <script>
-  import AWS from 'aws-sdk'
+  import AWS from 'aws-sdk';
+  import instance from '../../../../axios-auth.js';
+
   export default {
     name: "uploadVideo",
     data() {
       return {
         file: null,
         fileName: '',
-        headsculpture: this.$store.state.url + '/teacher/headsculpture.jpg',
+        headsculpture: '',
+        name: '',
+        description: ''
       };
     },
     methods: {
+      calcelUpload() {
+        this.headsculpture = '';
+        this.file = null;
+        this.fileName = '';
+        this.name = '';
+        this.description = '';
+        this.$router.push({ path: '/Admin/courseManagement/' });
+      },
       getFile(event) {
         this.file = event.target.files[0]
-        console.log(this.file.name)
+        console.log(this.file)
         this.fileName = this.file.name
         var reader = new FileReader();
         var that = this;
@@ -52,39 +64,53 @@
         }
       },
       submit1(event) {
-        AWS.config = new AWS.Config({
-          accessKeyId: 'AKIAS6QS63NLMGJEODPO',
-          secretAccessKey: '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',
-          region: 'cn-northwest-1'
-        })
-        var s3 = new AWS.S3();
-        let formData = new FormData()
-
-        formData.append('caption', this.caption)
-        formData.append('hour', this.hour)
-        formData.append('particulars', this.particulars)
-        formData.append('content', this.file)
-        console.log(window.localStorage.getItem('user'))
-        const reader = new FileReader();
-        var content = reader.readAsArrayBuffer(this.file);
-        var params = {
-          ACL: 'public-read',
-          Bucket: "cedsi",
-          Body: formData.get('content'),
-          Key: "" + this.fileName,
-          ContentType: 'video/mp4',
-          Metadata: {
-            'uploader': window.localStorage.getItem('user')
-          }
-        };
-        s3.putObject(params, function (err, data) {
-          if (err) {
-            console.log(err, err.stack);
-          } else {
-            console.log(data);
-          }
-        })
+        let postImgToS3 = function (config, file) {
+          AWS.config = new AWS.Config({
+            accessKeyId: config.AccessKeyId,
+            secretAccessKey: config.SecretAccessKey,
+            sessionToken: config.SessionToken,
+            region: 'cn-northwest-1'
+          })
+          var s3 = new AWS.S3();
+          let formData = new FormData();
+          formData.append('content', file);
+          const reader = new FileReader();
+          var content = reader.readAsArrayBuffer(file);
+          var params = {
+            ACL: 'public-read',
+            Bucket: "cedsi",
+            Body: formData.get('content'),
+            Key: "course/" + config.id + "." + file.type.split('/')[1],
+            ContentType: file.type,
+            Metadata: { 'uploader': window.localStorage.getItem('user') }
+          };
+          s3.putObject(params, function (err, data) {
+            if (err) {
+              console.log(err, err.stack);
+            } else {
+              console.log(data);
+            }
+          });
+        }
+        this.postFormData({
+          name: this.name,
+          introduction: this.description,
+          type: this.file.type.split('/')[1]
+        }, postImgToS3);
       },
+      postFormData(formData, postImgToS3) {
+        let file = this.file;
+        instance.post('/admin/course', formData, {
+          headers: { Authorization: localStorage.getItem('idToken') }
+        })
+          .then((res) => {
+            console.log(res);
+            postImgToS3(res.data, file);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   };
 </script>
