@@ -2,22 +2,11 @@
   <div class="upload-video">
     <div class="upload">
       <span class="upload-title">视频名称:</span>
-      <input class="upload-input" placeholder="请输入视频名称" />
+      <input class="upload-input" placeholder="请输入视频名称" v-model="videoName"/>
     </div>
     <div class="upload upload-height">
       <span class="upload-title">视频描述:</span>
-      <textarea class="upload-textarea" rows="8" cols="70" placeholder="请输入视频描述" />
-      </div>
-    <div class="upload">
-      <span class="upload-title">请选择课程:</span>
-        <select-input
-          class="upload-select"
-          id="course"
-          tips="请选择课程"
-          :option="inputData.course.option"
-          @option="changeOption"
-          :drop-down-list="inputData.course.list"
-        ></select-input>
+      <textarea class="upload-textarea" rows="8" cols="70" placeholder="请输入视频描述" v-model="videoIntro"/>
       </div>
     <div class="upload">
       <span class="upload-title">请选择章节:</span>
@@ -25,7 +14,7 @@
           class="upload-select"
           id="chapter"
           tips="请选章节"
-          :option="inputData.chapter.option"
+          :option="inputData.chapter.option.name"
           @option="changeOption"
           :drop-down-list="inputData.chapter.list"
         ></select-input>
@@ -35,15 +24,16 @@
       <input type="file" @change="getFile($event)">
     </div>
     <div class="upload-footer">
-      <button class="btn upload-btn" @click="submit1($event)">确定</button>
+      <button class="btn upload-btn" @click="submit($event)">确定</button>
       <button class="btn upload-btn">取消</button>
     </div>
   </div>
 </template>
 
 <script>
-  import SelectInput from "../../teacher/utils/selectInput";
+  import SelectInput from "../utils/selectInput";
   import AWS from 'aws-sdk'
+  import globalAxios from "axios";
 
   export default {
     name: "uploadVideo",
@@ -52,15 +42,13 @@
         file: null,
         fileName: '',
         inputData: {
-          course: {
-            option: "",
-            list: ["课程一", "课程二", "课程三"]
-          },
           chapter: {
             option: "",
-            list: ["开学第一课", "开学第二课", "开学第三课"]
+            list: []
           }
-        }
+        },
+        videoName:"",
+        videoIntro:""
       };
     },
     methods: {
@@ -76,7 +64,13 @@
         console.log(this.file.name)
         this.fileName = this.file.name
       },
-      submit1(event) {
+      submit(event) {
+        var token = window.localStorage.getItem("idToken");
+        console.log(this.videoName,this.videoIntro,this.inputData.chapter.option.id)
+        var uploadVideo={}
+        uploadVideo.name=this.videoName
+        uploadVideo.introduction=this.videoIntro
+        uploadVideo.chapterId=this.inputData.chapter.option.id
         AWS.config = new AWS.Config({
           accessKeyId: 'AKIAS6QS63NLMGJEODPO',
           secretAccessKey: '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',
@@ -109,7 +103,77 @@
             console.log(data);
           }
         })
+        globalAxios
+            .post(
+              "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
+                this.courseId +
+                "/video",{uploadVideo},
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: token
+                }
+              }
+            )
+            .then(
+              response => {
+                //console.log(response);
+                var chapterArr = [];
+                var chapterData = [];
+                chapterArr = response.data.data;
+                for (var i = 0; i < chapterArr.length; i++) {
+                  var chapter = {};
+                  chapter.name = chapterArr[i].CP_NAME;
+                  chapter.id = chapterArr[i].CP_ID
+                  chapterData.push(chapter);
+                }
+                this.inputData.chapter.list=chapterData;
+                //console.log(this.inputData.chapter.list);
+              },
+              error => {
+                // this.$router.push({path:'/404'})
+                console.log(error);
+              }
+            );
       },
+    },
+    created(){
+      var token = window.localStorage.getItem("idToken");
+      //console.log(this.$route.params.courseId)
+      this.courseId=this.$route.params.courseId
+      console.log(this.courseId)
+      globalAxios
+            .get(
+              "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
+                this.courseId +
+                "/video",
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: token
+                }
+              }
+            )
+            .then(
+              response => {
+                //console.log(response);
+                var chapterArr = [];
+                var chapterData = [];
+                chapterArr = response.data.data;
+                for (var i = 0; i < chapterArr.length; i++) {
+                  var chapter = {};
+                  chapter.name = chapterArr[i].CP_NAME;
+                  chapter.id = chapterArr[i].CP_ID
+                  chapterData.push(chapter);
+                }
+                this.inputData.chapter.list=chapterData;
+                //console.log(this.inputData.chapter.list);
+              },
+              error => {
+                // this.$router.push({path:'/404'})
+                console.log(error);
+              }
+            );
     },
     components: { SelectInput }
   };
@@ -164,12 +228,12 @@
 .upload-textarea:focus {
   outline: none;
 }
-.outside[data-v-5567b275]{
+.outside[data-v-d899aefc]{
   width: 300px !important;
   height: 40px !important;
   margin-left: 10px !important;
 }
-.inputBox[data-v-5567b275]{
+.inputBox[data-v-d899aefc]{
     height: 35px !important;
     font-size: 14px !important;
     width: 230px !important;

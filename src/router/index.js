@@ -564,7 +564,7 @@ export default new Router({
           }, component: videoManagement
         },
         {
-          path: '/Admin/uploadVideo', beforeEnter(to, from, next) {
+          path: '/Admin/videoManagement/:courseId/uploadVideo', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {
