@@ -21,7 +21,10 @@
     </div>
     <div class="upload">
       <span class="upload-title">请选择视频:</span>
-      <input type="file" @change="getFile($event)">
+      <div class="upload-cover-btn">
+        上传文件
+      <input type="file" class="" @change="getFile($event)" style="opacity: 0">
+      </div>
     </div>
     <div class="upload-footer">
       <button class="btn upload-btn" @click="submit($event)">确定</button>
@@ -48,7 +51,8 @@
           }
         },
         videoName:"",
-        videoIntro:""
+        videoIntro:"",
+        type:""
       };
     },
     methods: {
@@ -63,46 +67,49 @@
         this.file = event.target.files[0]
         console.log(this.file.name)
         this.fileName = this.file.name
+        this.type=this.file.type.split('/')[1]
       },
       submit(event) {
         var token = window.localStorage.getItem("idToken");
-        console.log(this.videoName,this.videoIntro,this.inputData.chapter.option.id)
+        //console.log(this.videoName,this.videoIntro,this.inputData.chapter.option.id)
         var uploadVideo={}
         uploadVideo.name=this.videoName
         uploadVideo.introduction=this.videoIntro
         uploadVideo.chapterId=this.inputData.chapter.option.id
-        AWS.config = new AWS.Config({
-          accessKeyId: 'AKIAS6QS63NLMGJEODPO',
-          secretAccessKey: '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',
-          region: 'cn-northwest-1'
-        })
-        var s3 = new AWS.S3();
-        let formData = new FormData()
+        uploadVideo.type=this.type
+        console.log(uploadVideo)
+        // AWS.config = new AWS.Config({
+        //   accessKeyId: 'AKIAS6QS63NLMGJEODPO',
+        //   secretAccessKey: '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',
+        //   region: 'cn-northwest-1'
+        // })
+        // var s3 = new AWS.S3();
+        // let formData = new FormData()
 
-        formData.append('caption', this.caption)
-        formData.append('hour', this.hour)
-        formData.append('particulars', this.particulars)
-        formData.append('content', this.file)
-        console.log(window.localStorage.getItem('user'))
-        const reader = new FileReader();
-        var content = reader.readAsArrayBuffer(this.file);
-        var params = {
-          ACL: 'public-read',
-          Bucket: "cedsi",
-          Body: formData.get('content'),
-          Key: "" + this.fileName,
-          ContentType: 'video/mp4',
-          Metadata: {
-            'uploader': window.localStorage.getItem('user')
-          }
-        };
-        s3.putObject(params, function (err, data) {
-          if (err) {
-            console.log(err, err.stack);
-          } else {
-            console.log(data);
-          }
-        })
+        // formData.append('caption', this.caption)
+        // formData.append('hour', this.hour)
+        // formData.append('particulars', this.particulars)
+        // formData.append('content', this.file)
+        // console.log(window.localStorage.getItem('user'))
+        // const reader = new FileReader();
+        // var content = reader.readAsArrayBuffer(this.file);
+        // var params = {
+        //   ACL: 'public-read',
+        //   Bucket: "cedsi",
+        //   Body: formData.get('content'),
+        //   Key: "" + this.fileName,
+        //   ContentType: 'video/mp4',
+        //   Metadata: {
+        //     'uploader': window.localStorage.getItem('user')
+        //   }
+        // };
+        // s3.putObject(params, function (err, data) {
+        //   if (err) {
+        //     console.log(err, err.stack);
+        //   } else {
+        //     console.log(data);
+        //   }
+        // })
         globalAxios
             .post(
               "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
@@ -117,17 +124,7 @@
             )
             .then(
               response => {
-                //console.log(response);
-                var chapterArr = [];
-                var chapterData = [];
-                chapterArr = response.data.data;
-                for (var i = 0; i < chapterArr.length; i++) {
-                  var chapter = {};
-                  chapter.name = chapterArr[i].CP_NAME;
-                  chapter.id = chapterArr[i].CP_ID
-                  chapterData.push(chapter);
-                }
-                this.inputData.chapter.list=chapterData;
+                console.log(response);
                 //console.log(this.inputData.chapter.list);
               },
               error => {
@@ -256,5 +253,22 @@
 .upload-btn:focus{
     outline:none;
     color: #fff
+}
+.upload-cover-btn{
+  margin-left: 10px;
+  width: 80px;
+  height: 35px;
+  display: inline-block;
+  background-color: #409eff;
+  color: #fff;
+  border-radius:5px; 
+  line-height: 35px;
+  text-align: center
+}
+input[type=file]{
+  width: 80px;
+  height: 35px;
+  position: relative;
+  top:-35px;
 }
 </style>
