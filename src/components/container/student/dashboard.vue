@@ -54,26 +54,23 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-2" :style="style">
-          <router-link to="/dashboard/showPage" tag="div" class="block">
-            <div class="shutiao"></div>
-            <div class="user-info">
-              <div class="message-img"></div>
-              <div class="header-img">
-                <img class="header" :src="user.AVATAR">
-                <img class="update-info" src="../../../../static/images/sidebar/update-info.png" data-toggle="modal"
-                  data-target="#update-info">
-              </div>
-              <div class="user">
-                <h5 class="user-name">{{user.NICK_NAME}}</h5>
-              </div>
-            </div>
-          </router-link>
           <ul class="nav nav-sidebar" id="uid">
             <li class="title" v-for="(title,index) in lists" :key="index" @mouseleave="hide(index)"
               @mouseenter="show(index)">
-              <router-link :to="title.path" tag="div" class="block">
-                <div v-show="index==i" class="shutiao"></div>
-                <img class="nav-img" :src="title.img">
+              <router-link :to="title.path" tag="div" class='block'>
+                <div v-show="index==i" :class="index==0?'shutiao_long':'shutiao'"></div>
+                <div class="user-info" v-show="index==0">
+                  <div class="message-img"></div>
+                  <div class="header-img">
+                    <img class="header" :src="user.AVATAR">
+                    <img class="update-info" src="../../../../static/images/sidebar/update-info.png" data-toggle="modal"
+                      data-target="#update-info">
+                  </div>
+                  <div class="user">
+                    <h5 class="user-name">{{user.NICK_NAME}}</h5>
+                  </div>
+                </div>
+                <img v-show="index!=0" class="nav-img" :src="title.img">
                 {{title.name}}
               </router-link>
             </li>
@@ -97,19 +94,29 @@
       return {
         lists: [
           {
-            name: "我的课程",
-            img: this.$store.state.url + "sidebar/un-course.png",
-            path: "/dashboard/"
+            name: "",
+            img: "",
+            path: "/dashboard/class"
           },
           {
-            name: "我的班级",
-            img: this.$store.state.url + "sidebar/un-class.png",
-            path: "/dashboard/class"
+            name: "我的首页",
+            img: this.$store.state.url + "sidebar/un-course.png",
+            path: "/dashboard/showPage"
+          },
+          {
+            name: "全部课程",
+            img: this.$store.state.url + "sidebar/un-course.png",
+            path: "/dashboard/"
           },
           {
             name: "我的作品",
             img: this.$store.state.url + "sidebar/un-mywork.png",
             path: "/dashboard/homework"
+          },
+          {
+            name: "社区",
+            img: this.$store.state.url + "sidebar/un-mywork.png",
+            path: "/dashboard/community"
           },
           {
             name: "消息中心",
@@ -126,11 +133,6 @@
             img: this.$store.state.url + "sidebar/un-info.png",
             path: "/dashboard/presentation"
           },
-          {
-            name: "退出登录",
-            img: this.$store.state.url + "sidebar/un-exit.png",
-            path: "/dashboard/hhh"
-          }
         ],
         i: -1,
         seen: false,
@@ -232,9 +234,14 @@
 
   .block {
     padding-left: 30px;
+    cursor: pointer;
   }
 
-  .router-link-exact-active {
+  .block_lg {
+    padding-left: 0px;
+  }
+
+  .router-link-exact-active{
     /* background-color: #7580b3; */
     color: #fff;
   }
@@ -244,6 +251,10 @@
     color: #fff;
   }
 
+  .nav>li:active {
+    background-color: #7580b3;
+    color: #fff;
+  }
   .active {
     background-color: #7580b3;
     color: #fff;
@@ -261,7 +272,14 @@
     float: left;
     left: -25px;
   }
-
+  .shutiao_long {
+    position: relative;
+    width: 5px;
+    height: 150px;
+    background-color: #fff;
+    float: left;
+    left: -25px;
+  }
   /* Hide for mobile, show later */
   .col-md-2 {
     width: 16.7%;
@@ -304,7 +322,6 @@
     height: 150px;
     padding-top: 20px;
     text-align: center;
-    margin: 0 auto;
   }
 
   .header-img {

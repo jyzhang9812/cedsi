@@ -214,7 +214,7 @@ export default {
   
   created: function() {
     var token = window.localStorage.getItem('idToken')
-    var arr =  'https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses/'+ this.$route.params.id +'/chapters'
+    var arr =  'https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses/111/chapters'
     console.log(arr)
     globalAxios.get(arr,
         {headers: {

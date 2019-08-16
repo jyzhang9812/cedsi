@@ -6,18 +6,18 @@
             v-for="(item,index) in items" class="tag"
             :class="{active : index===curId}">{{item.item}}</button>
         </div>
-        <div class="main"> <!--  v-show="index===curId" v-for="(content, index) in contents"-->
+        <div class="main">
             <div class="cardbox" v-for="(item,index) in currentList">
                 <div class="card_header">
                     <img style="cursor: pointer" src="" alt="">
                 </div>
                 <div class="card_content">
-                    {{item.message_content}}
+                    {{item.MESSAGE_CONTENT}}{{item.MESSAGE_TYPE}}
                 </div>
                 <div class="card_footer">
                     <span>
                         <b>{{item.teacher_name}}</b><br>
-                        {{item.dispatch_date}}
+                        {{item.DISPATCH_DATE}}
                     </span>
                     <img class="avast" :src="item.avatar">
                 </div>
@@ -286,7 +286,6 @@
                 
                 var token = window.localStorage.getItem('idToken')
                 var arr =  'https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/message/'+(this.curId+1)
-                console.log(arr)
                 globalAxios.get(arr,
                     {headers: {
                         'Content-Type':'application/json',
@@ -301,13 +300,12 @@
                         }
                         this.contents = arr;
                         this.tableData = this.contents;
-                        // return response.json();
+                        this.getNew(0);
                     },
                     error => {
                         console.log(error);
                     }
                 );
-                this.getNew(0);
             },      
 
         },
@@ -316,7 +314,6 @@
             // this.tableData = this.contents[0];
             var token = window.localStorage.getItem('idToken')
             var arr =  'https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/message/'+(this.curId+1)
-            console.log(arr)
             globalAxios.get(arr,
                 {headers: {
                     'Content-Type':'application/json',
