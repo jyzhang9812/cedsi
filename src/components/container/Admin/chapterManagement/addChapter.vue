@@ -1,16 +1,12 @@
 <template>
   <div class="upload-video">
     <div class="upload">
-      <span class="upload-title">课程名称:</span>
-      <input class="upload-input" placeholder="请输入视频名称" />
+      <span class="upload-title">章节名称:</span>
+      <input class="upload-input" placeholder="请输入章节名称" />
     </div>
     <div class="upload upload-height">
-      <span class="upload-title">课程描述:</span>
-      <textarea class="upload-textarea" rows="8" cols="70" placeholder="请输入视频描述" />
-    </div>
-    <div class="upload">
-      <span class="upload-title">请选择封面:</span>
-      <button class="btn upload-btn">选择文件</button>
+      <span class="upload-title">章节描述:</span>
+      <textarea class="upload-textarea" rows="8" cols="70" placeholder="请输入章节描述" />
     </div>
     <div class="upload-footer">
       <button class="btn upload-btn">确定</button>

@@ -107,7 +107,7 @@
     color: #FFF;
     background-color: #3766A6;
     width: 220px;
-    min-width: 170px;
+    min-width: 220px;
   }
 
   .item-name {

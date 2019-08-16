@@ -39,9 +39,9 @@
       <button class="btn btn-clear" @click="addCourse">新增课程</button>
     </div>
     <div class="second-floor row">
-      <div class="course col-md-4" v-for="(course,index) in courseList" :key="index" @click="gotoChapter(index)">
-        <div class="course-card">
-          <img src="../../../../../static/images/index/amoeba-blue.png" class="course-image" />
+      <div class="col-md-4" v-for="(course,index) in courseList" :key="course.name">
+        <div class="course-card" @click="gotoChapter(index)">
+          <img :src="course.img" class="course-image" />
         </div>
         <div class="course-title">
           <h3 class="course-name">{{course.name}}</h3>
@@ -71,10 +71,10 @@
         this.courseNum = this.courseList[index].num;
       },
       addCourse() {
-        this.$router.replace({ path: '/Admin/courseManagement/addCourse' })
+        this.$router.push({ path: '/Admin/courseManagement/addCourse' })
       },
       gotoChapter(index) {
-        this.$router.replace({ path: '/Admin/chapterManagement/' + this.courseList[index].name })
+        this.$router.push({ path: '/Admin/chapterManagement/' + this.courseList[index].name })
       }
     },
     mounted() {
@@ -85,6 +85,7 @@
             this.courseList.push({
               name: item.NAME,
               introduction: item.INTRO,
+              img:item.COVER,
               num: 100
             });
           });
@@ -98,7 +99,6 @@
 
 <style>
   .course-management {
-    min-width: 1400px;
     width: 98%;
     margin: 0 auto;
   }
@@ -158,18 +158,16 @@
   .btn-clear {
     width: 88px;
   }
-
+  .row{
+    margin: 0;
+  }
   .second-floor {
     width: 95%;
-    margin: 20px auto;
+    margin: 0px auto;
   }
-
   .course {
-    margin-right: 40px;
-    width: 30%;
     height: 300px;
   }
-
   .course-card {
     height: 250px;
     background-color: rgb(80, 118, 255);
@@ -193,6 +191,7 @@
   .course-image {
     width: 100%;
     height: 100%;
+    border-radius:8px; 
   }
 
   .course-title {
@@ -203,7 +202,7 @@
 
   .course-name {
     display: inline-block;
-    width: 85%;
+    width: 80%;
     line-height: 20px;
   }
 
