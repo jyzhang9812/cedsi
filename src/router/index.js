@@ -18,6 +18,11 @@ const course = resolve => {
     resolve(require('../components/container/student/right/course/course.vue'));
   });
 };
+const community = resolve => {
+  require.ensure(['../components/container/student/right/community/community.vue'], () => {
+    resolve(require('../components/container/student/right/community/community.vue'));
+  });
+};
 const homework = resolve => {
   require.ensure(['../components/container/student/right/homework/homework.vue'], () => {
     resolve(require('../components/container/student/right/homework/homework.vue'));
@@ -257,6 +262,15 @@ export default new Router({
             }
           },
           component: showPage
+        },
+        {
+          path: '/dashboard/community', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: community
         },
         {
           path: '/dashboard/class',

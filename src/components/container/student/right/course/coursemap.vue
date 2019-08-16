@@ -4,6 +4,8 @@
             <div class="introductionContent">
                 <img :src="mapUrl" class="course-map-img">
                 <div class="introductionList">
+                    <div class="">
+                    </div>
                 </div>
             </div>
         </div>

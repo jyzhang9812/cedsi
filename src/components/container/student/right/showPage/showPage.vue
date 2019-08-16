@@ -1,83 +1,51 @@
 <template>
     <div class="container">
-        <div class="threeImg" style="background: url('https://www.tynker.com/image/dashboard/student/launchpad/bg-space.jpg')">
+        <!-- 推荐课程 -->
+        <div class="threeImg"
+            style="background: url('https://www.tynker.com/image/dashboard/student/launchpad/bg-space.jpg')">
             <div class="Containt">
                 <div class="recommend_title">
-                    <h3>推荐课程</h3>
-                    <button class="button">查看更多</button>
+                    <h3 style="color: #fff">Projects & Puzzles</h3>
+                    <p>
+                        <button class="button">TRY EVERYTHING</button>
+                        <i class="fa fa-trophy fa-2x" style="color: #ffbf35" aria-hidden="true"></i>
+                        <i class="fa fa-cog fa-2x" style="color: #fff" aria-hidden="true"></i>
+                    </p>
                 </div>
-                <div class="iconleft" v-on:click="zuohua">
+                <div class="iconleft" v-on:click="zuohua(0)" v-show='calleft[0]!=0'>
                     <img class="el-icon-arrow" :src=leftImg></img>
                 </div>
-                <ul :style="{'left':calleft + 'px'}">
+                <ul :style="{'left':calleft[0] + 'px'}">
                     <li class="course_card" v-for="(item,index) in superurl" :key="index" @mouseover="show(index)"
                         @mouseleave="hidden(index)">
                         <div class="inside">
                             <img class="img" :src="item.url">
                             <div class="details" v-show="index==i">
                                 <div class="detail_item">
-                                    <h4>课程名{{item.course_name}}</h4>
-                                    <button class="btn">查看资料</button>
+                                    <h4><strong>课程名{{item.course_name}}</strong></h4>
+                                    <button class="btn">Level 1</button>
                                 </div>
+                                <p style="margin-left: 10px;">课程介绍啥的asdfghjklreitohitbbdwdwicw</p>
                             </div>
                         </div>
                     </li>
                 </ul>
-                <div class="iconright" v-on:click="youhua">
+                <div class="iconright" v-on:click="youhua(0)" v-show='!calleft[0]>0'>
                     <img class="el-icon-arrow" :src=rightImg></img>
                 </div>
             </div>
         </div>
+
         <div class="threeImg">
-            <div class="Containt">
-                <div class="recommend_title">
-                    <h3>全部课程</h3>
-                </div>
-                <div class="iconleft" v-on:click="zuohua">
+            <div class='Containt' v-for="(item,index) in arrComponent" :key="index">
+                <div class="iconleft" v-on:click="zuohua(index+1)" v-show='calleft[index+1]!=0'>
                     <img class="el-icon-arrow" :src=leftImg></img>
                 </div>
-                <ul :style="{'left':calleft + 'px'}">
-                    <li class="course_card" v-for="(item,index) in superurl" :key="index" @mouseover="show(index)"
-                        @mouseleave="hidden(index)">
-                        <div class="inside">
-                            <img class="img" :src="item.url">
-                            <div class="details" v-show="index==i">
-                                <div class="detail_item">
-                                    <h4>课程名{{item.course_name}}</h4>
-                                    <button class="btn">查看资料</button>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <div class="iconright" v-on:click="youhua">
-                    <img class="el-icon-arrow" :src=rightImg></img>
-                </div>
-            </div>
-        </div>
-        <div class="threeImg">
-            <div class="Containt">
                 <div class="recommend_title">
-                    <h3>社区</h3>
+                    <h3>{{item.title}}</h3>
                 </div>
-                <div class="iconleft" v-on:click="zuohua">
-                    <img class="el-icon-arrow" :src=leftImg></img>
-                </div>
-                <ul :style="{'left':calleft + 'px'}">
-                    <li class="course_card" v-for="(item,index) in superurl" :key="index" @mouseover="show(index)"
-                        @mouseleave="hidden(index)">
-                        <div class="inside">
-                            <img class="img" :src="item.url">
-                            <div class="details" v-show="index==i">
-                                <div class="detail_item">
-                                    <h4>课程名{{item.course_name}}</h4>
-                                    <button class="btn">查看资料</button>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <div class="iconright" v-on:click="youhua">
+                <component v-bind:is="item.componentName" :calleft="calleft[index+1]"></component>
+                <div class="iconright" v-on:click="youhua(index+1)" v-show='!calleft[index+1]>0'>
                     <img class="el-icon-arrow" :src=rightImg></img>
                 </div>
             </div>
@@ -88,16 +56,36 @@
 
 <script>
     import pagination from '../pagination.vue'
+    import userCard from './userCard.vue'
+    import communityCard from './communityCard.vue'
+    import allCourseCard from './allCourseCard.vue'
+
 
     export default {
         name: 'presentation',
         components: {
             pagination,
+            userCard,
+            communityCard,
+            allCourseCard
         },
         data() {
             return {
                 leftImg: '../../../' + this.$store.state.url + 'dashboard/left.png',
                 rightImg: '../../../' + this.$store.state.url + 'dashboard/right.png',
+                arrComponent: [
+                    {
+                        componentName: 'allCourseCard',
+                        title: '全部课程'
+                    },
+                    {
+                        componentName: 'communityCard',
+                        title: '社区'
+                    },
+                    {
+                        componentName: 'userCard',
+                        title: '优秀作者'
+                    },],
                 superurl: [
                     {
                         url: 'https://www.tynker.com/image/dashboard/student/learn/tutorials/nasa-design-a-mission-patch.png?width=600&height=400&mode=cover&format=jpg&quality=75&cache=1m&v=1',
@@ -124,29 +112,9 @@
                         img: '',
                     },
                 ],
-                calleft: 0,
+                calleft: [0,0,0,0],
                 i: -1,
                 curId: 0,
-                items: [
-                    { item: '视频' },
-                    { item: 'PPT' },
-                    { item: '文档' },
-                ],
-                contents: [
-                    [
-                        { name: "video1", src: "../../../../../../static/images/presentation/mp4.png" },
-                        { name: "video2", src: "../../../../../../static/images/presentation/mp4.png" },
-                    ],
-                    [
-                        { name: "ppt1", src: "../../../../../../static/images/presentation/ppt.png" },
-                        { name: "ppt2", src: "../../../../../../static/images/presentation/ppt.png" },
-                    ],
-                    [
-                        { name: "word1", src: "../../../../../../static/images/presentation/word.png" },
-                        { name: "word2", src: "../../../../../../static/images/presentation/word.png" },
-                        { name: "word2", src: "../../../../../../static/images/presentation/word.png" },
-                    ],
-                ],
                 limit: 12,
                 currentList: [],
                 tableData: [],
@@ -165,17 +133,17 @@
                 this.isShow = false;
             },
             //点击按钮左移
-            zuohua() {
-                this.calleft -= 340;
-                if (this.calleft < -1200) {
-                    this.calleft = 0
+            zuohua(index) {
+                this.calleft[index] -= 340;
+                if (this.calleft[index] < -1200) {
+                    this.calleft[index] = 0
                 }
             },
             //点击按钮右移
-            youhua() {
-                this.calleft += 340;
-                if (this.calleft > 0) {
-                    this.calleft = -1020
+            youhua(index) {   
+                this.calleft[index] += 340;
+                if (this.calleft[index] > 0) {
+                    this.calleft[index] = -1020
                 }
             },
         },
@@ -184,7 +152,6 @@
         // }
     }
 </script>
-
 
 <style scoped>
     .container {
@@ -199,7 +166,7 @@
     .threeImg {
         min-width: 1000px;
         height: 100%;
-        color:black;
+        color: black;
     }
 
     .threeImg .Containt ul {
@@ -212,8 +179,7 @@
     }
 
     .threeImg .Containt ul li {
-        width: 300px;
-        margin-right: 40px;
+        margin-right: 20px;
         margin-top: 10px;
         float: left;
     }
@@ -221,12 +187,12 @@
     .Containt {
         position: relative;
         min-height: 300px;
-        height:100%;
+        height: 100%;
         overflow: hidden;
         margin: 0 auto;
     }
 
-    .recommend_title{
+    .recommend_title {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -258,7 +224,34 @@
         justify-content: center;
     }
 
-    /* 修改 */
+    .recommend_title i {
+        width: 50px;
+        height: 55px;
+        margin: 0 10px 2px 0;
+        padding-top: 10px;
+        background: #333;
+        border-bottom-left-radius: 40px;
+        border-bottom-right-radius: 40px;
+        text-align: center;
+    }
+
+    .recommend_title i:hover {
+        -webkit-transform: scale(1.05);
+        -moz-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        -o-transform: scale(1.05);
+        transform: scale(1.05);
+    }
+
+    p {
+        margin-right: 10px;
+        color: #fff;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    /* 推荐课程 */
     ul {
         min-height: 250px;
         list-style-type: none;
@@ -324,13 +317,14 @@
 
     .details {
         width: 300px;
-        height: 50px;
-        background-color: rgba(0, 0, 0, 0.35);
+        height: 100px;
+        /* background-color: rgba(0, 0, 0, 0.35); */
+        background: linear-gradient(to bottom, rgba(69, 72, 77, 0) 0%, #232427 50%, #000000 100%);
         z-index: 999;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        margin-top: -50px;
+        margin-top: -100px;
         position: relative;
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
@@ -339,6 +333,7 @@
     }
 
     .detail_item {
+        margin: 30px 10px 0 10px;
         width: 100%;
         display: flex;
         flex-direction: row;
@@ -369,16 +364,17 @@
         font-weight: bold;
         border-radius: 8px;
     }
-    .button{
+
+    .button {
         display: inline-block;
         vertical-align: middle;
-        margin: 0 30px;
+        margin: 2px 30px 0 0;
         font-family: inherit;
-        padding: .5em 1em;
+        padding: .8em 1em;
         -webkit-appearance: none;
         border: 1px solid transparent;
         border-radius: 5px;
-        transition: background-color .25s ease-out,color .25s ease-out;
+        transition: background-color .25s ease-out, color .25s ease-out;
         font-size: 1.5rem;
         line-height: 1;
         text-align: center;
@@ -387,10 +383,8 @@
         color: #fff;
     }
 
-    h4 {
+    h3 {
+        margin-top: 15px;
         margin-left: 20px;
     }
-
-    /* 下半部分 */
-    
 </style>

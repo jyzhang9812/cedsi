@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import courseCard from'./courseCard.vue'
+    import courseCard from'./all.vue'
     import searchBar from'../searchBar.vue'
     export default {
         name: 'dashboard',

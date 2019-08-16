@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      limit: 15,
+      limit: 6,
       currentList: [],
       tableData:[],
       btn: "btn",
@@ -148,13 +148,13 @@ export default {
   -ms-transform: scale(1.05);
   -o-transform: scale(1.05);
   transform: scale(1.05);
-  box-shadow: 0px -10px 10px 2px #ccc, /*上边阴影*/ -2px 0px 10px 2px #ccc,
-    /*左边阴影*/ 2px 0px 10px 2px #ccc,
-    /*右边阴影*/ 0px 10px 10px 2px #ccc; /*下边阴影*/
+  box-shadow: 0px -10px 10px 2px #457e72 /*上边阴影*/ -2px 0px 10px 2px #457e72,
+    /*左边阴影*/ 2px 0px 10px 2px #457e72,
+    /*右边阴影*/ 0px 10px 10px 2px #457e72; /*下边阴影*/
 }
 .btn {
-  color: #51c79f;
-  background: #fff;
+  color: #fff;
+  background: #457e72;
   border: 1px solid #51c79f;
   height: 35px;
   width: 90px;
@@ -167,8 +167,8 @@ export default {
 .btnhover {
   height: 35px;
   width: 90px;
-  background: #51c79f;
-  color: #fff;
+  color: #51c79f;
+  background: #fff;
   font-size: 15px;
   text-align: center;
   margin-right: 10px;
