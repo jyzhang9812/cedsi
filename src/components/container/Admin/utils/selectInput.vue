@@ -13,7 +13,7 @@
     </div>
     <ul class="dropdown-menu" :aria-labelledby="id">
       <li v-for="item in dropDownList">
-        <a href="#" @click="reportOption(item)">{{item}}</a>
+        <a href="#" @click="reportOption(item)">{{item.name}}</a>
       </li>
     </ul>
   </div>

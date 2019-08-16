@@ -13,6 +13,7 @@ export const store = new Vuex.Store({
   state: {
     url:'../../../../static/images/',
     idToken: null,
+    expirationDate: null,
     userId: null,
     user: null,
     status: null,
@@ -42,6 +43,7 @@ export const store = new Vuex.Store({
     clearAuthData(state) {
       state.idToken = null;
       state.userId = null;
+      state.expirationDate=null;
       state.roleId = 0;
     },
     changeAdminList(state, adminList) {
@@ -59,12 +61,14 @@ export const store = new Vuex.Store({
         .then(
           response => {
             console.log(response);
+            state.expirationDate=response.data.exp;
             state.idToken = response.data.token;
             localStorage.setItem('idToken', state.idToken)
             state.roleId = response.data.role;
             state.user = authData.username
             localStorage.setItem('user',state.user)
             localStorage.setItem('roleId',state.roleId)
+            localStorage.setItem('expirationDate',state.expirationDate)
             state.status = response.data.status
             if (state.status == 'fail') {
               console.log('error')
@@ -95,14 +99,19 @@ export const store = new Vuex.Store({
     },
     tryAutoLogin({ commit, state }) {
       const token = localStorage.getItem('idToken');
-      if (!token) {
+       const expirationDate = Number(localStorage.getItem('expirationDate'));
+      const now = new Date();
+      let flag=1;
+      if (now.getTime()<= expirationDate){
+        console.log("token未过期");     
+                flag=0;
+      }else{
+        console.log("token已过期");
+      }
+      if (!token||flag) {
         return;
       }
-      // const expirationDate = localStorage.getItem('expirationDate');
-      // const now = new Date();
-      // if (now >= expirationDate) {
-      //   return;
-      // }
+
       const userId = localStorage.getItem('userId');
       commit('authUser', {
         token: token,
@@ -114,6 +123,9 @@ export const store = new Vuex.Store({
       localStorage.removeItem('idToken');
       localStorage.removeItem('userId');
       localStorage.removeItem('roleId');
+      localStorage.removeItem('expirationDate');
+      localStorage.removeItem('user');
+      
       router.replace('/')
       // localStorage.removeItem('userId');
     },
