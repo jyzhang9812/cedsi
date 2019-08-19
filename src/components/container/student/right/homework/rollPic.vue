@@ -52,9 +52,6 @@
             return {
                 curId: 0,
                 items: [{ item: '作业' }, { item: '项目' },],
-                limit: 6,
-                currentList: [],
-                tableData: [],
                 btn: 'btn',
                 btnh: 'btnhover',
                 clock: '../' + this.$store.state.url + 'dashboard/clock.png',
@@ -62,13 +59,6 @@
                 products: '../' + this.$store.state.url + 'dashboard/xiangmu.png',
                 star_active: '../' + this.$store.state.url + 'dashboard/star_active.png',
                 star: '../' + this.$store.state.url + 'dashboard/star.png',
-                content: [{
-                    name: '',
-                    rank: '',
-                    time: '',
-                    img_url: '',
-                    teacher_remark: '',
-                }],
                 i: -1,
             }
         },
@@ -81,92 +71,33 @@
                 this.i = -1;
                 this.isShow = false;
             },
-            getNew(value) {
-                this.currentList = this.tableData.slice(value, value + this.limit);
-            },
             tab(index) {
                 this.curId = index;
-                var token = window.localStorage.getItem('idToken')
-                var arr = 'https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/works?type=' + this.curId
-                globalAxios.get(arr,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': token
-                        }
-                    }
-                ).then(
-                    response => {
-                        var arr = [];
-                        if (this.curId == 0) {
-                            for (var i = 0; i < response.data.homework.length; i++) {
-                                arr.push(response.data.homework[i])
-                            }
-                            for (var i = 0; i < arr.length; i++) {
-                                this.content[i].name = arr[i].HW_NAME;
-                                this.content[i].img_url = arr[i].HW_COVER;
-                                this.content[i].teacher_remark = arr[i].TEACHER_REMARK;
-                                this.content[i].rank = arr[i].HW_RANK;
-                                this.content[i].time = arr[i].SUBMIT_TIME;
-                            }
-                        }
-                        else {
-                            for (var i = 0; i < response.data.product.length; i++) {
-                                arr.push(response.data.product[i])
-                            }
-                            for (var i = 0; i < arr.length; i++) {
-                                this.content[i].name = arr[i].PRODUCT_NAME;
-                                this.content[i].img_url = arr[i].COVER_URL;
-                                this.content[i].teacher_remark = arr[i].TEACHER_REMARK;
-                                this.content[i].rank = arr[i].PRODUCT_RANK;
-                                this.content[i].time = arr[i].CREATE_TIME;
-                            }
-                        }
-                        console.log(this.content)
-                        this.tableData = this.content;
-                        this.getNew(0);
-                    },
-                    error => {
-                        console.log(error);
-                    }
-                );
+                this.$store.dispatch('getWork', this.curId)
+            },
+            //换页
+            getNew(value) {
+                var currentPage = value / this.limit;
+                this.currentPage = currentPage;
+                this.$store.commit("changeWorkCurrentList", this.currentPage * this.limit)
             },
         },
         created: function () {
             //let that = this.$router;
             this.style = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;'
             this.style1 = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;margin-top:-' + (document.documentElement.clientWidth * 0.17) + 'px;'
-
-            var token = window.localStorage.getItem('idToken')
-            globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/works?type=' + this.curId,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': token
-                    }
-                }
-            ).then(response => {
-                var arr = [];
-                console.log(response);
-                for (var i = 0; i < response.data.homework.length; i++) {
-                    arr.push(response.data.homework[i])
-                }
-                console.log(arr)
-                for (var i = 0; i < arr.length; i++) {
-                    this.content[i].name = arr[i].HW_NAME;
-                    this.content[i].img_url = arr[i].HW_COVER;
-                    this.content[i].teacher_remark = arr[i].TEACHER_REMARK;
-                    this.content[i].rank = arr[i].HW_RANK;
-                    this.content[i].time = arr[i].SUBMIT_TIME;
-                }
-
-                this.tableData = this.content;
-                this.getNew(0);
+            this.$store.dispatch('getWork', this.curId)
+        },
+        computed: {
+            currentList() {
+                return this.$store.state.workCurrentList
             },
-                error => {
-                    console.log(error);
-                }
-            );
+            tableData() {
+                return this.$store.state.workList
+            },
+            limit() {
+                return this.$store.state.limit
+            }
         },
     }
 </script>

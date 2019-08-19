@@ -3,9 +3,9 @@
         <div class="container-table100">
             <div class="wrap-table100">
                 <div style="margin-bottom: 10px;">
-                    <button class="nameOfClass">{{name_of_class}}</button>
-                    <img class="avastimg" alt="" :src="myteacher.avatar">
-                    代课老师：{{myteacher.teacher_name}}
+                    <button class="nameOfClass">{{myClass.name}}</button>
+                    <img class="avastimg" :src="myClass.teacher.avatar">
+                    代课老师：{{myClass.teacher.teacher_name}}
                 </div>
                 <div class="table100 ver1 m-b-110">
                     <table data-vertable="ver1">
@@ -19,7 +19,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="row100" v-for="(item,index) in myclassmate" :key="index">
+                            <tr class="row100" v-for="(item,index) in myClass.classmates" :key="index">
                                 <td class="column100">{{index+1}}</td>
                                 <td class="column100"><img class="avastimg" :src="item.AVATAR"></td>
                                 <td class="column100">{{item.STUDENT_NAME}}</td>
@@ -40,35 +40,17 @@
         name: 'class',
         data() {
             return {
-                name_of_class: '',
-                myclassmate: [],
-                myteacher: {},
             }
         },
         created: function () {
             var token = window.localStorage.getItem('idToken')
-            globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/class',
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': token
-                    }
-                }
-            ).then(response => {
-                console.log(response);
-                var arr = [];
-                this.name_of_class = response.data.className;
-                this.myteacher = response.data.teacher;
-                for (var i = 0; i < response.data.classmates.length; i++) {
-                    arr.push(response.data.classmates[i])
-                }
-                this.myclassmate = arr;
-            },
-                error => {
-                    console.log(error);
-                }
-            );
+            this.$store.dispatch('getClass')
         },
+        computed: {
+      myClass:function(state) {
+        return this.$store.state.myClass
+      },
+    },
     }
 </script>
 
