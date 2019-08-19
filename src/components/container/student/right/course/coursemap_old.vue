@@ -1,6 +1,6 @@
 <template>
   <div id="coursemap">
-    <!-- <div class="mustRead modal fade" id="myvideo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="mustRead modal fade" id="myvideo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click='deletevideo()'>
@@ -17,10 +17,9 @@
             >
             </Media>
           </div>
-        </div>/.modal-content -->
-        <!--
-      </div> /.modal 
-    </div>-->
+        </div>
+      </div> 
+    </div>
     <div
       class="mustRead modal fade"
       id="myModal"

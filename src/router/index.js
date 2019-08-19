@@ -605,7 +605,7 @@ export default new Router({
           }, component: addCourse
         },
         {
-          path: '/Admin/chapterManagement/:courseName', beforeEnter(to, from, next) {
+          path: '/Admin/chapterManagement/:courseId', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {
@@ -614,7 +614,7 @@ export default new Router({
           }, component: chapterManagement
         },
         {
-          path: '/Admin/chapterManagement/:courseName/addChapter', beforeEnter(to, from, next) {
+          path: '/Admin/chapterManagement/:courseId/addChapter', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {

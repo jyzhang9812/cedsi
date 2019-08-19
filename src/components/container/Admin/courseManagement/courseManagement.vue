@@ -74,19 +74,21 @@
         this.$router.push({ path: '/Admin/courseManagement/addCourse' })
       },
       gotoChapter(index) {
-        this.$router.push({ path: '/Admin/chapterManagement/' + this.courseList[index].name })
+        this.$router.push({ path: '/Admin/chapterManagement/' + this.courseList[index].id })
       }
     },
     mounted() {
       let config = { headers: { Authorization: localStorage.getItem('idToken') } };
       instance.get('/admin/course', config)
         .then((res) => {
+          console.log(res)
           res.data.forEach(item => {
             this.courseList.push({
               name: item.NAME,
               introduction: item.INTRO,
               img:item.COVER,
-              num: 100
+              num: 100,
+              id:item.ID
             });
           });
         })
