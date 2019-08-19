@@ -148,7 +148,6 @@
           </div>
           <div class="modal-body">
             <input type="file" @change="importExcel($event.target)" />
-            <button>传tmd</button>
           </div>
 
           <div class="modal-footer">
@@ -404,28 +403,22 @@
           if (tabJson && tabJson.length > 0) {
             this.xlsxJson = tabJson
             console.log(this.xlsxJson)
-            globalAxios.post('',
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': token
-                },
-                data: this.xlsxJson
-              }
+            var token = window.localStorage.getItem('idToken')
+            globalAxios({
+              url: 'https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/students',
+              method:'post',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+              },
+              data: this.xlsxJson
+            }
             ).then(response => {
               console.log(response);
-              // return response.json();
             },
               error => {
                 console.log(error);
               })
-            // xlsxJson就是解析出来的json数据,数据格式如下
-            // [
-            //   {
-            //     sheetName: sheet1
-            //     sheet: sheetData
-            //   }
-            // ]
           }
         })
       },
@@ -619,6 +612,7 @@
     background-repeat: no-repeat;
     background-position: -1px -2px;
   }
+
   .btn {
     background: #409eff;
     color: #fff;

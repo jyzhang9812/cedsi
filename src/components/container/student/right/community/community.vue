@@ -187,6 +187,7 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+        color: #868686;
     }
 
     /* 社区 */

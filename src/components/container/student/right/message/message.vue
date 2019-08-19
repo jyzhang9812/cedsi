@@ -2,9 +2,8 @@
     <div class="body">
         <searchBar></searchBar>
         <div class="menu">
-            <button  @click="tab(index)"
-            v-for="(item,index) in items" class="tag"
-            :class="{active : index===curId}">{{item.item}}</button>
+            <button @click="tab(index)" v-for="(item,index) in items" class="tag"
+                :class="{active : index===curId}">{{item.item}}</button>
         </div>
         <div class="main">
             <div class="cardbox" v-for="(item,index) in currentList">
@@ -58,7 +57,8 @@
         font-weight: 550;
     }
 
-    .tag:hover, .active {
+    .tag:hover,
+    .active {
         color: #00bcd4;
     }
 
@@ -248,98 +248,55 @@
 </style>
 
 <script>
-    import searchBar from'../searchBar.vue'
-    import pagination from'../pagination.vue'
+    import searchBar from '../searchBar.vue'
+    import pagination from '../pagination.vue'
     import globalAxios from 'axios'
-    
+
     export default {
         name: 'message',
-        components:{
+        components: {
             searchBar,
             pagination,
         },
         data() {
             return {
                 curId: 0,
+                //当前页码
+                currentPage: 0,
                 items: [
-                    {item: '系统消息'},
-                    {item: '通知公告'},
-                    {item: '活动安排'},
-                    {item: '辅导答疑'},
-                    {item: '我的作业'},
+                    { item: '系统消息' },
+                    { item: '通知公告' },
+                    { item: '活动安排' },
+                    { item: '辅导答疑' },
+                    { item: '我的作业' },
                 ],
-                contents:[],
-                limit: 6,
-                currentList: [],
-                tableData:[],
             }
         },
         methods: {
-            // delcard() {
-            //     this.tableData.splice(0, 1);
-            // },
-            getNew(value) {
-                this.currentList = this.tableData.slice(value, value + this.limit);
-            },
-            tab (index) {
+            tab(index) {
                 this.curId = index;
-                
-                var token = window.localStorage.getItem('idToken')
-                var arr =  'https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/message/'+(this.curId+1)
-                globalAxios.get(arr,
-                    {headers: {
-                        'Content-Type':'application/json',
-                        'Authorization': token
-                    }}
-                ).then(
-                    response => {
-                        console.log(response);
-                        var arr=[];
-                        for(var i = 0;i<response.data.length;i++){
-                            arr.push(response.data[i])
-                        }
-                        this.contents = arr;
-                        this.tableData = this.contents;
-                        this.getNew(0);
-                    },
-                    error => {
-                        console.log(error);
-                    }
-                );
-            },      
-
+                this.$store.dispatch('getMsg', this.curId)
+            },
+            //换页
+            getNew(value) {
+                var currentPage = value / this.limit;
+                this.currentPage = currentPage;
+                this.$store.commit("changeMsgCurrentList", this.currentPage * this.limit)
+            },
         },
-            
-        created: function() {
-            // this.tableData = this.contents[0];
-            var token = window.localStorage.getItem('idToken')
-            var arr =  'https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/message/'+(this.curId+1)
-            globalAxios.get(arr,
-                {headers: {
-                    'Content-Type':'application/json',
-                    'Authorization': token
-                }}
-            ).then(
-                response => {
-                console.log(response);
-                var arr=[];
-                for(var i = 0;i<response.data.length;i++){
-                    arr.push(response.data[i])
-                }
-                this.contents = arr;
-                this.tableData = this.contents;
-                this.getNew(0);
-                // return response.json();
-                },
-                error => {
-                console.log(error);
-                }
-            );
+        created: function () {
+            this.$store.dispatch('getMsg', this.curId)
         },
-
-        mounted() {
-            this.tableData = this.contents;
-            this.getNew(0);
-        }
+        computed: {
+            currentList() {
+                return this.$store.state.msgCurrentList
+            },
+            tableData() {
+                return this.$store.state.msgList
+            },
+            limit() {
+                return this.$store.state.limit
+            }
+        },
     }
 </script>

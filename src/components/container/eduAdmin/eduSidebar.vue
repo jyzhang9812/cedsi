@@ -128,6 +128,7 @@
     background-color: #3766A6;
     width: 220px;
     min-width: 170px;
+    min-height: 620px;
   }
 
   .item-name {

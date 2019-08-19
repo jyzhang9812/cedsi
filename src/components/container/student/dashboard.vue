@@ -11,35 +11,36 @@
           </div>
           <div class="modal-body">
             <div class="modal-head">
-              <img class="modal-headimg" :src="user.AVATAR">
+              <img class="modal-headimg" :src="user.avatar">
             </div>
             <div class="modal-update">
               <div class="modal-update-text">昵称:</div>
-              <input type='text' class="modal-update-info" v-model="user.NICK_NAME">
+              <input type='text' class="modal-update-info" v-model="user.username">
             </div>
             <div class="modal-update">
               <div class="modal-update-text">性别:</div>
               <div class="modal-update-radiogroup">
-                <input class="modal-update-radio" type="radio" name="sex" value="man" id="man" @click="getupdatesex()">男
-                <input class="modal-update-radio" type="radio" name="sex" value="woman" id="woman"
+                <input class="modal-update-radio" type="radio" :checked="user.gender == '1' ? 'true':'' " id="man" 
+                @click="getupdatesex()">男
+                <input class="modal-update-radio" type="radio" :checked="user.gender == '1' ? '':'true' " id="woman"
                   @click="getupdatesex()">女
               </div>
             </div>
             <div class="modal-update">
               <div class="modal-update-text">加入时间:</div>
-              <input class="modal-update-info" v-model="user.CREATED_TIME">
+              <input class="modal-update-info" v-model="user.time">
             </div>
             <div class="modal-update">
               <div class="modal-update-text">邮箱:</div>
-              <input class="modal-update-info" v-model="user.EMAIL">
+              <input class="modal-update-info" v-model="user.email">
             </div>
             <div class="modal-update">
               <div class="modal-update-text">移动电话:</div>
-              <input class="modal-update-info" v-model="user.MOBILE">
+              <input class="modal-update-info" v-model="user.mobile">
             </div>
             <div class="modal-update">
               <div class="modal-update-text">固定电话:</div>
-              <input class="modal-update-info" v-model="user.PHONE">
+              <input class="modal-update-info" v-model="user.phone">
             </div>
           </div>
           <div class="modal-footer">
@@ -62,12 +63,12 @@
                 <div class="user-info" v-show="index==0">
                   <div class="message-img"></div>
                   <div class="header-img">
-                    <img class="header" :src="user.AVATAR">
+                    <img class="header" :src="user.avatar">
                     <img class="update-info" src="../../../../static/images/sidebar/update-info.png" data-toggle="modal"
                       data-target="#update-info">
                   </div>
                   <div class="user">
-                    <h5 class="user-name">{{user.NICK_NAME}}</h5>
+                    <h5 class="user-name">{{user.username}}</h5>
                   </div>
                 </div>
                 <img v-show="index!=0" class="nav-img" :src="title.img">
@@ -137,7 +138,6 @@
         i: -1,
         seen: false,
         imgpath: this.$store.state.url,
-        user: {},
         height: 0,
         style: ''
       };
@@ -159,20 +159,15 @@
         var img2 = this.lists[index].img.substring(34, length);
         this.lists[index].img = img1 + "un-" + img2;
       },
-      getsex() {
-        if (this.user.GENDER == "1") {
-          document.getElementById("man").checked = true;
-        } else {
-          document.getElementById("woman").checked = true;
-        }
-      },
+
+      //更新暂时还有点问题
       getupdatesex() {
         if (document.getElementById("man").checked == true) {
-          this.user.GENDER = '男';
-          console.log(this.user.GENDER);
+          this.user.gender = '男';
+          console.log(this.user.gender);
         } else if (document.getElementById("woman").checked == true) {
-          this.user.GENDER = '女';
-          console.log(this.user.GENDER);
+          this.user.gender = '女';
+          console.log(this.user.gender);
         } else {
           console.log(error)
         }
@@ -193,27 +188,13 @@
       this.height = document.documentElement.clientHeight
       this.style = 'min-height:' + (this.height - 56) + 'px;'
       console.log(this.height)
-
-      var token = window.localStorage.getItem('idToken')
-      globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/studentinfo',
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-          }
-        }
-      ).then(response => {
-        console.log(response);
-        this.user = response.data;
-        console.log(this.user);
-        this.getsex();
-        // return response.json();
-      },
-        error => {
-          console.log(error);
-        })
+      this.$store.dispatch('getUser')
     },
-
+    computed: {
+      user:function(state) {
+        return this.$store.state.userInfo
+      },
+    },
   };
 </script>
 
@@ -241,7 +222,7 @@
     padding-left: 0px;
   }
 
-  .router-link-exact-active{
+  .router-link-exact-active {
     /* background-color: #7580b3; */
     color: #fff;
   }
@@ -255,6 +236,7 @@
     background-color: #7580b3;
     color: #fff;
   }
+
   .active {
     background-color: #7580b3;
     color: #fff;
@@ -272,6 +254,7 @@
     float: left;
     left: -25px;
   }
+
   .shutiao_long {
     position: relative;
     width: 5px;
@@ -280,6 +263,7 @@
     float: left;
     left: -25px;
   }
+
   /* Hide for mobile, show later */
   .col-md-2 {
     width: 16.7%;
