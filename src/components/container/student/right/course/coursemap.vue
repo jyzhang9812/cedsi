@@ -17,7 +17,7 @@
           <div class="modal-body modal-box">
             <div class="left-box">
               <div class="box-title">
-                <p>Scratch Level 1| 第{{courseNum}}节课 | {{courseName}}</p>
+                <p>{{courseName}}| 第{{courseNum}}节课 | {{chapterName}}</p>
               </div>
               <button class="study-btn" data-toggle="modal" data-target="#myVideo">开始学习</button>
             </div>
@@ -40,36 +40,29 @@
     </div>
     <div
       class="modal fade"
-      id="myvideo"
+      id="myVideo"
       tabindex="-1"
       role="dialog"
       aria-labelledby="myModalLabel"
       aria-hidden="true"
     >
       <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-content">
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-hidden="true"
-              @click="deletevideo()"
-            >&times;</button>
-            <div class="modal-body">
+        <div class="modal-content video-bck">
+          <div class="modal-header header-height">
+            <span class="video-name">{{courseName}}| 第{{courseNum}}节课 | {{chapterName}}</span>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click="deletevideo">&times;</button>
+          </div>
+            <div class="modal-body modal-box">
               <Media
                 :autoplay="false"
                 :kind="'video'"
                 :controls="true"
                 :src="videosrc"
-                style="height: 400px;width: 600px;"
+                style="height: 400px;width: 700px;"
                 @pause="handle()"
               ></Media>
             </div>
-          </div>
-          <!-- /.modal-content -->
         </div>
-        <!-- /.modal -->
       </div>
     </div>
     <div class="introduction" :style="screenHeight">
@@ -89,7 +82,7 @@
               <img :src="point.bgImg" class="btn-img" />
             </div>
             <div class="chapter-intro">
-              <p class="intro">Scratch Level 1| 第{{point.number}}课 | {{point.name}}</p>
+              <p class="intro">{{courseName}}| 第{{point.number}}课 | {{point.name}}</p>
               <p class="intro">{{point.status}}</p>
             </div>
           </div>
@@ -327,14 +320,17 @@ export default {
       courseName: "",
       courseIntro: "",
       courseNum: "",
-      videosrc: ""
+      videosrc: "",
+      chapterName:""
     };
   },
   methods: {
     gotoStudy(index) {
-      this.courseName = this.pointList[index].name;
+      this.chapterName = this.pointList[index].name;
       this.courseIntro = this.pointList[index].description;
       this.courseNum = this.pointList[index].number;
+      this.videosrc = this.pointList[index].videoSrc;
+      console.log(this.videosrc)
     },
     handle() {
       console.log("Video paused!, playing in 2 sec...");
@@ -363,8 +359,10 @@ export default {
       })
       .then(
         response => {
-          var chaptersArr = response.data.chapters;
-          var finishChaptersArr = response.data.finish_chapters;
+          console.log(response.data.data)
+          this.courseName=response.data.data.courseName
+          var chaptersArr = response.data.data.chapter_message.chapters;
+          var finishChaptersArr = response.data.data.chapter_message.finish_chapters;
           for (var i = 0; i < chaptersArr.length; i++) {
             if (i < finishChaptersArr.length) {
               this.pointList[i].bgImg =
@@ -379,6 +377,7 @@ export default {
             this.pointList[i].description = chaptersArr[i].CP_DESCRIPTION;
             this.pointList[i].number = chaptersArr[i].CP_NUMBER;
             this.pointList[i].name = chaptersArr[i].CP_NAME;
+            this.pointList[i].videoSrc = chaptersArr[i].CP_RESOURCE.VIDEO;
           }
         },
         error => {
@@ -480,6 +479,14 @@ img {
   height: 400px;
   width: 660px;
 }
+.video-bck {
+  height: 400px;
+  width: 700px;
+}
+.video-name{
+  margin-bottom: 10px;
+  display: inline-block;
+}
 .header-height {
   height: 20px;
   border: none;
@@ -565,8 +572,8 @@ img {
 }
 /*视频*/
 .video-js {
-  height: 400px;
-  width: 600px;
+  height: 600px;
+  width: 800px;
 }
 .vjs-tech {
   height: auto;

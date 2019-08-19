@@ -61,6 +61,13 @@
             close: true,
             route: "/Admin/courseManagement"
           },
+          {
+            name: "机构管理",
+            iconSrc: "../../../../static/images/aside/activityManagement.png",
+            children: [],
+            close: true,
+            route: "/Admin/organizationManagement"
+          },
         ],
         height: 0,
         style: '',
