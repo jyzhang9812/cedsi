@@ -38,10 +38,6 @@
     import globalAxios from 'axios'
     export default {
         name: 'class',
-        data() {
-            return {
-            }
-        },
         created: function () {
             var token = window.localStorage.getItem('idToken')
             this.$store.dispatch('getClass')
