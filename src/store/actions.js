@@ -280,6 +280,7 @@ const actions = {
     },
     //superAdmin add Admin
     addAdmin({ commit, state, dispatch }, addAdmin) {
+        console.log(state.idToken)
         globalAxios
             .post(
                 "/superadmin/admin",

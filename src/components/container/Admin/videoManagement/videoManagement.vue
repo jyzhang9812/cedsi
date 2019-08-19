@@ -189,17 +189,18 @@ export default {
 }
 .course-nav {
   width: 100%;
-  height: 50px;
   text-align: center;
 }
 .course-btn {
   font-size: 14px;
   margin-right: 10px;
-  width: 100px;
   height: 40px;
   line-height: 35px;
   border-radius: 30px;
   color: #fff;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .course-btn:focus {
