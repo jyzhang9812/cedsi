@@ -265,12 +265,13 @@ const actions = {
     },
     //superAdmin add Admin
     addAdmin({ commit, state, dispatch }, addAdmin) {
+        console.log(state.idToken)
         globalAxios
             .post(
                 "/superadmin/admin",
                 { username: addAdmin.username, password: addAdmin.password },
                 {
-                    header: {
+                    headers: {
                         "Content-Type": "application/json",
                         Authorization: state.idToken
                     }
