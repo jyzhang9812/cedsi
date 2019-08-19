@@ -91,7 +91,6 @@ const actions = {
             // console.log(response.data)
             var user = {}
             var arr = response.data
-
             user.avatar = arr.AVATAR,
                 user.time = arr.CREATED_TIME,
                 user.username = arr.NICK_NAME,
@@ -99,12 +98,27 @@ const actions = {
                 user.phone = arr.PHONE,
                 user.email = arr.EMAIL,
                 user.gender = arr.GENDER,
-
                 commit(TYPES.getUserInfo, user)
         },
             error => {
                 console.log(error);
             })
+    },
+    updateUser({ commit, state }, userData) {
+        globalAxios.post('/student/studentinfo',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': state.idToken
+                },
+                data: userData
+            }
+        ).then( response => {
+            console.log(response)
+            commit(TYPES.getUserInfo, userData)
+        }, error => {
+            console.log(error);
+        })
     },
     getCourse({ commit, state }) {
         globalAxios.get('/student/courses',
@@ -215,6 +229,7 @@ const actions = {
 
             myClass.name = response.data.className
             myClass.teacher = response.data.teacher
+            console.log(myClass.teacher)
             myClass.memberCount = response.data.member_count
             for (var i = 0; i < response.data.classmates.length; i++) {
                 arr.push(response.data.classmates[i])

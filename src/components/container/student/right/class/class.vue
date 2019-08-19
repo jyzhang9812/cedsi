@@ -6,8 +6,8 @@
         :class="{active : index===curId}">{{item.item}}</button>
     </div>
     <div class="row" style="margin-top: 10px">
-      <courseCard v-show="0===curId"></courseCard>
-      <newclass v-show="1===curId"></newclass>
+      <courseCard v-if="0===curId"></courseCard>
+      <newclass v-if="1===curId"></newclass>
     </div>
   </div>
 </template>

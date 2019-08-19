@@ -19,12 +19,11 @@
             </div>
             <div class="modal-update">
               <div class="modal-update-text">性别:</div>
-              <div class="modal-update-radiogroup">
-                <input class="modal-update-radio" type="radio" :checked="user.gender == '1' ? 'true':'' " id="man" 
-                @click="getupdatesex()">男
-                <input class="modal-update-radio" type="radio" :checked="user.gender == '1' ? '':'true' " id="woman"
-                  @click="getupdatesex()">女
-              </div>
+              <span class="modal-update-radio" v-for="(item,index) in radiolist">
+                <input class="modal-update-radio" type="radio" :value='item.value' :checked="item.isCheck"
+                  v-model="user.gender" @change="changeInput(index)">
+                {{item.name}}
+              </span>
             </div>
             <div class="modal-update">
               <div class="modal-update-text">加入时间:</div>
@@ -135,6 +134,7 @@
             path: "/dashboard/presentation"
           },
         ],
+        radiolist: [{ name: '男', value: 1, isCheck: false }, { name: '女', value: 2, isCheck: false }],
         i: -1,
         seen: false,
         imgpath: this.$store.state.url,
@@ -160,28 +160,24 @@
         this.lists[index].img = img1 + "un-" + img2;
       },
 
-      //更新暂时还有点问题
-      getupdatesex() {
-        if (document.getElementById("man").checked == true) {
-          this.user.gender = '男';
-          console.log(this.user.gender);
-        } else if (document.getElementById("woman").checked == true) {
-          this.user.gender = '女';
-          console.log(this.user.gender);
-        } else {
-          console.log(error)
-        }
+      changeInput(index) {
+        this.radiolist.map((v, i) => {
+          if (i == index) {
+            v.isCheck = true
+          } else {
+            v.isCheck = false
+          }
+        })
       },
       submit() {
-        console.log(this.user);
-        this.$http.patch("", this.user).then(
-          response => {
-            console.log(response);
-          },
-          error => {
-            console.log(error);
+        this.radiolist.map((v, i) => {
+          if (v.isCheck) {
+            console.log('被选中的值为:' + v.value)
+            this.user.gender = v.value
           }
-        );
+        })
+        console.log(this.user);
+        
       }
     },
     created: function () {
@@ -191,7 +187,7 @@
       this.$store.dispatch('getUser')
     },
     computed: {
-      user:function(state) {
+      user: function (state) {
         return this.$store.state.userInfo
       },
     },

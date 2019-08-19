@@ -3,9 +3,9 @@
         <div class="container-table100">
             <div class="wrap-table100">
                 <div style="margin-bottom: 10px;">
-                    <button class="nameOfClass">{{myClass.name}}</button>
-                    <img class="avastimg" :src="myClass.teacher.avatar">
-                    代课老师：{{myClass.teacher.teacher_name}}
+                    <button class="nameOfClass">{{uClass.name}}</button>
+                    <img class="avastimg" :src="uClass.teacher.avatar">
+                    代课老师：{{uClass.teacher.teacher_name}}
                 </div>
                 <div class="table100 ver1 m-b-110">
                     <table data-vertable="ver1">
@@ -19,7 +19,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="row100" v-for="(item,index) in myClass.classmates" :key="index">
+                            <tr class="row100" v-for="(item,index) in uClass.classmates" :key="index">
                                 <td class="column100">{{index+1}}</td>
                                 <td class="column100"><img class="avastimg" :src="item.AVATAR"></td>
                                 <td class="column100">{{item.STUDENT_NAME}}</td>
@@ -38,8 +38,13 @@
     import globalAxios from 'axios'
     export default {
         name: 'class',
-        data() {
+        data(){
             return {
+                uClass:{
+                    teacher:{
+
+                    }
+                }
             }
         },
         created: function () {
@@ -47,9 +52,12 @@
             this.$store.dispatch('getClass')
         },
         computed: {
+
       myClass:function(state) {
-        return this.$store.state.myClass
+        return this.uClass=this.$store.state.myClass
       },
+
+      
     },
     }
 </script>
