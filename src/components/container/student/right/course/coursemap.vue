@@ -96,6 +96,7 @@
         </div>
       </div>
     </div>
+    <button class="btn goback-btn" @click="gotoCourseList">返回课程列表</button>
   </div>
 </template>
 <script>
@@ -343,6 +344,9 @@ export default {
     },
     deletevideo() {
       this.videosrc = "";
+    },
+    gotoCourseList(){
+      this.$router.push({path:"/dashboard"});
     }
   },
   created: function() {
@@ -445,6 +449,25 @@ img {
   width: 95%;
   margin: 10px auto;
   color: #fff;
+}
+.goback-btn {
+  position: absolute;
+  top: 100px;
+  left: 50px;
+  width: 120px;
+  text-align: center;
+  line-height: 15px;
+  height: 30px;
+  color: #fff;
+  background: #22A0FF;
+  border-radius: 6px;
+}
+.goback-btn:hover {
+  color: #fff;
+}
+.goback-btn:active{
+  color: #fff;
+  outline: none;
 }
 /*开始学习模态框*/
 .btn:active{
