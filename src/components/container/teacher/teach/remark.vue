@@ -3,109 +3,62 @@
     <span>作业点评</span>
     <div class="first-floor">
       <label for="tel-name"></label>
-      <input type="text" placeholder="请输入姓名、手机号"
-             class="textBox" id="tel-name"
-             v-model="inputData.telOrName">
-      <date-picker tips="选择开始时间" id="datePicker_start"
-                   :date="inputData.startDate"
-                   @changeDate="changeDate">
+      <input type="text" placeholder="请输入姓名" class="textBox" id="tel-name" v-model="inputData.telOrName">
+      <date-picker tips="选择开始时间" id="datePicker_start" :date="inputData.startDate" @changeDate="changeDate">
       </date-picker>
-      <date-picker tips="选择结束时间" id="datePicker_end"
-                   :date="inputData.endDate"
-                   @changeDate="changeDate">
+      <date-picker tips="选择结束时间" id="datePicker_end" :date="inputData.endDate" @changeDate="changeDate">
       </date-picker>
     </div>
     <div class="second-floor">
       <div class="select-input">
-        <select-input id="school"
-                      tips="请选择学校"
-                      :option="inputData.school.option"
-                      @option="changeOption"
-                      :drop-down-list="inputData.school.list">
+        <select-input id="classes" tips="请选择班级" :option="inputData.classes.option" @option="changeOption"
+          :drop-down-list="inputData.classes.list">
         </select-input>
       </div>
       <div class="select-input">
-        <select-input id="classes"
-                      tips="请选择班级名称"
-                      :option="inputData.classes.option"
-                      @option="changeOption"
-                      :drop-down-list="inputData.classes.list">
+        <select-input id="course" tips="请选择课程" :option="inputData.course.option" @option="changeOption"
+          :drop-down-list="inputData.course.list">
         </select-input>
       </div>
       <div class="select-input">
-        <select-input id="course"
-                      tips="请选择课程"
-                      :option="inputData.course.option"
-                      @option="changeOption"
-                      :drop-down-list="inputData.course.list">
+        <select-input id="order" tips="请选择课次" :option="inputData.order.option" @option="changeOption"
+          :drop-down-list="inputData.order.list">
         </select-input>
       </div>
-      <div class="select-input">
-        <select-input id="grade"
-                      tips="请选择课程等级"
-                      :option="inputData.grade.option"
-                      @option="changeOption"
-                      :drop-down-list="inputData.grade.list">
-        </select-input>
-      </div>
-      <div class="select-input">
-        <select-input id="order"
-                      tips="请选择课次"
-                      :option="inputData.order.option"
-                      @option="changeOption"
-                      :drop-down-list="inputData.order.list">
-        </select-input>
-      </div>
-      <!--      2019-07-23-->
-      <!--      由于业务逻辑不清晰, 暂时关闭全选按钮-->
-      <!--      <div class="select-input">-->
-      <!--       <span @click="changeChoices">-->
-      <!--        <span :class="{'choose': chooseAll}" class="choose-icon"></span>-->
-      <!--        <span>全选</span>-->
-      <!--       </span>-->
-      <!--      </div>-->
     </div>
     <div class="third-floor">
       <span>点评状态</span>
-      <span class="comment has-comment"
-            @click="changeComment('has')"
-            :style="comment.hasComment">已点评</span>
-      <span class="comment no-comment"
-            @click="changeComment('no')"
-            :style="comment.noComment">未点评</span>
+      <span class="comment has-comment" @click="changeComment('has')" :style="comment.hasComment">已点评</span>
+      <span class="comment no-comment" @click="changeComment('no')" :style="comment.noComment">未点评</span>
       <button class="btn btn-search" @click="conditionSearch">搜索</button>
       <button class="btn btn-clear" @click="clearChoices">清空筛选</button>
     </div>
     <div class="forth-floor">
       <table class="table table-hover">
         <thead>
-        <tr>
-          <th v-for="title in tableTitle" class="title">{{title}}</th>
-        </tr>
+          <tr>
+            <th v-for="title in tableTitle" class="title">{{title}}</th>
+          </tr>
         </thead>
         <tbody>
-        <tr v-for="(line, seq) in currentList" :key="seq" class="content">
-          <td>{{seq + 1}}</td>
-          <td v-for="(value, key, index) in line"
-              :key="index" v-if="key !== 'id'">
-            {{value}}
-          </td>
-          <td>
-            <span class="blue" @click="viewWork(line)">查看作品</span>&nbsp;&nbsp;
-            <span class="blue" @click="remarkWork(line)">点评</span>&nbsp;&nbsp;
-            <span class="red" @click="popModal('delete', line.id)">删除</span>
-          </td>
-        </tr>
+          <tr v-for="(line, seq) in currentList" :key="seq" class="content">
+            <td>{{seq + 1}}</td>
+            <td v-for="(value, key, index) in line" :key="index" v-if="key !== 'id' && key !== 'commentStat'">
+              {{value}}
+            </td>
+            <td>
+              <span class="blue" @click="viewWork(line)">查看作品</span>&nbsp;&nbsp;
+              <span class="blue" @click="remarkWork(line)">点评</span>&nbsp;&nbsp;
+              <span class="red" @click="popModal('delete', line.id)">删除</span>
+            </td>
+          </tr>
         </tbody>
       </table>
-      <delete-prompt :id="deletePromptId" @deleteWork="deleteWork"
-                     :work-id="currentWorkId">
+      <delete-prompt :id="deletePromptId" @deleteWork="deleteWork" :work-id="currentWorkId">
       </delete-prompt>
     </div>
     <div class="fifth-floor">
-      <pagination :num="tableData.length"
-                  @getNew="changeTablePages"
-                  :limit="limit">
+      <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit">
       </pagination>
     </div>
   </div>
@@ -116,6 +69,7 @@
   import SelectInput from "../utils/selectInput";
   import Pagination from "../utils/pagination";
   import DeletePrompt from "../utils/deletePrompt";
+  import instance from "../../../../axios-auth.js"
 
   export default {
     name: "remark",
@@ -123,20 +77,15 @@
       return {
         limit: 10,
         currentWorkId: "hello",
-        chooseAll: false,
         comment: {
           commentStatus: 0,
-          hasComment: this.whiteCommentStyle,
-          noComment: this.whiteCommentStyle
+          hasComment: "",
+          noComment: ""
         },
         inputData: {
           telOrName: "",
           startDate: "",
           endDate: "",
-          school: {
-            option: "",
-            list: ["邮电附小", "师大二中", "师大三中"]
-          },
           classes: {
             option: "",
             list: ["1班", "2班", "3班", "4班", "5班"]
@@ -144,10 +93,6 @@
           course: {
             option: "",
             list: ["课程一", "课程二", "课程三"]
-          },
-          grade: {
-            option: "",
-            list: ["1", "2", "3", "4"]
           },
           order: {
             option: "",
@@ -157,186 +102,44 @@
         tableTitle: [
           "序号",
           "作者姓名",
-          "手机号码",
           "提交时间",
           "作品",
-          "所属学校",
           "班级",
           "课程名称",
-          "课程等级",
-          "课次",
-          "状态",
+          "章节",
           "操作"
         ],
-        originalTableData: [
-          {
-            id: "001",
-            authorName: "赛大迪",
-            tel: "15252081872",
-            submitTime: "2019-3-21 19:03",
-            workName: "坦克大战",
-            school: "师大附小",
-            classes: "9班",
-            course: "计算机网络",
-            grade: "3",
-            order: "开学第一课",
-            commentStat: "已点评"
-          },
-          {
-            id: "002",
-            authorName: "李云龙",
-            tel: "18896253728",
-            submitTime: "2018-5-2 11:32",
-            workName: "消灭病毒",
-            school: "师大附小",
-            classes: "10班",
-            course: "计算机网络",
-            grade: "2",
-            order: "开学第二课",
-            commentStat: "未点评"
-          },
-          {
-            id: "003",
-            authorName: "楚云飞",
-            tel: "15652081872",
-            submitTime: "2019-5-20 16:30",
-            workName: "宾果消消消",
-            school: "邮电附小",
-            classes: "2班",
-            course: "计算机网络",
-            grade: "1",
-            order: "开学第三课",
-            commentStat: "已点评"
-          },
-          {
-            id: "004",
-            authorName: "张大彪",
-            tel: "15652081872",
-            submitTime: "2019-5-20 16:30",
-            workName: "宾果吃吃吃",
-            school: "邮电附小",
-            classes: "2班",
-            course: "计算机网络",
-            grade: "1",
-            order: "开学第三课",
-            commentStat: "已点评"
-          },
-          {
-            id: "005",
-            authorName: "孔捷",
-            tel: "15652081872",
-            submitTime: "2019-5-20 16:30",
-            workName: "宾果消消消",
-            school: "邮电附小",
-            classes: "2班",
-            course: "计算机网络",
-            grade: "1",
-            order: "开学第三课",
-            commentStat: "已点评"
-          },
-          {
-            id: "006",
-            authorName: "孔捷",
-            tel: "15652081872",
-            submitTime: "2019-5-20 16:30",
-            workName: "宾果消消消",
-            school: "邮电附小",
-            classes: "2班",
-            course: "计算机网络",
-            grade: "1",
-            order: "开学第三课",
-            commentStat: "已点评"
-          },
-          {
-            id: "007",
-            authorName: "孔捷",
-            tel: "15652081872",
-            submitTime: "2019-5-20 16:30",
-            workName: "宾果消消消",
-            school: "邮电附小",
-            classes: "2班",
-            course: "计算机网络",
-            grade: "1",
-            order: "开学第三课",
-            commentStat: "已点评"
-          },
-          {
-            id: "008",
-            authorName: "孔捷",
-            tel: "15652081872",
-            submitTime: "2019-5-20 16:30",
-            workName: "宾果消消消",
-            school: "邮电附小",
-            classes: "2班",
-            course: "计算机网络",
-            grade: "1",
-            order: "开学第三课",
-            commentStat: "已点评"
-          },
-          {
-            id: "009",
-            authorName: "孔捷",
-            tel: "15652081872",
-            submitTime: "2019-5-20 16:30",
-            workName: "宾果消消消",
-            school: "邮电附小",
-            classes: "2班",
-            course: "计算机网络",
-            grade: "1",
-            order: "开学第三课",
-            commentStat: "已点评"
-          },
-          {
-            id: "010",
-            authorName: "孔捷",
-            tel: "15652081872",
-            submitTime: "2019-5-20 16:30",
-            workName: "宾果消消消",
-            school: "邮电附小",
-            classes: "2班",
-            course: "计算机网络",
-            grade: "1",
-            order: "开学第三课",
-            commentStat: "已点评"
-          },
-          {
-            id: "011",
-            authorName: "孔捷",
-            tel: "15652081872",
-            submitTime: "2019-5-20 16:30",
-            workName: "宾果消消消",
-            school: "邮电附小",
-            classes: "2班",
-            course: "计算机网络",
-            grade: "1",
-            order: "开学第三课",
-            commentStat: "已点评"
-          },
-        ],
+        originalTableData: [],
         currentList: [],
         tableData: []
       }
     },
     methods: {
-      changeChoices() {
-        this.chooseAll = !this.chooseAll;
+      /**
+       * 改变点评的状态, 并立即刷新数据的显示, 其中的 commentStatus 映射关系为
+       * 0: 均未选中   
+       * 1: 已点评
+       * 2: 未点评
+       * 
+       * @param {String} comment
+       * @param {Array<Object>} tableData
+      */
+      changeComment(comment, tableData) {
+        let condition1 = comment === 'has',
+          condition2 = comment === 'no';
+        tableData = tableData || this.tableData;
+        this.comment.commentStatus = condition1 ? 1 : (condition2 ? 2 : 0);
+        this.comment.hasComment = condition1 ? this.blueCommentStyle : this.whiteCommentStyle;
+        this.comment.noComment = condition2 ? this.blueCommentStyle : this.whiteCommentStyle;
+        this.tableData = this.commentStatFilter(this.comment.commentStatus, tableData);
+        this.changeTablePages(0);
       },
-      changeComment(comment) {
-        if (comment === 'has') {
-          // 0: 均未选中  1:已点评  2: 未点评
-          this.comment = {
-            commentStatus: 1,
-            hasComment: this.blueCommentStyle,
-            noComment: this.whiteCommentStyle
-          };
-        } else if (comment === "no") {
-          this.comment = {
-            commentStatus: 2,
-            hasComment: this.whiteCommentStyle,
-            noComment: this.blueCommentStyle
-          };
-        }
-      },
+      /**
+       * 更改日期, 是 datePicker 组件绑定的事件处理函数
+       * 
+       * @param {String} value
+       * @param {String} id
+      */
       changeDate(value, id) {
         if (id === "datePicker_start") {
           this.inputData.startDate = value;
@@ -344,13 +147,13 @@
           this.inputData.endDate = value;
         }
       },
+      /**
+       * 清空筛选, 是 清空筛选 按钮绑定的事件处理函数
+       */
       clearChoices() {
         this.inputData.startDate = "";
         this.inputData.endDate = "";
-        this.optionsClear();
-      },
-      optionsClear() {
-        // 如果是字符串则清空, 如果是对象则清空 option
+        this.changeComment('init', this.originalTableData);
         Object.keys(this.inputData).forEach((res) => {
           if (this.inputData[res].hasOwnProperty("option")) {
             this.inputData[res].option = "";
@@ -358,15 +161,13 @@
             this.inputData[res] = "";
           }
         });
-        // 全选按钮
-        this.chooseAll = false;
-        // 是否
-        this.comment = {
-          commentStatus: 0,
-          hasComment: this.whiteCommentStyle,
-          noComment: this.whiteCommentStyle
-        }
       },
+      /**
+       * 修改当前选中项, 是 selectInput 组件绑定的事件处理函数
+       * 
+       * @param {String} item
+       * @param {String} id
+      */
       changeOption(item, id) {
         Object.keys(this.inputData).forEach((res) => {
           if (res === id) {
@@ -374,15 +175,26 @@
           }
         });
       },
+      /**
+       * 分页跳转, 是 pagination 分页组件绑定的事件处理函数
+       * 
+       * @param {Number} value
+      */
       changeTablePages(value) {
         this.currentList = this.tableData.slice(value, value + this.limit);
       },
-      // 以下为过滤器, 采用递进式过滤方法, 数据随着过滤越来越少, 减轻了浏览器负担
+      /**
+       * 时间过滤器
+       * 
+       * @param {String} startTime
+       * @param {String} endTime
+       * @param {Array<Object>} tableList
+       * @return {Array<object>}
+      */
       timeFilter(startTime, endTime, tableList) {
         if (startTime === "" && endTime === "") return tableList;
         startTime = startTime === "" ? 0 : startTime;
-        // 今天是 2019-7-21 此系统若能运行1000年算我输
-        endTime = endTime === "" ? "3000-01-01 00:00" : endTime;
+        endTime = endTime === "" ? "9999-01-01 00:00" : endTime;
         let restTableList = tableList.slice(0);
         startTime = new Date(startTime);
         endTime = new Date(endTime);
@@ -396,6 +208,13 @@
         }
         return restTableList;
       },
+      /**
+       * 名称或手机号码过滤器 (因开发需求, 当前页面裁剪掉了手机号码, 但过滤器仍保留其过滤功能)
+       * 
+       * @param {String} telOrName
+       * @param {Array<Object>} tableList
+       * @return {Array<Object>}
+      */
       telOrNameFilter(telOrName, tableList) {
         if (telOrName === "") return tableList;
         let testArg = "tel";
@@ -412,13 +231,16 @@
         }
         return restTableList;
       },
+      /**
+       * 点评过滤器
+       * 
+       * @param {Number} commentCode
+       * @param {Array<Object>} tableList
+      */
       commentStatFilter(commentCode, tableList) {
         if (!commentCode) return tableList;
-        let restTableList = tableList.slice(0);
-        let status = "未点评";
-        if (commentCode === 1) {
-          status = "已点评"
-        }
+        let restTableList = tableList.slice(0),
+          status = commentCode === 1 ? "已点评" : "未点评";
         for (let i = 0, j = restTableList.length; i < j; i++) {
           if (restTableList[i].commentStat !== status) {
             restTableList.splice(i, 1);
@@ -428,6 +250,13 @@
         }
         return restTableList;
       },
+      /**
+       * selectInput 组件的过滤器
+       * 
+       * @param {Array<Object>} inputData
+       * @param {Array<Object>} tableList
+       * @return {Array<Object>}
+      */
       selectInputFilter(inputData, tableList) {
         let restTableList = tableList.slice(0);
         for (let i = 0, j = restTableList.length; i < j; i++) {
@@ -446,6 +275,9 @@
         }
         return restTableList;
       },
+      /**
+       * 搜索, 是 搜索 按钮绑定的事件处理函数, 用到了上面定义的过滤器函数
+      */
       conditionSearch() {
         let temp = this.timeFilter(
           this.inputData.startDate,
@@ -457,6 +289,11 @@
         this.tableData = temp;
         this.changeTablePages(0);
       },
+      /**
+       * 删除作品, 是表格里每行数据中 删除 操作绑定的事件处理函数
+       * 
+       * @param {String} workId
+      */
       deleteWork(workId) {
         setTimeout(() => {
           alert("删除成功!" + workId)
@@ -474,40 +311,91 @@
         //     // 显示异常原因
         //   });
       },
+      /**
+       * 查看作品, 参数为当前行数据, 是表格里每行数据中 查看作品 操作绑定的事件处理函数
+       * 
+       * @param {Object} item
+      */
       viewWork(item) {
         let id = this.searchWorkId(item);
         // 打开新窗口, 可能会传递sb3文件之类的参数
       },
+      /**
+       * 作品点评, 参数为当前行数据, 是表格里每行数据中 点评 操作绑定的事件处理函数
+       * 
+       * @param {Object} item
+      */
       remarkWork(item) {
         let id = this.searchWorkId(item);
         // 弹框, 给个点评输入框即可
       },
+      /**
+       * 弹出模态框, 提示用户是否进一步删除作品
+       * 
+       * @param {String} type
+       * @param {String} workId
+      */
       popModal(type, workId) {
         this.currentWorkId = workId;
         if (type === "delete") {
           $('#' + this.deletePromptId).modal('show');
         }
+      },
+      /**
+      * 拉取作业点评的数据
+      *
+      * @return {Object}
+      */
+      pullOriginalData() {
+        this.originalTableData.splice(0);
+        instance
+          .get('/teacher/works', { headers: { Authorization: localStorage.getItem('idToken') } })
+          .then((res) => {
+            res.data.forEach((item) => {
+              this.originalTableData.push({
+                id: item.HW_ID,
+                authorName: item.STUDENT_NAME,
+                submitTime: item.SUBMIT_TIME,
+                workName: item.HW_NAME,
+                classes: item.CLASS_NAME,
+                course: item.COURSE_NAME,
+                order: item.CP_NAME,
+                commentStat: item.TEACHER_REMARK ? "已点评" : "未点评"
+              });
+            });
+            this.changeComment('has', this.originalTableData);
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
       }
     },
     computed: {
+      /**
+       * 已点评与未点评按钮的状态样式
+      */
       blueCommentStyle() {
-        return "background-color: #409EFF; color: #FFF";
+        return "background-color: #409EFF; color: #FFF;";
       },
+      /**
+       * 已点评与未点评按钮的状态样式
+      */
       whiteCommentStyle() {
-        return "background-color: #FFF; color: #000";
+        return "background-color: #FFF; color: #000;";
       },
+      /**
+       * 删除提示框组件需要绑定的 id 属性, 纯字符串, 无任何特殊含义
+      */
       deletePromptId() {
         return "remarkDeletePrompt";
       }
     },
     mounted() {
-      this.tableData = this.originalTableData;
-      this.changeTablePages(0);
+      this.pullOriginalData();
     },
-    components: {
-      DeletePrompt,
-      Pagination, SelectInput, DatePicker
-    }
+    components: { DeletePrompt, Pagination, SelectInput, DatePicker }
   }
 </script>
 
