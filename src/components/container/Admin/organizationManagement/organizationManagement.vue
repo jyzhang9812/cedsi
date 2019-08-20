@@ -50,10 +50,7 @@
         v-model="inputData.organizationName"
       />
       <button class="btn btn-search">搜索</button>
-      <button
-        class="btn btn-clear"
-        @click="addOrganization()"
-      >新增机构</button>
+      <button class="btn btn-clear" @click="addOrganization()">新增机构</button>
     </div>
     <div class="second-floor">
       <table class="table table-hover">
@@ -65,13 +62,15 @@
         <tbody>
           <tr v-for="(organization, seq) in currentList" :key="seq" class="content">
             <td>{{seq+1}}</td>
-            <td>{{organization.account}}</td>
+            <td>{{organization.id}}</td>
             <td>{{organization.name}}</td>
-            <td>{{organization.region}}</td>
+            <td>{{organization.headmaster}}</td>
+            <td>{{organization.intro}}</td>
+            <td>{{organization.location}}</td>
             <td>
-              <span class="blue">查看营业执照</span>
-              <span class="blue">下载相关文件</span>
-              <br>
+              <span class="blue" @click="See(seq)">查看营业执照</span>
+              <!-- <span class="blue">下载相关文件</span> -->
+              <br />
               <span class="blue">编辑</span>
               <span
                 class="red"
@@ -91,10 +90,9 @@
 <script>
 import pagination from "../../teacher/utils/pagination.vue";
 import globalAxios from "axios";
-import SelectInput from "../../teacher/utils/selectInput";
 export default {
   name: "adminManagement",
-  components: { pagination,SelectInput },
+  components: { pagination },
   data() {
     return {
       limit: 20,
@@ -102,144 +100,62 @@ export default {
       inputData: {
         organizationUserName: ""
       },
-      tableTitle: ["序号", "企业账号", "机构名称","机构负责人","所属地区", "教师人数","操作"],
-      tableData: [
-        {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-              {
-        account:"xxx",
-        name:"lll",
-        region:"陕西西安"
-      },
-
-      ], //页面表格内容
-      //新增管理员
-      organizationUserName: "",
-      isUserName: true,
-      organizationPassword: "",
-      isPassword: true,
+      tableTitle: [
+        "序号",
+        "企业账号",
+        "机构名称",
+        "机构负责人",
+        "介绍",
+        "所属地区",
+        "操作"
+      ],
+      tableData: [], //页面表格内容
       //提示框
       alterimg: this.$store.state.url + "organization/alter.png",
       alterMes: "",
       //当前页码
       currentPage: 0,
-      index: 0,
+      index: 0
     };
   },
   methods: {
-      changeOption(item, id) {
-        Object.keys(this.inputData).forEach((res) => {
-          if (res === id) {
-            this.inputData[res].option = item;
-          }
-        });
-      },
     deleteOrganization(seq) {
       this.index = this.currentPage * this.limit + seq;
       console.log(this.index);
       this.alterMes = "确认删除吗？";
     },
-    submitDelete() {
-      var deleteorganization = this.tableData[this.index];
-      console.log(deleteorganization);
-      var token = window.localStorage.getItem("idToken");
-      console.log(token);
-      this.$http
-        .delete(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-          { userId: deleteorganization.id },
-          {
-            "Content-Type": "application/json",
-            Authorization: token
-          }
-        )
-        .then(
-          response => {
-            console.log(response);
-            this.tableData.splice(this.index, 1);
-          },
-          error => {
-            console.log(error);
-          }
-        );
-      this.getNew(this.currentPage * this.limit);
+    // submitDelete() {
+    //   var deleteorganization = this.tableData[this.index];
+    //   console.log(deleteorganization);
+    //   var token = window.localStorage.getItem("idToken");
+    //   console.log(token);
+    //   this.$http
+    //     .delete(
+    //       "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
+    //       { userId: deleteorganization.id },
+    //       {
+    //         "Content-Type": "application/json",
+    //         Authorization: token
+    //       }
+    //     )
+    //     .then(
+    //       response => {
+    //         console.log(response);
+    //         this.tableData.splice(this.index, 1);
+    //       },
+    //       error => {
+    //         console.log(error);
+    //       }
+    //     );
+    //   this.getNew(this.currentPage * this.limit);
+    // },
+    See(index){
+      window.location.href=this.tableData[index].license
     },
     addOrganization() {
-        this.$router.push({path:"/Admin/organizationManagement/addOrganization"});
+      this.$router.push({
+        path: "/Admin/organizationManagement/addOrganization"
+      });
     },
     //换页
     changeTablePages(value) {
@@ -256,6 +172,41 @@ export default {
   },
   mounted() {
     this.changeTablePages(0);
+  },
+  created() {
+    var token = window.localStorage.getItem("idToken");
+    globalAxios
+      .get(
+        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/org",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token
+          }
+        }
+      )
+      .then(
+        response => {
+          var orgList = [];
+          var orgArr = [];
+          orgList = response.data.data;
+          for (var i = 0; i < orgList.length; i++) {
+            var org = {};
+            org.name = orgList[i].ORG_NAME;
+            org.headmaster = orgList[i].HEADMASTER;
+            org.intro = orgList[i].INTRODUCTION;
+            org.location = orgList[i].ORG_LOCATION;
+            org.id = orgList[i].ORG_ID;
+            org.license=orgList[i].BUSINESS_LICENSE;
+            orgArr.push(org);
+          }
+          this.tableData=orgArr
+          this.changeTablePages(0);
+        },
+        error => {
+          console.log(error);
+        }
+      );
   }
 };
 </script>
@@ -444,10 +395,10 @@ table td {
 .inputBox {
   padding: 0;
 }
-.dropdown{
-  margin-left: 20px; 
+.dropdown {
+  margin-left: 20px;
 }
-#school .outside{
+#school .outside {
   width: 300px !important;
   height: 40px !important;
   margin-left: 10px !important;
@@ -485,5 +436,4 @@ table td {
   height: 25px;
   margin-right: 10px;
 }
-
 </style>
