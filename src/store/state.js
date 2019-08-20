@@ -10,7 +10,7 @@ const state =  {
     content:[],
     myClass:[],
     status: null,
-    roles: ['/dashboard', '/console', '/EduAdmin', '/Admin', '/superAdmin'],
+    roles: ['/dashboard/class', '/console', '/EduAdmin', '/Admin', '/superAdmin'],
     roleId: 0,
     courseList: [],
     courseCurrentList: [],

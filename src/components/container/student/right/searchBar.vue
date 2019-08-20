@@ -6,7 +6,7 @@
         </div>
         <div>
             <button class="button">
-                TRY EVERYTHING
+                付费全部解锁
             </button>
         </div>
     </div>

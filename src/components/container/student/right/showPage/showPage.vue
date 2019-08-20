@@ -1,13 +1,13 @@
 <template>
-    <div class="container">
+    <div id='showPage' class="container">
         <!-- 推荐课程 -->
         <div class="threeImg"
             style="background: url('https://www.tynker.com/image/dashboard/student/launchpad/bg-space.jpg')">
             <div class="Containt">
                 <div class="recommend_title">
-                    <h3 style="color: #fff">Projects & Puzzles</h3>
+                    <h3 style="color: #fff">推荐课程</h3>
                     <p>
-                        <button class="button">TRY EVERYTHING</button>
+                        <button class="button">查看更多</button>
                         <i class="fa fa-trophy fa-2x" style="color: #ffbf35" aria-hidden="true"></i>
                         <i class="fa fa-cog fa-2x" style="color: #fff" aria-hidden="true"></i>
                     </p>
@@ -37,7 +37,7 @@
         </div>
 
         <div class="threeImg">
-            <div class='Containt' v-for="(item,index) in arrComponent" :key="index">
+            <div class='Containt' v-for="(item,index) in arrComponent" :key="index" v-model='calleft[index+1]'>
                 <div class="iconleft" v-on:click="zuohua(index+1)" v-show='calleft[index+1]!=0'>
                     <img class="el-icon-arrow" :src=leftImg></img>
                 </div>
@@ -112,7 +112,7 @@
                         img: '',
                     },
                 ],
-                calleft: [0,0,0,0],
+                calleft: [0, 0, 0, 0],
                 i: -1,
                 curId: 0,
                 limit: 12,
@@ -135,15 +135,21 @@
             //点击按钮左移
             zuohua(index) {
                 this.calleft[index] -= 340;
-                if (this.calleft[index] < -1200) {
+                if (this.calleft[index] < -1020) {
                     this.calleft[index] = 0
+                }
+                for (var i = 0; i < 4; i++) {
+                    console.log(this.calleft[i])
                 }
             },
             //点击按钮右移
-            youhua(index) {   
+            youhua(index) {
                 this.calleft[index] += 340;
                 if (this.calleft[index] > 0) {
                     this.calleft[index] = -1020
+                }
+                for (var i = 0; i < 4; i++) {
+                    console.log(this.calleft[i])
                 }
             },
         },
@@ -243,7 +249,7 @@
         transform: scale(1.05);
     }
 
-    p {
+    #showPage p {
         margin-right: 10px;
         color: #fff;
         white-space: nowrap;
@@ -383,7 +389,7 @@
         color: #fff;
     }
 
-    h3 {
+    #showPage h3 {
         margin-top: 15px;
         margin-left: 20px;
     }

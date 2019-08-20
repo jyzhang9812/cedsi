@@ -44,7 +44,6 @@ const mutations = {
     //superAdmin
     [TYPES.changeAdminList](state, adminList) {
         state.adminList = adminList
-
     },
     [TYPES.changeAdminCurrentList](state, value) {
         state.adminCurrentList = state.adminList.slice(value, value + state.limit);
