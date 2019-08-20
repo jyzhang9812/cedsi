@@ -40,19 +40,19 @@
     data() {
       return {
         aside: [
-          {
-            name: "教务管理",
-            iconSrc: "../../../../static/images/eduAdmin/icon-02.png",
-            children: [],
-            close: true,
-            route: "/Admin/"
-          },
+          // {
+          //   name: "教务管理",
+          //   iconSrc: "../../../../static/images/eduAdmin/icon-02.png",
+          //   children: [],
+          //   close: true,
+          //   route: "/Admin/"
+          // },
           {
             name: "视频管理",
             iconSrc: "../../../../static/images/aside/teachingManagement.png",
             children: [],
             close: true,
-            route: "/Admin/videoManagement"
+            route: "/Admin/"
           },
           {
             name: "课程管理",

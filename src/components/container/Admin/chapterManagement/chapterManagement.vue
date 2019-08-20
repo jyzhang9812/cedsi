@@ -49,7 +49,6 @@ export default {
       chapterData: [],
       tableTitle: [
         "序号",
-        "视频名称",
         "章节名称",
         "操作说明",
         "上传时间",
@@ -64,7 +63,7 @@ export default {
       this.currentList = this.chapterData.slice(value, value + this.limit);
     },
     gotoAdd() {
-      this.$router.push({
+      this.$router.replace({
         path:
           "/Admin/chapterManagement/" +
           this.courseId +
@@ -79,7 +78,9 @@ export default {
       this.chapterList[index].isActive = true;
     },
     timestampToTime(timestamp) {
-      var date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      timestamp = String(timestamp);
+      timestamp = timestamp.length == 10 ? timestamp*1000 : timestamp * 1
+      var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
       var Y = date.getFullYear() + "-";
       var M =(date.getMonth() + 1 < 10? "0" + (date.getMonth() + 1): date.getMonth() + 1) + "-";
       var D = date.getDate() + " ";
@@ -91,15 +92,13 @@ export default {
   },
   mounted() {
     this.changeTablePages(0);
-  },
-  created() {
     this.courseId = this.$route.params.courseId;
     var token = window.localStorage.getItem("idToken");
     globalAxios
       .get(
         "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
         this.courseId +
-        "/chapter",
+        "/chapters",
         {
           headers: {
             "Content-Type": "application/json",
@@ -116,11 +115,11 @@ export default {
           for (var i = 0; i < chapterArr.length; i++) {
             var chapter = {};
             chapter.chapterName = chapterArr[i].CP_NAME;
-            chapter.chapterName = chapterArr[i].RS_NAME;
-            chapter.introduction = chapterArr[i].RS_COMMENT;
-            chapter.date = this.timestampToTime(chapterArr[i].RS_CREATE_TIME);
-            chapter.uploadAdmin = chapterArr[i].RS_FOUNDER;
+            chapter.introduction = chapterArr[i].CP_DESCRIPTION;
+            chapter.date = this.timestampToTime(chapterArr[i].CP_UPLOAD_TIME);
+            chapter.uploadAdmin = chapterArr[i].CP_FOUNDER;
             chapter.chapterNum = chapterArr[i].CP_NUMBER;
+            chapter.id=chapterArr[i].CP_ID;
             chapterData.push(chapter);
           }
           this.chapterData = chapterData;
@@ -132,6 +131,8 @@ export default {
           console.log(error);
         }
       );
+  },
+  created() {
   }
 };
 </script>

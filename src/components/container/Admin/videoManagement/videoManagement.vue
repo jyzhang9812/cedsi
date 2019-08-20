@@ -12,7 +12,8 @@
       <button class="btn btn-clear" @click="gotoUpload">上传视频</button>
     </div>
     <div class="outside">
-      <table class="table table-hover">
+      <span v-if="error"></span>
+      <table class="table table-hover" v-if="error">
         <thead>
           <tr>
             <th v-for="(th, index) in tableTitle" :key="index" class="title">{{th}}</th>
@@ -65,7 +66,8 @@ export default {
         "创建人",
         "操作"
       ],
-      currentList: []
+      currentList: [],
+      error:true
     };
   },
   methods: {
@@ -90,16 +92,61 @@ export default {
         this.courseList[i].isActive = false;
       }
       this.courseList[index].isActive = true;
+      var token = window.localStorage.getItem("idToken");
+      globalAxios
+        .get(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
+            this.courseList[index].id +
+            "/video",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            }
+          }
+        )
+        .then(
+          response => {
+            console.log(response);
+            var videoArr = [];
+            var videoData = [];
+            videoArr = response.data.data;
+            if (videoArr == null) {
+              this.error=true
+              this.errorMsg = "暂时没有数据";
+            } else {
+              for (var i = 0; i < videoArr.length; i++) {
+                var video = {};
+                video.chapterName = videoArr[i].CP_NAME;
+                video.videoName = videoArr[i].RS_NAME;
+                video.introduction = videoArr[i].RS_COMMENT;
+                video.date = this.timestampToTime(videoArr[i].RS_CREATE_TIME);
+                video.uploadAdmin = videoArr[i].RS_FOUNDER;
+                video.chapterNum = videoArr[i].CP_NUMBER;
+                videoData.push(video);
+              }
+              this.videoData = videoData;
+              console.log(videoData);
+              this.changeTablePages(0);
+            }
+          },
+          error => {
+            // this.$router.push({path:'/404'})
+            console.log(error);
+          }
+        );
     },
     timestampToTime(timestamp) {
-        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        var Y = date.getFullYear() + '-';
-        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-        var D = date.getDate() + ' ';
-        var h = date.getHours() + ':';
-        var m = date.getMinutes() + ':';
-        var s = date.getSeconds();
-        return Y+M+D+h+m+s;
+      timestamp = String(timestamp);
+      timestamp = timestamp.length == 10 ? timestamp*1000 : timestamp * 1
+      var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      var Y = date.getFullYear() + "-";
+      var M =(date.getMonth() + 1 < 10? "0" + (date.getMonth() + 1): date.getMonth() + 1) + "-";
+      var D = date.getDate() + " ";
+      var h = date.getHours() + ":";
+      var m = date.getMinutes() + ":";
+      var s = date.getSeconds();
+      return Y + M + D + h + m + s;
     }
   },
   mounted() {
@@ -127,7 +174,7 @@ export default {
             var course = {};
             course.name = courseArr[i].NAME;
             course.id = courseArr[i].ID;
-            if (i == 5) course.isActive = true;
+            if (i == 0) course.isActive = true;
             else course.isActive = false;
             courseList.push(course);
           }
@@ -136,7 +183,7 @@ export default {
           globalAxios
             .get(
               "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
-                this.courseList[5].id +
+                this.courseList[0].id +
                 "/video",
               {
                 headers: {
@@ -156,14 +203,14 @@ export default {
                   video.chapterName = videoArr[i].CP_NAME;
                   video.videoName = videoArr[i].RS_NAME;
                   video.introduction = videoArr[i].RS_COMMENT;
-                  video.date = this.timestampToTime(videoArr[i].RS_CREATE_TIME); 
+                  video.date = this.timestampToTime(videoArr[i].RS_CREATE_TIME);
                   video.uploadAdmin = videoArr[i].RS_FOUNDER;
                   video.chapterNum = videoArr[i].CP_NUMBER;
                   videoData.push(video);
                 }
                 this.videoData = videoData;
                 console.log(videoData);
-                this.changeTablePages(0)
+                this.changeTablePages(0);
               },
               error => {
                 // this.$router.push({path:'/404'})
@@ -211,7 +258,7 @@ export default {
   border: 1px solid #eee;
   color: #666;
 }
-.course-inactive-btn:hover{
+.course-inactive-btn:hover {
   background-color: rgba(238, 238, 238, 0.575);
   border: 1px solid rgba(238, 238, 238, 0.575);
   color: #666;
@@ -220,9 +267,9 @@ export default {
   background-color: #409eff;
   border: 1px solid #409eff;
 }
-.course-active-btn:hover{
-    background-color: #40a0ffcc;
-    border: 1px solid #40a0ffcc;
+.course-active-btn:hover {
+  background-color: #40a0ffcc;
+  border: 1px solid #40a0ffcc;
 }
 
 .title {

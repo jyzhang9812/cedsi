@@ -146,10 +146,10 @@ export default {
             console.log(error);
           }
         );
-        this.$router.push({path:"/Admin/videoManagement"})
+        this.$router.push({path:"/Admin/"})
     },
     goback(){
-      this.$router.push({path:"/Admin/videoManagement"})
+      this.$router.push({path:"/Admin/"})
     }
   },
   created() {
@@ -161,7 +161,7 @@ export default {
       .get(
         "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
           this.courseId +
-          "/video",
+          "/chapters",
         {
           headers: {
             "Content-Type": "application/json",
@@ -171,7 +171,7 @@ export default {
       )
       .then(
         response => {
-          //console.log(response);
+          console.log(response);
           var chapterArr = [];
           var chapterData = [];
           chapterArr = response.data.data;
@@ -256,7 +256,7 @@ export default {
 .dropdown-menu {
   left: 100px !important;
   overflow: auto !important;
-  height: 300px !important;
+  max-height: 300px !important;
 }
 .upload-footer {
   width: 100%;

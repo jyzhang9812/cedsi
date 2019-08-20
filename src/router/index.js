@@ -569,17 +569,17 @@ export default new Router({
       path: '/Admin',
       component: Admin,
       children: [
+        // {
+        //   path: '/Admin/', beforeEnter(to, from, next) {
+        //     if (window.localStorage.getItem("idToken")) {
+        //       next()
+        //     } else {
+        //       next('/signin')
+        //     }
+        //   }, component: eduAdminManagement
+        // },
         {
           path: '/Admin/', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: eduAdminManagement
-        },
-        {
-          path: '/Admin/videoManagement', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {
@@ -642,7 +642,7 @@ export default new Router({
           }, component: organizationManagement
         },
         {
-          path: '/Admin/organizationManagement/:courseId/addOrganization', beforeEnter(to, from, next) {
+          path: '/Admin/organizationManagement/addOrganization', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {

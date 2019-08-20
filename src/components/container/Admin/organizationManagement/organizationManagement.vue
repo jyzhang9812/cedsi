@@ -1,63 +1,5 @@
 <template>
   <div class="subContainer">
-    <!-- 添加教务模态框（Modal） -->
-    <div
-      class="modal fade"
-      id="addEduAdmin"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="myModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">新增教务</h4>
-          </div>
-          <div class="modal-body">
-            <div class="content">
-              <div class="add">
-                <span class="keypoint">*</span>
-                <span class="addtitle">账号</span>
-                <input
-                  :class="isUserName==false?'addcon':'addcon err'"
-                  placeholder="请输入教务账号"
-                  v-model="eduAdminUserName"
-                />
-              </div>
-              <span :class="isUserName==true?'inputtips':'inputerr'">不超过15个字符</span>
-              <div class="add">
-                <span class="keypoint">*</span>
-                <span class="addtitle">密码</span>
-                <input
-                  :class="isPassword==false?'addcon':'addcon err'"
-                  placeholder="请输入密码"
-                  v-model="eduAdminPassword"
-                />
-              </div>
-              <span :class="isPassword==true?'inputtips':'inputerr'">不超过20个字符</span>
-              <div class="add">
-                <span class="keypoint">*</span>
-                <span class="addtitle">所属学校</span>
-                <select-input
-                  class="modal-select-input"
-                  id="school"
-                  tips="请选择学校"
-                  :option="inputData.school.option" 
-                  :dropDownList="inputData.school.list"
-                  @option="changeOption"
-                ></select-input>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="submit()">确定</button>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- 提示模态框（Modal） -->
     <div
       class="modal fade"
@@ -95,25 +37,23 @@
     </div>
     <div class="classroute">
       <ol class="breadcrumb">
-        <li>教务管理</li>
+        <li>机构管理</li>
       </ol>
     </div>
     <div class="first-floor">
       <label for="class-name"></label>
       <input
         type="text"
-        placeholder="请输入教务账号"
+        placeholder="请输入机构账号"
         class="textBox"
         id="class-name"
-        v-model="inputData.adminUserName"
+        v-model="inputData.organizationName"
       />
       <button class="btn btn-search">搜索</button>
       <button
         class="btn btn-clear"
-        data-toggle="modal"
-        data-target="#addEduAdmin"
-        @click="addEduAdmin()"
-      >新增教务</button>
+        @click="addOrganization()"
+      >新增机构</button>
     </div>
     <div class="second-floor">
       <table class="table table-hover">
@@ -123,17 +63,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(eduadmin, seq) in currentList" :key="seq" class="content">
+          <tr v-for="(organization, seq) in currentList" :key="seq" class="content">
             <td>{{seq+1}}</td>
-            <td>{{eduadmin.username}}</td>
-            <td>{{eduadmin.character}}</td>
+            <td>{{organization.account}}</td>
+            <td>{{organization.name}}</td>
+            <td>{{organization.region}}</td>
             <td>
-              <button
-                :class="eduadmin.status==='启用'?'btnactive btn-success':'btnactive btn-warning'"
-                @click="changeEduAdminStatus(seq)"
-              >{{eduadmin.status}}</button>
-            </td>
-            <td>
+              <span class="blue">查看营业执照</span>
+              <span class="blue">下载相关文件</span>
+              <br>
+              <span class="blue">编辑</span>
               <span
                 class="red"
                 data-toggle="modal"
@@ -161,127 +100,105 @@ export default {
       limit: 20,
       currentList: [],
       inputData: {
-        eduAdminUserName: ""
+        organizationUserName: ""
       },
-      tableTitle: ["序号", "账号", "所属学校", "状态", "操作"],
+      tableTitle: ["序号", "企业账号", "机构名称","机构负责人","所属地区", "教师人数","操作"],
       tableData: [
         {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
 
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
               {
         account:"xxx",
-        character:"lll",
-        status:"启用"
+        name:"lll",
+        region:"陕西西安"
       },
 
       ], //页面表格内容
       //新增管理员
-      eduAdminUserName: "",
+      organizationUserName: "",
       isUserName: true,
-      eduAdminPassword: "",
+      organizationPassword: "",
       isPassword: true,
       //提示框
-      alterimg: this.$store.state.url + "eduAdmin/alter.png",
+      alterimg: this.$store.state.url + "organization/alter.png",
       alterMes: "",
       //当前页码
       currentPage: 0,
       index: 0,
-        inputData: {
-          school: {
-            option: "赛迪思",
-            list: ["赛迪思", "雁塔路小学", "翠华路小学", "回民街小学"]
-          }
-        },
     };
-  },
-  watch: {
-    eduAdminUserName(val, oldVal) {
-      if (val.length <= 15 && val.length > 0) {
-        this.isUserName = false;
-      } else {
-        this.isUserName = true;
-      }
-    },
-    eduAdminPassword(val, oldVal) {
-      if (val.length <= 20 && val.length > 0) {
-        this.isPassword = false;
-      } else {
-        this.isPassword = true;
-      }
-    }
   },
   methods: {
       changeOption(item, id) {
@@ -291,50 +208,20 @@ export default {
           }
         });
       },
-    changeEduAdminStatus(seq) {
-      this.index = this.currentPage * this.limit + seq;
-      //console.log(this.index,this.currentPage)
-      if (this.tableData[this.index].status == "启用") {
-        this.tableData[this.index].status = "禁用";
-      } else {
-        this.tableData[this.index].status = "启用";
-      }
-      var updateEduAdmin = this.tableData[this.index];
-      console.log(updateEduAdmin);
-      var token = window.localStorage.getItem("idToken");
-      console.log(token);
-      globalAxios
-        .put(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-          { userId: updateEduAdmin.id },
-          {
-            "Content-Type": "application/json",
-            Authorization: token
-          }
-        )
-        .then(
-          response => {
-            console.log(response);
-          },
-          error => {
-            console.log(error);
-          }
-        );
-    },
-    deleteEduAdmin(seq) {
+    deleteOrganization(seq) {
       this.index = this.currentPage * this.limit + seq;
       console.log(this.index);
       this.alterMes = "确认删除吗？";
     },
     submitDelete() {
-      var deleteEduAdmin = this.tableData[this.index];
-      console.log(deleteEduAdmin);
+      var deleteorganization = this.tableData[this.index];
+      console.log(deleteorganization);
       var token = window.localStorage.getItem("idToken");
       console.log(token);
       this.$http
         .delete(
           "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-          { userId: deleteEduAdmin.id },
+          { userId: deleteorganization.id },
           {
             "Content-Type": "application/json",
             Authorization: token
@@ -351,41 +238,8 @@ export default {
         );
       this.getNew(this.currentPage * this.limit);
     },
-    addEduAdmin() {
-      this.eduAdminUserName = "";
-      this.eduAdminPassword = "";
-    },
-    //提交
-    submit() {
-      var newEduAdmin = {};
-      newEduAdmin.username = this.eduAdminUserName;
-      newEduAdmin.character = "管理员";
-      newEduAdmin.status = "启用";
-      //console.log(newAdmin);
-      var data = { username: this.eduAdminUserName, password: this.eduAdminPassword };
-      //console.log(data);
-      var token = window.localStorage.getItem("idToken");
-      console.log(token);
-      this.$http
-        .post(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-          { username: this.eduAdminUserName, password: this.eduAdminPassword },
-          {
-            "Content-Type": "application/json",
-            Authorization: token
-          }
-        )
-        .then(
-          response => {
-            //console.log(response);
-            this.tableData.splice(0, 0, newEduAdmin);
-            this.getNew(this.currentPage * this.limit);
-          },
-          error => {
-            console.log(error);
-          }
-        );
-      //console.log(this.currentPage*this.limit)
+    addOrganization() {
+        this.$router.push({path:"/Admin/organizationManagement/addOrganization"});
     },
     //换页
     changeTablePages(value) {
@@ -400,46 +254,7 @@ export default {
       //console.log(this.currentList)
     }
   },
-  // created() {
-  //   var token = window.localStorage.getItem("idToken");
-  //   globalAxios
-  //     .get(
-  //       "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: token
-  //         }
-  //       }
-  //     )
-  //     .then(
-  //       response => {
-  //         //console.log(response.data.data);
-  //         var eduadmin_arr = response.data.data;
-  //         var eduadmin_table = [];
-  //         for (var i = 0; i < eduadmin_arr.length; i++) {
-  //           var eduadmin = {};
-  //           eduadmin.username = eduadmin_arr[i].USER_NAME;
-  //           eduadmin.id = eduadmin_arr[i].USER_ID;
-  //           if (eduadmin_arr[i].USER_STATUS == "active") eduadmin.status = "启用";
-  //           else eduadmin.status = "禁用";
-  //           eduadmin.character = "管理员";
-  //           //console.log(admin)
-  //           eduadmin_table.push(eduadmin);
-  //         }
-  //         //console.log(admin_table)
-  //         // return response.json();
-  //         this.tableData = eduadmin_table;
-  //         this.getNew(0);
-  //         //console.log(this.tableData)
-  //       },
-  //       error => {
-  //         console.log(error);
-  //       }
-  //     );
-  // },
   mounted() {
-    //this.tableData = this.originalTableData;
     this.changeTablePages(0);
   }
 };
