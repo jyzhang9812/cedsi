@@ -13,17 +13,17 @@
         @area="onChangeArea"
       ></v-distpicker>
     </div>
-    <!-- <div class="upload">
+    <div class="upload">
       <span class="upload-title">机构类型:</span>
       <select-input
         class="upload-select"
-        id="orgtype"
-        tips="请选择机构类型"
+        id="org"
+        tips="请选章节"
         :option="inputData.org.option.name"
         @option="changeOption"
         :drop-down-list="inputData.org.list"
       ></select-input>
-    </div> -->
+    </div>
     <div class="upload upload-height">
       <span class="upload-title">机构描述:</span>
       <textarea
@@ -102,13 +102,13 @@ export default {
           option: "",
           list: [
             {
-              name: "学校",
-              id: "1"
-            },
-            {
-              name: "企业",
-              id: "2"
-            }
+              name:"学校",
+              id:"0"
+          },
+                      {
+              name:"企业",
+              id:"1"
+          },
           ]
         }
       },
@@ -127,7 +127,6 @@ export default {
       Object.keys(this.inputData).forEach(res => {
         if (res === id) {
           this.inputData[res].option = item;
-          console.log(this.inputData[res].option)
         }
       });
     },
@@ -177,7 +176,7 @@ export default {
       newOrg.organizationAddress = this.organizationAddress;
       newOrg.organizationIntro = this.organizationIntro;
       newOrg.code=this.code;
-      //newOrg.organizationType = this.inputData.option
+      newOrg.organizationType = this.inputData.org.option
       newOrg.type=this.licenseType;
       console.log(newOrg);
       console.log(this.organization);
