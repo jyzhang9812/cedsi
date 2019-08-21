@@ -5,7 +5,7 @@
         <app-quote-grid :quotes="quotes" @quoteDeleted="deleteQuote"></app-quote-grid>
         <div class="quote_row">
           <div class="col-sm-12 text-center">
-            <div class="alert alert-info">Info: click on a Quote to delete it!!!</div>
+            <div class="alert alert-info">点击卡片查看具体问题及回复~</div>
           </div>
         </div>
     </div>

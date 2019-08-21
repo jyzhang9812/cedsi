@@ -34,11 +34,11 @@ const actions = {
     },
     signup({ commit, dispatch }, authData) {
         globalAxios.post("/user/register",
-            { "username": authData.username, "password": authData.password })
+            { "username": authData.username, "password": authData.password, "account": authData.account })
             .then(
                 response => {
                     console.log(response);
-                    this.$router.replace({ path: '/signin' })
+                    router.replace({ path: '/signin' })
                 },
                 error => {
                     router.push({ path: '/404' })
@@ -74,7 +74,6 @@ const actions = {
         localStorage.removeItem('roleId');
         localStorage.removeItem('expirationDate');
         localStorage.removeItem('user');
-
         router.replace('/')
     },
 
@@ -99,26 +98,31 @@ const actions = {
                 user.email = arr.EMAIL,
                 user.gender = arr.GENDER,
                 commit(TYPES.getUserInfo, user)
+            commit(TYPES.updateLoading, false)
         },
             error => {
+                commit(TYPES.updateLoading, false)
                 console.log(error);
             })
     },
     updateUser({ commit, state }, userData) {
-        globalAxios.post('/student/studentinfo',
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': state.idToken
-                },
-                data: userData
+        globalAxios({
+            method: "PUT",
+            url: '/student/studentinfo',
+            data: userData,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': state.idToken
             }
-        ).then( response => {
-            console.log(response)
-            commit(TYPES.getUserInfo, userData)
-        }, error => {
-            console.log(error);
         })
+            .then(response => {
+                console.log(response)
+                commit(TYPES.getUserInfo, userData)
+                commit(TYPES.updateLoading, false)
+            }, error => {
+                commit(TYPES.updateLoading, false)
+                console.log(error);
+            })
     },
     getCourse({ commit, state }) {
         globalAxios.get('/student/courses',
@@ -136,10 +140,57 @@ const actions = {
             }
             commit(TYPES.changeCourseList, arr)
             commit(TYPES.changeCourseCurrentList, 0)
+            commit(TYPES.updateLoading, false)
         },
             error => {
+                commit(TYPES.updateLoading, false)
                 console.log(error);
             })
+    },
+    getCourseDetail({ commit, state },id) {
+        globalAxios.get('/student/courses/'+id+'/chapters', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': state.idToken
+            }
+        })
+            .then(
+                response => {
+                    console.log(response)
+                    var chaptersArr = response.data.data.chapter_message.chapters;
+                    var finishChaptersArr = response.data.data.chapter_message.finish_chapters;
+                    var List={
+                        name:'',
+                        list:[]
+                    }
+                    for (var i = 0; i < chaptersArr.length; i++) {
+                        var point={}
+                        if (i < finishChaptersArr.length) {
+                            point.bgImg =
+                                "../../static/images/scratch/coordinateed.6a1e9a5.png";
+                            point.status = "已完成";
+                            point.flag = true;
+                        } else {
+                           point.bgImg =
+                                "../../static/images/scratch/coordinate.a15fa38.png";
+                            point.status = "未解锁";
+                            point.flag = false;
+                        }
+                        point.description = chaptersArr[i].CP_DESCRIPTION;
+                        point.number = chaptersArr[i].CP_NUMBER;
+                        point.name = chaptersArr[i].CP_NAME;
+                        point.videoSrc = chaptersArr[i].CP_RESOURCE.VIDEO;
+                        List.list.push(point);
+                    }
+                    List.name = response.data.data.courseName,
+                    commit(TYPES.changeCouseDetail, List)
+                    commit(TYPES.updateLoading, false)
+                },
+                error => {
+                    commit(TYPES.updateLoading, false)
+                    console.log(error);
+                }
+            );
     },
     getWork({ commit, state }, curId) {
         globalAxios.get('/student/works?type=' + curId,
@@ -183,8 +234,10 @@ const actions = {
             }
             commit(TYPES.changeWorkList, content)
             commit(TYPES.changeWorkCurrentList, 0)
+            commit(TYPES.updateLoading, false)
         },
             error => {
+                commit(TYPES.updateLoading, false)
                 console.log(error);
             }
         );
@@ -206,8 +259,10 @@ const actions = {
                 }
                 commit(TYPES.changeMsgList, arr)
                 commit(TYPES.changeMsgCurrentList, 0)
+                commit(TYPES.updateLoading, false)
             },
             error => {
+                commit(TYPES.updateLoading, false)
                 console.log(error);
             }
         );
@@ -233,8 +288,10 @@ const actions = {
             }
             myClass.classmates = arr
             commit(TYPES.getClass, myClass)
+            commit(TYPES.updateLoading, false)
         },
             error => {
+                commit(TYPES.updateLoading, false)
                 console.log(error);
             }
         );
@@ -268,8 +325,10 @@ const actions = {
                     }
                     commit(TYPES.changeAdminList, admin_table)
                     commit(TYPES.changeAdminCurrentList, 0)
+                    commit(TYPES.updateLoading, false)
                 },
                 error => {
+                    commit(TYPES.updateLoading, false)
                     console.log(error)
 
                 }
@@ -293,8 +352,10 @@ const actions = {
                 response => {
                     console.log(response);
                     dispatch("getAdmin")
+                    commit(TYPES.updateLoading, false)
                 },
                 error => {
+                    commit(TYPES.updateLoading, false)
                     console.log(error);
                 }
             );
@@ -316,8 +377,10 @@ const actions = {
                     console.log(response);
                     state.adminList.splice(deleteAdmin.index, 1);
                     commit(TYPES.changeAdminCurrentList, (deleteAdmin.page * state.limit));
+                    commit(TYPES.updateLoading, false)
                 },
                 error => {
+                    commit(TYPES.updateLoading, false)
                     console.log(error);
                 }
             );
@@ -337,9 +400,11 @@ const actions = {
             )
             .then(
                 response => {
+                    commit(TYPES.updateLoading, false)
                     console.log(response);
                 },
                 error => {
+                    commit(TYPES.updateLoading, false)
                     console.log(error);
                 }
             );

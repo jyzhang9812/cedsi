@@ -1,11 +1,12 @@
 export const authUser = 'authUser'
 export const storeUser = 'storeUser'
 export const clearAuthData = 'clearAuthData'
-
+export const updateLoading = 'updateLoading'
 export const getUser = 'getUser'
 
 export const getUserInfo = 'getUserInfo'
 export const getClass = 'getClass'
+export const changeCouseDetail = 'changeCouseDetail'
 export const changeCourseList = 'changeCourseList'
 export const changeCourseCurrentList = 'changeCourseCurrentList'
 export const changeWorkList = 'changeWorkList'

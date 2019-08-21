@@ -8,23 +8,26 @@
     <div class="row" style="margin-top: 10px">
       <courseCard v-if="0===curId"></courseCard>
       <newclass v-if="1===curId"></newclass>
+      <message v-if="2===curId"></message>
     </div>
   </div>
 </template>
 
 <script>
   import courseCard from '../course/courseCard.vue'
+  import message from '../message/message.vue'
   import newclass from './new.vue'
   export default {
     name: 'class',
     components: {
       newclass,
-      courseCard
+      courseCard,
+      message
     },
     data() {
       return {
         curId: 0,
-        items: [{ item: '我的课程' }, { item: '我的班级' }],
+        items: [{ item: '我的课程' }, { item: '我的班级' }, { item: '消息中心' }],
       }
     },
     methods: {
