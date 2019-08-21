@@ -63,7 +63,7 @@ export default {
       this.currentList = this.chapterData.slice(value, value + this.limit);
     },
     gotoAdd() {
-      this.$router.replace({
+      this.$router.push({
         path:
           "/Admin/chapterManagement/" +
           this.courseId +
@@ -133,6 +133,7 @@ export default {
       );
   },
   created() {
+    console.log("created被调用了")
   }
 };
 </script>

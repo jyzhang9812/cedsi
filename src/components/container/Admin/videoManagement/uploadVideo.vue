@@ -105,6 +105,7 @@ export default {
         .then(
           response => {
             console.log(response);
+            this.$router.push({path:"/Admin/"})
             //console.log(this.inputData.chapter.list);
             AWS.config = new AWS.Config({
               accessKeyId: response.data.AccessKeyId,
@@ -146,7 +147,6 @@ export default {
             console.log(error);
           }
         );
-        this.$router.push({path:"/Admin/"})
     },
     goback(){
       this.$router.push({path:"/Admin/"})
