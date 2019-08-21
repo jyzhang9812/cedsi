@@ -38,27 +38,26 @@
     import globalAxios from 'axios'
     export default {
         name: 'class',
-        data(){
+        data() {
             return {
-                uClass:{
-                    teacher:{
-
-                    }
-                }
+                temp: { name: '', teacher: { avatar: '', teacher_name: '' } }
             }
         },
         created: function () {
-            var token = window.localStorage.getItem('idToken')
-            this.$store.dispatch('getClass')
+            this.$store.dispatch('getClass').then(() => {
+                console.log("数据获取完成")
+            })
         },
         computed: {
+            uClass: function () {
+                if (Array.isArray(this.$store.state.myClass)) {
+                    return this.temp
+                } else {
+                    return this.$store.state.myClass;
+                }
 
-      myClass:function(state) {
-        return this.uClass=this.$store.state.myClass
-      },
-
-      
-    },
+            }
+        },
     }
 </script>
 
