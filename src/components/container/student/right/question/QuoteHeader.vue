@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-sm-12">
-                <h3 class="quote_header">Question Added</h3>
+                <h3 class="quote_header">我的提问</h3>
                 <div class="progress">
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" aria-valuenow="60" 

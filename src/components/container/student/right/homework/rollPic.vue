@@ -87,6 +87,7 @@
             this.style = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;'
             this.style1 = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;margin-top:-' + (document.documentElement.clientWidth * 0.17) + 'px;'
             this.$store.dispatch('getWork', 0)
+            this.$store.commit('updateLoading', true)
         },
         computed: {
             currentList() {

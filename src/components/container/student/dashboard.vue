@@ -27,7 +27,7 @@
             </div>
             <div class="modal-update">
               <div class="modal-update-text">加入时间:</div>
-              <input class="modal-update-info" v-model="user.time">
+              <input class="modal-update-info" v-model="user.time" value='user.time' disabled="disabled">
             </div>
             <div class="modal-update">
               <div class="modal-update-text">邮箱:</div>
@@ -87,9 +87,13 @@
 <script>
   import { error } from 'util';
   import globalAxios from 'axios'
+  import VueElementLoading from'vue-element-loading'
 
   export default {
     name: "dashboard",
+    components:{
+      VueElementLoading
+    },
     data() {
       return {
         lists: [
@@ -105,23 +109,18 @@
           },
           {
             name: "全部课程",
-            img: 'fa-leanpub',
+            img: 'fa-2x fa-lightbulb-o',
             path: "/dashboard/"
           },
           {
             name: "我的作品",
-            img: 'fa-2x fa-lightbulb-o',
+            img: 'fa-cube',
             path: "/dashboard/homework"
           },
           {
             name: "社区",
             img: 'fa-users',
             path: "/dashboard/community"
-          },
-          {
-            name: "消息中心",
-            img: 'fa-comments',
-            path: "/dashboard/message"
           },
           {
             name: "我的问题",
@@ -164,14 +163,24 @@
             this.user.gender = v.value
           }
         })
-        console.log(this.user);
-
+        const formData = {
+          avatar: this.user.avatar,
+          nickName: this.user.username,
+          email: this.user.email,
+          gender: this.user.gender,
+          mobile: this.user.mobile,
+          phone: this.user.phone,
+          time: this.user.time
+        }
+        console.log(formData);
+        this.$store.dispatch('updateUser', formData)
       }
     },
     created: function () {
       this.height = document.documentElement.clientHeight
       this.style = 'min-height:' + (this.height - 56) + 'px;'
       console.log(this.height)
+      this.$store.commit('updateLoading', true)
       this.$store.dispatch('getUser')
     },
     computed: {

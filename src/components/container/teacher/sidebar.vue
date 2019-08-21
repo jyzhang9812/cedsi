@@ -147,10 +147,9 @@
     color: #FFF;
     background-color: #3766A6;
     width: 220px;
-    /* position: fixed; */
     top: 0;
     bottom: 0;
-    /* height: 100%; */
+    min-height: 620px;
     float: left;
     display: table;
     height: auto;
