@@ -42,7 +42,8 @@
             return {
                 uClass: {
                     teacher: {
-
+                        avatar: '',
+                        teacher_name: ''
                     }
                 }
             }
@@ -53,7 +54,7 @@
         },
         computed: {
             myClass: function (state) {
-                return this.uClass = this.$store.state.myClass
+                return Array.isArray(this.$store.state.myClass) ? this.uClass : this.$store.state.myClass
             },
         },
     }
