@@ -24,7 +24,7 @@
             <div class="join">
                 <a class="wordjoin">
                     <img :src="video" class="joinpic" alt="">
-                    Find out why everyone loves Cedsi
+                    加入赛迪思
                 </a>
             </div>
         </div>

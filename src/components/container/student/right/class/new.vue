@@ -3,9 +3,9 @@
         <div class="container-table100">
             <div class="wrap-table100">
                 <div style="margin-bottom: 10px;">
-                    <button class="nameOfClass">{{uClass.name}}</button>
-                    <img class="avastimg" :src="uClass.teacher.avatar">
-                    代课老师：{{uClass.teacher.teacher_name}}
+                    <button class="nameOfClass">{{myClass.name}}</button>
+                    <img class="avastimg" :src="myClass.teacher.avatar">
+                    代课老师：{{myClass.teacher.teacher_name}}
                 </div>
                 <div class="table100 ver1 m-b-110">
                     <table data-vertable="ver1">
@@ -19,7 +19,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="row100" v-for="(item,index) in uClass.classmates" :key="index">
+                            <tr class="row100" v-for="(item,index) in myClass.classmates" :key="index">
                                 <td class="column100">{{index+1}}</td>
                                 <td class="column100"><img class="avastimg" :src="item.AVATAR"></td>
                                 <td class="column100">{{item.STUDENT_NAME}}</td>
@@ -40,23 +40,22 @@
         name: 'class',
         data() {
             return {
-                temp: { name: '', teacher: { avatar: '', teacher_name: '' } }
+                uClass: {
+                    teacher: {
+                        avatar: '',
+                        teacher_name: ''
+                    }
+                }
             }
         },
         created: function () {
-            this.$store.dispatch('getClass').then(() => {
-                console.log("数据获取完成")
-            })
+            this.$store.commit('updateLoading', true)
+            this.$store.dispatch('getClass')
         },
         computed: {
-            uClass: function () {
-                if (Array.isArray(this.$store.state.myClass)) {
-                    return this.temp
-                } else {
-                    return this.$store.state.myClass;
-                }
-
-            }
+            myClass: function (state) {
+                return Array.isArray(this.$store.state.myClass) ? this.uClass : this.$store.state.myClass
+            },
         },
     }
 </script>
@@ -75,30 +74,25 @@
         color: #fff;
         border-radius: 12px;
     }
-
     /* .nameOfClass:hover {
         color: #75b598;
         background: #fff;
     } */
-
     .avastimg {
         vertical-align: middle;
         width: 40px;
     }
-
     /*[ RESTYLE TAG ]*/
     * {
         margin: 0px;
         padding: 0px;
         box-sizing: border-box;
     }
-
     body,
     html {
         height: 100%;
         font-family: sans-serif;
     }
-
     /* ------------------------------------ */
     a {
         margin: 0px;
@@ -107,15 +101,12 @@
         -o-transition: all 0.4s;
         -moz-transition: all 0.4s;
     }
-
     a:focus {
         outline: none !important;
     }
-
     a:hover {
         text-decoration: none;
     }
-
     /* ------------------------------------ */
     h1,
     h2,
@@ -125,80 +116,65 @@
     h6 {
         margin: 0px;
     }
-
     p {
         margin: 0px;
     }
-
     ul,
     li {
         margin: 0px;
         list-style-type: none;
     }
-
     /* ------------------------------------ */
     button {
         outline: none !important;
         border: none;
         background: transparent;
     }
-
     button:hover {
         cursor: pointer;
     }
-
     iframe {
         border: none !important;
     }
-
     /*//////////////////////////////////////////////////////////////////
     [ Table ]*/
-
     .limiter {
         width: 100%;
         margin: 0 auto;
     }
-
     .container-table100 {
         width: 100%;
         min-height: 100vh;
         padding: 10px 30px;
     }
-
     .wrap-table100 {
         width: 100%;
         margin-top: 20px;
     }
-
     /*//////////////////////////////////////////////////////////////////
     [ Table ]*/
     table {
         width: 100%;
         background-color: #fff;
     }
-
     th,
     td {
         font-weight: unset;
         padding-right: 10px;
     }
-
     .column100 {
         width: 130px;
         padding-left: 25px;
         text-align: center;
     }
-
     .row100.head th {
         padding-top: 24px;
         padding-bottom: 20px;
     }
-
     .row100 td {
         padding-top: 10px;
         padding-bottom: 8px;
     }
-
     /*==================================================================
     [ Ver1 ]*/
     .table100.ver1 td {
@@ -207,29 +183,23 @@
         color: #808080;
         line-height: 1.4;
     }
-
     .table100.ver1 th {
         font-family: Montserrat-Medium;
         font-size: 15px;
         color: #fff;
         line-height: 1.4;
         text-transform: uppercase;
-
         background-color: #3d857a;
     }
-
     .table100.ver1 .row100:hover {
         background-color: #eff4e7;
     }
-
     .table100.ver1 .hov-column-ver1 {
         background-color: #eff4e7;
     }
-
     .table100.ver1 .hov-column-head-ver1 {
         background-color: #484848 !important;
     }
-
     .table100.ver1 .row100 td:hover {
         background-color: #c4f2ce;
         color: #fff;

@@ -1,21 +1,21 @@
 <template>
   <header id="header">
     <div class="logo">
-      <router-link to="/">Home - Cedsi</router-link>
+      <router-link to="/">赛迪思人工智能</router-link>
     </div>
     <nav>
       <ul>
         <li v-if="!auth">
-          <router-link to="/signup">Sign Up</router-link>
+          <router-link to="/signup">注册</router-link>
         </li>
         <li v-if="!auth">
-          <router-link to="/signin">Sign In</router-link>
+          <router-link to="/signin">登录</router-link>
         </li>
         <li v-if="auth">
-          <button @click="role">Dashboard</button>
+          <button @click="role">我的主页</button>
         </li>
         <li v-if="auth">
-          <button @click="signout">Sign out</button>
+          <button @click="signout">退出登录</button>
         </li>
       </ul>
     </nav>

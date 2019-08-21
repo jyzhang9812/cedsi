@@ -4,7 +4,7 @@
             <h2>成为赛迪斯的一员</h2>
             <div class="btn">
                 <button class="btnsingup">
-                    Sign up free
+                    免费注册
                 </button>
             </div>
         </div>
