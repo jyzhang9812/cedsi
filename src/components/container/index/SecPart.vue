@@ -109,8 +109,8 @@ export default {
      message:{
      h2:"儿童排名第一的编码平台",
      p1:"赛迪斯为提供学习资源",
-     ps1:"87,000 schools",
-     ps2:"60 million kids",
+     ps1:"87,000 学校",
+     ps2:"60000000 学生",
      p11:"and powers the imagination of",
      p12:" worldwide.",
      p2:"通过赛迪斯，孩子们学习使用代表真实编程概念的革命性可视代码块来编写有趣而简单的方法。"

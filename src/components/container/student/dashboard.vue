@@ -58,20 +58,20 @@
             <li class="title" v-for="(title,index) in lists" :key="index" @mouseleave="hide(index)"
               @mouseenter="show(index)">
               <router-link :to="title.path" tag="div" class='block'>
-                <div v-show="index==i" :class="index==0?'shutiao_long':'shutiao'"></div>
                 <div class="user-info" v-show="index==0">
                   <div class="message-img"></div>
                   <div class="header-img">
                     <img class="header" :src="user.avatar">
-                    <img class="update-info" src="../../../../static/images/sidebar/update-info.png" data-toggle="modal"
-                      data-target="#update-info">
+                    <i class="fa fa-pencil fa-lg update-info" aria-hidden="true" data-toggle="modal"
+                      data-target="#update-info"></i>
                   </div>
                   <div class="user">
                     <h5 class="user-name">{{user.username}}</h5>
                   </div>
                 </div>
-                <img v-show="index!=0" class="nav-img" :src="title.img">
-                {{title.name}}
+                <i class="fa fa-lg" :class='title.img' v-show="index!=0" :style="index==i?'color:#fff':'color:#7580b3'"
+                  aria-hidden="true"></i>
+                <span v-show="index!=0" style="padding-left: 10px">{{title.name}}</span>
               </router-link>
             </li>
           </ul>
@@ -100,44 +100,42 @@
           },
           {
             name: "我的首页",
-            img: this.$store.state.url + "sidebar/un-course.png",
+            img: 'fa-bandcamp',
             path: "/dashboard/showPage"
           },
           {
             name: "全部课程",
-            img: this.$store.state.url + "sidebar/un-course.png",
+            img: 'fa-leanpub',
             path: "/dashboard/"
           },
           {
             name: "我的作品",
-            img: this.$store.state.url + "sidebar/un-mywork.png",
+            img: 'fa-2x fa-lightbulb-o',
             path: "/dashboard/homework"
           },
           {
             name: "社区",
-            img: this.$store.state.url + "sidebar/un-mywork.png",
+            img: 'fa-users',
             path: "/dashboard/community"
           },
           {
             name: "消息中心",
-            img: this.$store.state.url + "sidebar/un-message.png",
+            img: 'fa-comments',
             path: "/dashboard/message"
           },
           {
             name: "我的问题",
-            img: this.$store.state.url + "sidebar/un-question.png",
+            img: 'fa-quora',
             path: "/dashboard/question"
           },
           {
             name: "辅导资料",
-            img: this.$store.state.url + "sidebar/un-info.png",
+            img: 'fa-book',
             path: "/dashboard/presentation"
           },
         ],
         radiolist: [{ name: '男', value: 1, isCheck: false }, { name: '女', value: 2, isCheck: false }],
-        i: -1,
-        seen: false,
-        imgpath: this.$store.state.url,
+        i: 0,
         height: 0,
         style: ''
       };
@@ -145,19 +143,9 @@
     methods: {
       show(index) {
         this.i = index;
-        this.seen = true;
-        var length = this.lists[index].img.length;
-        var img1 = this.lists[index].img.substring(0, 34);
-        var img2 = this.lists[index].img.substring(37, length);
-        this.lists[index].img = img1 + img2;
       },
       hide(index) {
         this.i = index;
-        this.seen = false;
-        var length = this.lists[index].img.length;
-        var img1 = this.lists[index].img.substring(0, 34);
-        var img2 = this.lists[index].img.substring(34, length);
-        this.lists[index].img = img1 + "un-" + img2;
       },
 
       changeInput(index) {
@@ -177,7 +165,7 @@
           }
         })
         console.log(this.user);
-        
+
       }
     },
     created: function () {
@@ -195,73 +183,42 @@
 </script>
 
 <style>
-  .container-fluid {
+  #student .container-fluid {
     height: 100%;
   }
 
-  .row {
+  #student .row {
     display: flex;
   }
 
-  .title {
+  #student .title {
     width: 250px;
     line-height: 60px;
     color: #7580b3;
   }
 
-  .block {
+  #student .block {
     padding-left: 30px;
     cursor: pointer;
+    transition: all .25s;
   }
 
-  .block_lg {
-    padding-left: 0px;
+  #student .nav>li {
+    cursor: pointer;
+    min-height: 50px;
+    padding: 5px 5px;
   }
 
-  .router-link-exact-active {
-    /* background-color: #7580b3; */
+  #student .block:hover,
+  #student .router-link-exact-active {
+    background-color: #2e3347;
     color: #fff;
-  }
-
-  .nav>li:hover {
-    background-color: #7580b3;
-    color: #fff;
-  }
-
-  .nav>li:active {
-    background-color: #7580b3;
-    color: #fff;
-  }
-
-  .active {
-    background-color: #7580b3;
-    color: #fff;
-  }
-
-  a {
-    color: #7580b3;
-  }
-
-  .shutiao {
-    position: relative;
-    width: 5px;
-    height: 60px;
-    background-color: #fff;
-    float: left;
-    left: -25px;
-  }
-
-  .shutiao_long {
-    position: relative;
-    width: 5px;
-    height: 150px;
-    background-color: #fff;
-    float: left;
-    left: -25px;
+    border-left: 5px solid #fff;
+    padding-left: 30px;
   }
 
   /* Hide for mobile, show later */
-  .col-md-2 {
+  #student .col-md-2 {
     width: 16.7%;
     position: relative;
     top: 0px;
@@ -269,20 +226,20 @@
     display: block;
     overflow-x: hidden;
     overflow-y: auto;
-    /* Scrollable contents if viewport is shorter than content. */
     background-color: #252937;
   }
 
   /* Sidebar navigation */
-  .nav-sidebar {
+  #student .nav-sidebar {
     margin-left: -20px;
   }
 
-  .nav-sidebar>li>a {
+  #student .nav-sidebar>li>a {
     padding-right: 20px;
+    color: #7580b3;
   }
 
-  .col-md-10 {
+  #student .col-md-10 {
     z-index: 1;
     position: relative;
     width: 83.3%;
@@ -291,7 +248,7 @@
     display: block;
   }
 
-  .col-md-offset-2 {
+  #student .col-md-offset-2 {
     margin-left: 0%;
   }
 
@@ -360,36 +317,36 @@
   }
 
   /*修改个人信息*/
-  .modal-title {
+  #student .modal-title {
     text-align: center;
   }
 
-  .modal-head {
+  #student .modal-head {
     width: 70px;
     height: 70px;
     margin: 0 auto;
   }
 
-  .modal-headimg {
+  #student .modal-headimg {
     position: relative;
     width: 100%;
     height: 100%;
     border-radius: 50%;
   }
 
-  .modal-update {
+  #student .modal-update {
     margin: 20px auto;
     height: 40px;
     width: 400px;
   }
 
-  .modal-update-radiogroup {
+  #student .modal-update-radiogroup {
     width: 70%;
     line-height: 40px;
     float: left;
   }
 
-  .modal-update-info {
+  #student .modal-update-info {
     width: 70%;
     height: 40px;
     border-radius: 5px;
@@ -398,11 +355,11 @@
     margin-inline-start: 20px;
   }
 
-  .modal-update-radio {
+  #student .modal-update-radio {
     width: 20%;
   }
 
-  .modal-update-text {
+  #student .modal-update-text {
     width: 20%;
     height: 100%;
     float: left;

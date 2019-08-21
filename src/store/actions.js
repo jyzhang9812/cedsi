@@ -88,7 +88,7 @@ const actions = {
                 }
             }
         ).then(response => {
-            // console.log(response.data)
+            console.log(response.data)
             var user = {}
             var arr = response.data
             user.avatar = arr.AVATAR,
@@ -151,24 +151,20 @@ const actions = {
             }
         ).then(response => {
             var arr = []
-            var content = [{
-                name: '',
-                rank: '',
-                time: '',
-                img_url: '',
-                teacher_remark: '',
-            }]
-            // console.log(response);
+            var content = []
+            console.log(response);
             if (curId == 0) {
                 for (var i = 0; i < response.data.homework.length; i++) {
                     arr.push(response.data.homework[i])
                 }
                 for (var i = 0; i < arr.length; i++) {
-                    content[i].name = arr[i].HW_NAME;
-                    content[i].img_url = arr[i].HW_COVER;
-                    content[i].teacher_remark = arr[i].TEACHER_REMARK;
-                    content[i].rank = arr[i].HW_RANK;
-                    content[i].time = arr[i].SUBMIT_TIME;
+                    var array = {}
+                    array.name = arr[i].HW_NAME;
+                    array.img_url = arr[i].HW_COVER;
+                    array.teacher_remark = arr[i].TEACHER_REMARK;
+                    array.rank = arr[i].HW_RANK;
+                    array.time = arr[i].SUBMIT_TIME;
+                    content.push(array);
                 }
             }
             else {
@@ -176,11 +172,13 @@ const actions = {
                     arr.push(response.data.product[i])
                 }
                 for (var i = 0; i < arr.length; i++) {
-                    content[i].name = arr[i].PRODUCT_NAME;
-                    content[i].img_url = arr[i].COVER_URL;
-                    content[i].teacher_remark = arr[i].TEACHER_REMARK;
-                    content[i].rank = arr[i].PRODUCT_RANK;
-                    content[i].time = arr[i].CREATE_TIME;
+                    var array = {}
+                    array.name = arr[i].PRODUCT_NAME;
+                    array.img_url = arr[i].COVER_URL;
+                    array.teacher_remark = arr[i].TEACHER_REMARK;
+                    array.rank = arr[i].PRODUCT_RANK;
+                    array.time = arr[i].CREATE_TIME;
+                    content.push(array);
                 }
             }
             commit(TYPES.changeWorkList, content)
@@ -223,13 +221,12 @@ const actions = {
                 }
             }
         ).then(response => {
-            // console.log(response);
+            console.log(response);
             var myClass = {}
             var arr = []
 
             myClass.name = response.data.className
             myClass.teacher = response.data.teacher
-            console.log(myClass.teacher)
             myClass.memberCount = response.data.member_count
             for (var i = 0; i < response.data.classmates.length; i++) {
                 arr.push(response.data.classmates[i])
