@@ -194,6 +194,7 @@ export default {
         .then(
           response => {
             console.log(response);
+            this.$router.push({path:"/Admin/organizationManagement"})
             AWS.config = new AWS.Config({
               accessKeyId: response.data.AccessKeyId,
               secretAccessKey: response.data.SecretAccessKey,
@@ -229,7 +230,6 @@ export default {
             console.log(error);
           }
         );
-        this.$router.push({path:"/Admin/organizationManagement"})
     }
   }
 };

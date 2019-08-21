@@ -224,7 +224,7 @@
     components: { SelectInput, DatePicker, pagination },
     data() {
       return {
-        limit: 2,
+        limit: 10,
         inputData: {
           className: ""
           // school: {
@@ -246,12 +246,11 @@
         },
         tableTitle: [
           "序号",
-          "所属学校",
           "班级名称",
           "开课时间",
           "老师",
-          "待上课程",
-          "已结课程",
+          "课程",
+          "学生人数",
           "操作"
         ],
         tableData: [
