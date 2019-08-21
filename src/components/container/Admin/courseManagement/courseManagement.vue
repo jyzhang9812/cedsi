@@ -84,7 +84,7 @@
           console.log(res)
           res.data.forEach(item => {
             this.courseList.push({
-              name: item.NAME,
+              name: item.COURSE_NAME,
               introduction: item.INTRO,
               img:item.COVER,
               num: 100,

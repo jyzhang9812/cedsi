@@ -176,7 +176,7 @@ export default {
       newOrg.organizationAddress = this.organizationAddress;
       newOrg.organizationIntro = this.organizationIntro;
       newOrg.code=this.code;
-      newOrg.organizationType = this.inputData.org.option
+      newOrg.organizationType = this.inputData.org.option.name;
       newOrg.type=this.licenseType;
       console.log(newOrg);
       console.log(this.organization);
