@@ -125,7 +125,6 @@ export default {
 .right {
   margin-top: 10px;
   margin-left: 20px;
-  height: 400px;
 }
 .title {
   font-weight: bolder;

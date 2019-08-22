@@ -159,7 +159,9 @@
     background-color: #7579ff;
     border: none;
   }
-
+  .nav>li>a:focus, .nav>li>a:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
   .nav-pills>li>a {
     line-height: 1.4;
     border-radius: 4px 4px 0 0;
