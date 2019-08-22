@@ -1,5 +1,6 @@
 <template>
-  <div id="signin" class="bcg" :style="{backgroundImage:'url('+require('../../../../static/images/auth/bg-01.jpg')+')'}">
+  <div id="signin" class="bcg"
+    :style="{backgroundImage:'url('+require('../../../../static/images/auth/bg-01.jpg')+')'}">
     <div class="signin-form">
       <span class="login100-form-logo">
         <i class="zmdi zmdi-landscape"></i>
@@ -9,25 +10,13 @@
         welcome
       </span>
       <form @submit.prevent="onSubmit">
-        <div class="wrap-input100 validate-input" data-validate = "Enter username">
-          <input
-                  type="username"
-                  id="username"
-                  v-model="username"
-                  class="input100"
-                  placeholder="用户名"
-                  >
-                  <span class="focus-input100" data-placeholder=""></span>
+        <div class="wrap-input100 validate-input" data-validate="Enter username">
+          <input type="username" id="username" v-model="username" class="input100" placeholder="用户名">
+          <span class="focus-input100" data-placeholder=""></span>
         </div>
         <div class="wrap-input100 validate-input" data-validate="Enter password">
-          <input
-                  type="password"
-                  id="password"
-                  v-model="password"
-                  class="input100"
-                  placeholder="密码"
-                  >
-                  <span class="focus-input100" data-placeholder=""></span>
+          <input type="password" id="password" v-model="password" class="input100" placeholder="密码">
+          <span class="focus-input100" data-placeholder=""></span>
         </div>
 
         <!-- <div class="contact100-form-checkbox">
@@ -42,7 +31,7 @@
           </p>
         </div>
         <div class="container-login100-form-btn">
-          <button type="submit"class="login100-form-btn">登录</button>
+          <button type="submit" class="login100-form-btn">登录</button>
         </div>
         <div class="text-center p-t-90">
           <a class="txt1" href="#">
@@ -56,33 +45,35 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         email: '',
         password: '',
-        username:'',
-        error:0
+        username: '',
+        error: 0,
       }
     },
     methods: {
-      onSubmit () {
+      onSubmit() {
         const formData = {
           password: this.password,
           username: this.username
         }
-        this.error = this.$store.getters.isAuthenticated;
-        this.$store.dispatch('login',formData);
+        this.$store.dispatch('login', formData).then(() => {
+          this.error = this.$store.getters.isAuthenticated;
+        })
       }
     },
   }
 </script>
 
 <style scoped>
-  #signin{
+  #signin {
     min-height: 100%;
   }
-  .bcg{
-    width: 100%;  
+
+  .bcg {
+    width: 100%;
     min-height: 100vh;
     display: -webkit-box;
     display: -webkit-flex;
@@ -98,8 +89,9 @@
     background-position: center;
     background-size: cover;
     position: relative;
-    z-index: 1;  
+    z-index: 1;
   }
+
   .bcg::before {
     content: "";
     display: block;
@@ -109,8 +101,9 @@
     height: 100%;
     top: 0;
     left: 0;
-    background-color: rgba(255,255,255,0.9);
+    background-color: rgba(255, 255, 255, 0.9);
   }
+
   .signin-form {
     width: 400px;
     border-radius: 10px;
@@ -135,60 +128,106 @@
     border: none;
   }
 
-  textarea:focus, input:focus {
+  textarea:focus,
+  input:focus {
     border-color: transparent !important;
   }
 
-  input:focus::-webkit-input-placeholder { color:transparent; }
-  input:focus:-moz-placeholder { color:transparent; }
-  input:focus::-moz-placeholder { color:transparent; }
-  input:focus:-ms-input-placeholder { color:transparent; }
+  input:focus::-webkit-input-placeholder {
+    color: transparent;
+  }
 
-  textarea:focus::-webkit-input-placeholder { color:transparent; }
-  textarea:focus:-moz-placeholder { color:transparent; }
-  textarea:focus::-moz-placeholder { color:transparent; }
-  textarea:focus:-ms-input-placeholder { color:transparent; }
+  input:focus:-moz-placeholder {
+    color: transparent;
+  }
 
-  input::-webkit-input-placeholder { color: #fff;}
-  input:-moz-placeholder { color: #fff;}
-  input::-moz-placeholder { color: #fff;}
-  input:-ms-input-placeholder { color: #fff;}
+  input:focus::-moz-placeholder {
+    color: transparent;
+  }
 
-  textarea::-webkit-input-placeholder { color: #fff;}
-  textarea:-moz-placeholder { color: #fff;}
-  textarea::-moz-placeholder { color: #fff;}
-  textarea:-ms-input-placeholder { color: #fff;}
+  input:focus:-ms-input-placeholder {
+    color: transparent;
+  }
+
+  textarea:focus::-webkit-input-placeholder {
+    color: transparent;
+  }
+
+  textarea:focus:-moz-placeholder {
+    color: transparent;
+  }
+
+  textarea:focus::-moz-placeholder {
+    color: transparent;
+  }
+
+  textarea:focus:-ms-input-placeholder {
+    color: transparent;
+  }
+
+  input::-webkit-input-placeholder {
+    color: #fff;
+  }
+
+  input:-moz-placeholder {
+    color: #fff;
+  }
+
+  input::-moz-placeholder {
+    color: #fff;
+  }
+
+  input:-ms-input-placeholder {
+    color: #fff;
+  }
+
+  textarea::-webkit-input-placeholder {
+    color: #fff;
+  }
+
+  textarea:-moz-placeholder {
+    color: #fff;
+  }
+
+  textarea::-moz-placeholder {
+    color: #fff;
+  }
+
+  textarea:-ms-input-placeholder {
+    color: #fff;
+  }
 
   label {
     margin: 0;
     display: block;
   }
-/*------------------------------------------------------------------
+
+  /*------------------------------------------------------------------
 [ Form ]*/
 
-.login100-form {
-  width: 100%;
-}
+  .login100-form {
+    width: 100%;
+  }
 
-.login100-form-logo {
-  font-size: 60px; 
-  color: #333333;
+  .login100-form-logo {
+    font-size: 60px;
+    color: #333333;
 
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background-color: #fff;
-  margin: 0 auto;
-}
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #fff;
+    margin: 0 auto;
+  }
 
-.login100-form-title{
+  .login100-form-title {
     font-family: Poppins-Medium;
     font-size: 22px;
     color: #fff;
@@ -196,33 +235,33 @@
     text-align: center;
     text-transform: uppercase;
     display: block;
-}
+  }
 
 
-/*------------------------------------------------------------------
+  /*------------------------------------------------------------------
 [ Input ]*/
 
-.wrap-input100 {
-  width: 100%;
-  position: relative;
-  border-bottom: 2px solid rgba(255,255,255,0.24);
-  margin-bottom: 30px;
-}
+  .wrap-input100 {
+    width: 100%;
+    position: relative;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.24);
+    margin-bottom: 30px;
+  }
 
-.input100 {
-  font-family: Poppins-Regular;
-  font-size: 16px;
-  color: #fff;
-  line-height: 1.2;
+  .input100 {
+    font-family: Poppins-Regular;
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.2;
 
-  display: block;
-  width: 100%;
-  height: 45px;
-  background: transparent;
-  padding: 0 5px 0 38px;
-}
+    display: block;
+    width: 100%;
+    height: 45px;
+    background: transparent;
+    padding: 0 5px 0 38px;
+  }
 
-  /*---------------------------------------------*/ 
+  /*---------------------------------------------*/
   .focus-input100 {
     position: absolute;
     display: block;
@@ -273,21 +312,21 @@
     padding-left: 5px;
   }
 
-  .input100:focus + .focus-input100::after {
+  .input100:focus+.focus-input100::after {
     top: -22px;
     font-size: 18px;
   }
 
-  .input100:focus + .focus-input100::before {
+  .input100:focus+.focus-input100::before {
     width: 100%;
   }
 
-  .has-val.input100 + .focus-input100::after {
+  .has-val.input100+.focus-input100::after {
     top: -22px;
     font-size: 18px;
   }
 
-  .has-val.input100 + .focus-input100::before {
+  .has-val.input100+.focus-input100::before {
     width: 100%;
   }
 
@@ -365,67 +404,69 @@
   .login100-form-btn:hover:before {
     opacity: 0;
   }
+
   /*==================================================================
 [ Restyle Checkbox ]*/
 
-.contact100-form-checkbox {
-  padding-left: 5px;
-  padding-top: 5px;
-  padding-bottom: 35px;
-}
+  .contact100-form-checkbox {
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 35px;
+  }
 
-.input-checkbox100 {
-  display: none;
-}
+  .input-checkbox100 {
+    display: none;
+  }
 
-.label-checkbox100 {
-  font-family: Poppins-Regular;
-  font-size: 13px;
-  color: #fff;
-  line-height: 1.2;
+  .label-checkbox100 {
+    font-family: Poppins-Regular;
+    font-size: 13px;
+    color: #fff;
+    line-height: 1.2;
 
-  display: block;
-  position: relative;
-  padding-left: 26px;
-  cursor: pointer;
-}
+    display: block;
+    position: relative;
+    padding-left: 26px;
+    cursor: pointer;
+  }
 
-.label-checkbox100::before {
-  content: "\f26b";
-  font-family: Material-Design-Iconic-Font;
-  font-size: 13px;
-  color: transparent;
+  .label-checkbox100::before {
+    content: "\f26b";
+    font-family: Material-Design-Iconic-Font;
+    font-size: 13px;
+    color: transparent;
 
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  border-radius: 2px;
-  background: #fff;
-  left: 0;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  -o-transform: translateY(-50%);
-  transform: translateY(-50%);
-}
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    background: #fff;
+    left: 0;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
 
-.input-checkbox100:checked + .label-checkbox100::before {
-  color: #555555;
-}
-/*//////////////////////////////////////////////////////////////////
+  .input-checkbox100:checked+.label-checkbox100::before {
+    color: #555555;
+  }
+
+  /*//////////////////////////////////////////////////////////////////
 [ Utility ]*/
-.txt1 {
-  font-family: Poppins-Regular;
-  font-size: 13px;
-  color: #e5e5e5;
-  line-height: 1.5;
-}
+  .txt1 {
+    font-family: Poppins-Regular;
+    font-size: 13px;
+    color: #e5e5e5;
+    line-height: 1.5;
+  }
 </style>

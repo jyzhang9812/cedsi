@@ -5,19 +5,21 @@ import router from '../router';
 const actions = {
 
     login({ commit, dispatch, state }, authData) {
+        var token = ''
         globalAxios.post("/user/login",
             { "username": authData.username, "password": authData.password })
             .then(
                 response => {
                     console.log(response);
-                    state.expirationDate = response.data.exp;
-                    state.idToken = response.data.token;
                     localStorage.setItem('idToken', state.idToken)
-                    state.roleId = response.data.role;
-                    state.user = authData.username
                     localStorage.setItem('user', state.user)
                     localStorage.setItem('roleId', state.roleId)
                     localStorage.setItem('expirationDate', state.expirationDate)
+
+                    token = response.data.token
+                    state.expirationDate = response.data.exp;
+                    state.roleId = response.data.role;
+                    state.user = authData.username
                     state.status = response.data.status
                     if (state.status == 'fail') {
                         console.log('error')
@@ -31,6 +33,15 @@ const actions = {
                     console.log(error);
                 }
             );
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                commit(TYPES.authUser, {
+                    token: token,
+                    userId: null
+                })
+                resolve()
+            }, 1000)
+        })
     },
     signup({ commit, dispatch }, authData) {
         globalAxios.post("/user/register",
@@ -147,8 +158,8 @@ const actions = {
                 console.log(error);
             })
     },
-    getCourseDetail({ commit, state },id) {
-        globalAxios.get('/student/courses/'+id+'/chapters', {
+    getCourseDetail({ commit, state }, id) {
+        globalAxios.get('/student/courses/' + id + '/chapters', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': state.idToken
@@ -159,19 +170,19 @@ const actions = {
                     console.log(response)
                     var chaptersArr = response.data.data.chapter_message.chapters;
                     var finishChaptersArr = response.data.data.chapter_message.finish_chapters;
-                    var List={
-                        name:'',
-                        list:[]
+                    var List = {
+                        name: '',
+                        list: []
                     }
                     for (var i = 0; i < chaptersArr.length; i++) {
-                        var point={}
+                        var point = {}
                         if (i < finishChaptersArr.length) {
                             point.bgImg =
                                 "../../static/images/scratch/coordinateed.6a1e9a5.png";
                             point.status = "已完成";
                             point.flag = true;
                         } else {
-                           point.bgImg =
+                            point.bgImg =
                                 "../../static/images/scratch/coordinate.a15fa38.png";
                             point.status = "未解锁";
                             point.flag = false;
@@ -183,7 +194,7 @@ const actions = {
                         List.list.push(point);
                     }
                     List.name = response.data.data.courseName,
-                    commit(TYPES.changeCouseDetail, List)
+                        commit(TYPES.changeCouseDetail, List)
                     commit(TYPES.updateLoading, false)
                 },
                 error => {

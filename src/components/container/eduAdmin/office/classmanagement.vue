@@ -421,18 +421,18 @@ export default {
       }
       this.file2Xce(file).then(tabJson => {
         if (tabJson && tabJson.length > 0) {
-          this.xlsxJson = tabJson;
+          this.xlsxJson = tabJson[0].sheet;
           console.log(this.xlsxJson);
           var token = window.localStorage.getItem("idToken");
           globalAxios({
             url:
-              "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/students",
+              "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/133/students",
             method: "post",
             headers: {
               "Content-Type": "application/json",
               Authorization: token
             },
-            data: this.xlsxJson
+            data:{sheet:this.xlsxJson}
           }).then(
             response => {
               console.log(response);
@@ -555,6 +555,7 @@ export default {
                   var classArr = [];
                   for (var i = 0; i < classList.length; i++) {
                     var classes = {};
+                    classes.classId = classList[i].CLASS_ID;
                     classes.className = classList[i].CLASS_NAME;
                     classes.teacherName = classList[i].TEACHER_NAME;
                     classes.courseName = classList[i].COURSE_NAME;
