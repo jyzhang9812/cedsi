@@ -5,20 +5,23 @@ import router from '../router';
 const actions = {
 
     login({ commit, dispatch, state }, authData) {
+        var token = ''
         globalAxios.post("/user/login",
             { "username": authData.username, "password": authData.password })
             .then(
                 response => {
                     console.log(response);
+                    token = response.data.token
                     state.expirationDate = response.data.exp;
-                    state.idToken = response.data.token;
-                    localStorage.setItem('idToken', state.idToken)
                     state.roleId = response.data.role;
                     state.user = authData.username
+                    state.status = response.data.status
+                    
+                    localStorage.setItem('idToken', token)
                     localStorage.setItem('user', state.user)
                     localStorage.setItem('roleId', state.roleId)
                     localStorage.setItem('expirationDate', state.expirationDate)
-                    state.status = response.data.status
+
                     if (state.status == 'fail') {
                         console.log('error')
                     }
@@ -31,14 +34,23 @@ const actions = {
                     console.log(error);
                 }
             );
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                commit(TYPES.authUser, {
+                    token: token,
+                    userId: null
+                })
+                resolve()
+            }, 1000)
+        })
     },
     signup({ commit, dispatch }, authData) {
         globalAxios.post("/user/register",
-            { "username": authData.username, "password": authData.password })
+            { "username": authData.username, "password": authData.password, "account": authData.account })
             .then(
                 response => {
                     console.log(response);
-                    this.$router.replace({ path: '/signin' })
+                    router.replace({ path: '/signin' })
                 },
                 error => {
                     router.push({ path: '/404' })
@@ -74,7 +86,6 @@ const actions = {
         localStorage.removeItem('roleId');
         localStorage.removeItem('expirationDate');
         localStorage.removeItem('user');
-
         router.replace('/')
     },
 
@@ -88,7 +99,7 @@ const actions = {
                 }
             }
         ).then(response => {
-            // console.log(response.data)
+            console.log(response.data)
             var user = {}
             var arr = response.data
             user.avatar = arr.AVATAR,
@@ -99,26 +110,31 @@ const actions = {
                 user.email = arr.EMAIL,
                 user.gender = arr.GENDER,
                 commit(TYPES.getUserInfo, user)
+            commit(TYPES.updateLoading, false)
         },
             error => {
+                commit(TYPES.updateLoading, false)
                 console.log(error);
             })
     },
     updateUser({ commit, state }, userData) {
-        globalAxios.post('/student/studentinfo',
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': state.idToken
-                },
-                data: userData
+        globalAxios({
+            method: "PUT",
+            url: '/student/studentinfo',
+            data: userData,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': state.idToken
             }
-        ).then( response => {
-            console.log(response)
-            commit(TYPES.getUserInfo, userData)
-        }, error => {
-            console.log(error);
         })
+            .then(response => {
+                console.log(response)
+                commit(TYPES.getUserInfo, userData)
+                commit(TYPES.updateLoading, false)
+            }, error => {
+                commit(TYPES.updateLoading, false)
+                console.log(error);
+            })
     },
     getCourse({ commit, state }) {
         globalAxios.get('/student/courses',
@@ -136,10 +152,57 @@ const actions = {
             }
             commit(TYPES.changeCourseList, arr)
             commit(TYPES.changeCourseCurrentList, 0)
+            commit(TYPES.updateLoading, false)
         },
             error => {
+                commit(TYPES.updateLoading, false)
                 console.log(error);
             })
+    },
+    getCourseDetail({ commit, state }, id) {
+        globalAxios.get('/student/courses/' + id + '/chapters', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': state.idToken
+            }
+        })
+            .then(
+                response => {
+                    console.log(response)
+                    var chaptersArr = response.data.data.chapter_message.chapters;
+                    var finishChaptersArr = response.data.data.chapter_message.finish_chapters;
+                    var List = {
+                        name: '',
+                        list: []
+                    }
+                    for (var i = 0; i < chaptersArr.length; i++) {
+                        var point = {}
+                        if (i < finishChaptersArr.length) {
+                            point.bgImg =
+                                "../../static/images/scratch/coordinateed.6a1e9a5.png";
+                            point.status = "已完成";
+                            point.flag = true;
+                        } else {
+                            point.bgImg =
+                                "../../static/images/scratch/coordinate.a15fa38.png";
+                            point.status = "未解锁";
+                            point.flag = false;
+                        }
+                        point.description = chaptersArr[i].CP_DESCRIPTION;
+                        point.number = chaptersArr[i].CP_NUMBER;
+                        point.name = chaptersArr[i].CP_NAME;
+                        point.videoSrc = chaptersArr[i].CP_RESOURCE.VIDEO;
+                        List.list.push(point);
+                    }
+                    List.name = response.data.data.courseName,
+                        commit(TYPES.changeCouseDetail, List)
+                    commit(TYPES.updateLoading, false)
+                },
+                error => {
+                    commit(TYPES.updateLoading, false)
+                    console.log(error);
+                }
+            );
     },
     getWork({ commit, state }, curId) {
         globalAxios.get('/student/works?type=' + curId,
@@ -151,24 +214,20 @@ const actions = {
             }
         ).then(response => {
             var arr = []
-            var content = [{
-                name: '',
-                rank: '',
-                time: '',
-                img_url: '',
-                teacher_remark: '',
-            }]
-            // console.log(response);
+            var content = []
+            console.log(response);
             if (curId == 0) {
                 for (var i = 0; i < response.data.homework.length; i++) {
                     arr.push(response.data.homework[i])
                 }
                 for (var i = 0; i < arr.length; i++) {
-                    content[i].name = arr[i].HW_NAME;
-                    content[i].img_url = arr[i].HW_COVER;
-                    content[i].teacher_remark = arr[i].TEACHER_REMARK;
-                    content[i].rank = arr[i].HW_RANK;
-                    content[i].time = arr[i].SUBMIT_TIME;
+                    var array = {}
+                    array.name = arr[i].HW_NAME;
+                    array.img_url = arr[i].HW_COVER;
+                    array.teacher_remark = arr[i].TEACHER_REMARK;
+                    array.rank = arr[i].HW_RANK;
+                    array.time = arr[i].SUBMIT_TIME;
+                    content.push(array);
                 }
             }
             else {
@@ -176,17 +235,21 @@ const actions = {
                     arr.push(response.data.product[i])
                 }
                 for (var i = 0; i < arr.length; i++) {
-                    content[i].name = arr[i].PRODUCT_NAME;
-                    content[i].img_url = arr[i].COVER_URL;
-                    content[i].teacher_remark = arr[i].TEACHER_REMARK;
-                    content[i].rank = arr[i].PRODUCT_RANK;
-                    content[i].time = arr[i].CREATE_TIME;
+                    var array = {}
+                    array.name = arr[i].PRODUCT_NAME;
+                    array.img_url = arr[i].COVER_URL;
+                    array.teacher_remark = arr[i].TEACHER_REMARK;
+                    array.rank = arr[i].PRODUCT_RANK;
+                    array.time = arr[i].CREATE_TIME;
+                    content.push(array);
                 }
             }
             commit(TYPES.changeWorkList, content)
             commit(TYPES.changeWorkCurrentList, 0)
+            commit(TYPES.updateLoading, false)
         },
             error => {
+                commit(TYPES.updateLoading, false)
                 console.log(error);
             }
         );
@@ -208,8 +271,10 @@ const actions = {
                 }
                 commit(TYPES.changeMsgList, arr)
                 commit(TYPES.changeMsgCurrentList, 0)
+                commit(TYPES.updateLoading, false)
             },
             error => {
+                commit(TYPES.updateLoading, false)
                 console.log(error);
             }
         );
@@ -223,21 +288,22 @@ const actions = {
                 }
             }
         ).then(response => {
-            // console.log(response);
+            console.log(response);
             var myClass = {}
             var arr = []
 
             myClass.name = response.data.className
             myClass.teacher = response.data.teacher
-            console.log(myClass.teacher)
             myClass.memberCount = response.data.member_count
             for (var i = 0; i < response.data.classmates.length; i++) {
                 arr.push(response.data.classmates[i])
             }
             myClass.classmates = arr
             commit(TYPES.getClass, myClass)
+            commit(TYPES.updateLoading, false)
         },
             error => {
+                commit(TYPES.updateLoading, false)
                 console.log(error);
             }
         );
@@ -271,8 +337,10 @@ const actions = {
                     }
                     commit(TYPES.changeAdminList, admin_table)
                     commit(TYPES.changeAdminCurrentList, 0)
+                    commit(TYPES.updateLoading, false)
                 },
                 error => {
+                    commit(TYPES.updateLoading, false)
                     console.log(error)
 
                 }
@@ -296,8 +364,10 @@ const actions = {
                 response => {
                     console.log(response);
                     dispatch("getAdmin")
+                    commit(TYPES.updateLoading, false)
                 },
                 error => {
+                    commit(TYPES.updateLoading, false)
                     console.log(error);
                 }
             );
@@ -319,8 +389,10 @@ const actions = {
                     console.log(response);
                     state.adminList.splice(deleteAdmin.index, 1);
                     commit(TYPES.changeAdminCurrentList, (deleteAdmin.page * state.limit));
+                    commit(TYPES.updateLoading, false)
                 },
                 error => {
+                    commit(TYPES.updateLoading, false)
                     console.log(error);
                 }
             );
@@ -340,9 +412,11 @@ const actions = {
             )
             .then(
                 response => {
+                    commit(TYPES.updateLoading, false)
                     console.log(response);
                 },
                 error => {
+                    commit(TYPES.updateLoading, false)
                     console.log(error);
                 }
             );

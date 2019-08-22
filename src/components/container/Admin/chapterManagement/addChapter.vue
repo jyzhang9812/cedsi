@@ -61,13 +61,13 @@ export default {
         .then(
           response => {
             console.log(response);
+            this.$router.push({ path: "/Admin/chapterManagement/"+this.courseId });
           },
           error => {
             // this.$router.push({path:'/404'})
             console.log(error);
           }
         );
-      this.$router.push({ path: "/Admin/chapterManagement/"+this.courseId });
     }
   },
   created() {

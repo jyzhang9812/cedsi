@@ -2,7 +2,7 @@
   <div class="container-fluid layout">
     <div class="row">
       <div class="col-md-4" v-for="(item,index) in currentList" :key="index">
-        <router-link :to="{name:'coursemap',params:{id:item.ID}}" class="box">
+        <router-link :to="{name:'coursemap',query:{id:item.ID}}" class="box">
           <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
             <img class="img" :style="style" :src="item.COVER">
             <div class="details" :style="style1" v-show="index==i">
@@ -43,6 +43,7 @@
 <script>
   import pagination from '../pagination.vue'
   import globalAxios from 'axios'
+
   export default {
     name: "courseCard",
     components: {
@@ -83,6 +84,7 @@
     created: function () {
       this.style = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;'
       this.style1 = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;margin-top:-' + (document.documentElement.clientWidth * 0.17) + 'px;'
+      this.$store.commit('updateLoading', true)
       this.$store.dispatch('getCourse')
     },
     computed: {

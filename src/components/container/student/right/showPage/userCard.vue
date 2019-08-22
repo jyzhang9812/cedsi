@@ -1,5 +1,5 @@
 <template>
-    <ul :style="{'left':calleft + 'px'}">
+    <ul :style="{'left':mycalleft + 'px'}">
         <li class="user_card" v-for="(item,index) in user_url" :key="index">
             <div class="details">
                 <div class="detail_item">
@@ -34,11 +34,14 @@
 <script>
     export default {
         name: 'userCard',
+        props: {
+            calleft: Number  //接收父组件传过来的值，这是稍微高级一点的写法，也可以props:[' message']
+        },
         data() {
             return {
                 leftImg: '../../../' + this.$store.state.url + 'dashboard/left.png',
                 rightImg: '../../../' + this.$store.state.url + 'dashboard/right.png',
-                calleft: 0,
+                mycalleft: 0,
                 i: -1,
                 curId: 0,
                 limit: 12,
@@ -80,21 +83,18 @@
                 this.i = -1;
                 this.isShow = false;
             },
-            //点击按钮左移
-            zuohua() {
-                this.calleft -= 340;
-                if (this.calleft < -1200) {
-                    this.calleft = 0
-                }
-            },
-            //点击按钮右移
-            youhua() {
-                this.calleft += 340;
-                if (this.calleft > 0) {
-                    this.calleft = -1020
-                }
-            },
         },
+        created() {
+            this.mycalleft = this.calleft
+            console.log(this.calleft)
+        },
+        
+        //这里用watch方法来监听父组件传过来的值，来实现实时更新
+        watch: {
+            calleft(val) {    //calleft为父组件的值，val参数为值
+                this.mycalleft = val    //将父组件的值赋给mycalleft子组件的值
+            }
+        }
     }
 </script>
 

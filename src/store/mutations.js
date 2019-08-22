@@ -14,6 +14,9 @@ const mutations = {
         state.expirationDate = null;
         state.roleId = 0;
     },
+    [TYPES.updateLoading](state, num) {
+        state.vueElementLoading = num
+    },
 
     //student
     [TYPES.getUserInfo](state, UserInfo) {
@@ -22,6 +25,20 @@ const mutations = {
     [TYPES.getClass](state, myClass) {
         state.myClass = myClass
     },
+
+    [TYPES.changeCouseDetail](state, List) {
+        state.courseName = List.name
+        for (var i = 0; i < List.list.length; i++) {
+            state.pointList[i].bgImg = List.list[i].bgImg
+            state.pointList[i].status = List.list[i].status
+            state.pointList[i].description = List.list[i].description
+            state.pointList[i].number = List.list[i].number
+            state.pointList[i].name = List.list[i].name
+            state.pointList[i].videoSrc = List.list[i].videoSrc
+            state.pointList[i].flag = List.list[i].flag
+        }
+    },
+
     [TYPES.changeCourseList](state, courseList) {
         state.courseList = courseList
     },
@@ -44,7 +61,6 @@ const mutations = {
     //superAdmin
     [TYPES.changeAdminList](state, adminList) {
         state.adminList = adminList
-
     },
     [TYPES.changeAdminCurrentList](state, value) {
         state.adminCurrentList = state.adminList.slice(value, value + state.limit);

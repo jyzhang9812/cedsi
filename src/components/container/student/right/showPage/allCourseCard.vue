@@ -1,5 +1,5 @@
 <template>
-    <ul :style="{'left':calleft + 'px'}">
+    <ul :style="{'left':mycalleft + 'px'}">
         <li class="all_course" v-for="(item,index) in all_url" :key="index" @mouseover="show(index)"
             @mouseleave="hidden(index)">
             <div class="inside">
@@ -21,6 +21,9 @@
 <script>
     export default {
         name: 'allCourseCard',
+        props: {
+            calleft: Number  //接收父组件传过来的值，这是稍微高级一点的写法，也可以props:[' message']
+        },
         data() {
             return {
                 all_url: [
@@ -45,7 +48,7 @@
                         img: '',
                     },
                 ],
-                calleft: 0,
+                mycalleft: 0,
                 i: -1,
                 curId: 0,
                 limit: 12,
@@ -65,24 +68,18 @@
                 this.i = -1;
                 this.isShow = false;
             },
-            //点击按钮左移
-            zuohua() {
-                this.calleft -= 340;
-                if (this.calleft < -1200) {
-                    this.calleft = 0
-                }
-            },
-            //点击按钮右移
-            youhua() {
-                this.calleft += 340;
-                if (this.calleft > 0) {
-                    this.calleft = -1020
-                }
-            },
         },
-        // created() {
-        //     this.change('video_res', 2);
-        // }
+        created() {
+            this.mycalleft = this.calleft
+            console.log(this.calleft)
+        },
+        
+        //这里用watch方法来监听父组件传过来的值，来实现实时更新
+        watch: {
+            calleft(val) {    //message即为父组件的值，val参数为值
+                this.mycalleft = val    //将父组件的值赋给childrenMessage 子组件的值
+            }
+        }
     }
 </script>
 

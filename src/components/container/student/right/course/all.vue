@@ -1,5 +1,9 @@
 <template>
     <div class="container-fluid layout">
+        <div class="menu">
+            <button @click="tab(index)" v-for="(item,index) in items" class="tag"
+                :class="{active : index===curId}">{{item.item}}</button>
+        </div>
         <div class="row">
             <div class="col-md-4" v-for="(item,index) in currentList" :key="index">
                 <router-link :to="{name:'coursemap',params:{id:item.ID}}" class="box">
@@ -35,6 +39,13 @@
         },
         data() {
             return {
+                items: [
+                    { item: '热门课程' },
+                    { item: '人工智能' },
+                    { item: '超维数学' },
+                    { item: '编程类' },
+                ],
+                curId:0,
                 limit: 6,
                 currentList: [],
                 tableData: [],
@@ -55,6 +66,9 @@
             },
             getNew(value) {
                 this.currentList = this.tableData.slice(value, value + this.limit);
+            },
+            tab(index) {
+                this.curId = index;
             },
         },
         created: function () {
@@ -98,6 +112,36 @@
 <style scoped>
     .layout {
         margin: 0;
+    }
+
+    .menu {
+        background-color: #f4f9fa;
+        height: auto;
+        padding-top: 10px;
+        padding-left: 40px;
+        padding-right: 40px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .tag {
+        background-color: #f4f9fa;
+        color: #575757;
+        padding: 15px 32px;
+        margin: 10px 4px 0px;
+        text-align: center;
+        text-decoration: none;
+        padding: 4px 10px;
+        font-size: 16px;
+        border: none;
+        font-weight: 550;
+    }
+
+    .tag:hover,
+    .active {
+        color: #00bcd4;
     }
 
     .row {
@@ -153,7 +197,7 @@
         margin-top: 10px;
         font-weight: bold;
     }
-    
+
     .btnh,
     .btn:hover {
         height: 35px;
@@ -168,15 +212,19 @@
         border-radius: 8px;
         text-decoration: none;
     }
-    .right .btn:first-child{
+
+    .right .btn:first-child {
         background: #fff;
-        color: #94d183; 
+        color: #94d183;
         border: 1px solid #94d183;
     }
-    .btn_green,.right .btn:first-child:hover{
+
+    .btn_green,
+    .right .btn:first-child:hover {
         color: #fff;
         background: #94d183;
     }
+
     .details {
         width: 100%;
         background-color: rgba(0, 0, 0, 0.55);
@@ -186,14 +234,16 @@
         border-radius: 20px;
         padding-top: 20px;
     }
-    .details p{
+
+    .details p {
         width: 80%;
         height: 80%;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        margin:0;
+        margin: 0;
     }
+
     .outside {
         margin-top: 8px;
         display: flex;

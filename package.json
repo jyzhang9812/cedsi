@@ -23,6 +23,7 @@
     "v-distpicker": "^1.2.1",
     "video.js": "^7.6.0",
     "vue": "^2.5.2",
+    "vue-element-loading": "^1.1.5",
     "vue-localstorage": "^0.6.2",
     "vue-quill-editor": "^3.0.6",
     "vue-resource": "^1.5.1",

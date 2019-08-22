@@ -1,14 +1,7 @@
 <template>
   <div class="coursemap">
     <!-- 模态框（Modal） -->
-    <div
-      class="modal fade"
-      id="goStudy"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="myModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="goStudy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content bckimg">
           <div class="modal-header header-height">
@@ -38,30 +31,18 @@
       </div>
       <!-- /.modal -->
     </div>
-    <div
-      class="modal fade"
-      id="myVideo"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="myModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="myVideo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content video-bck">
           <div class="modal-header header-height">
             <span class="video-name">{{courseName}}| 第{{courseNum}}节课 | {{chapterName}}</span>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click="deletevideo">&times;</button>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+              @click="deletevideo">&times;</button>
           </div>
-            <div class="modal-body modal-box">
-              <Media
-                :autoplay="false"
-                :kind="'video'"
-                :controls="true"
-                :src="videosrc"
-                style="height: 400px;width: 700px;"
-                @pause="handle()"
-              ></Media>
-            </div>
+          <div class="modal-body modal-box">
+            <Media :autoplay="false" :kind="'video'" :controls="true" :src="videosrc"
+              style="height: 400px;width: 700px;" @pause="handle()"></Media>
+          </div>
         </div>
       </div>
     </div>
@@ -69,15 +50,9 @@
       <div class="introductionContent">
         <img :src="mapUrl" />
         <div class="introductionList">
-          <div
-            class="course-btn"
-            v-for="(point,index) in pointList"
-            :key="index"
+          <div class="course-btn" v-for="(point,index) in pointList" :key="index"
             :style="{width:point.width,height:point.height,bottom:point.bottom,right:point.right}"
-            @click="gotoStudy(index)"
-            :data-toggle="point.flag==true?'modal':''"
-            data-target="#goStudy"
-          >
+            @click="gotoStudy(index)" :data-toggle="point.flag==true?'modal':''" data-target="#goStudy">
             <div>
               <img :src="point.bgImg" class="btn-img" />
             </div>
@@ -92,491 +67,273 @@
     <button class="btn goback-btn" @click="gotoCourseList">返回课程列表</button>
   </div>
 </template>
+
 <script>
-import Media from "@dongido/vue-viaudio";
-import globalAxios from "axios";
-export default {
-  data() {
-    return {
-      mapUrl: this.$store.state.url + "scratch/bg.f0d850a.jpg",
-      pointList: [
-        {
-          width: "8%",
-          height: "15%",
-          bottom: "15%",
-          right: "9%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "8%",
-          height: "15%",
-          bottom: "22%",
-          right: "20%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "7%",
-          height: "12%",
-          bottom: "18%",
-          right: "35%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "8%",
-          height: "15%",
-          bottom: "15%",
-          right: "50%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "7%",
-          height: "12%",
-          bottom: "15%",
-          right: "60%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "7%",
-          height: "12%",
-          bottom: "15%",
-          right: "70%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "8%",
-          height: "15%",
-          bottom: "20%",
-          right: "80%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "7%",
-          height: "12%",
-          bottom: "45%",
-          right: "88%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "8%",
-          height: "15%",
-          bottom: "60%",
-          right: "80%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "7%",
-          height: "12%",
-          bottom: "50%",
-          right: "67%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "7%",
-          height: "12%",
-          bottom: "35%",
-          right: "50%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "8%",
-          height: "15%",
-          bottom: "40%",
-          right: "20%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "7%",
-          height: "12%",
-          bottom: "60%",
-          right: "21%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "8%",
-          height: "15%",
-          bottom: "60%",
-          right: "35%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "7%",
-          height: "12%",
-          bottom: "60%",
-          right: "50%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "7%",
-          height: "12%",
-          bottom: "72%",
-          right: "57%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "8%",
-          height: "15%",
-          bottom: "80%",
-          right: "40%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        },
-        {
-          width: "8%",
-          height: "15%",
-          bottom: "80%",
-          right: "20%",
-          bgImg: "",
-          status: "",
-          description: "",
-          number: "",
-          name: "",
-          flag: false
-        }
-      ],
-      courseName: "",
-      courseIntro: "",
-      courseNum: "",
-      videosrc: "",
-      chapterName:""
-    };
-  },
-  methods: {
-    gotoStudy(index) {
-      this.chapterName = this.pointList[index].name;
-      this.courseIntro = this.pointList[index].description;
-      this.courseNum = this.pointList[index].number;
-      this.videosrc = this.pointList[index].videoSrc;
-      console.log(this.videosrc)
+  import Media from "@dongido/vue-viaudio";
+  import globalAxios from "axios";
+  export default {
+    data() {
+      return {
+        mapUrl: this.$store.state.url + "scratch/bg.f0d850a.jpg",
+        courseIntro: "",
+        courseNum: "",
+        videosrc: "",
+        chapterName: ""
+      };
     },
-    handle() {
-      console.log("Video paused!, playing in 2 sec...");
-      setTimeout(() => {
-        this.$refs.coursevideo.play();
-      }, 2000);
+    methods: {
+      gotoStudy(index) {
+        this.chapterName = this.pointList[index].name;
+        this.courseIntro = this.pointList[index].description;
+        this.courseNum = this.pointList[index].number;
+        this.videosrc = this.pointList[index].videoSrc;
+        console.log(this.videosrc)
+      },
+      handle() {
+        console.log("Video paused!, playing in 2 sec...");
+        setTimeout(() => {
+          this.$refs.coursevideo.play();
+        }, 2000);
+      },
+      deletevideo() {
+        this.videosrc = "";
+      },
+      gotoCourseList() {
+        this.$router.push({ path: "/dashboard" });
+      }
     },
-    deletevideo() {
-      this.videosrc = "";
+    created: function () {
+      this.screenHeight = "min-height:" + (this.height - 56) + "px;";
+      this.$store.commit('updateLoading', true)
+      this.$store.dispatch('getCourseDetail', this.$route.query.id)
     },
-    gotoCourseList(){
-      this.$router.push({path:"/dashboard"});
-    }
-  },
-  created: function() {
-    this.screenHeight = "min-height:" + (this.height - 56) + "px;";
-    var token = window.localStorage.getItem("idToken");
-    var arr =
-      "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses/111/chapters";
-    globalAxios
-      .get(arr, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token
-        }
-      })
-      .then(
-        response => {
-          console.log(response.data.data)
-          this.courseName=response.data.data.courseName
-          var chaptersArr = response.data.data.chapter_message.chapters;
-          var finishChaptersArr = response.data.data.chapter_message.finish_chapters;
-          for (var i = 0; i < chaptersArr.length; i++) {
-            if (i < finishChaptersArr.length) {
-              this.pointList[i].bgImg =
-                "../../../../../../static/images/scratch/coordinateed.6a1e9a5.png";
-              this.pointList[i].status = "已完成";
-              this.pointList[i].flag = true;
-            } else {
-              this.pointList[i].bgImg =
-                "../../../../../../static/images/scratch/coordinate.a15fa38.png";
-              this.pointList[i].status = "未解锁";
-            }
-            this.pointList[i].description = chaptersArr[i].CP_DESCRIPTION;
-            this.pointList[i].number = chaptersArr[i].CP_NUMBER;
-            this.pointList[i].name = chaptersArr[i].CP_NAME;
-            this.pointList[i].videoSrc = chaptersArr[i].CP_RESOURCE.VIDEO;
-          }
-        },
-        error => {
-          console.log(error);
-        }
-      );
-  }
-};
+    computed: {
+      courseName: function (state) {
+        return this.$store.state.courseName
+      },
+      pointList: function (state) {
+        return this.$store.state.pointList
+      },
+    },
+  };
 </script>
+
 <style>
-.coursemap {
-  background: #2fd0ff;
-}
-.introduction {
-  width: 100%;
-  margin: 0 auto;
-}
-img {
-  border: 0 !important;
-  display: block;
-}
+  .coursemap {
+    background: #2fd0ff;
+  }
 
-.introductionContent {
-  max-width: 1200px;
-  min-width: 700px;
-  margin: 0 auto;
-  position: relative;
-}
+  .introduction {
+    width: 100%;
+    margin: 0 auto;
+  }
 
-.introductionContent img {
-  margin: 0 auto;
-  width: 100%;
-}
+  img {
+    border: 0 !important;
+    display: block;
+  }
 
-.introductionList {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-}
-.course-btn {
-  position: absolute;
-}
-.btn-img {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.chapter-intro {
-  position: absolute;
-  width: 280px;
-  height: 68px;
-  background-color: #82551d;
-  box-shadow: 0 0 10px #ec491d;
-  bottom: 54%;
-  right: 0%;
-  border: 1px solid red;
-  font-size: 8px;
-  z-index: 10;
-  visibility: hidden;
-}
-.course-btn:hover .chapter-intro {
-  visibility: visible;
-}
-.intro {
-  text-align: center;
-  width: 95%;
-  margin: 10px auto;
-  color: #fff;
-}
-.goback-btn {
-  position: absolute;
-  top: 100px;
-  left: 50px;
-  width: 120px;
-  text-align: center;
-  line-height: 15px;
-  height: 30px;
-  color: #fff;
-  background: #22A0FF;
-  border-radius: 6px;
-}
-.goback-btn:hover {
-  color: #fff;
-}
-.goback-btn:active{
-  color: #fff;
-  outline: none;
-}
-/*开始学习模态框*/
-.btn:active{
-  outline: none;
-}
-.bckimg {
-  background: url("../../../../../../static/images/scratch/background.png")
-    no-repeat;
-  background-size: cover;
-  height: 400px;
-  width: 660px;
-}
-.video-bck {
-  height: 400px;
-  width: 700px;
-}
-.video-name{
-  margin-bottom: 10px;
-  display: inline-block;
-}
-.header-height {
-  height: 20px;
-  border: none;
-}
-.modal-box {
-  width: 100%;
-  height: 320px;
-  padding: 0;
-}
-.left-box {
-  float: left;
-  width: 47%;
-  height: 100%;
-  text-align: center;
-}
-.box-title {
-  width: 80%;
-  height: 100px;
-  text-align: center;
-  font-size: 18px;
-  margin: 0 auto;
-  padding-bottom: 290px;
-  color: #fff;
-}
-.study-btn {
-  width: 120px;
-  height: 30px;
-  line-height: 25px;
-  text-align: center;
-  background: #fff;
-  color: #22a0ff;
-  border-radius: 6px;
-}
-.right-box {
-  float: left;
-  width: 53%;
-  height: 100%;
-  text-align: center;
-  padding-left: 20px;
-  padding-right: 20px;
-}
-.course-intro {
-  width: 100%;
-  font-size: 14px;
-  color: #22a0ff;
-  text-align: left;
-}
-.intro-detials {
-  width: 100%;
-  text-align: left;
-  background: #e3f3ff;
-  font-size: 12px;
-  margin-top: 10px;
-  border-radius: 6px;
-  height: 165px;
-  line-height: 25px;
-  padding: 10px;
-  color: #22a0ff;
-  overflow-y: auto;
-}
-.course-warn {
-  font-size: 12px;
-  width: 100%;
-  text-align: left;
-  line-height: 25px;
-  color: red;
-}
-.work-btn {
-  width: 120px;
-  height: 30px;
-  line-height: 25px;
-  text-align: center;
-  background: #22a0ff;
-  color: #fff;
-  border-radius: 6px;
-  border: none;
-}
-.preview {
-  width: 100%;
-  font-size: 12px;
-  color: #22a0ff;
-  cursor: pointer;
-}
-/*视频*/
-.video-js {
-  height: 600px;
-  width: 800px;
-}
-.vjs-tech {
-  height: auto;
-  width: 100%;
-}
+  .introductionContent {
+    max-width: 1200px;
+    min-width: 700px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .introductionContent img {
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .introductionList {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+  }
+
+  .course-btn {
+    position: absolute;
+  }
+
+  .btn-img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .chapter-intro {
+    position: absolute;
+    width: 280px;
+    height: 68px;
+    background-color: #82551d;
+    box-shadow: 0 0 10px #ec491d;
+    bottom: 54%;
+    right: 0%;
+    border: 1px solid red;
+    font-size: 8px;
+    z-index: 10;
+    visibility: hidden;
+  }
+
+  .course-btn:hover .chapter-intro {
+    visibility: visible;
+  }
+
+  .intro {
+    text-align: center;
+    width: 95%;
+    margin: 10px auto;
+    color: #fff;
+  }
+
+  .goback-btn {
+    position: absolute;
+    top: 100px;
+    left: 50px;
+    width: 120px;
+    text-align: center;
+    line-height: 15px;
+    height: 30px;
+    color: #fff;
+    background: #22A0FF;
+    border-radius: 6px;
+  }
+
+  .goback-btn:hover {
+    color: #fff;
+  }
+
+  .goback-btn:active {
+    color: #fff;
+    outline: none;
+  }
+
+  /*开始学习模态框*/
+  .btn:active {
+    outline: none;
+  }
+
+  .bckimg {
+    background: url("../../../../../../static/images/scratch/background.png") no-repeat;
+    background-size: cover;
+    height: 400px;
+    width: 660px;
+  }
+
+  .video-bck {
+    height: 400px;
+    width: 700px;
+  }
+
+  .video-name {
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+
+  .header-height {
+    height: 20px;
+    border: none;
+  }
+
+  .modal-box {
+    width: 100%;
+    height: 320px;
+    padding: 0;
+  }
+
+  .left-box {
+    float: left;
+    width: 47%;
+    height: 100%;
+    text-align: center;
+  }
+
+  .box-title {
+    width: 80%;
+    height: 100px;
+    text-align: center;
+    font-size: 18px;
+    margin: 0 auto;
+    padding-bottom: 290px;
+    color: #fff;
+  }
+
+  .study-btn {
+    width: 120px;
+    height: 30px;
+    line-height: 25px;
+    text-align: center;
+    background: #fff;
+    color: #22a0ff;
+    border-radius: 6px;
+  }
+
+  .right-box {
+    float: left;
+    width: 53%;
+    height: 100%;
+    text-align: center;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .course-intro {
+    width: 100%;
+    font-size: 14px;
+    color: #22a0ff;
+    text-align: left;
+  }
+
+  .intro-detials {
+    width: 100%;
+    text-align: left;
+    background: #e3f3ff;
+    font-size: 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+    height: 165px;
+    line-height: 25px;
+    padding: 10px;
+    color: #22a0ff;
+    overflow-y: auto;
+  }
+
+  .course-warn {
+    font-size: 12px;
+    width: 100%;
+    text-align: left;
+    line-height: 25px;
+    color: red;
+  }
+
+  .work-btn {
+    width: 120px;
+    height: 30px;
+    line-height: 25px;
+    text-align: center;
+    background: #22a0ff;
+    color: #fff;
+    border-radius: 6px;
+    border: none;
+  }
+
+  .preview {
+    width: 100%;
+    font-size: 12px;
+    color: #22a0ff;
+    cursor: pointer;
+  }
+
+  /*视频*/
+  .video-js {
+    height: 600px;
+    width: 800px;
+  }
+
+  .vjs-tech {
+    height: auto;
+    width: 100%;
+  }
 </style>

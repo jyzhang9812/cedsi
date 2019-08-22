@@ -166,13 +166,13 @@ export default {
       )
       .then(
         response => {
-          //console.log(response.data);
+          console.log(response.data);
           var courseArr = [];
           var courseList = [];
           courseArr = response.data;
           for (var i = 0; i < courseArr.length; i++) {
             var course = {};
-            course.name = courseArr[i].NAME;
+            course.name = courseArr[i].COURSE_NAME;
             course.id = courseArr[i].ID;
             if (i == 0) course.isActive = true;
             else course.isActive = false;
