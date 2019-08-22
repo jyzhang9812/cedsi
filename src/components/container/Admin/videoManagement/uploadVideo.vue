@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-video">
+  <div id="upload-video">
     <div class="upload">
       <span class="upload-title">视频名称:</span>
       <input class="upload-input" placeholder="请输入视频名称" v-model="videoName" />
@@ -23,21 +23,31 @@
         :option="inputData.chapter.option.name"
         @option="changeOption"
         :drop-down-list="inputData.chapter.list"
+        autocomplete="off"
       ></select-input>
     </div>
     <div class="upload">
       <span class="upload-title">请选择视频:</span>
       <div class="upload-cover-btn">
-        上传文件
+        选择文件
         <input type="file" class @change="getFile($event)" style="opacity: 0" />
       </div>
+      <button class="btn btn-primary btn-upload-file" @click="submit($event)">上传文件</button>
+    </div>
+        <div class="upload">
+      <span class="upload-title">上传进度:</span>
+      <div class="progress upload-process">
+  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" :style="{width:progressWidth}">
+    {{progressWidth}}
+  </div>
+</div>
     </div>
     <div class="upload upload-height">
       <span class="upload-title">文件名称:</span>
       <input class="upload-input" :value="fileName" disabled />
     </div>
     <div class="upload-footer">
-      <button class="btn upload-btn" @click="submit($event)">确定</button>
+      <button class="btn upload-btn" :disabled="isComplete" @click="gotoVideo">提交</button>
       <button class="btn upload-btn" @click="goback()">取消</button>
     </div>
   </div>
@@ -63,7 +73,9 @@ export default {
       videoName: "",
       videoIntro: "",
       type: "",
-      fileName: "暂未上传"
+      fileName: "暂未上传",
+      progressWidth:"0%",
+      isComplete:true
     };
   },
   methods: {
@@ -104,8 +116,9 @@ export default {
         )
         .then(
           response => {
+            var that=this
             console.log(response);
-            this.$router.push({path:"/Admin/"})
+            //this.$router.push({path:"/Admin/"})
             //console.log(this.inputData.chapter.list);
             AWS.config = new AWS.Config({
               accessKeyId: response.data.AccessKeyId,
@@ -120,6 +133,12 @@ export default {
             formData.append("hour", this.hour);
             formData.append("particulars", this.particulars);
             formData.append("content", this.file);
+            var config = {
+        onUploadProgress: progressEvent => {
+            var complete = (progressEvent.loaded / progressEvent.total * 100 | 0) + '%'
+            this.progress = complete
+        }
+    }
             console.log(window.localStorage.getItem("user"));
             const reader = new FileReader();
             var content = reader.readAsArrayBuffer(this.file);
@@ -134,11 +153,17 @@ export default {
               }
             //Key: "course/" + config.id + "." + file.type.split('/')[1],
             };
-            s3.putObject(params, function(err, data) {
+            s3.putObject(params,function(err, data) {
               if (err) {
                 console.log(err, err.stack);
               } else {
                 console.log(data);
+              }
+            }).on('httpUploadProgress',function(e){
+              var process=Number(e.loaded*100/e.total)
+              that.progressWidth=parseInt(process)+"%"
+              if(process==100){
+                that.isComplete=false
               }
             });
           },
@@ -149,6 +174,9 @@ export default {
         );
     },
     goback(){
+      this.$router.push({path:"/Admin/"})
+    },
+    gotoVideo(){
       this.$router.push({path:"/Admin/"})
     }
   },
@@ -195,17 +223,17 @@ export default {
 </script>
 
 <style>
-.upload-video {
+#upload-video {
   width: 98%;
   margin: 0 auto;
   padding-top: 30px;
 }
-.upload {
+#upload-video .upload {
   width: 100%;
   height: 50px;
   margin-bottom: 20px;
 }
-.upload-title {
+#upload-video .upload-title {
   color: #606266;
   display: block;
   text-align: right;
@@ -214,7 +242,7 @@ export default {
   float: left;
   line-height: 40px;
 }
-.upload-input {
+#upload-video .upload-input {
   width: 300px;
   height: 40px;
   border-radius: 5px;
@@ -222,59 +250,60 @@ export default {
   margin-left: 10px;
   padding-left: 10px;
 }
-.upload-input:hover {
+#upload-video .upload-input:hover {
   border: 1px solid #66b1ff;
 }
-.upload-input:focus {
+#upload-video .upload-input:focus {
   outline: none;
 }
-.upload-textarea {
+#upload-video .upload-textarea {
   border: 1px solid #409eff;
   border-radius: 5px;
   margin-left: 10px;
   padding: 10px;
 }
-.upload-height {
+#upload-video .upload-height {
   height: 190px;
 }
-.upload-textarea:hover {
+#upload-video .upload-textarea:hover {
   border: 1px solid #66b1ff;
 }
-.upload-textarea:focus {
+#upload-video .upload-textarea:focus {
   outline: none;
 }
-.outside[data-v-d899aefc] {
+#upload-video .outside[data-v-d899aefc] {
   width: 300px !important;
   height: 40px !important;
   margin-left: 10px !important;
 }
-.inputBox[data-v-d899aefc] {
+#upload-video .inputBox[data-v-d899aefc] {
   height: 35px !important;
   font-size: 14px !important;
   width: 230px !important;
 }
-.dropdown-menu {
+#upload-video .dropdown-menu {
   left: 100px !important;
   overflow: auto !important;
   max-height: 300px !important;
 }
-.upload-footer {
+#upload-video .upload-footer {
   width: 100%;
   text-align: center;
+  margin-bottom: 20px;
 }
-.upload-btn {
+#upload-video .upload-btn {
   background-color: #409eff;
   color: #fff;
   margin-left: 10px;
 }
-.upload-btn:hover {
+#upload-video .upload-btn:hover {
   color: #fff;
 }
-.upload-btn:focus {
+#upload-video .upload-btn:focus {
   outline: none;
   color: #fff;
 }
-.upload-cover-btn {
+#upload-video .upload-cover-btn {
   margin-left: 10px;
   width: 80px;
   height: 35px;
@@ -285,10 +314,31 @@ export default {
   line-height: 35px;
   text-align: center;
 }
-input[type="file"] {
+#upload-video input[type="file"] {
   width: 80px;
   height: 35px;
   position: relative;
   top: -35px;
+  display: inline-block;
+}
+#upload-video .upload-process{
+  width: 30%;
+  margin-left: 10px;
+  display: inline-block;
+  position: relative;
+  top:10px;
+}
+#upload-video .btn-upload-file{
+  position: relative;
+  top:-35px;
+  margin-left: 10px;
+  background-color: #2fc27e;
+  border: none;
+  width: 80px;
+  height: 35px;
+  font-size: 14px;
+}
+#upload-video .btn-upload-file:hover{
+  background-color: #2fc27ddc;
 }
 </style>

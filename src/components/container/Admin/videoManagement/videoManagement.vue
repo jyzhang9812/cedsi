@@ -28,6 +28,7 @@
             <td>{{video.date}}</td>
             <td>{{video.uploadAdmin}}</td>
             <td>
+              <span class="blue">预览</span>&nbsp;&nbsp;
               <span class="blue">编辑</span>&nbsp;&nbsp;
               <span class="red">删除</span>
             </td>
