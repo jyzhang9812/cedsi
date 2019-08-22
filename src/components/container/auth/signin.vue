@@ -25,7 +25,7 @@
             Remember me
           </label>
         </div> -->
-        <div class="text-center p-t-90" v-if='error'>
+        <div class="text-center p-t-90" v-show='error'>
           <p style="color: #f87c56">
             用户名或密码错误 请重试
           </p>
@@ -60,6 +60,7 @@
           username: this.username
         }
         this.$store.dispatch('login', formData).then(() => {
+          console.log('+++++++++++++++++++')
           this.error = this.$store.getters.isAuthenticated;
         })
       }
