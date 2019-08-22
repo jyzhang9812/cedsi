@@ -11,16 +11,17 @@ const actions = {
             .then(
                 response => {
                     console.log(response);
-                    localStorage.setItem('idToken', state.idToken)
-                    localStorage.setItem('user', state.user)
-                    localStorage.setItem('roleId', state.roleId)
-                    localStorage.setItem('expirationDate', state.expirationDate)
-
                     token = response.data.token
                     state.expirationDate = response.data.exp;
                     state.roleId = response.data.role;
                     state.user = authData.username
                     state.status = response.data.status
+                    
+                    localStorage.setItem('idToken', token)
+                    localStorage.setItem('user', state.user)
+                    localStorage.setItem('roleId', state.roleId)
+                    localStorage.setItem('expirationDate', state.expirationDate)
+
                     if (state.status == 'fail') {
                         console.log('error')
                     }
