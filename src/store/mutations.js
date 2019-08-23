@@ -2,6 +2,7 @@ import * as TYPES from './mutation-types.js';
 
 const mutations = {
     [TYPES.authUser](state, userData) {
+        console.log('--------------------')
         state.idToken = userData.token;
         state.userId = userData.userId;
     },

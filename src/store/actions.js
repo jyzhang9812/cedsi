@@ -21,13 +21,6 @@ const actions = {
                     localStorage.setItem('user', state.user)
                     localStorage.setItem('roleId', state.roleId)
                     localStorage.setItem('expirationDate', state.expirationDate)
-
-                    if (state.status == 'fail') {
-                        console.log('error')
-                    }
-                    else {
-                        router.replace({ path: state.roles[state.roleId - 1] })
-                    }
                 },
                 error => {
                     router.push({ path: '/404' })
@@ -40,6 +33,13 @@ const actions = {
                     token: token,
                     userId: null
                 })
+          console.log('0000000000000000000')
+                if (state.status == 'fail') {
+                    console.log('error')
+                }
+                else {
+                    router.replace({ path: state.roles[state.roleId - 1] })
+                }
                 resolve()
             }, 1000)
         })
