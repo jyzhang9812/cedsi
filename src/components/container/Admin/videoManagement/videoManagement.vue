@@ -1,5 +1,38 @@
 <template>
   <div class="body">
+    <div
+      class="modal fade"
+      id="myVideo"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content modal-width">
+          <div class="modal-header">
+            <span class="video-name">{{videoName}}</span>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-hidden="true"
+              @click="deletevideo"
+            >&times;</button>
+          </div>
+          <div class="modal-body modal-padding">
+            <Media
+              :autoplay="false"
+              :kind="'video'"
+              :controls="true"
+              :src="videosrc"
+              style="height: 400px;width: 700px;"
+              @pause="handle()"
+            ></Media>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="course-nav">
       <button
         v-for="(course,index) in courseList"
@@ -28,7 +61,7 @@
             <td>{{video.date}}</td>
             <td>{{video.uploadAdmin}}</td>
             <td>
-              <span class="blue">预览</span>&nbsp;&nbsp;
+              <span class="blue" @click="previewVideo(seq)" data-toggle="modal" data-target="#myVideo">预览</span>&nbsp;&nbsp;
               <span class="blue">编辑</span>&nbsp;&nbsp;
               <span class="red">删除</span>
             </td>
@@ -47,6 +80,7 @@ import Pagination from "../utils/pagination";
 import globalAxios from "axios";
 import fs from "fs";
 import AWS from "aws-sdk";
+import Media from "@dongido/vue-viaudio";
 
 export default {
   name: "videos",
@@ -68,11 +102,31 @@ export default {
         "操作"
       ],
       currentList: [],
-      error:true
+      error: true,
+      index: -1,
+      videosrc: "",
+      videoName:"",
     };
   },
   methods: {
+    previewVideo(seq) {
+      this.index = this.currentPage * this.limit + seq;
+      this.videosrc = this.videoData[this.index].videoUrl;
+      this.videoName=this.videoData[this.index].videoName;
+      //window.location.href = this.videosrc;
+    },
+    handle() {
+      console.log("Video paused!, playing in 2 sec...");
+      setTimeout(() => {
+        this.$refs.coursevideo.play();
+      }, 2000);
+    },
+    deletevideo() {
+      this.videosrc = "";
+    },
     changeTablePages(value) {
+      var currentPage = value / this.limit;
+      this.currentPage = currentPage;
       this.currentList = this.videoData.slice(value, value + this.limit);
     },
     gotoUpload() {
@@ -113,7 +167,7 @@ export default {
             var videoData = [];
             videoArr = response.data.data;
             if (videoArr == null) {
-              this.error=true
+              this.error = true;
               this.errorMsg = "暂时没有数据";
             } else {
               for (var i = 0; i < videoArr.length; i++) {
@@ -124,6 +178,7 @@ export default {
                 video.date = this.timestampToTime(videoArr[i].RS_CREATE_TIME);
                 video.uploadAdmin = videoArr[i].RS_FOUNDER;
                 video.chapterNum = videoArr[i].CP_NUMBER;
+                video.videoUrl = videoArr[i].RS_URL;
                 videoData.push(video);
               }
               this.videoData = videoData;
@@ -139,7 +194,7 @@ export default {
     },
     timestampToTime(timestamp) {
       timestamp = String(timestamp);
-      timestamp = timestamp.length == 10 ? timestamp*1000 : timestamp * 1
+      timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
       var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
       var Y = date.getFullYear() + "-";
       var M =(date.getMonth() + 1 < 10? "0" + (date.getMonth() + 1): date.getMonth() + 1) + "-";
@@ -207,6 +262,7 @@ export default {
                   video.date = this.timestampToTime(videoArr[i].RS_CREATE_TIME);
                   video.uploadAdmin = videoArr[i].RS_FOUNDER;
                   video.chapterNum = videoArr[i].CP_NUMBER;
+                  video.videoUrl = videoArr[i].RS_URL;
                   videoData.push(video);
                 }
                 this.videoData = videoData;
@@ -332,5 +388,13 @@ table td {
 .red {
   cursor: pointer;
   color: #ff6947;
+}
+/*视频模态框*/
+.modal-width{
+  width: 700px;
+  height: 400px;
+}
+.modal-padding{
+  padding: 0;
 }
 </style>
