@@ -61,9 +61,11 @@ const actions = {
             flag = 0;
         } else {
             console.log("token已过期");
+
         }
         if (!token || flag) {
-            return;
+            router.replace({ path: '/signin' });
+            // return;
         }
 
         const userId = localStorage.getItem('userId');
