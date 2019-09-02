@@ -61,6 +61,7 @@
         }
         this.$store.dispatch('login', formData)
         .then(() => {
+          console.log('\\\\\\\\\\\\\\\\\\\\\\\\')
           this.error = !this.$store.getters.isAuthenticated;
         })
       }
