@@ -59,8 +59,8 @@
           password: this.password,
           username: this.username
         }
-        this.$store.dispatch('login', formData).then(() => {
-          console.log('+++++++++++++++++++')
+        this.$store.dispatch('login', formData)
+        .then(() => {
           this.error = this.$store.getters.isAuthenticated;
         })
       }

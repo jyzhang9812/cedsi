@@ -3,7 +3,6 @@ import globalAxios from '../axios-auth';
 import router from '../router';
 
 const actions = {
-
     login({ commit, dispatch, state }, authData) {
         var token = ''
         globalAxios.post("/user/login",
@@ -17,14 +16,16 @@ const actions = {
                     state.user = authData.username
                     state.status = response.data.status
                     commit(TYPES.authUser, {
+
                         token: token,
                         userId: null
                     })
-
                     localStorage.setItem('idToken', token)
                     localStorage.setItem('user', state.user)
                     localStorage.setItem('roleId', state.roleId)
                     localStorage.setItem('expirationDate', state.expirationDate)
+
+
                     if (state.status == 'fail') {
                         console.log('error')
                     }
