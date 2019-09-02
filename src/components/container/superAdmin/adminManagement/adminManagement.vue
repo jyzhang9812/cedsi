@@ -34,6 +34,7 @@
                   :class="isPassword==false?'addcon':'addcon err'"
                   placeholder="请输入密码"
                   v-model="adminPassword"
+                  type="password"
                 />
               </div>
               <span :class="isPassword==true?'inputtips':'inputerr'">不超过20个字符</span>

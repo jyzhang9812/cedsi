@@ -58,18 +58,38 @@
 
 
     <div class="add" v-show="addShown">
-      <form action="">
-        <div class="item">
-          <p>标题：</p><input type="text" class="title" placeholder="请输入标题">
-        </div>
-        <div class="item">
-          <div ref="editor" class="editor"></div>
-        </div>
-        <div class="item1">
-          <button type="button" class="btn-my" @click="addActivitySave">保存</button>
-          <button type="button" class="btn-my" @click="addActivityShow">取消</button>
-        </div>
-      </form>
+      
+        <div class="upload-video">
+    <div class="upload">
+      <span class="upload-title">活动标题:</span>
+      <input class="upload-input" v-model='title' placeholder="请输入活动标题" />
+    </div>
+    <div class="upload">
+      <span class="upload-title">活动类型:</span>
+      <input class="upload-input" v-model='activityType' placeholder="请输入活动类型" />
+    </div>
+    <div class="upload upload-height">
+      <span class="upload-title">活动内容:</span>
+      <textarea class="upload-textarea" rows="8" cols="70" v-model='content' placeholder="请输入活动内容" />
+      </div>
+    <div class="upload">
+      <span class="upload-title">选择封面:</span>
+      <div class="upload-cover-btn">
+        上传文件
+      <input type="file" class="" @change="getFile($event)" style="opacity: 0">
+      </div>
+    </div>
+    <div class="upload upload-height">
+      <span class="upload-title">预览:</span>
+      <div class="upload-cover-img" >
+        <img id="headimage" :src="headsculpture" class="cover-image" alt="" v-show="headsculpture!==''">
+      </div>
+    </div>
+    <div class="upload-footer">
+      <button class="btn upload-btn" @click="submit1($event)">确定</button>
+      <button class="btn upload-btn" @click="calcelUpload">取消</button>
+    </div>
+  </div>
     </div>
   </div>
 </template>
@@ -79,10 +99,19 @@
   import selectInput from "../../teacher/utils/selectInput";
   import deletePrompt from "../../teacher/utils/deletePrompt";
   import E from 'wangeditor';
+  import AWS from 'aws-sdk';
+  import instance from '../../../../axios-auth.js';
   export default {
     name: 'activity',
     data() {
       return {
+         title:'',
+        type:'',
+        file: null,
+        fileName: '',
+        headsculpture: '',
+        activityType: '',
+        content: '',
         limit: 10,
         addShown: false,
         currentList: [],
@@ -192,40 +221,113 @@
       },
       addActivitySave() {
         this.addActivityShow();
+      },
+      calcelUpload() {
+        this.headsculpture = '';
+        this.file = null;
+        this.fileName = '';
+        this.name = '';
+        this.description = '';
+        this.$router.replace({ path: '/Admin/courseManagement/' });
+      },
+      getFile(event) {
+        this.file = event.target.files[0]
+        console.log(this.file)
+        this.fileName = this.file.name
+        var reader = new FileReader();
+        var that = this;
+        reader.readAsDataURL(this.file);
+        reader.onload = function (e) {
+          that.headsculpture = this.result
+        }
+      },
+      submit1(event) {
+        let postImgToS3 = function (config, file) {
+          AWS.config = new AWS.Config({
+            accessKeyId: config.AccessKeyId,
+            secretAccessKey: config.SecretAccessKey,
+            sessionToken: config.SessionToken,
+            region: 'cn-northwest-1'
+          })
+          var s3 = new AWS.S3();
+          let formData = new FormData();
+          formData.append('content', file);
+          const reader = new FileReader();
+          var content = reader.readAsArrayBuffer(file);
+          var params = {
+            ACL: 'public-read',
+            Bucket: "cedsi",
+            Body: formData.get('content'),
+            Key: "activity/" + config.id + "." + file.type.split('/')[1],
+            ContentType: file.type,
+            Metadata: { 'uploader': window.localStorage.getItem('user') }
+          };
+          s3.putObject(params, function (err, data) {
+            if (err) {
+              console.log(err, err.stack);
+            } else {
+              console.log(data);
+              if (data.hasOwnProperty('ETag')) {
+                alert("上传成功!");
+              } else {
+                alert("上传失败!");
+              }
+            }
+          });
+        }
+        this.postFormData({          
+          TITLE:this.title,
+          ACTIVITY_TYPE:this.activityType,
+          CONTENT:this.content,
+          IMAGE_TYPE: this.file.type.split('/')[1]
+        }, postImgToS3);
+      },
+      postFormData(formData, postImgToS3) {
+        let file = this.file;
+        instance.post('/eduadmin/activity', formData, {
+          headers: { Authorization: localStorage.getItem('idToken') }
+        })
+          .then((res) => {
+            console.log(res);
+            postImgToS3(res.data.data, file);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
     mounted() {
       this.tableData = this.activityList;
       this.getNew(0);
-      let editor = new E(this.$refs.editor);
-      editor.customConfig.uploadImgShowBase64 = true;
-      editor.customConfig.onchange = (html) => {
-        this.editorContent = html
-      };
-      editor.customConfig.menus = [
-          'head', // 标题
-          'bold', // 粗体
-          'fontSize', // 字号
-          'fontName', // 字体
-          'italic', // 斜体
-          'underline', // 下划线
-          'strikeThrough', // 删除线
-          'foreColor', // 文字颜色
-          'backColor', // 背景颜色
-          'link', // 插入链接
-          'list', // 列表
-          'justify', // 对齐方式
-          'quote', // 引用
-          'emoticon', // 表情
-          'image', // 插入图片
-          'table', // 表格
-          'video', // 插入视频
-          'code', // 插入代码
-          'undo', // 撤销
-          'redo' // 重复
-        ],
-        editor.create();
-      editor.txt.html('<p>请输入内容</p>');
+      // let editor = new E(this.$refs.editor);
+      // editor.customConfig.uploadImgShowBase64 = true;
+      // editor.customConfig.onchange = (html) => {
+      //   this.editorContent = html
+      // };
+      // editor.customConfig.menus = [
+      //     'head', // 标题
+      //     'bold', // 粗体
+      //     'fontSize', // 字号
+      //     'fontName', // 字体
+      //     'italic', // 斜体
+      //     'underline', // 下划线
+      //     'strikeThrough', // 删除线
+      //     'foreColor', // 文字颜色
+      //     'backColor', // 背景颜色
+      //     'link', // 插入链接
+      //     'list', // 列表
+      //     'justify', // 对齐方式
+      //     'quote', // 引用
+      //     'emoticon', // 表情
+      //     'image', // 插入图片
+      //     'table', // 表格
+      //     'video', // 插入视频
+      //     'code', // 插入代码
+      //     'undo', // 撤销
+      //     'redo' // 重复
+      //   ],
+      //   editor.create();
+      // editor.txt.html('<p>请输入内容</p>');
     }
   }
 
@@ -370,4 +472,107 @@
     margin-left: 356px;
   }
 
+
+.upload {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 20px;
+}
+.upload-title {
+  color: #606266;
+  display: block;
+  text-align: right;
+  width: 80px;
+  height: 40px;
+  float: left;
+  line-height: 40px;
+}
+.upload-input {
+  width: 300px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #409eff;
+  margin-left: 10px;
+  padding-left: 10px;
+}
+.upload-input:hover {
+  border: 1px solid #66b1ff;
+}
+.upload-input:focus {
+  outline: none;
+}
+.upload-textarea {
+  border: 1px solid #409eff;
+  border-radius: 5px;
+  margin-left: 10px;
+  padding: 10px;
+}
+.upload-height {
+  height: 190px;
+}
+.upload-textarea:hover {
+  border: 1px solid #66b1ff;
+}
+.upload-textarea:focus {
+  outline: none;
+}
+.outside[data-v-5567b275]{
+  width: 300px !important;
+  height: 40px !important;
+  margin-left: 10px !important;
+}
+.inputBox[data-v-5567b275]{
+    height: 35px !important;
+    font-size: 14px !important;
+    width: 230px !important;
+}
+.dropdown-menu{
+    left: 100px !important;
+}
+.upload-footer{
+    width: 100%;
+    text-align: center
+}
+.upload-btn{
+    background-color: #409eff;
+    color: #fff;
+    margin-left: 10px;
+}
+.upload-btn:hover{
+    color: #fff
+}
+.upload-btn:focus{
+    outline:none;
+    color: #fff
+}
+.upload-cover-btn{
+  margin-left: 10px;
+  width: 80px;
+  height: 35px;
+  display: inline-block;
+  background-color: #409eff;
+  color: #fff;
+  border-radius:5px; 
+  line-height: 35px;
+  text-align: center
+}
+input[type=file]{
+  width: 80px;
+  height: 35px;
+  position: relative;
+  top:-35px;
+}
+.upload-cover-img{
+  display: inline-block;
+  border: 1px dashed #dcdfe6;
+  width: 290px;
+  height: 150px;
+  margin-left: 10px;
+  border-radius:5px; 
+  background-color: #f5f7fa;
+}
+.cover-image{
+  width: 100%;
+  height: 100%;
+}
 </style>

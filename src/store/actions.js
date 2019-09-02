@@ -3,7 +3,6 @@ import globalAxios from '../axios-auth';
 import router from '../router';
 
 const actions = {
-
     login({ commit, dispatch, state }, authData) {
         var token = ''
         globalAxios.post("/user/login",
@@ -16,33 +15,27 @@ const actions = {
                     state.roleId = response.data.role;
                     state.user = authData.username
                     state.status = response.data.status
-                    
+                    commit(TYPES.authUser, {
+                                    token: token,
+                                    userId: null
+                                })
                     localStorage.setItem('idToken', token)
                     localStorage.setItem('user', state.user)
                     localStorage.setItem('roleId', state.roleId)
                     localStorage.setItem('expirationDate', state.expirationDate)
+
+                    if (state.status == 'fail') {
+                                    console.log('error')
+                                }
+                                else {
+                                    router.replace({ path: state.roles[state.roleId - 1] })
+                                }
                 },
                 error => {
                     router.push({ path: '/404' })
                     console.log(error);
                 }
             );
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                commit(TYPES.authUser, {
-                    token: token,
-                    userId: null
-                })
-          console.log('0000000000000000000')
-                if (state.status == 'fail') {
-                    console.log('error')
-                }
-                else {
-                    router.replace({ path: state.roles[state.roleId - 1] })
-                }
-                resolve()
-            }, 1000)
-        })
     },
     signup({ commit, dispatch }, authData) {
         globalAxios.post("/user/register",
@@ -68,9 +61,11 @@ const actions = {
             flag = 0;
         } else {
             console.log("token已过期");
+
         }
         if (!token || flag) {
-            return;
+            router.replace({ path: '/signin' });
+            // return;
         }
 
         const userId = localStorage.getItem('userId');
