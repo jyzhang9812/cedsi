@@ -13,6 +13,11 @@ const showPage = resolve => {
     resolve(require('../components/container/student/right/showPage/showPage.vue'));
   });
 };
+const activedetailCard = resolve => {
+  require.ensure(['../components/container/student/right/showPage/activedetailCard.vue'], () => {
+    resolve(require('../components/container/student/right/showPage/activedetailCard.vue'));
+  });
+};
 const course = resolve => {
   require.ensure(['../components/container/student/right/course/course.vue'], () => {
     resolve(require('../components/container/student/right/course/course.vue'));
@@ -344,6 +349,17 @@ export default new Router({
           }, component: question
         }
       ]
+    },
+    {
+      path: '/dashboard/showPage/activedetailCard',
+      beforeEnter(to, from, next) {
+        if (window.localStorage.getItem("idToken")) {
+          next()
+        } else {
+          next('/signin')
+        }
+      },
+      component: activedetailCard
     },
     {
       path: '/dashboard/coursemap', beforeEnter(to, from, next) {

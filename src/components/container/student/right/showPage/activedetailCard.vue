@@ -21,7 +21,7 @@
 export default {
     data() {
         return {
-            banner:this.$state.state.url+"activity/bannerBg.png",
+            banner:this.$store.state.url+"activity/bannerBg.png",
             type: "教育",
             title: "第一次活动",
             principal: "zhanghuiquan",
