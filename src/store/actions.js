@@ -5,7 +5,7 @@ import router from '../router';
 const actions = {
     login({ commit, dispatch, state }, authData) {
         var token = ''
-        globalAxios.post("/user/login",
+        return globalAxios.post("/user/login",
             { "username": authData.username, "password": authData.password })
             .then(
                 response => {
@@ -64,17 +64,11 @@ const actions = {
         const token = localStorage.getItem('idToken');
         const expirationDate = Number(localStorage.getItem('expirationDate'));
         const now = new Date();
-        let flag = 1;
         if (now.getTime() <= expirationDate) {
             console.log("token未过期");
-            flag = 0;
         } else {
             console.log("token已过期");
-
-        }
-        if (!token || flag) {
             router.replace({ path: '/signin' });
-            // return;
         }
 
         const userId = localStorage.getItem('userId');
