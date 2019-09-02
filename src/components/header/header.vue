@@ -38,9 +38,6 @@
         this.$router.replace(this.$store.state.roles[roldId-1])
       }
     },
-    created:function(){
-      this.Authenticated = this.$store.getters.isAuthenticated
-    }  
   }
 </script>
 

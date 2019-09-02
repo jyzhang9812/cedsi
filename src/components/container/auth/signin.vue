@@ -61,7 +61,7 @@
         }
         this.$store.dispatch('login', formData)
         .then(() => {
-          this.error = this.$store.getters.isAuthenticated;
+          this.error = !this.$store.getters.isAuthenticated;
         })
       }
     },
