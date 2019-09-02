@@ -178,6 +178,11 @@ const teacherManagement = resolve => {
     resolve(require('../components/container/eduAdmin/office/teacherManagement.vue'));
   });
 };
+const checkStudent = resolve => {
+  require.ensure(['../components/container/eduAdmin/activity/checkStudent.vue'], () => {
+    resolve(require('../components/container/eduAdmin/activity/checkStudent.vue'));
+  });
+};
 import { resolve } from 'url';
 //以下是超级管理员角色
 const superAdmin = resolve => {
@@ -496,6 +501,15 @@ export default new Router({
               next('/signin')
             }
           }, component: eduActivity
+        },
+        {
+          path: '/eduAdmin/activity/checkStudent', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: checkStudent
         },
         {
           path: '/eduAdmin/classManagement', beforeEnter(to, from, next) {
