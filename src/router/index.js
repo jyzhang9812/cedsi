@@ -13,9 +13,9 @@ const showPage = resolve => {
     resolve(require('../components/container/student/right/showPage/showPage.vue'));
   });
 };
-const activedetailCard = resolve => {
-  require.ensure(['../components/container/student/right/showPage/activedetailCard.vue'], () => {
-    resolve(require('../components/container/student/right/showPage/activedetailCard.vue'));
+const activitydetailCard = resolve => {
+  require.ensure(['../components/container/student/right/showPage/activitydetailCard.vue'], () => {
+    resolve(require('../components/container/student/right/showPage/activitydetailCard.vue'));
   });
 };
 const course = resolve => {
@@ -71,6 +71,11 @@ const SigninPage = resolve => {
 const coursemap = resolve => {
   require.ensure(['../components/container/student/right/course/coursemap.vue'], () => {
     resolve(require('../components/container/student/right/course/coursemap.vue'));
+  });
+};
+const payment = resolve => {
+  require.ensure(['../components/container/student/payment.vue'], () => {
+    resolve(require('../components/container/student/payment.vue'));
   });
 };
 //import ErrorPage from '../components/container/auth/errorPage.vue'
@@ -361,11 +366,22 @@ export default new Router({
               next('/signin')
             }
           }, component: question
-        }
+        },
+        {
+          path: '/dashboard/showPage/activedetailCard',
+          beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          },
+          component: activitydetailCard
+        },
       ]
     },
     {
-      path: '/dashboard/showPage/activedetailCard',
+      path: '/payment',
       beforeEnter(to, from, next) {
         if (window.localStorage.getItem("idToken")) {
           next()
@@ -373,7 +389,7 @@ export default new Router({
           next('/signin')
         }
       },
-      component: activedetailCard
+      component: payment
     },
     {
       path: '/dashboard/coursemap', beforeEnter(to, from, next) {
