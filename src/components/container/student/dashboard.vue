@@ -215,7 +215,7 @@
   #student .nav>li {
     cursor: pointer;
     min-height: 50px;
-    padding: 5px 5px;
+    padding-left: 5px; 
   }
 
   #student .block:hover,
@@ -236,6 +236,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     background-color: #252937;
+    max-width: 230px;
   }
 
   /* Sidebar navigation */

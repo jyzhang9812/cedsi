@@ -69,6 +69,7 @@ export default {
 <style>
 #payment {
   background-color: #f8fafc;
+  min-width: 1200px;
 }
 .payment-header {
   width: 100%;
