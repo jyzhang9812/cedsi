@@ -5,7 +5,7 @@ import router from '../router';
 const actions = {
     login({ commit, dispatch, state }, authData) {
         var token = ''
-        globalAxios.post("/user/login",
+        return globalAxios.post("/user/login",
             { "username": authData.username, "password": authData.password })
             .then(
                 response => {
@@ -15,15 +15,23 @@ const actions = {
                     state.roleId = response.data.role;
                     state.user = authData.username
                     state.status = response.data.status
-                    commit(TYPES.authUser, {
-
-                        token: token,
-                        userId: null
-                    })
-                    localStorage.setItem('idToken', token)
-                    localStorage.setItem('user', state.user)
-                    localStorage.setItem('roleId', state.roleId)
-                    localStorage.setItem('expirationDate', state.expirationDate)
+                    console.log(token)
+                    if (token === undefined) {
+                        commit(TYPES.authUser, {
+                            token: null,
+                            userId: null
+                        })
+                    }
+                    else {
+                        commit(TYPES.authUser, {
+                            token: token,
+                            userId: null
+                        })
+                        localStorage.setItem('idToken', token)
+                        localStorage.setItem('user', state.user)
+                        localStorage.setItem('roleId', state.roleId)
+                        localStorage.setItem('expirationDate', state.expirationDate)
+                    }
 
 
                     if (state.status == 'fail') {
@@ -38,22 +46,6 @@ const actions = {
                     console.log(error);
                 }
             );
-        // return new Promise((resolve, reject) => {
-        //     setTimeout(() => {
-        //         commit(TYPES.authUser, {
-        //             token: token,
-        //             userId: null
-        //         })
-        //   console.log('0000000000000000000')
-        //         if (state.status == 'fail') {
-        //             console.log('error')
-        //         }
-        //         else {
-        //             router.replace({ path: state.roles[state.roleId - 1] })
-        //         }
-        //         resolve()
-        //     }, 1000)
-        // })
     },
     signup({ commit, dispatch }, authData) {
         globalAxios.post("/user/register",
@@ -73,17 +65,11 @@ const actions = {
         const token = localStorage.getItem('idToken');
         const expirationDate = Number(localStorage.getItem('expirationDate'));
         const now = new Date();
-        let flag = 1;
         if (now.getTime() <= expirationDate) {
             console.log("token未过期");
-            flag = 0;
         } else {
             console.log("token已过期");
-
-        }
-        if (!token || flag) {
             router.replace({ path: '/signin' });
-            // return;
         }
 
         const userId = localStorage.getItem('userId');

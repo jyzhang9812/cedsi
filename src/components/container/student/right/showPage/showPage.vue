@@ -59,7 +59,7 @@
     import userCard from './userCard.vue'
     import communityCard from './communityCard.vue'
     import allCourseCard from './allCourseCard.vue'
-
+    import activityCard from './activityCard.vue'
 
     export default {
         name: 'presentation',
@@ -67,7 +67,8 @@
             pagination,
             userCard,
             communityCard,
-            allCourseCard
+            allCourseCard,
+            activityCard
         },
         data() {
             return {
@@ -81,6 +82,10 @@
                     {
                         componentName: 'communityCard',
                         title: '社区'
+                    },
+                    {
+                        componentName: 'activityCard',
+                        title: '教务活动'
                     },
                     {
                         componentName: 'userCard',

@@ -33,11 +33,11 @@
         <div class="container-login100-form-btn">
           <button type="submit" class="login100-form-btn">登录</button>
         </div>
-        <div class="text-center p-t-90">
+        <!-- <div class="text-center p-t-90">
           <a class="txt1" href="#">
             忘记密码？
           </a>
-        </div>
+        </div> -->
       </form>
     </div>
   </div>
@@ -50,7 +50,7 @@
         email: '',
         password: '',
         username: '',
-        error: 0,
+        error: 0
       }
     },
     methods: {
@@ -60,9 +60,10 @@
           username: this.username
         }
         this.$store.dispatch('login', formData)
-        .then(() => {
-          this.error = !this.$store.getters.isAuthenticated;
-        })
+          .then(() => {
+            console.log('\\\\\\\\\\\\\\\\\\\\\\\\')
+            this.error = !this.$store.getters.isAuthenticated;
+          })
       }
     },
   }

@@ -48,7 +48,9 @@
               <td>{{list.school}}</td>
               <td>{{list.reply}}/{{list.view}}</td>
               <td>{{list.status}}</td>
-              <td><span class="blue">编辑</span></td>
+              <td><span class="blue" >编辑</span>
+              <span class="blue" @click="checkStu()">查看学生</span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -157,6 +159,11 @@
       deletePrompt
     },
     methods: {
+      checkStu(){
+        this.$router.push({
+        path: "/eduAdmin/activity/checkStudent"
+      });
+      },
       getNew(value) {
         this.currentList = this.tableData.slice(value, value + this.limit);
       },
@@ -228,7 +235,7 @@
         this.fileName = '';
         this.name = '';
         this.description = '';
-        this.$router.replace({ path: '/Admin/courseManagement/' });
+        this.addActivityShow();
       },
       getFile(event) {
         this.file = event.target.files[0]
@@ -363,6 +370,7 @@
 
   .blue {
     color: #409EFF;
+    cursor: pointer;
   }
 
   .red {

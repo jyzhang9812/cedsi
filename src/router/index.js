@@ -13,6 +13,11 @@ const showPage = resolve => {
     resolve(require('../components/container/student/right/showPage/showPage.vue'));
   });
 };
+const activedetailCard = resolve => {
+  require.ensure(['../components/container/student/right/showPage/activedetailCard.vue'], () => {
+    resolve(require('../components/container/student/right/showPage/activedetailCard.vue'));
+  });
+};
 const course = resolve => {
   require.ensure(['../components/container/student/right/course/course.vue'], () => {
     resolve(require('../components/container/student/right/course/course.vue'));
@@ -178,6 +183,11 @@ const teacherManagement = resolve => {
     resolve(require('../components/container/eduAdmin/office/teacherManagement.vue'));
   });
 };
+const checkStudent = resolve => {
+  require.ensure(['../components/container/eduAdmin/activity/checkStudent.vue'], () => {
+    resolve(require('../components/container/eduAdmin/activity/checkStudent.vue'));
+  });
+};
 import { resolve } from 'url';
 //以下是超级管理员角色
 const superAdmin = resolve => {
@@ -341,6 +351,17 @@ export default new Router({
       ]
     },
     {
+      path: '/dashboard/showPage/activedetailCard',
+      beforeEnter(to, from, next) {
+        if (window.localStorage.getItem("idToken")) {
+          next()
+        } else {
+          next('/signin')
+        }
+      },
+      component: activedetailCard
+    },
+    {
       path: '/dashboard/coursemap', beforeEnter(to, from, next) {
         if (window.localStorage.getItem("idToken")) {
           next()
@@ -496,6 +517,15 @@ export default new Router({
               next('/signin')
             }
           }, component: eduActivity
+        },
+        {
+          path: '/eduAdmin/activity/checkStudent', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: checkStudent
         },
         {
           path: '/eduAdmin/classManagement', beforeEnter(to, from, next) {
