@@ -68,6 +68,11 @@ const coursemap = resolve => {
     resolve(require('../components/container/student/right/course/coursemap.vue'));
   });
 };
+const payment = resolve => {
+  require.ensure(['../components/container/student/payment.vue'], () => {
+    resolve(require('../components/container/student/payment.vue'));
+  });
+};
 //import ErrorPage from '../components/container/auth/errorPage.vue'
 const ErrorPage = resolve => {
   require.ensure(['../components/container/auth/errorPage.vue'], () => {
@@ -360,6 +365,17 @@ export default new Router({
           component: activitydetailCard
         },
       ]
+    },
+    {
+      path: '/payment',
+      beforeEnter(to, from, next) {
+        if (window.localStorage.getItem("idToken")) {
+          next()
+        } else {
+          next('/signin')
+        }
+      },
+      component: payment
     },
     {
       path: '/dashboard/coursemap', beforeEnter(to, from, next) {

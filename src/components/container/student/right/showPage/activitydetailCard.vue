@@ -11,7 +11,7 @@
         :style="{backgroundImage:'url('+require('../../../../../../static/images/activity/fixedbg.png')+')'}"
       >
         <div class="activity-price">￥348.00</div>
-        <button class="join-btn">我要报名</button>
+        <button class="join-btn" @click="payment">我要报名</button>
       </div>
     </div>
     <div class="activity-section2">
@@ -85,6 +85,11 @@ export default {
       activityTime: "2019年6月2日",
       activityPlace: "陕西师范大学新勇活动中心"
     };
+  },
+  methods:{
+    payment(){
+      this.$router.push({ path: '/payment' })
+    }
   }
 };
 </script>
