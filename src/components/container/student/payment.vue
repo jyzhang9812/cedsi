@@ -6,7 +6,7 @@
 		<div class="modal-content mypay-height">
 			<div class="modal-header mypay-title">
 				<h4 class="modal-title" id="myModalLabel">
-					微信支付￥348.00
+					微信支付{{orderPrice}}
 				</h4>
 			</div>
             <div class="modal-body mypay-qrcode">
@@ -24,14 +24,14 @@
     </div>
     <div class="payment-card">
       <div class="card-title">
-        <span>订单：66666666666</span>
+        <span>订单：{{orderNum}}</span>
       </div>
       <div class="card-content">
         <img src="https://www.tynker.com/image/course-card/vertical/minecraft-starter.png" class="card-img" />
-        <div class="order-title">玩转算法系列--图论精讲 面试升职必备（Java版）</div>
+        <div class="order-title">{{orderName}}</div>
         <div class="order-price">
           实付金额:
-          <span>￥ 348.00</span>
+          <span>{{orderPrice}}</span>
         </div>
       </div>
       <div class="pay-method">
@@ -42,7 +42,7 @@
       </div>
       <div class="summary">
             应付金额:
-          <span>￥ 348.00</span>
+          <span>{{orderPrice}}</span>
           <button class="pay" data-toggle="modal" data-target="#myPay" @click="closeModal">立即支付</button>
       </div>
     </div>
@@ -52,6 +52,11 @@
 <script>
 export default {
     data(){
+        return{
+            orderName:"玩转算法系列--图论精讲 面试升职必备（Java版）",
+            orderPrice:"￥ 348.00",
+            orderNum:"66666666666"
+        }
     },
     methods:{
         closeModal(){
