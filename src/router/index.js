@@ -53,6 +53,11 @@ const presentation = resolve => {
     resolve(require('../components/container/student/right/presentation/presentation.vue'));
   });
 };
+const userCenter = resolve => {
+  require.ensure(['../components/container/student/right/userCenter/userCenter.vue'], () => {
+    resolve(require('../components/container/student/right/userCenter/userCenter.vue'));
+  });
+};
 const SignupPage = resolve => {
   require.ensure(['../components/container/auth/signup.vue'], () => {
     resolve(require('../components/container/auth/signup.vue'));
@@ -338,6 +343,15 @@ export default new Router({
               next('/signin')
             }
           }, component: presentation
+        },
+        {
+          path: '/dashboard/userCenter', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: userCenter
         },
         {
           path: '/dashboard/question', beforeEnter(to, from, next) {

@@ -1,56 +1,5 @@
 <template>
   <div id="student">
-    <!-- 模态框（Modal） -->
-    <div class="modal fade" id="update-info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">修改个人信息</h4>
-          </div>
-          <div class="modal-body">
-            <div class="modal-head">
-              <img class="modal-headimg" :src="user.avatar">
-            </div>
-            <div class="modal-update">
-              <div class="modal-update-text">昵称:</div>
-              <input type='text' class="modal-update-info" v-model="user.username">
-            </div>
-            <div class="modal-update">
-              <div class="modal-update-text">性别:</div>
-              <span class="modal-update-radio" v-for="(item,index) in radiolist">
-                <input class="modal-update-radio" type="radio" :value='item.value' :checked="item.isCheck"
-                  v-model="user.gender" @change="changeInput(index)">
-                {{item.name}}
-              </span>
-            </div>
-            <div class="modal-update">
-              <div class="modal-update-text">加入时间:</div>
-              <input class="modal-update-info" v-model="user.time" value='user.time' disabled="disabled">
-            </div>
-            <div class="modal-update">
-              <div class="modal-update-text">邮箱:</div>
-              <input class="modal-update-info" v-model="user.email">
-            </div>
-            <div class="modal-update">
-              <div class="modal-update-text">移动电话:</div>
-              <input class="modal-update-info" v-model="user.mobile">
-            </div>
-            <div class="modal-update">
-              <div class="modal-update-text">固定电话:</div>
-              <input class="modal-update-info" v-model="user.phone">
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="submit">提交更改</button>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-2" :style="style">
@@ -62,8 +11,7 @@
                   <div class="message-img"></div>
                   <div class="header-img">
                     <img class="header" :src="user.avatar">
-                    <i class="fa fa-pencil fa-lg update-info" aria-hidden="true" data-toggle="modal"
-                      data-target="#update-info"></i>
+                    <i class="fa fa-bolt fa-lg bolt" aria-hidden="true"></i>
                   </div>
                   <div class="user">
                     <h5 class="user-name">{{user.username}}</h5>
@@ -86,7 +34,6 @@
 
 <script>
   import { error } from 'util';
-  import globalAxios from 'axios'
   import VueElementLoading from'vue-element-loading'
 
   export default {
@@ -132,8 +79,12 @@
             img: 'fa-book',
             path: "/dashboard/presentation"
           },
+          {
+            name: "个人中心",
+            img: 'fa-user-circle-o',
+            path: "/dashboard/userCenter"
+          },
         ],
-        radiolist: [{ name: '男', value: 1, isCheck: false }, { name: '女', value: 2, isCheck: false }],
         i: 0,
         height: 0,
         style: ''
@@ -146,35 +97,6 @@
       hide(index) {
         this.i = index;
       },
-
-      changeInput(index) {
-        this.radiolist.map((v, i) => {
-          if (i == index) {
-            v.isCheck = true
-          } else {
-            v.isCheck = false
-          }
-        })
-      },
-      submit() {
-        this.radiolist.map((v, i) => {
-          if (v.isCheck) {
-            console.log('被选中的值为:' + v.value)
-            this.user.gender = v.value
-          }
-        })
-        const formData = {
-          avatar: this.user.avatar,
-          nickName: this.user.username,
-          email: this.user.email,
-          gender: this.user.gender,
-          mobile: this.user.mobile,
-          phone: this.user.phone,
-          time: this.user.time
-        }
-        console.log(formData);
-        this.$store.dispatch('updateUser', formData)
-      }
     },
     created: function () {
       this.height = document.documentElement.clientHeight
@@ -231,7 +153,7 @@
     width: 16.7%;
     position: relative;
     top: 0px;
-    z-index: 999;
+    /* z-index: 999; */
     display: block;
     overflow-x: hidden;
     overflow-y: auto;
@@ -283,8 +205,9 @@
     border-radius: 50%;
   }
 
-  .update-info {
+  .bolt {
     position: relative;
+    color: #ffbf35;
     width: 20px;
     height: 20px;
     top: -20px;
