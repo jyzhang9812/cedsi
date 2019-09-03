@@ -5,7 +5,7 @@
             style="background: url('https://www.tynker.com/image/dashboard/student/launchpad/bg-space.jpg')">
             <div class="Containt">
                 <div class="recommend_title">
-                    <h3 style="color: #fff">推荐课程</h3>
+                    <h3 style="color: #fff">精品活动</h3>
                     <p>
                         <button class="button">查看更多</button>
                         <i class="fa fa-trophy fa-2x" style="color: #ffbf35" aria-hidden="true"></i>
@@ -13,7 +13,7 @@
                     </p>
                 </div>
                 <div class="iconleft" v-on:click="zuohua(0)" v-show='calleft[0]!=0'>
-                    <img class="el-icon-arrow" :src=leftImg></img>
+                    <img class="el-icon-arrow" :src=leftImg />
                 </div>
                 <ul :style="{'left':calleft[0] + 'px'}">
                     <li class="course_card" v-for="(item,index) in superurl" :key="index" @mouseover="show(index)"
@@ -22,31 +22,31 @@
                             <img class="img" :src="item.url">
                             <div class="details" v-show="index==i">
                                 <div class="detail_item">
-                                    <h4><strong>课程名{{item.course_name}}</strong></h4>
-                                    <button class="btn">Level 1</button>
+                                    <h4><strong>活动名{{item.course_name}}</strong></h4>
+                                    <button class="btn" @click="gotoActivity">查看详情</button>
                                 </div>
-                                <p style="margin-left: 10px;">课程介绍啥的asdfghjklreitohitbbdwdwicw</p>
+                                <p style="margin-left: 10px;">活动介绍啥的asdfghjklreitohitbbdwdwicw</p>
                             </div>
                         </div>
                     </li>
                 </ul>
                 <div class="iconright" v-on:click="youhua(0)" v-show='!calleft[0]>0'>
-                    <img class="el-icon-arrow" :src=rightImg></img>
+                    <img class="el-icon-arrow" :src=rightImg />
                 </div>
             </div>
         </div>
 
         <div class="threeImg">
-            <div class='Containt' v-for="(item,index) in arrComponent" :key="index" v-model='calleft[index+1]'>
+            <div class='Containt' v-for="(item,index) in arrComponent" :key="index">
                 <div class="iconleft" v-on:click="zuohua(index+1)" v-show='calleft[index+1]!=0'>
-                    <img class="el-icon-arrow" :src=leftImg></img>
+                    <img class="el-icon-arrow" :src=leftImg />
                 </div>
                 <div class="recommend_title">
                     <h3>{{item.title}}</h3>
                 </div>
                 <component v-bind:is="item.componentName" :calleft="calleft[index+1]"></component>
                 <div class="iconright" v-on:click="youhua(index+1)" v-show='!calleft[index+1]>0'>
-                    <img class="el-icon-arrow" :src=rightImg></img>
+                    <img class="el-icon-arrow" :src=rightImg />
                 </div>
             </div>
         </div>
@@ -59,7 +59,6 @@
     import userCard from './userCard.vue'
     import communityCard from './communityCard.vue'
     import allCourseCard from './allCourseCard.vue'
-    import activityCard from './activityCard.vue'
 
     export default {
         name: 'presentation',
@@ -67,8 +66,7 @@
             pagination,
             userCard,
             communityCard,
-            allCourseCard,
-            activityCard
+            allCourseCard
         },
         data() {
             return {
@@ -82,10 +80,6 @@
                     {
                         componentName: 'communityCard',
                         title: '社区'
-                    },
-                    {
-                        componentName: 'activityCard',
-                        title: '教务活动'
                     },
                     {
                         componentName: 'userCard',
@@ -126,6 +120,9 @@
             }
         },
         methods: {
+            gotoActivity() {
+                this.$router.push({ path: '/dashboard/showPage/activedetailCard' })
+            },
             tab(index) {
                 this.curId = index;
             },

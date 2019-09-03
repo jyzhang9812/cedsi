@@ -13,9 +13,9 @@ const showPage = resolve => {
     resolve(require('../components/container/student/right/showPage/showPage.vue'));
   });
 };
-const activedetailCard = resolve => {
-  require.ensure(['../components/container/student/right/showPage/activedetailCard.vue'], () => {
-    resolve(require('../components/container/student/right/showPage/activedetailCard.vue'));
+const activitydetailCard = resolve => {
+  require.ensure(['../components/container/student/right/showPage/activitydetailCard.vue'], () => {
+    resolve(require('../components/container/student/right/showPage/activitydetailCard.vue'));
   });
 };
 const course = resolve => {
@@ -347,19 +347,19 @@ export default new Router({
               next('/signin')
             }
           }, component: question
-        }
+        },
+        {
+          path: '/dashboard/showPage/activedetailCard',
+          beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          },
+          component: activitydetailCard
+        },
       ]
-    },
-    {
-      path: '/dashboard/showPage/activedetailCard',
-      beforeEnter(to, from, next) {
-        if (window.localStorage.getItem("idToken")) {
-          next()
-        } else {
-          next('/signin')
-        }
-      },
-      component: activedetailCard
     },
     {
       path: '/dashboard/coursemap', beforeEnter(to, from, next) {
