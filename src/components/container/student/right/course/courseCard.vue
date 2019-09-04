@@ -29,7 +29,7 @@
             </div>
           </div>
           <div class="outside">
-            <h4>{{item.COURESE_NAME}}</h4>
+            <h4>{{item.COURSE_NAME}}</h4>
             <button :class="(index==i)?btnh:btn">开始学习</button>
           </div>
         </router-link>

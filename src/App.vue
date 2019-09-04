@@ -43,7 +43,6 @@
 <style>
   body, html, #app {
     margin: 0;
-    height: 100%;
     min-height: 620px;
     /* font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; */
     font-family: 'TianZhen19e6a6ae661ff1';

@@ -33,6 +33,7 @@ const actions = {
                         localStorage.setItem('expirationDate', state.expirationDate)
                     }
 
+
                     if (state.status == 'fail') {
                         console.log('error')
                     }
