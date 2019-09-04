@@ -85,7 +85,7 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
     <div class="upload-footer">
-      <button class="btn upload-btn" data-toggle="modal" data-target="#myModal"">创建班级</button>
+      <button class="btn upload-btn" data-toggle="modal" data-target="#myModal">创建班级</button>
       <button class="btn upload-btn" @click="calcelUpload">取消</button>
     </div>
   </div>
