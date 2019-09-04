@@ -53,7 +53,7 @@
     </div>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-2" :style="style">
+        <div class="col-md-2 nav-width" :style="style">
           <ul class="nav nav-sidebar" id="uid">
             <li class="title" v-for="(title,index) in lists" :key="index" @mouseleave="hide(index)"
               @mouseenter="show(index)">
@@ -201,7 +201,7 @@
   }
 
   #student .title {
-    width: 250px;
+    width: 100%;
     line-height: 60px;
     color: #7580b3;
   }
@@ -215,7 +215,11 @@
   #student .nav>li {
     cursor: pointer;
     min-height: 50px;
-    padding-left: 5px; 
+    padding-left: 5px;
+  }
+
+  #student .nav-width {
+    padding-right: 0px; 
   }
 
   #student .block:hover,
@@ -236,7 +240,6 @@
     overflow-x: hidden;
     overflow-y: auto;
     background-color: #252937;
-    max-width: 230px;
   }
 
   /* Sidebar navigation */
@@ -268,7 +271,9 @@
     position: relative;
     height: 150px;
     padding-top: 20px;
+    padding-right: 30px;
     text-align: center;
+    margin: 0 auto;
   }
 
   .header-img {
@@ -307,6 +312,7 @@
     margin: 0 auto;
     width: 100px;
     line-height: 20px;
+    padding-right: 30px;
   }
 
   .user-level {
