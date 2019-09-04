@@ -1,40 +1,5 @@
 <template>
   <div class="subContainer">
-    <!-- 提示模态框（Modal） -->
-    <div
-      class="modal fade"
-      id="alterModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="myModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog alterwidth">
-        <div class="modal-content">
-          <div class="modal-header alterheader">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">提示</h4>
-          </div>
-          <div class="modal-body">
-            <div class="altercontent" aria-hidden="true">
-              <img :src="alterimg" class="alterimg" />
-              <span>{{alterMes}}</span>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              data-dismiss="modal"
-              @click="submitDelete()"
-            >确定</button>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
     <div class="classroute">
       <ol class="breadcrumb">
         <li>学生名单</li>
@@ -60,7 +25,7 @@
         </thead>
         <tbody>
           <tr v-for="(student, seq) in tableData" :key="seq" class="content">
-            <td><input type="checkbox"></td>
+            <td><input type="checkbox" v-model="checkedId" :value="student.name"></td>
             <td>{{student.name}}</td>
             <td>{{student.gender}}</td>
             <td>{{student.age}}</td>
@@ -70,21 +35,85 @@
       </table>
     </div>
     <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit"></pagination>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog addwidth">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" 
+						aria-hidden="true">×
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					新增班级
+				</h4>
+			</div>
+			<div class="modal-body">
+				  <div class="content">
+              <div class="add">
+                <span class="keypoint">*</span>
+                <span class="addtitle">班级名称</span>
+                <input
+                  :class="isName==false?'addcon':'addcon err'"
+                  placeholder="请输入班级名称"
+                  v-model="addClassName"
+                />
+                <span :class="isName==true?'inputtips':'inputerr'">不超过10个字符</span>
+              </div>
+              <div class="add">
+                <span class="keypoint">*</span>
+                <span class="addtitle">指定教师</span>
+                <select-input
+                  class="modal-select-input"
+                  id="teacher"
+                  tips="请选择教师"
+                  :option="addClassData.teacher.option.name"
+                  @option="changeOption"
+                  :drop-down-list="addClassData.teacher.list"
+                ></select-input>
+              </div>
+
+            </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" 
+						data-dismiss="modal">关闭
+				</button>
+				<button type="button" class="btn btn-primary">
+					确定
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
     <div class="upload-footer">
-      <button class="btn upload-btn" @click="submit1($event)">创建班级</button>
+      <button class="btn upload-btn" data-toggle="modal" data-target="#myModal"">创建班级</button>
       <button class="btn upload-btn" @click="calcelUpload">取消</button>
     </div>
   </div>
+
 </template>
 
 <script>
 import pagination from "../../teacher/utils/pagination.vue";
+import SelectInput from "../../Admin/utils/selectInput";
 import globalAxios from "axios";
 export default {
   name: "adminManagement",
-  components: { pagination },
+  components: { pagination,SelectInput },
   data() {
     return {
+      addClassName: "",
+      isName: true,
+       addClassData: {
+        addClassName: "",
+        teacher: {
+          option: "",
+          list: []
+        },
+        course: {
+          option: "",
+          list: []
+        }
+      },
       limit: 20,
       currentList: [],
       inputData: {
@@ -98,43 +127,43 @@ export default {
         "所属学校"
       ],
       tableData: [{
-          name:'小明',
+          name:'小明1',
           gender:'男',
           age:'15',
           school:'师大附中'
       },
       {
-          name:'小明',
+          name:'小明2',
           gender:'男',
           age:'15',
           school:'师大附中'
       },
       {
-          name:'小明',
+          name:'小明3',
           gender:'男',
           age:'15',
           school:'师大附中'
       },
       {
-          name:'小明',
+          name:'小明4',
           gender:'男',
           age:'15',
           school:'师大附中'
       },
        {
-          name:'小明',
+          name:'小明5',
           gender:'男',
           age:'15',
           school:'师大附中'
       },
        {
-          name:'小明',
+          name:'小明6',
           gender:'男',
           age:'15',
           school:'师大附中'
       },
        {
-          name:'小明',
+          name:'小明7',
           gender:'男',
           age:'15',
           school:'师大附中'
@@ -148,10 +177,32 @@ export default {
       alterMes: "",
       //当前页码
       currentPage: 0,
-      index: 0
+      index: 0,
+      checkedId:[],
+      checkedStudent:[],
     };
   },
+   watch: {
+     checkedId(val, oldVal) {
+      this.checkedStudent=val
+      //console.log(this.checkedStudent)
+    },
+    addClassName(val, oldVal) {
+      if (val.length <= 10 && val.length > 0) {
+        this.isName = false;
+      } else {
+        this.isName = true;
+      }
+    }
+  },
   methods: {
+     changeOption(item, id) {
+      Object.keys(this.addClassData).forEach(res => {
+        if (res === id) {
+          this.addClassData[res].option = item;
+        }
+      });
+    },
    calcelUpload() {
       this.$router.push({
         path: "/eduAdmin/activity"
@@ -398,17 +449,19 @@ table td {
 }
 
 .addcon {
-  width: 75%;
+  width: 180px;
   border: 1px solid #409eff;
   border-radius: 5px;
   height: 32px;
   line-height: 32px;
-  margin-left: 20px;
+  margin-left: 5px;
   padding: 0 20px;
 }
+
 .addcon:hover {
   border: 1px solid #dcdfe6;
 }
+
 .addcon:focus {
   outline: none;
 }
@@ -478,5 +531,22 @@ table td {
     background-color: #409eff;
     color: #fff;
     margin-left: 10px;
+}
+.modal-select-input {
+  display: inline-block;
+  margin-left: 5px;
+}
+.modal-dialog {
+  top: 100px;
+  position: relative;
+}
+.modal-header {
+  background-color: #409eff;
+  color: #fff;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.addwidth {
+  width: 500px;
 }
 </style>
