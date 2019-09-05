@@ -1,5 +1,5 @@
 <template>
-  <div class="subContainer">
+  <div id="organizationManagement">
     <!-- 提示模态框（Modal） -->
     <div
       class="modal fade"
@@ -213,12 +213,12 @@ export default {
 </script>
 
 <style scoped>
-.breadcrumb {
+#organizationManagement .breadcrumb {
   background-color: #fff;
   color: #606266;
   margin-bottom: 0;
 }
-.subContainer {
+#organizationManagement{
   font-size: 12px;
   color: #606266;
   width: 100%;
@@ -226,26 +226,26 @@ export default {
   padding: 10px;
 }
 
-.first-floor {
+#organizationManagement .first-floor {
   margin-top: 20px;
 }
-.second-floor {
+#organizationManagement .second-floor {
   font-size: 12px;
   color: #606266;
   margin-top: 20px;
 }
-.select-input {
+#organizationManagement .select-input {
   display: inline-block;
 }
 label {
   display: inline;
 }
 
-.content td {
+#organizationManagement .content td {
   line-height: 30px;
 }
 
-.textBox {
+#organizationManagement .textBox {
   width: 180px;
   height: 32px;
   font-size: 12px;
@@ -256,22 +256,22 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.textBox:focus {
+#organizationManagement .textBox:focus {
   outline: none;
 }
 
-.textBox:hover {
+#organizationManagement .textBox:hover {
   border-color: #409eff;
 }
 
 /* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-.choose {
+#organizationManagement .choose {
   background-image: url("../../../../../static/images/teach/choose.png");
   background-repeat: no-repeat;
   background-position: -1px -2px;
 }
 
-.btn {
+#organizationManagement .btn {
   background: #409eff;
   color: #fff;
   height: 30px;
@@ -280,28 +280,28 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.btn:focus {
+#organizationManagement .btn:focus {
   outline: none;
 }
 
-.btn:hover {
+#organizationManagement .btn:hover {
   background: #66b1ff;
 }
 
-.btn-search {
+#organizationManagement .btn-search {
   width: 54px;
 }
 
-.btn-clear {
+#organizationManagement .btn-clear {
   width: 88px;
 }
 
-.blue {
+#organizationManagement .blue {
   cursor: pointer;
   color: #409eff;
 }
 
-.red {
+#organizationManagement .red {
   cursor: pointer;
   color: red;
 }
@@ -318,53 +318,53 @@ table td {
   vertical-align: middle !important;
 }
 
-.title {
+#organizationManagement .title {
   text-align: center;
 }
 
-.select-input {
+#organizationManagement .select-input {
   margin-right: 8px;
 }
 
-.btnactive {
+#organizationManagement .btnactive {
   border-radius: 5px;
   line-height: 20px;
   height: 22px;
 }
-.btnactive:focus {
+#organizationManagement .btnactive:focus {
   outline: none;
 }
 
 /*添加教师模态框*/
 
-.modal-dialog {
+#organizationManagement .modal-dialog {
   top: 100px;
   position: relative;
 }
 
-.modal-header {
+#organizationManagement .modal-header {
   background-color: #409eff;
   color: #fff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
-.add {
+#organizationManagement .add {
   width: 100%;
 }
 
-.keypoint {
+#organizationManagement .keypoint {
   color: red;
 }
-.keypointwhite {
+#organizationManagement .keypointwhite {
   color: #fff;
 }
-.addtitle {
+#organizationManagement .addtitle {
   color: #606266;
   display: inline-block;
   width: 50px;
 }
 
-.addcon {
+#organizationManagement .addcon {
   width: 75%;
   border: 1px solid #409eff;
   border-radius: 5px;
@@ -373,42 +373,42 @@ table td {
   margin-left: 20px;
   padding: 0 20px;
 }
-.addcon:hover {
+#organizationManagement .addcon:hover {
   border: 1px solid #dcdfe6;
 }
-.addcon:focus {
+#organizationManagement .addcon:focus {
   outline: none;
 }
 
-.content {
+#organizationManagement .content {
   margin: 0 auto;
   width: 60%;
   height: 100%;
 }
-.modal-footer {
+#organizationManagement .modal-footer {
   border: none;
   text-align: center;
 }
-.modal-select-input {
+#organizationManagement .modal-select-input {
   display: inline-block;
   margin-left: 5px;
 }
-.inputBox {
+#organizationManagement .inputBox {
   padding: 0;
 }
-.dropdown {
+#organizationManagement .dropdown {
   margin-left: 20px;
 }
-#school .outside {
+#organizationManagement #school .outside {
   width: 300px !important;
   height: 40px !important;
   margin-left: 10px !important;
 }
 /*正则表达式*/
-.err {
+#organizationManagement .err {
   border: 1px solid red;
 }
-.inputtips {
+#organizationManagement .inputtips {
   display: block;
   font-size: 10px;
   color: red;
@@ -416,7 +416,7 @@ table td {
   margin-bottom: 5px;
   margin-top: 5px;
 }
-.inputerr {
+#organizationManagement .inputerr {
   display: block;
   font-size: 10px;
   color: red;
@@ -425,14 +425,14 @@ table td {
   height: 20px;
   margin-bottom: 10px;
 }
-.alterwidth {
+#organizationManagement .alterwidth {
   width: 30%;
 }
-.altercontent {
+#organizationManagement .altercontent {
   width: 300px;
   margin: 0 auto;
 }
-.alterimg {
+#organizationManagement .alterimg {
   width: 25px;
   height: 25px;
   margin-right: 10px;

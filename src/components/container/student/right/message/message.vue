@@ -27,7 +27,7 @@
 
 
 <style scoped>
-    .body {
+    #msg .body {
         width: 100%;
         height:100%;
     }
@@ -43,7 +43,7 @@
         justify-content: center;
     }
 
-    .tag {
+    #msg .tag {
         background-color: none;
         color: #575757;
         padding: 15px 32px;
@@ -56,12 +56,12 @@
         font-weight: 550;
     }
 
-    .tag:hover,
-    .active {
+    #msg .tag:hover,
+    #msg .active {
         color: #00bcd4;
     }
 
-    .main {
+    #msg .main {
         min-width: 400px;
         min-height: 600px;
         padding-top: 20px;
@@ -73,7 +73,7 @@
         justify-content: flex-start;
     }
 
-    .cardbox {
+    #msg .cardbox {
         width: 48%;
         height: 220px;
         margin-left: 20px;
@@ -90,7 +90,7 @@
 
     }
 
-    .cardbox:hover {
+    #msg .cardbox:hover {
         box-shadow: 0 3px 6px rgba(0, 0, 0, .16);
         transform: scale(1.03);
         -ms-transform: scale(1.03);
@@ -103,7 +103,7 @@
         /* Firefox */
     }
 
-    .card_header {
+    #msg .card_header {
         display: flex;
         display: -webkit-flex;
         flex-direction: row-reverse;
@@ -115,13 +115,13 @@
         padding-top: 10px;
     }
 
-    .card_header img {
+    #msg .card_header img {
         width: 16px;
         height: 16px;
         padding-right: 5px;
     }
 
-    .card_content {
+    #msg .card_content {
         padding: 10px 40px;
         height: auto;
         color: #2f2f2f;
@@ -131,7 +131,7 @@
     }
 
 
-    .card_content::before {
+    #msg .card_content::before {
         content: "\201C";
         font-family: MS PGothic;
         font-size: 60px;
@@ -140,13 +140,13 @@
         box-sizing: inherit;
     }
 
-    .card_footer {
+    #msg .card_footer {
         padding: 0px 40px 10px 40px;
         margin-left: auto;
     }
 
 
-    .avast {
+    #msg .avast {
         height: 60px;
         width: 60px;
         border-radius: 50%;
@@ -156,13 +156,13 @@
         display: inline-block;
     }
 
-    .card_footer span {
+    #msg .card_footer span {
         color: black;
         vertical-align: middle;
         display: inline-block;
     }
 
-    .footer {
+    #msg .footer {
         background-color: #f4f9fa;
         height: auto;
         padding-top: 10px;
@@ -174,7 +174,7 @@
         justify-content: center;
     }
 
-    .modal-6 {
+    #msg .modal-6 {
         -moz-box-shadow: 0 2px 2px #333;
         -webkit-box-shadow: 0 2px 2px #333;
         box-shadow: 0 2px 2px #333;
@@ -183,19 +183,19 @@
         border-radius: 50px;
     }
 
-    .modal-6 a {
+    #msg .modal-6 a {
         border-color: #ddd;
         color: #999;
         background: #fff;
         padding: 10px 15px;
     }
 
-    .modal-6 a:hover {
+    #msg .modal-6 a:hover {
         color: #E34E48;
         background-color: #eee;
     }
 
-    .modal-6 a.prev {
+    #msg .modal-6 a.prev {
         -moz-border-radius: 50px 0 0 50px;
         -webkit-border-radius: 50px;
         border-radius: 50px 0 0 50px;
@@ -203,7 +203,7 @@
         position: relative;
     }
 
-    .modal-6 a.prev:after {
+    #msg .modal-6 a.prev:after {
         content: '';
         position: absolute;
         width: 10px;
@@ -215,7 +215,7 @@
         background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%);
     }
 
-    .modal-6 a.next {
+    #msg .modal-6 a.next {
         -moz-border-radius: 0 50px 50px 0;
         -webkit-border-radius: 0;
         border-radius: 0 50px 50px 0;
@@ -223,7 +223,7 @@
         position: relative;
     }
 
-    .modal-6 a.next:after {
+    #msg .modal-6 a.next:after {
         content: '';
         position: absolute;
         width: 10px;
@@ -235,7 +235,7 @@
         background-image: linear-gradient(to right, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
     }
 
-    .modal-6 a.active {
+    #msg .modal-6 a.active {
         border-color: #bbb;
         background: #fff;
         color: #E34E48;

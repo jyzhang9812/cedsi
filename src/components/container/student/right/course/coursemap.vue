@@ -1,5 +1,5 @@
 <template>
-  <div class="coursemap">
+  <div id="coursemap">
     <!-- 模态框（Modal） -->
     <div class="modal fade" id="goStudy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -119,33 +119,33 @@
 </script>
 
 <style scoped>
-  .coursemap {
+  #coursemap {
     background: #2fd0ff;
   }
 
-  .introduction {
+  #coursemap .introduction {
     width: 100%;
     margin: 0 auto;
   }
 
-  img {
+  #coursemap img {
     border: 0 !important;
     display: block;
   }
 
-  .introductionContent {
+  #coursemap .introductionContent {
     max-width: 1200px;
     min-width: 700px;
     margin: 0 auto;
     position: relative;
   }
 
-  .introductionContent img {
+  #coursemap .introductionContent img {
     margin: 0 auto;
     width: 100%;
   }
 
-  .introductionList {
+  #coursemap .introductionList {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -153,17 +153,17 @@
     top: 0;
   }
 
-  .course-btn {
+  #coursemap .course-btn {
     position: absolute;
   }
 
-  .btn-img {
+  #coursemap .btn-img {
     position: relative;
     width: 100%;
     height: 100%;
   }
 
-  .chapter-intro {
+  #coursemap .chapter-intro {
     position: absolute;
     width: 280px;
     height: 68px;
@@ -177,18 +177,18 @@
     visibility: hidden;
   }
 
-  .course-btn:hover .chapter-intro {
+  #coursemap .course-btn:hover .chapter-intro {
     visibility: visible;
   }
 
-  .intro {
+  #coursemap .intro {
     text-align: center;
     width: 95%;
     margin: 10px auto;
     color: #fff;
   }
 
-  .goback-btn {
+  #coursemap .goback-btn {
     position: absolute;
     top: 100px;
     left: 50px;
@@ -201,56 +201,56 @@
     border-radius: 6px;
   }
 
-  .goback-btn:hover {
+  #coursemap .goback-btn:hover {
     color: #fff;
   }
 
-  .goback-btn:active {
+  #coursemap .goback-btn:active {
     color: #fff;
     outline: none;
   }
 
   /*开始学习模态框*/
-  .btn:active {
+  #coursemap .btn:active {
     outline: none;
   }
 
-  .bckimg {
+  #coursemap .bckimg {
     background: url("../../../../../../static/images/scratch/background.png") no-repeat;
     background-size: cover;
     height: 400px;
     width: 660px;
   }
 
-  .video-bck {
+  #coursemap .video-bck {
     height: 400px;
     width: 700px;
   }
 
-  .video-name {
+  #coursemap .video-name {
     margin-bottom: 10px;
     display: inline-block;
   }
 
-  .header-height {
+  #coursemap .header-height {
     height: 20px;
     border: none;
   }
 
-  .modal-box {
+  #coursemap .modal-box {
     width: 100%;
     height: 320px;
     padding: 0;
   }
 
-  .left-box {
+  #coursemap .left-box {
     float: left;
     width: 47%;
     height: 100%;
     text-align: center;
   }
 
-  .box-title {
+  #coursemap .box-title {
     width: 80%;
     height: 100px;
     text-align: center;
@@ -260,7 +260,7 @@
     color: #fff;
   }
 
-  .study-btn {
+  #coursemap .study-btn {
     width: 120px;
     height: 30px;
     line-height: 25px;
@@ -270,7 +270,7 @@
     border-radius: 6px;
   }
 
-  .right-box {
+  #coursemap .right-box {
     float: left;
     width: 53%;
     height: 100%;
@@ -279,14 +279,14 @@
     padding-right: 20px;
   }
 
-  .course-intro {
+  #coursemap .course-intro {
     width: 100%;
     font-size: 14px;
     color: #22a0ff;
     text-align: left;
   }
 
-  .intro-detials {
+  #coursemap .intro-detials {
     width: 100%;
     text-align: left;
     background: #e3f3ff;
@@ -300,7 +300,7 @@
     overflow-y: auto;
   }
 
-  .course-warn {
+  #coursemap .course-warn {
     font-size: 12px;
     width: 100%;
     text-align: left;
@@ -308,7 +308,7 @@
     color: red;
   }
 
-  .work-btn {
+  #coursemap .work-btn {
     width: 120px;
     height: 30px;
     line-height: 25px;
@@ -319,7 +319,7 @@
     border: none;
   }
 
-  .preview {
+  #coursemap .preview {
     width: 100%;
     font-size: 12px;
     color: #22a0ff;
@@ -327,12 +327,12 @@
   }
 
   /*视频*/
-  .video-js {
+  #coursemap .video-js {
     height: 600px;
     width: 800px;
   }
 
-  .vjs-tech {
+  #coursemap .vjs-tech {
     height: auto;
     width: 100%;
   }

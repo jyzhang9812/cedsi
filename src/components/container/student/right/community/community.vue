@@ -1,5 +1,5 @@
 <template>
-    <div class="body">
+    <div id="community" class="body">
         <searchBar></searchBar>
         <div class="menu">
             <button @click="tab(index)" v-for="(item,index) in items" class="tag"
@@ -65,11 +65,11 @@
 </template>
 
 <style scoped>
-    .body {
+    #community{
         background-color: #f4f9fa;
     }
 
-    .menu {
+    #community .menu {
         background-color: #f4f9fa;
         height: auto;
         padding-top: 10px;
@@ -81,7 +81,7 @@
         justify-content: center;
     }
 
-    .tag {
+    #community .tag {
         background-color: #f4f9fa;
         color: #575757;
         padding: 15px 32px;
@@ -94,12 +94,12 @@
         font-weight: 550;
     }
 
-    .tag:hover,
-    .active {
+    #community .tag:hover,
+    #community .active {
         color: #00bcd4;
     }
 
-    .main {
+    #community .main {
         background-color: #f4f9fa;
         min-width: 400px;
         min-height: 500px;
@@ -113,7 +113,7 @@
     }
 
     /* 优秀作者 */
-    .user_card {
+    #community .user_card {
         width: 100%;
         height: 180px;
         background: #fff;
@@ -122,7 +122,7 @@
         box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .1);
     }
 
-    .user_card:hover {
+    #community .user_card:hover {
         -webkit-transform: scale(1.05);
         -moz-transform: scale(1.05);
         -ms-transform: scale(1.05);
@@ -133,7 +133,7 @@
         box-shadow: 5px 10px 10px #25293a;
     }
 
-    .user_card .img_avatar {
+    #community .user_card .img_avatar {
         width: 70px;
         height: 70px;
         border-radius: 50%;
@@ -141,7 +141,7 @@
         border: 5px solid #50b8ee;
     }
 
-    .user_card .details {
+    #community .user_card .details {
         width: 100%;
         height: 100%;
         margin: 0;
@@ -151,7 +151,7 @@
         background: none;
     }
 
-    .user_card .detail_item {
+    #community .user_card .detail_item {
         width: 100%;
         height: auto;
         margin: 0;
@@ -160,10 +160,10 @@
         justify-content: space-around;
     }
 
-    .user_card h5 {
+    #community .user_card h5 {
         text-align: center
     }
-    .user_card .detail_item p {
+    #community .user_card .detail_item p {
         font-size: 12px;
         margin-right: 10px;
         margin-bottom: 5px;
@@ -174,11 +174,11 @@
     }
 
     /* 社区 */
-    .inside {
+    #community .inside {
         border-radius: 8px;
     }
 
-    .inside:hover {
+    #community .inside:hover {
         -webkit-transform: scale(1.05);
         -moz-transform: scale(1.05);
         -ms-transform: scale(1.05);
@@ -189,7 +189,7 @@
         box-shadow: 5px 10px 10px #25293a;
     }
 
-    .details {
+    #community .details {
         width: 100%;
         height: auto;
         display: flex;
@@ -198,7 +198,7 @@
         position: relative;
     }
 
-    .detail_item {
+    #community .detail_item {
         margin: 30px 10px 0 10px;
         width: 100%;
         display: flex;
@@ -209,7 +209,7 @@
     }
 
     /* 社区 */
-    .community_card {
+    #community .community_card {
         border-radius: 8px;
         width: 100%;
         height: auto;
@@ -222,16 +222,16 @@
         box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .1);
     }
 
-    .community_card li {
+    #community .community_card li {
         margin-right: 5px;
     }
 
-    a,
-    a:hover {
+    #community a,
+    #community a:hover {
         text-decoration: none;
     }
 
-    .community_card .inside:hover {
+    #community .community_card .inside:hover {
         -webkit-transform: none;
         -moz-transform: none;
         -ms-transform: none;
@@ -242,7 +242,7 @@
         box-shadow: none;
     }
 
-    .community_card:hover {
+    #community .community_card:hover {
         -webkit-transform: scale(1.05);
         -moz-transform: scale(1.05);
         -ms-transform: scale(1.05);
@@ -253,11 +253,11 @@
         box-shadow: 5px 10px 10px #25293a;
     }
 
-    .community_card .img {
+    #community .community_card .img {
         width: 100%;
         height: 80%;
     }
-    .community_card .img_avatar {
+    #community .community_card .img_avatar {
         width: 45px;
         height: 45px;
         border-radius: 50%;
@@ -266,22 +266,22 @@
         z-index: 999;
     }
 
-    .community_card .details{
+    #community .community_card .details{
         border-top:1px solid #ccc; 
     }
-    .community_card .detail_item {
+    #community .community_card .detail_item {
         margin: 0px 10px 0 10px;
         color:#868686;
     }
 
-    .community_card .detail_item .left {
+    #community .community_card .detail_item .left {
         width: 60%;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
     }
 
-    .community_card .detail_item .right {
+    #community .community_card .detail_item .right {
         margin-top: 10px;
         width: 40%;
         display: flex;
@@ -289,11 +289,11 @@
         justify-content: center;
     }
 
-    .community_card .detail_item .right div {
+    #community .community_card .detail_item .right div {
         margin-right: 10px;
     }
 
-    .community_card .detail_item .right p {
+    #community .community_card .detail_item .right p {
         margin-top: 5px;
     }
 </style>

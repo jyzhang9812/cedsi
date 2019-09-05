@@ -1,5 +1,5 @@
 <template>
-    <div class="personalcontent">
+    <div id="personalcontent">
         <div class="contentdetail">
             <form class="form" @submit.prevent="submit">
                 <div class="formdetail">
@@ -174,7 +174,7 @@
         font-family: Helvetica, Arial, sans-serif;
     }
 
-    .personalcontent {
+    #personalcontent {
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
         border: 1px solid #ebeef5;
         background-color: #fff;
@@ -184,22 +184,22 @@
         margin: 15px auto;
     }
 
-    .contentdetail {
+    #personalcontent .contentdetail {
         padding: 20px;
         margin-bottom: 12px;
     }
 
-    .personal {
+    #personalcontent .personal {
         width: 1000px;
         margin: 10px 10px;
     }
 
-    .formdetail {
+    #personalcontent .formdetail {
         margin: 20px 0 0 10px;
     }
 
     /* 清除浮动 */
-    .formdetail::after {
+    #personalcontent .formdetail::after {
         content: ".";
         display: block;
         height: 0;
@@ -207,7 +207,7 @@
         visibility: hidden;
     }
 
-    .formlabel {
+    #personalcontent .formlabel {
         width: 80px;
         line-height: 15px;
         margin-left: 10px;
@@ -216,7 +216,7 @@
         float: left;
     }
 
-    .input {
+    #personalcontent .input {
         width: 500px;
         line-height: 15px;
         color: #000;
@@ -225,32 +225,32 @@
         border: 1px solid #e7e7e7;
     }
 
-    .disabledinput {
+    #personalcontent .disabledinput {
         border-color: #e4e7ed;
         background-color: #f5f7fa;
         color: #c0c4cc;
     }
 
-    .input:focus {
+    #personalcontent .input:focus {
         border-color: #67c23a;
     }
 
-    input[type=radio] {
+    #personalcontent input[type=radio] {
         padding-right: 50px;
     }
 
-    .image {
+    #personalcontent .image {
         width: 150px;
         height: 150px;
     }
 
-    .headsculpture {
+    #personalcontent .headsculpture {
         width: 500px;
         margin-left: 110px;
         margin-top: 10px;
     }
 
-    .remark {
+    #personalcontent .remark {
         width: 500px;
         height: 186px;
         padding: 5px 15px;
@@ -260,7 +260,7 @@
         border: 1px solid #409eff;
     }
 
-    .buttonsave {
+    #personalcontent .buttonsave {
         margin-left: 260px;
         padding: 9px 15px;
         border-radius: 3px;
@@ -270,7 +270,7 @@
         text-align: center;
     }
 
-    .upload-cover-btn {
+    #personalcontent .upload-cover-btn {
         margin-left: 10px;
         width: 80px;
         height: 35px;
@@ -282,14 +282,14 @@
         text-align: center
     }
 
-    input[type=file] {
+    #personalcontent input[type=file] {
         width: 80px;
         height: 35px;
         position: relative;
         top: -35px;
     }
 
-    .cover-image {
+    #personalcontent .cover-image {
         width: 200px;
         height: 200px;
     }

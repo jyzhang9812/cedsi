@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div id="presentation" class="container">
         <div class="threeImg">
             <div class="Containt">
                 <div class="iconleft" v-on:click="zuohua">
@@ -141,7 +141,7 @@
     
     
 <style scoped>
-    .container{
+    #presentation{
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -149,11 +149,11 @@
         min-height: 620px;
         padding: 0;
     }    
-    .threeImg {
+    #presentation .threeImg {
         min-width: 1000px;
     }
         
-    .threeImg .Containt ul {
+    #presentation .threeImg .Containt ul {
         margin: 0 auto;
         width: 2400px;
         position: absolute;
@@ -162,14 +162,14 @@
         min-height: 100%
     }
         
-    .threeImg .Containt ul li {
+    #presentation .threeImg .Containt ul li {
         width: 300px;
         margin-right: 40px;
         margin-top: 10px;
         float: left;
     }
 
-    .Containt {
+    #presentation .Containt {
         position: relative;
         min-height: 250px;
         overflow: hidden;
@@ -177,7 +177,7 @@
         background: linear-gradient(to right, #134a68, #006c9b);
     }
         
-    .iconleft {
+    #presentation .iconleft {
         position: absolute;
         width: 50px;
         height: 50px;
@@ -189,7 +189,7 @@
         opacity: 0.5;
     }
         
-    .iconright {
+    #presentation .iconright {
         position: relative;
         left: 1080px;
         top: 80px;
@@ -204,33 +204,33 @@
     }
 
     /* 修改 */
-    ul{
+    #presentation ul{
         min-height: 250px;
         list-style-type: none;
         padding-top:16px; 
         padding-bottom: 20px;
     }
-    .course{
+    #presentation .course{
         margin-top: 20px;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: flex-start;
     }
-    .course_card{
+    #presentation .course_card{
         margin-top:10px; 
         margin-bottom: 10px;
         margin-left: 20px;
     }
-    .img{
+    #presentation .img{
         width: 300px;
         height: 200px;
         border-radius:20px; 
     }
-    .inside{
+    #presentation .inside{
         border-radius:20px;
     }
-    .inside:hover{
+    #presentation .inside:hover{
         -webkit-transform: scale(1.05);
         -moz-transform: scale(1.05);
         -ms-transform: scale(1.05);
@@ -240,26 +240,26 @@
         -webkit-box-shadow: 5px 10px 10px #25293a;
         box-shadow: 5px 10px 10px #25293a;
     }
-    .el-icon-arrow{
+    #presentation .el-icon-arrow{
         margin-top: 12px;
         margin-left: 12px;
         width: 25px;
         height: 25px;
         opacity: 0.5;
     }
-    .el-icon-arrow:hover{
+    #presentation .el-icon-arrow:hover{
         opacity: 1;
     }
-    .iconright:hover{
+    #presentation .iconright:hover{
         opacity: 1;
         box-shadow:2px 2px 10px #23527c
     }
-    .iconleft:hover{
+    #presentation .iconleft:hover{
         opacity: 1;
         box-shadow:5px 10px 10px #25293a
     }
     
-    .details{
+    #presentation .details{
         width: 300px;
         height: 50px;
         background-color: rgba(0, 0, 0, 0.35);
@@ -274,7 +274,7 @@
         border-bottom-left-radius: 20px;
         border-bottom-right-radius: 20px;
     }
-    .detail_item{
+    #presentation .detail_item{
         width: 100%;
         display: flex;
         flex-direction: row;
@@ -282,16 +282,16 @@
         position: relative;
         color:#fff;
     }
-    .icon{
+    #presentation .icon{
         width: 16px;
         height: 16px;
         margin-right: 5px;
     }
-    .work_type{
+    #presentation .work_type{
         width: 34.7px;
         height: 20px;
     }
-    .btn{
+    #presentation .btn{
         background: #51c79f;
         color: #fff;
         height: 35px;
@@ -302,12 +302,12 @@
         font-weight: bold;
         border-radius: 8px;
     }
-    h4{
+    #presentation h4{
         margin-left: 20px;
     }
 
     /* 下半部分 */
-    .menu {
+    #presentation .menu {
         background-color: #f4f9fa;
         height: auto;
         padding-top: 10px;
@@ -318,19 +318,19 @@
         flex-wrap: wrap;
         justify-content: left;
     }
-    .presentation{
+    #presentation .presentation{
         margin-top: 30px;
         margin-left: 40px;
         display: flex;
         flex-direction: row;
     }
-    .presentation_item{
+    #presentation .presentation_item{
         margin-right: 20px;
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
-    .tag {
+    #presentation .tag {
         background-color: #fff;
         color: #9196a1;
         padding: 15px 32px;
@@ -343,7 +343,7 @@
         border: none;
     }
 
-    .tag:hover,.active{
+    #presentation .tag:hover,.active{
         background-color: #9196a1;
         text-align: center;
         text-decoration: none;
@@ -354,11 +354,11 @@
         border: none;
         color: #fff;
     }
-    .item_img{
+    #presentation .item_img{
         width: 80px;
         height: 80px;
     }
-    span{
+    #presentation span{
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;

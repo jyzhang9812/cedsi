@@ -1,5 +1,5 @@
 <template>
-  <div class="subContainer">
+  <div id="eduAdminManagement">
     <!-- 添加教务模态框（Modal） -->
     <div
       class="modal fade"
@@ -446,12 +446,12 @@ export default {
 </script>
 
 <style scoped>
-.breadcrumb {
+#eduAdminManagement .breadcrumb {
   background-color: #fff;
   color: #606266;
   margin-bottom: 0;
 }
-.subContainer {
+#eduAdminManagement {
   font-size: 12px;
   color: #606266;
   width: 100%;
@@ -459,26 +459,26 @@ export default {
   padding: 10px;
 }
 
-.first-floor {
+#eduAdminManagement .first-floor {
   margin-top: 20px;
 }
-.second-floor {
+#eduAdminManagement .second-floor {
   font-size: 12px;
   color: #606266;
   margin-top: 20px;
 }
-.select-input {
+#eduAdminManagement .select-input {
   display: inline-block;
 }
-label {
+#eduAdminManagement label {
   display: inline;
 }
 
-.content td {
+#eduAdminManagement .content td {
   line-height: 30px;
 }
 
-.textBox {
+#eduAdminManagement .textBox {
   width: 180px;
   height: 32px;
   font-size: 12px;
@@ -489,22 +489,22 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.textBox:focus {
+#eduAdminManagement .textBox:focus {
   outline: none;
 }
 
-.textBox:hover {
+#eduAdminManagement .textBox:hover {
   border-color: #409eff;
 }
 
 /* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-.choose {
+#eduAdminManagement .choose {
   background-image: url("../../../../../static/images/teach/choose.png");
   background-repeat: no-repeat;
   background-position: -1px -2px;
 }
 
-.btn {
+#eduAdminManagement .btn {
   background: #409eff;
   color: #fff;
   height: 30px;
@@ -513,28 +513,28 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.btn:focus {
+#eduAdminManagement .btn:focus {
   outline: none;
 }
 
-.btn:hover {
+#eduAdminManagement .btn:hover {
   background: #66b1ff;
 }
 
-.btn-search {
+#eduAdminManagement .btn-search {
   width: 54px;
 }
 
-.btn-clear {
+#eduAdminManagement .btn-clear {
   width: 88px;
 }
 
-.blue {
+#eduAdminManagement .blue {
   cursor: pointer;
   color: #409eff;
 }
 
-.red {
+#eduAdminManagement .red {
   cursor: pointer;
   color: red;
 }
@@ -543,61 +543,61 @@ table {
   border: #eeeeee;
 }
 
-table tr {
+#eduAdminManagement table tr {
   text-align: center !important;
 }
 
-table td {
+#eduAdminManagement table td {
   vertical-align: middle !important;
 }
 
-.title {
+#eduAdminManagement .title {
   text-align: center;
 }
 
-.select-input {
+#eduAdminManagement .select-input {
   margin-right: 8px;
 }
 
-.btnactive {
+#eduAdminManagement .btnactive {
   border-radius: 5px;
   line-height: 20px;
   height: 22px;
 }
-.btnactive:focus {
+#eduAdminManagement .btnactive:focus {
   outline: none;
 }
 
 /*添加教师模态框*/
 
-.modal-dialog {
+#eduAdminManagement .modal-dialog {
   top: 100px;
   position: relative;
 }
 
-.modal-header {
+#eduAdminManagement .modal-header {
   background-color: #409eff;
   color: #fff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
-.add {
+#eduAdminManagement .add {
   width: 100%;
 }
 
-.keypoint {
+#eduAdminManagement .keypoint {
   color: red;
 }
-.keypointwhite {
+#eduAdminManagement .keypointwhite {
   color: #fff;
 }
-.addtitle {
+#eduAdminManagement .addtitle {
   color: #606266;
   display: inline-block;
   width: 50px;
 }
 
-.addcon {
+#eduAdminManagement .addcon {
   width: 75%;
   border: 1px solid #409eff;
   border-radius: 5px;
@@ -606,42 +606,42 @@ table td {
   margin-left: 20px;
   padding: 0 20px;
 }
-.addcon:hover {
+#eduAdminManagement .addcon:hover {
   border: 1px solid #dcdfe6;
 }
-.addcon:focus {
+#eduAdminManagement .addcon:focus {
   outline: none;
 }
 
-.content {
+#eduAdminManagement .content {
   margin: 0 auto;
   width: 60%;
   height: 100%;
 }
-.modal-footer {
+#eduAdminManagement .modal-footer {
   border: none;
   text-align: center;
 }
-.modal-select-input {
+#eduAdminManagement .modal-select-input {
   display: inline-block;
   margin-left: 5px;
 }
-.inputBox {
+#eduAdminManagement .inputBox {
   padding: 0;
 }
-.dropdown{
+#eduAdminManagement .dropdown{
   margin-left: 20px; 
 }
-#school .outside{
+#eduAdminManagement #school .outside{
   width: 300px !important;
   height: 40px !important;
   margin-left: 10px !important;
 }
 /*正则表达式*/
-.err {
+#eduAdminManagement .err {
   border: 1px solid red;
 }
-.inputtips {
+#eduAdminManagement .inputtips {
   display: block;
   font-size: 10px;
   color: red;
@@ -649,7 +649,7 @@ table td {
   margin-bottom: 5px;
   margin-top: 5px;
 }
-.inputerr {
+#eduAdminManagement .inputerr {
   display: block;
   font-size: 10px;
   color: red;
@@ -658,14 +658,14 @@ table td {
   height: 20px;
   margin-bottom: 10px;
 }
-.alterwidth {
+#eduAdminManagement .alterwidth {
   width: 30%;
 }
-.altercontent {
+#eduAdminManagement .altercontent {
   width: 300px;
   margin: 0 auto;
 }
-.alterimg {
+#eduAdminManagement .alterimg {
   width: 25px;
   height: 25px;
   margin-right: 10px;

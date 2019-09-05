@@ -1,5 +1,5 @@
 <template>
-  <div class="subContainer">
+  <div id="teacherManagement">
     <!-- 添加班级模态框（Modal） -->
     <div
       class="modal fade"
@@ -318,12 +318,12 @@ export default {
 </script>
 
 <style scoped>
-.breadcrumb {
+#teacherManagement .breadcrumb {
   background-color: #fff;
   color: #606266;
   margin-bottom: 0;
 }
-.subContainer {
+#teacherManagement {
   font-size: 12px;
   color: #606266;
   width: 100%;
@@ -331,26 +331,26 @@ export default {
   padding: 10px;
 }
 
-.first-floor {
+#teacherManagement .first-floor {
   margin-top: 20px;
 }
-.second-floor {
+#teacherManagement .second-floor {
   font-size: 12px;
   color: #606266;
   margin-top: 20px;
 }
-.select-input {
+#teacherManagement .select-input {
   display: inline-block;
 }
-label {
+#teacherManagement label {
   display: inline;
 }
 
-.content td {
+#teacherManagement .content td {
   line-height: 30px;
 }
 
-.textBox {
+#teacherManagement .textBox {
   width: 180px;
   height: 32px;
   font-size: 12px;
@@ -361,22 +361,22 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.textBox:focus {
+#teacherManagement .textBox:focus {
   outline: none;
 }
 
-.textBox:hover {
+#teacherManagement .textBox:hover {
   border-color: #409eff;
 }
 
 /* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-.choose {
+#teacherManagement .choose {
   background-image: url("../../../../../static/images/teach/choose.png");
   background-repeat: no-repeat;
   background-position: -1px -2px;
 }
 
-.btn {
+#teacherManagement .btn {
   background: #409eff;
   color: #fff;
   height: 30px;
@@ -385,89 +385,89 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.btn:focus {
+#teacherManagement .btn:focus {
   outline: none;
 }
 
-.btn:hover {
+#teacherManagement .btn:hover {
   background: #66b1ff;
 }
 
-.btn-search {
+#teacherManagement .btn-search {
   width: 54px;
 }
 
-.btn-clear {
+#teacherManagement .btn-clear {
   width: 78px;
 }
 
-.blue {
+#teacherManagement .blue {
   cursor: pointer;
   color: #409eff;
 }
 
-.red {
+#teacherManagement .red {
   cursor: pointer;
   color: red;
 }
 
-table {
+#teacherManagement table {
   border: #eeeeee;
 }
 
-table tr {
+#teacherManagement table tr {
   text-align: center !important;
 }
 
-table td {
+#teacherManagement table td {
   vertical-align: middle !important;
 }
 
-.title {
+#teacherManagement .title {
   text-align: center;
 }
 
-.select-input {
+#teacherManagement .select-input {
   margin-right: 8px;
 }
 
-.btnactive {
+#teacherManagement .btnactive {
   border-radius: 5px;
   line-height: 20px;
   height: 22px;
 }
-.btnactive:focus {
+#teacherManagement .btnactive:focus {
   outline: none;
 }
 
 /*添加教师模态框*/
 
-.modal-dialog {
+#teacherManagement .modal-dialog {
   top: 100px;
   position: relative;
 }
 
-.modal-header {
+#teacherManagement .modal-header {
   background-color: #409eff;
   color: #fff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
-.add {
+#teacherManagement .add {
   width: 100%;
 }
 
-.keypoint {
+#teacherManagement .keypoint {
   color: red;
 }
-.keypointwhite {
+#teacherManagement .keypointwhite {
   color: #fff;
 }
-.addtitle {
+#teacherManagement .addtitle {
   color: #606266;
 }
 
-.addcon {
+#teacherManagement .addcon {
   width: 75%;
   border: 1px solid #409eff;
   border-radius: 5px;
@@ -476,41 +476,41 @@ table td {
   margin-left: 20px;
   padding: 0 20px;
 }
-.addcon:hover {
+#teacherManagement .addcon:hover {
   border: 1px solid #dcdfe6;
 }
-.addcon:focus {
+#teacherManagement .addcon:focus {
   outline: none;
 }
 
-.content {
+#teacherManagement .content {
   margin: 0 auto;
   width: 60%;
   height: 100%;
 }
-.modal-footer {
+#teacherManagement .modal-footer {
   border: none;
   text-align: center;
 }
-.modal-select-input {
+#teacherManagement .modal-select-input {
   display: inline-block;
   margin-left: 5px;
 }
-.inputBox {
+#teacherManagement .inputBox {
   padding: 0;
 }
 /*正则表达式*/
-.err {
+#teacherManagement .err {
   border: 1px solid red;
 }
-.inputtips {
+#teacherManagement .inputtips {
   display: block;
   font-size: 10px;
   color: red;
   margin-left: 60px;
   margin-bottom: 10px;
 }
-.inputerr {
+#teacherManagement .inputerr {
   display: block;
   font-size: 10px;
   color: red;
@@ -519,14 +519,14 @@ table td {
   height: 20px;
   margin-bottom: 10px;
 }
-.alterwidth {
+#teacherManagement .alterwidth {
   width: 30%;
 }
-.altercontent {
+#teacherManagement .altercontent {
   width: 300px;
   margin: 0 auto;
 }
-.alterimg {
+#teacherManagement .alterimg {
   width: 25px;
   height: 25px;
   margin-right: 10px;

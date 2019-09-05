@@ -125,7 +125,7 @@ export default {
   text-shadow: 0 2px 4px rgba(28, 31, 33, 0.6);
   margin-top: 8px;
 }
-.fixed-box {
+#activity-detial .fixed-box {
   position: relative;
   height: 128px;
   width: 80%;
@@ -137,7 +137,7 @@ export default {
   background-position: center;
   background-size: cover;
 }
-.activity-price {
+#activity-detial .activity-price {
   font-size: 32px;
   color: #f01414;
   line-height: 32px;
@@ -145,7 +145,7 @@ export default {
   display: inline-block;
   margin: 40px 0 0 40px;
 }
-.join-btn {
+#activity-detial .join-btn {
   width: 160px;
   height: 48px;
   float: right;
@@ -157,7 +157,7 @@ export default {
   border: 1px solid #f01414;
   margin: 35px 40px 0 0;
 }
-.activity-section3 {
+#activity-detial .activity-section3 {
   position: relative;
   width: 80%;
   margin: 0 auto;
@@ -169,61 +169,61 @@ export default {
   background-size: cover;
   padding: 80px;
 }
-.activity-left {
+#activity-detial .activity-left {
   float: left;
   width: 70%;
   height: 100%;
   border-right: 2px solid rgba(255, 255, 255, 0.4);
   padding-right: 30px;
 }
-.info-name {
+#activity-detial .info-name {
   font-weight: 700px;
   font-size: 24px;
   color: #fff;
   line-height: 36px;
 }
-.info-desc {
+#activity-detial .info-desc {
   margin-top: 20px;
   font-size: 14px;
   color: #fff;
   line-height: 28px;
 }
-.activity-right {
+#activity-detial .activity-right {
   float: left;
   width: 25%;
   height: 100%;
   margin-left: 20px;
   text-align: center;
 }
-.teacher {
+#activity-detial .teacher {
   text-align: center;
   width: 132px;
   height: 132px;
   margin: 20px auto;
 }
-.teacher-img {
+#activity-detial .teacher-img {
   border-radius: 50%;
   width: 100%;
   height: 100%;
 }
-.activity-right p {
+#activity-detial .activity-right p {
   font-size: 15px;
   color: #fff;
 }
-.activity-section2 {
+#activity-detial .activity-section2 {
   position: relative;
   width: 60%;
   margin: 40px auto;
   top: 50px;
 }
-.time-place {
+#activity-detial .time-place {
   position: relative;
   width: 50%;
   height: 100%;
   float: left;
   text-align: center;
 }
-.title-bg {
+#activity-detial .title-bg {
   display: inline-block;
   height: 40px;
   width: 184px;
@@ -234,25 +234,25 @@ export default {
   color: #fff;
   padding-left: 20px;
 }
-.content {
+#activity-detial .content {
   font-size: 14px;
   line-height: 20px;
   margin: 10px;
 }
-.activity-section4 {
+#activity-detial .activity-section4 {
   top: 50px;
   width: 100%;
   position: relative;
   height: 400px;
   margin: 50px 0;
 }
-.activity-row {
+#activity-detial .activity-row {
   margin: 0 auto;
   width: 100%;
   padding: 70px;
   height: 100%;
 }
-.activity-images {
+#activity-detial .activity-images {
   height: 100%;
 
   transition: All 0.4s ease-in-out;
@@ -260,14 +260,14 @@ export default {
   -moz-transition: All 0.4s ease-in-out;
   -o-transition: All 0.4s ease-in-out;
 }
-.activity-images:hover {
+#activity-detial .activity-images:hover {
   transform: scale(1.1);
   -webkit-transform: scale(1.1);
   -moz-transform: scale(1.1);
   -o-transform: scale(1.1);
   -ms-transform: scale(1.1);
 }
-.activity-images img {
+#activity-detial .activity-images img {
   width: 100%;
   height: 100%;
   border-radius: 8px;

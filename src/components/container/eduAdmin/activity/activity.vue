@@ -6,7 +6,7 @@
  * @Description: 教务角色发布活动页面
  -->
 <template>
-  <div class="content">
+  <div id="eduActivity">
     <div class="body">
       <p>活动管理</p>
       <div class="filter">
@@ -224,11 +224,11 @@
 </script>
 
 <style scoped>
-  .content {
+  #eduActivity {
     padding: 10px;
   }
 
-  .body {
+  #eduActivity .body {
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
@@ -239,55 +239,55 @@
     min-width: 850px;
   }
 
-  .option {
+  #eduActivity .option {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
   }
 
-  .option input {
+  #eduActivity .option input {
     width: 220px;
     height: 32px;
   }
 
-  .blue {
+  #eduActivity .blue {
     color: #409EFF;
     cursor: pointer;
   }
 
-  .red {
+  #eduActivity .red {
     color: #FF6947;
   }
 
-  .filter {
+  #eduActivity .filter {
     margin-bottom: 30px;
   }
 
-  .form-control {
+  #eduActivity .form-control {
     padding: 0px 30px 0 15px;
     font-size: 12px;
     margin-right: 5px;
   }
 
-  .panels {
+  #eduActivity .panels {
     text-align: center;
   }
 
-  .panels tr {
+  #eduActivity .panels tr {
     height: 40px;
     text-align: center;
   }
 
-  .panels th {
+  #eduActivity .panels th {
     text-align: center;
   }
 
-  table {
+  #eduActivity table {
     border: #eeeeee;
   }
 
-  .btn-my {
+  #eduActivity .btn-my {
     margin-right: 8px;
     height: 32px;
     border-radius: 4px;
@@ -297,7 +297,7 @@
     border: 1px solid #409eff;
   }
 
-  .add {
+  #eduActivity .add {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -306,7 +306,7 @@
     min-width: 850px;
   }
 
-  .title {
+  #eduActivity .title {
     width: 750px;
     display: block;
     height: 34px;
@@ -325,7 +325,7 @@
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   }
 
-  .item {
+  #eduActivity .item {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -333,28 +333,28 @@
     margin-top: 20px;
   }
 
-  .item p {
+  #eduActivity .item p {
     height: 32px;
     line-height: 32px;
     vertical-align: middle;
     margin-right: 5px;
   }
 
-  .file {
+  #eduActivity .file {
     height: 32px;
   }
 
-  .checkbox {
+  #eduActivity .checkbox {
     vertical-align: middle;
     margin: 0;
     height: 32px;
   }
 
-  .editor {
+  #eduActivity .editor {
     width: 800px;
   }
 
-  .item1 {
+  #eduActivity .item1 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

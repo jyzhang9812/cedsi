@@ -223,7 +223,7 @@ export default {
   margin: 0 auto;
   padding-top: 30px;
 }
-.upload {
+#add-activity .upload {
   width: 100%;
   height: 50px;
   margin-bottom: 20px;
@@ -237,7 +237,7 @@ export default {
   float: left;
   line-height: 40px;
 }
-.upload-input {
+#add-activity .upload-input {
   width: 300px;
   height: 40px;
   border-radius: 5px;
@@ -245,73 +245,73 @@ export default {
   margin-left: 10px;
   padding-left: 10px;
 }
-.upload-input:hover {
+#add-activity .upload-input:hover {
   border: 1px solid #66b1ff;
 }
-.upload-input:focus {
+#add-activity .upload-input:focus {
   outline: none;
 }
-.activity-time {
+#add-activity .activity-time {
   margin-left: 10px !important;
   height: 40px !important;
   width: 300px !important;
 }
-#datePicker {
+#add-activity #datePicker {
   width: 200px !important;
 }
-.upload-textarea {
+#add-activity .upload-textarea {
   border: 1px solid #409eff;
   border-radius: 5px;
   margin-left: 10px;
   padding: 10px;
 }
-.upload-height {
+#add-activity .upload-height {
   height: 190px;
 }
-.upload-textarea:hover {
+#add-activity .upload-textarea:hover {
   border: 1px solid #66b1ff;
 }
-.upload-textarea:focus {
+#add-activity .upload-textarea:focus {
   outline: none;
 }
-.outside {
+#add-activity .outside {
   width: 300px !important;
   height: 40px !important;
   margin-left: 10px !important;
 }
-.inputBox,
-.inputbox {
+#add-activity .inputBox,
+#add-activity .inputbox {
   height: 35px !important;
   font-size: 14px !important;
   width: 230px !important;
 }
 
-.dropdown-menu {
+#add-activity .dropdown-menu {
   left: 100px !important;
 }
-.upload-footer {
+#add-activity .upload-footer {
   width: 100%;
   text-align: center;
   margin-bottom: 20px;
 }
-.upload-btn {
+#add-activity .upload-btn {
   background-color: #409eff;
   color: #fff;
   margin-left: 10px;
 }
-.upload-btn:hover {
+#add-activity .upload-btn:hover {
   color: #fff;
 }
-.upload-btn:focus {
+#add-activity .upload-btn:focus {
   outline: none;
   color: #fff;
 }
 /**/
-.address-input select {
+#add-activity .address-input select {
   margin-left: 10px;
   font-size: 14px;
 }
-.upload-cover-btn {
+#add-activity .upload-cover-btn {
   margin-left: 10px;
   width: 80px;
   height: 35px;
@@ -322,13 +322,13 @@ export default {
   line-height: 35px;
   text-align: center;
 }
-input[type="file"] {
+#add-activity input[type="file"] {
   width: 80px;
   height: 35px;
   position: relative;
   top: -35px;
 }
-.upload-cover-img {
+#add-activity .upload-cover-img {
   display: inline-block;
   border: 1px dashed #dcdfe6;
   width: 290px;
@@ -337,35 +337,35 @@ input[type="file"] {
   border-radius: 5px;
   background-color: #f5f7fa;
 }
-.cover-image {
+#add-activity .cover-image {
   width: 100%;
   height: 100%;
 }
-.upload-height {
+#add-activity .upload-height {
   height: 190px;
 }
-.editor {
+#add-activity .editor {
   width: 800px;
   position: relative;
 }
-.w-e-toolbar {
+#add-activity .w-e-toolbar {
   position: relative;
   left: 10px;
 }
-.w-e-text-container {
+#add-activity .w-e-text-container {
   position: relative;
   left: 110px;
   width: 700px;
 }
-.w-e-text {
+#add-activity .w-e-text {
   position: relative;
   top: -10px;
   background-color: #fff;
 }
-.upload-height2 {
+#add-activity .upload-height2 {
   height: 350px;
 }
-.upload-width {
+#add-activity .upload-width {
   width: 200px;
 }
 </style>

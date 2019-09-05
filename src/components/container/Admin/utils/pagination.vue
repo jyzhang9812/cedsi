@@ -6,7 +6,7 @@
  * @Description: 封装分页组件
  -->
 <template>
-  <div class="page-wrap">
+  <div id="pagination">
     <ul>
       <li class="li-page" @click="goPrePage">&laquo;</li>
       <li v-for="(i, index) in showPageBtn" :key="index"
@@ -81,44 +81,44 @@
 </script>
 
 <style scoped>
-  .li-page {
+  #pagination .li-page {
     line-height: 1.5;
     cursor: pointer;
     color: #c2c4cc;
     background-color: #f4f4f5;
   }
 
-  .active {
+  #pagination .active {
     border-color: #409eff;
     background-color: #409eff;
   }
 
-  .pointer {
+  #pagination .pointer {
     cursor: pointer;
   }
 
-  .hover {
+  #pagination .hover {
     color: #FFF;
     background-color: #f4f4f5;
   }
 
-  .active a {
+  #pagination .active a {
     color: #FFF;
   }
 
-  .page-wrap {
+  #pagination  {
     font-size: 13px;
     margin-top: 10px;
   }
 
-  .page-wrap ul {
+  #pagination  ul {
     display: inline-block;
     list-style: none;
     overflow: hidden;
     padding-inline-start: 0px;
   }
 
-  .page-wrap li {
+  #pagination  li {
     float: left;
     color: #c2c4cc;
     padding: 3px 10px;

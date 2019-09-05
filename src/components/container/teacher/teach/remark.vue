@@ -1,5 +1,5 @@
 <template>
-  <div class="subContainer">
+  <div id="remark">
     <span>作业点评</span>
     <div class="first-floor">
       <label for="tel-name"></label>
@@ -400,47 +400,47 @@
 </script>
 
 <style scoped>
-  .subContainer {
+  #remark {
     font-size: 12px;
     color: #606266;
   }
 
-  .first-floor {
+  #remark .first-floor {
     margin-top: 20px;
   }
 
-  .second-floor {
+  #remark .second-floor {
     display: flex;
     margin-left: 5px;
     margin-top: 10px;
   }
 
-  .third-floor {
+  #remark .third-floor {
     margin-top: 20px;
     vertical-align: middle;
     font-size: 12px;
     margin-left: 5px;
   }
 
-  .third-floor span {
+  #remark .third-floor span {
     line-height: 30px;
   }
 
-  .forth-floor {
+  #remark .forth-floor {
     font-size: 12px;
     color: #606266;
     margin-top: 40px;
   }
 
-  label {
+  #remark label {
     display: inline;
   }
 
-  .content td {
+  #remark .content td {
     line-height: 30px;
   }
 
-  .textBox {
+  #remark .textBox {
     width: 180px;
     height: 32px;
     font-size: 12px;
@@ -451,15 +451,15 @@
     transition: all .3s cubic-bezier(.645, .045, .355, 1);
   }
 
-  .textBox:focus {
+  #remark .textBox:focus {
     outline: none;
   }
 
-  .textBox:hover {
+  #remark .textBox:hover {
     border-color: #c0c4cc;
   }
 
-  .choose-icon {
+  #remark .choose-icon {
     display: inline-block;
     width: 14px;
     height: 14px;
@@ -469,13 +469,13 @@
   }
 
   /* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-  .choose {
+  #remark .choose {
     background-image: url("../../../../../static/images/teach/choose.png");
     background-repeat: no-repeat;
     background-position: -1px -2px;
   }
 
-  .comment {
+  #remark .comment {
     width: 68px;
     height: 32px;
     display: inline-block;
@@ -484,16 +484,16 @@
     cursor: pointer;
   }
 
-  .has-comment {
+  #remark .has-comment {
     border-radius: 4px 0 0 4px;
   }
 
-  .no-comment {
+  #remark .no-comment {
     margin-right: 20px;
     border-radius: 0 4px 4px 0;
   }
 
-  .btn {
+  #remark .btn {
     background: #409eff;
     color: #FFF;
     height: 30px;
@@ -503,28 +503,28 @@
     transition: all .3s cubic-bezier(.645, .045, .355, 1);
   }
 
-  .btn:focus {
+  #remark .btn:focus {
     outline: none;
   }
 
-  .btn:hover {
+  #remark .btn:hover {
     background: #66b1FF;
   }
 
-  .btn-search {
+  #remark .btn-search {
     width: 54px;
   }
 
-  .btn-clear {
+  #remark .btn-clear {
     width: 78px;
   }
 
-  .blue {
+  #remark .blue {
     cursor: pointer;
     color: #409EFF;
   }
 
-  .red {
+  #remark .red {
     cursor: pointer;
     color: #FF6947;
   }
@@ -533,19 +533,19 @@
     border: #eeeeee;
   }
 
-  table tr {
+  #remark table tr {
     text-align: center !important;
   }
 
-  table td {
+  #remark table td {
     vertical-align: middle !important;
   }
 
-  .title {
+  #remark .title {
     text-align: center;
   }
 
-  .select-input {
+  #remark .select-input {
     margin-right: 0;
   }
 </style>

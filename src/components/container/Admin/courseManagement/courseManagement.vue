@@ -1,5 +1,5 @@
 <template>
-  <div class="course-management">
+  <div id="courseManagement">
     <!-- 课程详情模态框-->
     <div class="modal fade" id="detials" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -100,22 +100,22 @@
 </script>
 
 <style scoped>
-  .course-management {
+  #courseManagement{
     width: 98%;
     margin: 0 auto;
   }
 
-  .breadcrumb {
+  #courseManagement .breadcrumb {
     background-color: #fff;
     color: #606266;
     margin-bottom: 0;
   }
 
-  .first-floor {
+  #courseManagement .first-floor {
     margin-top: 20px;
   }
 
-  .textBox {
+  #courseManagement .textBox {
     width: 180px;
     height: 32px;
     font-size: 12px;
@@ -126,15 +126,15 @@
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   }
 
-  .textBox:focus {
+  #courseManagement .textBox:focus {
     outline: none;
   }
 
-  .textBox:hover {
+  #courseManagement .textBox:hover {
     border-color: #409eff;
   }
 
-  .btn {
+  #courseManagement .btn {
     background: #409eff;
     color: #fff;
     height: 30px;
@@ -143,34 +143,34 @@
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   }
 
-  .btn:focus {
+  #courseManagement .btn:focus {
     outline: none;
     color: #fff;
   }
 
-  .btn:hover {
+  #courseManagement .btn:hover {
     background: #66b1ff;
     color: #fff;
   }
 
-  .btn-search {
+  #courseManagement .btn-search {
     width: 54px;
   }
 
-  .btn-clear {
+  #courseManagement .btn-clear {
     width: 88px;
   }
-  .row{
+  #courseManagement .row{
     margin: 0;
   }
-  .second-floor {
+  #courseManagement .second-floor {
     width: 95%;
     margin: 0px auto;
   }
-  .course {
+  #courseManagement .course {
     height: 300px;
   }
-  .course-card {
+  #courseManagement .course-card {
     height: 250px;
     background-color: rgb(80, 118, 255);
     border-radius: 8px;
@@ -182,7 +182,7 @@
     -o-transition: All 0.4s ease-in-out;
   }
 
-  .course-card:hover {
+  #courseManagement .course-card:hover {
     transform: scale(1.1);
     -webkit-transform: scale(1.1);
     -moz-transform: scale(1.1);
@@ -190,42 +190,42 @@
     -ms-transform: scale(1.1);
   }
 
-  .course-image {
+  #courseManagement .course-image {
     width: 100%;
     height: 100%;
     border-radius:8px; 
   }
 
-  .course-title {
+  #courseManagement .course-title {
     width: 100%;
     height: 50px;
     line-height: 50px;
   }
 
-  .course-name {
+  #courseManagement .course-name {
     display: inline-block;
     width: 80%;
     line-height: 20px;
   }
 
-  .course-detials {
+  #courseManagement .course-detials {
     background-color: #2fc27e;
     margin-bottom: 5px;
   }
 
-  .course-detials:hover {
+  #courseManagement .course-detials:hover {
     background-color: #2fc27dc7;
   }
 
   /*课程详情模态框*/
-  .modal-list {
+  #courseManagement .modal-list {
     width: 100%;
     height: 40px;
     line-height: 40px;
     clear: both;
   }
 
-  .modal-list-title {
+  #courseManagement .modal-list-title {
     margin: 0;
     width: 20%;
     text-align: right;
@@ -234,7 +234,7 @@
     line-height: 40px;
   }
 
-  .modal-list-course {
+  #courseManagement .modal-list-course {
     width: 70%;
     display: block;
     margin-left: 10px;
