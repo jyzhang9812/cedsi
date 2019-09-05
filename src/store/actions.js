@@ -72,24 +72,34 @@ const actions = {
             );
     },
     //处理刷新页面state数据丢失问题
-    tryAutoLogin({ commit, state }) {
+    tryAutoLogin({ dispatch, commit, state }) {
         const token = localStorage.getItem('idToken');
         const expirationDate = Number(localStorage.getItem('expirationDate'));
         console.log(expirationDate)
         const now = new Date();
         if (now.getTime() <= expirationDate) {
             console.log("token未过期");
+            commit(TYPES.authUser, {
+                token: token,
+                // expirationDate: expirationDate,
+                userId: userId
+            })
         } else {
             console.log("token已过期");
-            router.replace({ path: '/signin' });
+            if (localStorage.getItem('idToken')) {
+                dispatch('logout')
+                router.replace({ path: '/signin' });
+            } else {
+                router.replace({ path: '/' })
+            };
         }
 
         const userId = localStorage.getItem('userId');
-        commit(TYPES.authUser, {
-            token: token,
-            // expirationDate: expirationDate,
-            userId: userId
-        })
+        // commit(TYPES.authUser, {
+        //     token: token,
+        //     // expirationDate: expirationDate,
+        //     userId: userId
+        // })
     },
     logout: ({ commit }) => {
         commit(TYPES.clearAuthData);

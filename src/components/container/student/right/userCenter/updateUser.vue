@@ -132,7 +132,7 @@
                     mobile: this.user.mobile,
                     phone: this.user.phone,
                     time: this.user.time,
-                    type: this.file.type.split('/')[1]
+                    type: this.file?this.file.type.split('/')[1]:''
                 }, postImgToS3);
             },
             postFormData(formData, postImgToS3) {
@@ -144,7 +144,8 @@
                 })
                     .then((res) => {
                         console.log(res);
-                        postImgToS3(res.data, file);
+                        if(res.data.AccessKeyId){
+                        postImgToS3(res.data, file);}
                     })
                     .catch((err) => {
                         console.log(err);
