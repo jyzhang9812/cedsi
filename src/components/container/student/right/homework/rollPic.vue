@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div id="rollPic" class="container-fluid">
         <div class="menu">
             <button @click="tab(index)" v-for="(item,index) in items" class="tag"
                 :class="{active : index==curId}">{{item.item}}</button>
@@ -105,7 +105,7 @@
 
 
 <style scoped>
-    .menu {
+    #rollPic .menu {
         background-color: #f4f9fa;
         height: auto;
         padding-top: 10px;
@@ -117,7 +117,7 @@
         justify-content: center;
     }
 
-    .tag {
+    #rollPic .tag {
         background-color: #fff;
         color: #9196a1;
         padding: 15px 32px;
@@ -130,8 +130,8 @@
         border: none;
     }
 
-    .tag:hover,
-    .active {
+    #rollPic .tag:hover,
+    #rollPic .active {
         background-color: #9196a1;
         text-align: center;
         text-decoration: none;
@@ -143,22 +143,22 @@
         color: #fff;
     }
 
-    .col-md-4 {
+    #rollPic .col-md-4 {
         margin-top: 10px;
         margin-bottom: 10px;
         text-decoration: none;
     }
 
-    .img {
+    #rollPic .img {
         border-radius: 20px;
         width: 100%;
     }
 
-    .inside {
+    #rollPic .inside {
         border-radius: 20px;
     }
 
-    .inside:hover {
+    #rollPic .inside:hover {
         -webkit-transform: scale(1.05);
         -moz-transform: scale(1.05);
         -ms-transform: scale(1.05);
@@ -174,7 +174,7 @@
         /*下边阴影*/
     }
 
-    .btn {
+    #rollPic .btn {
         background: #f4f9fa;
         height: 30px;
         width: 70px;
@@ -185,7 +185,7 @@
         font-weight: bold;
     }
 
-    .edit {
+    #rollPic .edit {
         background: #f4f9fa;
         height: 30px;
         width: 60px;
@@ -199,13 +199,13 @@
         border-radius: 8px;
     }
 
-    .edit:hover,
-    .edit:focus {
+    #rollPic .edit:hover,
+    #rollPic .edit:focus {
         background: #50b8ee;
         color: #f4f9fa;
     }
 
-    .delete {
+    #rollPic .delete {
         background: #f4f9fa;
         height: 30px;
         width: 60px;
@@ -219,13 +219,13 @@
         border-radius: 8px;
     }
 
-    .delete:hover,
-    .delete:focus {
+    #rollPic .delete:hover,
+    #rollPic .delete:focus {
         background: red;
         color: #f4f9fa;
     }
 
-    .details {
+    #rollPic .details {
         width: 100%;
         height: 50px;
         background-color: rgba(0, 0, 0, 0.35);
@@ -240,7 +240,7 @@
         padding-top: 20px;
     }
 
-    .detail_item {
+    #rollPic .detail_item {
         margin-left: 40px;
         width: 60%;
         height: 100%;
@@ -252,7 +252,7 @@
         color: #fff;
     }
 
-    .outside {
+    #rollPic .outside {
         margin-top: 8px;
         display: flex;
         flex-direction: row;
@@ -262,7 +262,7 @@
         justify-content: space-between;
     }
 
-    .up {
+    #rollPic .up {
         margin-top: 10px;
         display: flex;
         flex-direction: row;
@@ -270,7 +270,7 @@
         width: 150px;
     }
 
-    h5 {
+    #rollPic h5 {
         margin-left: 10px;
         margin-top: 5px;
         font-weight: bold;
@@ -280,25 +280,25 @@
         overflow: hidden;
     }
 
-    span {
+    #rollPic span {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
     }
 
-    .down {
+    #rollPic .down {
         display: flex;
         flex-direction: row;
         color: #777;
     }
 
-    .icon {
+    #rollPic .icon {
         width: 16px;
         height: 16px;
         margin-right: 5px;
     }
 
-    .work_type {
+    #rollPic .work_type {
         width: 34.7px;
         height: 20px;
     }

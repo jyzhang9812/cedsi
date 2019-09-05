@@ -122,20 +122,20 @@ export default {
 };
 </script>
 <style scoped>
-.right {
+#edustaging .right {
   margin-top: 10px;
   margin-left: 20px;
 }
-.title {
+#edustaging .title {
   font-weight: bolder;
 }
-.card {
+#edustaging .card {
   width: 100%;
   height: 142px;
   margin-top: 20px;
   margin-bottom: 20px;
 }
-.childcard {
+#edustaging .childcard {
   width: 23%;
   float: left;
   height: 142px;
@@ -143,7 +143,7 @@ export default {
   border-radius: 6px;
   margin-right: 2%;
 }
-.card_img {
+#edustaging .card_img {
   padding-top: 20px;
   width: 50%;
   float: left;
@@ -151,25 +151,25 @@ export default {
   text-align: center;
   line-height: 100%;
 }
-.card_msg {
+#edustaging .card_msg {
   float: left;
   width: 50%;
   text-align: center;
   margin-top: 40px;
 }
-.num {
+#edustaging .num {
   font-weight: bold;
   color: #409eff;
 }
-.selectschool {
+#edustaging .selectschool {
   width: 100%;
   height: 40px;
   color: #606266;
 }
-.schoolname {
+#edustaging .schoolname {
   display: inline-block;
 }
-input[type="checkbox"] {
+#edustaging input[type="checkbox"] {
   margin: 0 4px;
 }
 </style>

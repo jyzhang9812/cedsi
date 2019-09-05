@@ -46,7 +46,7 @@
         justify-content: left;
     }
 
-    .bcg {
+    #userCenter .bcg {
         width: 100%;
         min-height: 100vh;
         background-repeat: no-repeat;
@@ -56,7 +56,7 @@
         z-index: 1;
     }
 
-    .bcg::before {
+    #userCenter .bcg::before {
         content: "";
         display: block;
         position: absolute;

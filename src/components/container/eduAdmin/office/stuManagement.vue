@@ -1,5 +1,5 @@
 <template>
-  <div class="subContainer">
+  <div id="stuManagement">
     <!-- 添加学生模态框（Modal） -->
     <div
       class="modal fade"
@@ -587,12 +587,12 @@ export default {
 </script>
 
 <style scoped>
-.breadcrumb {
+#stuManagement .breadcrumb {
   background-color: #fff;
   color: #606266;
   margin-bottom: 0;
 }
-.subContainer {
+#stuManagement {
   font-size: 12px;
   color: #606266;
   width: 100%;
@@ -600,30 +600,30 @@ export default {
   padding: 0 10px;
 }
 
-.first-floor {
+#stuManagement .first-floor {
   margin-top: 20px;
 }
 
-.second-floor {
+#stuManagement .second-floor {
   display: flex;
   margin-top: 10px;
 }
 
-.forth-floor {
+#stuManagement .forth-floor {
   font-size: 12px;
   color: #606266;
   margin-top: 10px;
 }
 
-label {
+#stuManagement label {
   display: inline;
 }
 
-.content td {
+#stuManagement .content td {
   line-height: 30px;
 }
 
-.textBox {
+#stuManagement .textBox {
   width: 180px;
   height: 32px;
   font-size: 12px;
@@ -634,15 +634,15 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.textBox:focus {
+#stuManagement .textBox:focus {
   outline: none;
 }
 
-.textBox:hover {
+#stuManagement .textBox:hover {
   border-color: #c0c4cc;
 }
 
-.choose-icon {
+#stuManagement .choose-icon {
   display: inline-block;
   width: 14px;
   height: 14px;
@@ -652,13 +652,13 @@ label {
 }
 
 /* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-.choose {
+#stuManagement .choose {
   background-image: url("../../../../../static/images/teach/choose.png");
   background-repeat: no-repeat;
   background-position: -1px -2px;
 }
 
-.btn {
+#stuManagement .btn {
   background: #409eff;
   color: #fff;
   height: 32px;
@@ -668,23 +668,23 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.btn:focus {
+#stuManagement .btn:focus {
   outline: none;
 }
 
-.btn:hover {
+#stuManagement .btn:hover {
   background: #66b1ff;
 }
 
-.btn-search {
+#stuManagement .btn-search {
   width: 54px;
 }
 
-.btn-clear {
+#stuManagement .btn-clear {
   width: 78px;
 }
 
-.blue {
+#stuManagement .blue {
   cursor: pointer;
   color: #409eff;
   display: block;
@@ -693,81 +693,81 @@ label {
   width: 50%;
 }
 
-table {
+#stuManagement table {
   border: #eeeeee;
 }
 
-table tr {
+#stuManagement table tr {
   text-align: center !important;
 }
 
-table td {
+#stuManagement table td {
   vertical-align: middle !important;
 }
 
-.title {
+#stuManagement .title {
   text-align: center;
 }
 
-.select-input {
+#stuManagement .select-input {
   margin-right: 8px;
   display: inline-block;
 }
-.tips {
+#stuManagement .tips {
   border-radius: 5px;
   border: 1px solid #409eff;
   padding-left: 10px;
 }
-.tips:focus {
+#stuManagement .tips:focus {
   outline: none;
 }
-.tips:hover {
+#stuManagement .tips:hover {
   border: 1px solid #dcdfe6;
 }
 /*添加学生模态框*/
-.modal-dialog {
+#stuManagement .modal-dialog {
   top: 100px;
   position: relative;
   min-width: 700px;
 }
-.modal-header {
+#stuManagement .modal-header {
   background-color: #409eff;
   color: #fff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
-.modal-footer {
+#stuManagement .modal-footer {
   border: none;
   text-align: center;
 }
-.addinfo {
+#stuManagement .addinfo {
   margin: 0 auto;
   width: 100%;
   height: 220px;
 }
-.addinforson {
+#stuManagement .addinforson {
   width: 50%;
   height: 100%;
   float: left;
 }
-.addcon {
+#stuManagement .addcon {
   width: 100%;
   height: 33px;
 }
-.keypoint {
+#stuManagement .keypoint {
   color: red;
 }
-.keypoint-white {
+#stuManagement .keypoint-white {
   color: white;
 }
-.addtitle {
+#stuManagement .addtitle {
   color: #606266;
   width: 60px;
   height: 33px;
   text-align: right;
   display: inline-block;
 }
-.addinput {
+#stuManagement .addinput {
   border: 1px solid #409eff;
   border-radius: 5px;
   width: 180px;
@@ -775,7 +775,7 @@ table td {
   margin-left: 10px;
   padding-left: 10px;
 }
-.inputerr {
+#stuManagement .inputerr {
   border: 1px solid #409eff;
   border-radius: 5px;
   width: 180px;
@@ -784,10 +784,10 @@ table td {
   padding-left: 10px;
   visibility: hidden;
 }
-.addinput:focus {
+#stuManagement .addinput:focus {
   outline: none;
 }
-.sexradio {
+#stuManagement .sexradio {
   width: 180px;
   margin-left: 10px;
   display: inline-block;
@@ -795,58 +795,58 @@ table td {
   padding-left: 30px;
   line-height: 33px;
 }
-.sexradio1 {
+#stuManagement .sexradio1 {
   margin-right: 10px;
 }
-.sexname {
+#stuManagement .sexname {
   display: inline-block;
   margin-right: 10px;
 }
-.addStudentInput {
+#stuManagement .addStudentInput {
   display: inline-block;
   margin-left: 10px;
   width: 180px;
 }
-.outside {
+#stuManagement .outside {
   width: 200px;
 }
-.inputBox {
+#stuManagement .inputBox {
   width: 170px;
 }
 /* 详情模态框*/
-.col-md-4 {
+#stuManagement .col-md-4 {
   margin-bottom: 10px;
 }
 /*排班模态框*/
-.nav-pills > li.active > a,
-.nav-pills > li.active > a:focus,
-.nav-pills > li.active > a:hover {
+#stuManagement .nav-pills > li.active > a,
+#stuManagement .nav-pills > li.active > a:focus,
+#stuManagement .nav-pills > li.active > a:hover {
   background-color: #409eff;
   border-radius: 5px;
 }
-.arrangeblue {
+#stuManagement .arrangeblue {
   cursor: pointer;
   color: #409eff;
 }
 /*正则表达式*/
-.inputtips {
+#stuManagement .inputtips {
   display: block;
   font-size: 10px;
   color: red;
   margin-left: 90px;
 }
-.err {
+#stuManagement .err {
   border: 1px solid red;
 }
 /*提示模态框*/
-.alterwidth {
+#stuManagement .alterwidth {
   width: 30%;
 }
-.altercontent {
+#stuManagement .altercontent {
   width: 300px;
   margin: 0 auto;
 }
-.alterimg {
+#stuManagement .alterimg {
   width: 25px;
   height: 25px;
   margin-right: 10px;

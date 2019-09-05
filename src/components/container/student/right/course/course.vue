@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div id="course">
         <searchBar></searchBar>
         <courseCard></courseCard>
     </div>
@@ -21,7 +21,7 @@
 </script>
 
 <style scoped>
-    .container{
+    #course{
         display: flex;
         flex-direction: column;
         width: 100%;

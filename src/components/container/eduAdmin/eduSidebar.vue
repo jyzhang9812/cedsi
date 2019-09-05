@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div id="eduSidebar">
     <div class="aside">
       <ul class="menu">
         <li v-for="item in aside" class="bg-hover" :key="item.name">
@@ -105,25 +105,25 @@
 
 <style scoped>
 
-  .row {
+  #eduSidebar {
     margin: 0 !important;
     width: 100%;
     display: flex;
   }
 
-  .menu {
+  #eduSidebar .menu {
     list-style: none;
     padding-inline-start: 0;
     margin-block-start: 0;
     margin-block-end: 0;
   }
 
-  .menuPosition {
+  #eduSidebar .menuPosition {
     float: right;
     padding: 20px 20px 0 0;
   }
 
-  .aside {
+  #eduSidebar .aside {
     color: #FFF;
     background-color: #3766A6;
     width: 220px;
@@ -131,27 +131,27 @@
     min-height: 620px;
   }
 
-  .item-name {
+  #eduSidebar .item-name {
     height: 50px;
     line-height: 50px;
     padding-left: 28px;
   }
 
-  .item-name:hover {
+  #eduSidebar .item-name:hover {
     background-color: #2C5285;
   }
 
-  .children {
+  #eduSidebar .children {
     height: 50px;
     line-height: 50px;
     padding-left: 49px;
   }
 
-  .children:hover {
+  #eduSidebar .children:hover {
     background-color: #2C5285;
   }
 
-  .sonContainer {
+  #eduSidebar .sonContainer {
     right: 0;
     bottom: 0;
     top: 56px;

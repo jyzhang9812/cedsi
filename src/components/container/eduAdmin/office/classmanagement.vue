@@ -1,5 +1,5 @@
 <template>
-  <div class="subContainer">
+  <div id="classmanagement">
     <!-- 添加班级模态框（Modal） -->
     <div
       class="modal fade"
@@ -691,13 +691,13 @@ export default {
 </script>
 
 <style scoped>
-.breadcrumb {
+#classmanagement .breadcrumb {
   background-color: #fff;
   color: #606266;
   margin-bottom: 0;
 }
 
-.subContainer {
+#classmanagement {
   font-size: 12px;
   color: #606266;
   width: 100%;
@@ -705,29 +705,29 @@ export default {
   padding: 10px;
 }
 
-.first-floor {
+#classmanagement .first-floor {
   margin-top: 20px;
 }
 
-.second-floor {
+#classmanagement .second-floor {
   font-size: 12px;
   color: #606266;
   margin-top: 20px;
 }
 
-.select-input {
+#classmanagement .select-input {
   display: inline-block;
 }
 
-label {
+#classmanagement label {
   display: inline;
 }
 
-.content td {
+#classmanagement .content td {
   line-height: 30px;
 }
 
-.textBox {
+#classmanagement .textBox {
   width: 180px;
   height: 32px;
   font-size: 12px;
@@ -738,22 +738,22 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.textBox:focus {
+#classmanagement .textBox:focus {
   outline: none;
 }
 
-.textBox:hover {
+#classmanagement .textBox:hover {
   border-color: #409eff;
 }
 
 /* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-.choose {
+#classmanagement .choose {
   background-image: url("../../../../../static/images/teach/choose.png");
   background-repeat: no-repeat;
   background-position: -1px -2px;
 }
 
-.btn {
+#classmanagement .btn {
   background: #409eff;
   color: #fff;
   height: 30px;
@@ -762,77 +762,77 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.btn:focus {
+#classmanagement .btn:focus {
   outline: none;
 }
 
-.btn:hover {
+#classmanagement .btn:hover {
   background: #66b1ff;
 }
 
-.btn-search {
+#classmanagement .btn-search {
   width: 54px;
 }
 
-.btn-clear {
+#classmanagement .btn-clear {
   width: 78px;
 }
 
-.blue {
+#classmanagement .blue {
   cursor: pointer;
   color: #409eff;
 }
 
-table {
+#classmanagement table {
   border: #eeeeee;
 }
 
-table tr {
+#classmanagement table tr {
   text-align: center !important;
 }
 
-table td {
+#classmanagement table td {
   vertical-align: middle !important;
 }
 
-.title {
+#classmanagement .title {
   text-align: center;
 }
 
-.select-input {
+#classmanagement .select-input {
   margin-right: 8px;
 }
 
 /*添加班级模态框*/
-.addwidth {
+#classmanagement .addwidth {
   width: 500px;
 }
 
-.modal-dialog {
+#classmanagement .modal-dialog {
   top: 100px;
   position: relative;
 }
 
-.modal-header {
+#classmanagement .modal-header {
   background-color: #409eff;
   color: #fff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
 
-.add {
+#classmanagement .add {
   width: 100%;
 }
 
-.keypoint {
+#classmanagement .keypoint {
   color: red;
 }
 
-.addtitle {
+#classmanagement .addtitle {
   color: #606266;
 }
 
-.addcon {
+#classmanagement .addcon {
   width: 180px;
   border: 1px solid #409eff;
   border-radius: 5px;
@@ -842,84 +842,84 @@ table td {
   padding: 0 20px;
 }
 
-.addcon:hover {
+#classmanagement .addcon:hover {
   border: 1px solid #dcdfe6;
 }
 
-.addcon:focus {
+#classmanagement .addcon:focus {
   outline: none;
 }
 
-.content {
+#classmanagement .content {
   margin: 0 auto;
   width: 55%;
   height: 100%;
 }
 
-.modal-footer {
+#classmanagement .modal-footer {
   border: none;
   text-align: center;
 }
 
-.modal-select-input {
+#classmanagement .modal-select-input {
   display: inline-block;
   margin-left: 5px;
 }
 
-.inputBox {
+#classmanagement .inputBox {
   padding: 0;
 }
 
 /*排课模态框*/
-.nav-pills > li.active > a,
-.nav-pills > li.active > a:focus,
-.nav-pills > li.active > a:hover {
+#classmanagement .nav-pills > li.active > a,
+#classmanagement .nav-pills > li.active > a:focus,
+#classmanagement .nav-pills > li.active > a:hover {
   background-color: #409eff;
   margin-bottom: 10px;
 }
 
-.tab-content {
+#classmanagement .tab-content {
   margin: 0 auto;
 }
 
-.course-content {
+#classmanagement .course-content {
   height: 30px;
   line-height: 30px;
   margin-bottom: 10px;
 }
 
-.course-time {
+#classmanagement .course-time {
   display: inline-block;
   width: 250px;
   text-align: left;
 }
 
-.datepicker {
+#classmanagement .datepicker {
   margin-right: 20px;
 }
 
 /*查看学生模态框*/
-.tablewidth {
+#classmanagement .tablewidth {
   width: 90%;
   margin: 0 auto;
 }
 
-.tips {
+#classmanagement .tips {
   border-radius: 5px;
   border: 1px solid #409eff;
   padding-left: 10px;
 }
 
-.tips:focus {
+#classmanagement .tips:focus {
   outline: none;
 }
 
-.tips:hover {
+#classmanagement .tips:hover {
   border: 1px solid #dcdfe6;
 }
 
 /*正则判断*/
-.inputtips {
+#classmanagement .inputtips {
   display: inline-block;
   color: red;
   margin-left: 80px;
@@ -927,24 +927,24 @@ table td {
   width: 100%;
 }
 
-.err {
+#classmanagement .err {
   border: 1px solid red;
 }
 
-.inputerr {
+#classmanagement .inputerr {
   visibility: hidden;
   height: 10px;
   width: 100%;
 }
 
 /*修改成功弹出框*/
-.isshow {
+#classmanagement .isshow {
   width: 30%;
   position: relative;
   margin: 20px auto;
 }
 
-.notshow {
+#classmanagement .notshow {
   width: 40%;
   position: relative;
   margin: 20px auto;

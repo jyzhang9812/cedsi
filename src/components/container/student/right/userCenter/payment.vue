@@ -35,7 +35,7 @@
         min-width: 1200px;
     }
 
-    .payreceipt-card {
+    #payreceipt .payreceipt-card {
         height: auto;
         padding-bottom: 20px;
         width: 80%;
@@ -45,7 +45,7 @@
         background-color:rgba(255, 255, 255, 0.5);
     }
 
-    .card-title {
+    #payreceipt .card-title {
         margin: 0 auto;
         width: 90%;
         padding: 40px 0;
@@ -53,7 +53,7 @@
         color: #07111b;
     }
 
-    .card-content {
+    #payreceipt .card-content {
         margin: 0 auto;
         width: 90%;
         background-color: #fff;
@@ -62,26 +62,26 @@
         margin-bottom: 20px;
     }
 
-    .card-img {
+    #payreceipt .card-img {
         width: 160px;
         height: 90px;
         margin-right: 24px;
         float: left;
     }
 
-    .order-title {
+    #payreceipt .order-title {
         float: left;
         font-size: 16px;
         width: 400px;
     }
 
-    .order-price {
+    #payreceipt .order-price {
         display: inline-block;
         line-height: 95px;
         color: #93999f;
     }
 
-    .order-price span {
+    #payreceipt .order-price span {
         color: #f01414;
     }
 

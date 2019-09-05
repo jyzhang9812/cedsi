@@ -1,5 +1,5 @@
 <template>
-  <div class="subContainer">
+  <div id="checkStudent">
     <div class="classroute">
       <ol class="breadcrumb">
         <li>学生名单</li>
@@ -297,12 +297,12 @@ export default {
 </script>
 
 <style scoped>
-.breadcrumb {
+#checkStudent .breadcrumb {
   background-color: #fff;
   color: #606266;
   margin-bottom: 0;
 }
-.subContainer {
+#checkStudent {
   font-size: 12px;
   color: #606266;
   width: 100%;
@@ -310,26 +310,26 @@ export default {
   padding: 10px;
 }
 
-.first-floor {
+#checkStudent .first-floor {
   margin-top: 20px;
 }
-.second-floor {
+#checkStudent .second-floor {
   font-size: 12px;
   color: #606266;
   margin-top: 20px;
 }
-.select-input {
+#checkStudent .select-input {
   display: inline-block;
 }
-label {
+#checkStudent label {
   display: inline;
 }
 
-.content td {
+#checkStudent .content td {
   line-height: 30px;
 }
 
-.textBox {
+#checkStudent .textBox {
   width: 180px;
   height: 32px;
   font-size: 12px;
@@ -340,22 +340,22 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.textBox:focus {
+#checkStudent .textBox:focus {
   outline: none;
 }
 
-.textBox:hover {
+#checkStudent .textBox:hover {
   border-color: #409eff;
 }
 
 /* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-.choose {
+#checkStudent .choose {
   background-image: url("../../../../../static/images/teach/choose.png");
   background-repeat: no-repeat;
   background-position: -1px -2px;
 }
 
-.btn {
+#checkStudent .btn {
   background: #409eff;
   color: #fff;
   height: 30px;
@@ -364,91 +364,91 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.btn:focus {
+#checkStudent .btn:focus {
   outline: none;
 }
 
-.btn:hover {
+#checkStudent .btn:hover {
   background: #66b1ff;
 }
 
-.btn-search {
+#checkStudent .btn-search {
   width: 54px;
 }
 
-.btn-clear {
+#checkStudent .btn-clear {
   width: 88px;
 }
 
-.blue {
+#checkStudent .blue {
   cursor: pointer;
   color: #409eff;
 }
 
-.red {
+#checkStudent .red {
   cursor: pointer;
   color: red;
 }
 
-table {
+#checkStudent table {
   border: #eeeeee;
 }
 
-table tr {
+#checkStudent table tr {
   text-align: center !important;
 }
 
-table td {
+#checkStudent table td {
   vertical-align: middle !important;
 }
 
-.title {
+#checkStudent .title {
   text-align: center;
 }
 
-.select-input {
+#checkStudent .select-input {
   margin-right: 8px;
 }
 
-.btnactive {
+#checkStudent .btnactive {
   border-radius: 5px;
   line-height: 20px;
   height: 22px;
 }
-.btnactive:focus {
+#checkStudent .btnactive:focus {
   outline: none;
 }
 
 /*添加教师模态框*/
 
-.modal-dialog {
+#checkStudent .modal-dialog {
   top: 100px;
   position: relative;
 }
 
-.modal-header {
+#checkStudent .modal-header {
   background-color: #409eff;
   color: #fff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
-.add {
+#checkStudent .add {
   width: 100%;
 }
 
-.keypoint {
+#checkStudent .keypoint {
   color: red;
 }
-.keypointwhite {
+#checkStudent .keypointwhite {
   color: #fff;
 }
-.addtitle {
+#checkStudent .addtitle {
   color: #606266;
   display: inline-block;
   width: 50px;
 }
 
-.addcon {
+#checkStudent .addcon {
   width: 180px;
   border: 1px solid #409eff;
   border-radius: 5px;
@@ -458,43 +458,43 @@ table td {
   padding: 0 20px;
 }
 
-.addcon:hover {
+#checkStudent .addcon:hover {
   border: 1px solid #dcdfe6;
 }
 
-.addcon:focus {
+#checkStudent .addcon:focus {
   outline: none;
 }
 
-.content {
+#checkStudent .content {
   margin: 0 auto;
   width: 60%;
   height: 100%;
 }
-.modal-footer {
+#checkStudent .modal-footer {
   border: none;
   text-align: center;
 }
-.modal-select-input {
+#checkStudent .modal-select-input {
   display: inline-block;
   margin-left: 5px;
 }
-.inputBox {
+#checkStudent .inputBox {
   padding: 0;
 }
-.dropdown {
+#checkStudent .dropdown {
   margin-left: 20px;
 }
-#school .outside {
+#checkStudent #school .outside {
   width: 300px !important;
   height: 40px !important;
   margin-left: 10px !important;
 }
 /*正则表达式*/
-.err {
+#checkStudent .err {
   border: 1px solid red;
 }
-.inputtips {
+#checkStudent .inputtips {
   display: block;
   font-size: 10px;
   color: red;
@@ -502,7 +502,7 @@ table td {
   margin-bottom: 5px;
   margin-top: 5px;
 }
-.inputerr {
+#checkStudent .inputerr {
   display: block;
   font-size: 10px;
   color: red;
@@ -511,42 +511,42 @@ table td {
   height: 20px;
   margin-bottom: 10px;
 }
-.alterwidth {
+#checkStudent .alterwidth {
   width: 30%;
 }
-.altercontent {
+#checkStudent .altercontent {
   width: 300px;
   margin: 0 auto;
 }
-.alterimg {
+#checkStudent .alterimg {
   width: 25px;
   height: 25px;
   margin-right: 10px;
 }
-.upload-footer{
+#checkStudent .upload-footer{
     width: 100%;
     text-align: center
 }
-.upload-btn{
+#checkStudent .upload-btn{
     background-color: #409eff;
     color: #fff;
     margin-left: 10px;
 }
-.modal-select-input {
+#checkStudent .modal-select-input {
   display: inline-block;
   margin-left: 5px;
 }
-.modal-dialog {
+#checkStudent .modal-dialog {
   top: 100px;
   position: relative;
 }
-.modal-header {
+#checkStudent .modal-header {
   background-color: #409eff;
   color: #fff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
-.addwidth {
+#checkStudent .addwidth {
   width: 500px;
 }
 </style>
