@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid layout">
+  <div class="container-fluid layout" id="coursecard">
     <div class="row">
       <div class="col-md-4" v-for="(item,index) in currentList" :key="index">
         <router-link :to="{name:'coursemap',query:{id:item.ID}}" class="box">
@@ -107,7 +107,7 @@
     margin: 0;
   }
 
-  .row {
+  #coursecard .row {
     width: 100%;
     padding-top: 20px;
     display: flex;
@@ -115,24 +115,24 @@
     float: left;
   }
 
-  .col-md-4 {
+  #coursecard .col-md-4 {
     margin-top: 10px;
     margin-bottom: 10px;
     text-decoration: none;
   }
 
-  .img {
+  #coursecard .img {
     border-radius: 20px;
     width: 100%;
   }
 
-  .inside {
+  #coursecard .inside {
     border-radius: 20px;
     color: #fff;
     text-decoration: none;
   }
 
-  .inside:hover {
+  #coursecard .inside:hover {
     -webkit-transform: scale(1.05);
     -moz-transform: scale(1.05);
     -ms-transform: scale(1.05);
@@ -148,7 +148,7 @@
     /*下边阴影*/
   }
 
-  .btn {
+  #coursecard .btn {
     color: #fff;
     background: #457e72;
     border: 1px solid #51c79f;
@@ -161,7 +161,7 @@
     font-weight: bold;
   }
 
-  .btnhover {
+  #coursecard .btnhover {
     height: 35px;
     width: 90px;
     color: #51c79f;
@@ -175,7 +175,7 @@
     text-decoration: none;
   }
 
-  .details {
+  #coursecard .details {
     width: 100%;
     background-color: rgba(0, 0, 0, 0.55);
     z-index: 999;
@@ -187,7 +187,7 @@
     padding-top: 20px;
   }
 
-  .detail_item {
+  #coursecard .detail_item {
     margin-left: 40px;
     width: 60%;
     height: 100%;
@@ -198,7 +198,7 @@
     border-radius: 20px;
   }
 
-  .outside {
+  #coursecard .outside {
     margin-top: 8px;
     display: flex;
     flex-direction: row;
@@ -208,13 +208,13 @@
     justify-content: space-between;
   }
 
-  h4 {
+  #coursecard h4 {
     margin-top: 15px;
     margin-left: 10px;
     color: #25293a;
   }
 
-  .icon {
+  #coursecard .icon {
     width: 20px;
     height: 20px;
     margin-right: 10px;

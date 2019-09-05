@@ -6,7 +6,7 @@
  * @Description: teacher角色发布活动页面
  -->
 <template>
-  <div>
+  <div id="teacher-activity">
     <div class="body" v-show="!addShown">
       <p>活动管理</p>
       <div class="filter">
@@ -1232,7 +1232,7 @@
 </script>
 
 <style scoped>
-  .body {
+#teacher-activity .body {
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
@@ -1243,54 +1243,54 @@
     min-width: 850px;
   }
 
-  .option {
+  #teacher-activity .option {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
   }
 
-  .option input {
+  #teacher-activity .option input {
     width: 220px;
     height: 32px;
   }
 
-  .blue {
+  #teacher-activity .blue {
     color: #409EFF;
   }
 
-  .red {
+  #teacher-activity .red {
     color: #FF6947;
   }
 
-  .filter {
+  #teacher-activity .filter {
     margin-bottom: 30px;
   }
 
-  .form-control {
+  #teacher-activity .form-control {
     padding: 0px 30px 0 15px;
     font-size: 12px;
     margin-right: 5px;
   }
 
-  .panels {
+  #teacher-activity .panels {
     text-align: center;
   }
 
-  .panels tr {
+  #teacher-activity .panels tr {
     height: 40px;
     text-align: center;
   }
 
-  .panels th {
+  #teacher-activity .panels th {
     text-align: center;
   }
 
-  table {
+  #teacher-activity table {
     border: #eeeeee;
   }
 
-  .btn-my {
+  #teacher-activity .btn-my {
     margin-right: 8px;
     height: 32px;
     border-radius: 4px;
@@ -1300,7 +1300,7 @@
     border: 1px solid #409eff;
   }
 
-  .add {
+  #teacher-activity .add {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -1309,7 +1309,7 @@
     min-width: 850px;
   }
 
-  .title {
+  #teacher-activity .title {
     width: 750px;
     display: block;
     height: 34px;
@@ -1328,7 +1328,7 @@
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   }
 
-  .item {
+  #teacher-activity .item {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -1336,28 +1336,28 @@
     margin-top: 20px;
   }
 
-  .item p {
+  #teacher-activity .item p {
     height: 32px;
     line-height: 32px;
     vertical-align: middle;
     margin-right: 5px;
   }
 
-  .file {
+  #teacher-activity .file {
     height: 32px;
   }
 
-  .checkbox {
+  #teacher-activity .checkbox {
     vertical-align: middle;
     margin: 0;
     height: 32px;
   }
 
-  .editor {
+  #teacher-activity .editor {
     width: 800px;
   }
 
-  .item1 {
+  #teacher-activity .item1 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

@@ -237,11 +237,11 @@
 
 
 <style scoped>
-    .layout {
+    #allCourse .layout {
         margin: 0;
     }
 
-    .menu {
+    #allCourse .menu {
         background-color: #f4f9fa;
         height: auto;
         padding-top: 10px;
@@ -253,7 +253,7 @@
         justify-content: center;
     }
 
-    .tag {
+    #allCourse .tag {
         background-color: #f4f9fa;
         color: #575757;
         padding: 15px 32px;
@@ -266,12 +266,12 @@
         font-weight: 550;
     }
 
-    .tag:hover,
-    .active {
+    #allCourse .tag:hover,
+    #allCourse .active {
         color: #00bcd4;
     }
 
-    .row {
+    #allCourse .row {
         width: 100%;
         padding-top: 20px;
         display: flex;
@@ -279,24 +279,24 @@
         float: left;
     }
 
-    .col-md-4 {
+    #allCourse .col-md-4 {
         margin-top: 10px;
         margin-bottom: 10px;
         text-decoration: none;
     }
 
-    .img {
+    #allCourse .img {
         border-radius: 20px;
         width: 100%;
     }
 
-    .inside {
+    #allCourse .inside {
         border-radius: 20px;
         color: #fff;
         text-decoration: none;
     }
 
-    .inside:hover {
+    #allCourse .inside:hover {
         -webkit-transform: scale(1.05);
         -moz-transform: scale(1.05);
         -ms-transform: scale(1.05);
@@ -312,7 +312,7 @@
         /*下边阴影*/
     }
 
-    .btn {
+    #allCourse .btn {
         color: #50b8ee;
         background: #fff;
         border: 1px solid #50b8ee;
@@ -325,8 +325,8 @@
         font-weight: bold;
     }
 
-    .btnh,
-    .btn:hover {
+    #allCourse .btnh,
+    #allCourse .btn:hover {
         height: 35px;
         width: 90px;
         color: #fff;
@@ -340,19 +340,19 @@
         text-decoration: none;
     }
 
-    .right .btn:first-child {
+    #allCourse .right .btn:first-child {
         background: #fff;
         color: #94d183;
         border: 1px solid #94d183;
     }
 
-    .btn_green,
-    .right .btn:first-child:hover {
+    #allCourse .btn_green,
+    #allCourse .right .btn:first-child:hover {
         color: #fff;
         background: #94d183;
     }
 
-    .details {
+    #allCourse .details {
         width: 100%;
         background-color: rgba(0, 0, 0, 0.55);
         z-index: 999;
@@ -362,7 +362,7 @@
         padding-top: 20px;
     }
 
-    .details p {
+    #allCourse .details p {
         width: 80%;
         height: 80%;
         white-space: nowrap;
@@ -371,7 +371,7 @@
         margin: 0;
     }
 
-    .lock_circle {
+    #allCourse .lock_circle {
         width: 100px;
         height: 100px;
         border-radius: 50%;
@@ -384,7 +384,7 @@
         top: 30%;
     }
 
-    .outside {
+    #allCourse .outside {
         margin-top: 8px;
         display: flex;
         flex-direction: row;
@@ -394,19 +394,19 @@
         justify-content: space-between;
     }
 
-    h4 {
+    #allCourse h4 {
         margin-top: 15px;
         margin-left: 10px;
         color: #25293a;
     }
 
-    .icon {
+    #allCourse .icon {
         width: 20px;
         height: 20px;
         margin-right: 10px;
     }
 
-    .courseModal-dialog {
+    #allCourse .courseModal-dialog {
         width: 100%;
         z-index: 1050;
     }
@@ -420,27 +420,27 @@
         text-rendering: optimizeLegibility;
     }
 
-    .courseModal-content .close {
+    #allCourse .courseModal-content .close {
         position: relative;
         top: 10px;
         right: 20px;
         z-index: 1051;
     }
 
-    .courseModal-content {
+    #allCourse .courseModal-content {
         width: 85%;
         height: auto;
         margin: 0 auto;
         position: relative;
     }
 
-    .courseModal-body {
+    #allCourse .courseModal-body {
         padding: 20px;
         display: flex;
         flex-direction: row;
     }
 
-    .courseModal_left {
+    #allCourse .courseModal_left {
         width: 68%;
         height: 100%;
         padding: 20px;
@@ -449,19 +449,19 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, .2);
     }
 
-    .courseModal_right {
+    #allCourse .courseModal_right {
         padding: 20px;
         width: 32%;
         height: 100%;
     }
 
-    .courseModal_right .courseInfo {
+    #allCourse .courseModal_right .courseInfo {
         width: 100%;
         height: auto;
         border-bottom: 1px solid #e7e7e7;
     }
 
-    .courseModal_right img {
+    #allCourse .courseModal_right img {
         max-width: 100%;
         height: auto;
     }
@@ -482,13 +482,13 @@
         padding: 10px;
     }
 
-    .imgList_bg {
+    #allCourse .imgList_bg {
         min-height: 150px;
         overflow-x: scroll;
         overflow-y: hidden;
     }
 
-    ul#imgList {
+    #allCourse ul#imgList {
         margin: 0;
         list-style-type: none;
         width: 100%;
@@ -511,22 +511,22 @@
     }
 
     /*视频*/
-    .video-js {
+    #allCourse .video-js {
         height: 600px;
         width: 800px;
     }
 
-    .vjs-tech {
+    #allCourse .vjs-tech {
         height: auto;
         width: 100%;
     }
 
-    .video-bck {
+    #allCourse .video-bck {
         height: 400px;
         width: 700px;
     }
 
-    .video-name {
+    #allCourse .video-name {
         margin-bottom: 10px;
         display: inline-block;
     }
