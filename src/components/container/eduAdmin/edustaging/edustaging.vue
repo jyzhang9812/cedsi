@@ -121,7 +121,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .right {
   margin-top: 10px;
   margin-left: 20px;

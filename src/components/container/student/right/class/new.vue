@@ -60,7 +60,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .nameOfClass {
         width: auto;
         min-width: 100px;

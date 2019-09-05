@@ -93,7 +93,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 #activity-detial {
   display: flex;
   flex-direction: column;

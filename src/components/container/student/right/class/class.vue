@@ -38,7 +38,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   #setup .menu {
     height: auto;
     padding-top: 10px;

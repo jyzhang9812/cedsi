@@ -235,7 +235,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #add-organization {
   width: 98%;
   margin: 0 auto;

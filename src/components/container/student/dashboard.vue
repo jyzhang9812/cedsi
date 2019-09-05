@@ -113,7 +113,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   #student .container-fluid {
     height: 100%;
   }

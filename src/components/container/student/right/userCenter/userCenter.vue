@@ -35,7 +35,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     #userCenter .menu {
         height: auto;
         padding-top: 10px;

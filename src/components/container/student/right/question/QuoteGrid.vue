@@ -64,7 +64,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .quote_row{
       width: 100%;
       padding-left:15px; 
