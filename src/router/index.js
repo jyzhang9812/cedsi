@@ -3,10 +3,10 @@ import Router from 'vue-router'
 import index from '../components/container/index/index.vue'
 
 
-const originalPush = Router.prototype.push
-Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
-}
+// const originalPush = Router.prototype.push
+// Router.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
 
 //Webpack懒加载
 const sidebar = resolve => {
