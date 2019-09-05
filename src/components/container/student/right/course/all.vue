@@ -31,17 +31,34 @@
                                         vqehwebihcbweruvbrwihvbwreivbwirvbwrvbwhbvwrhbwrivbrhv</p>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myVideo">
                                 试听
                             </button>
-                            <button type="button" class="btn btn-primary">
-                                购买课程
+                            <button type="button" class="btn btn-primary" @click='jmpPay'>
+                                解锁课程
                             </button>
                         </div>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
+        <!-- 视频播放 -->
+        <div class="modal fade" id="myVideo" data-backdrop='false' tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content video-bck">
+                    <div class="modal-header header-height">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                            @click="deletevideo">&times;</button>
+                    </div>
+                    <div class="modal-box">
+                        <Media :autoplay="false" :kind="'video'" :controls="true" :src="videosrc"
+                            style="height: 400px;width: 700px;" @pause="handle()"></Media>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="menu">
             <button @click="tab(index)" v-for="(item,index) in items" class="tag"
                 :class="{active : index===curId}">{{item.item}}</button>
@@ -65,8 +82,8 @@
                 <div class="outside">
                     <h4>{{item.NAME}}</h4>
                     <div class="right">
-                        <button :class="(index==i)?'btnh btn_green':'btn'">试听</button>
-                        <button :class="(index==i)?'btnh':'btn'">开始学习</button>
+                        <button :class="(index==i)?'btnh btn_green':'btn'" @click="hidecourseModal" data-toggle="modal" data-target="#myVideo">试听</button>
+                        <button :class="(index==i)?'btnh':'btn'" @click='jmpPay'>解锁课程</button>
                     </div>
                 </div>
                 <!-- </router-link> -->
@@ -79,6 +96,7 @@
 
 <script>
     import pagination from '../pagination.vue'
+    import Media from "@dongido/vue-viaudio";
     import globalAxios from 'axios'
     export default {
         name: "courseCard",
@@ -88,7 +106,8 @@
         data() {
             return {
                 clickNum: 0,
-                courseNum:0,
+                courseNum: 0,
+                videosrc: "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/course/video/level1-1.mp4",
                 items: [
                     { item: '热门课程' },
                     { item: '人工智能' },
@@ -144,11 +163,26 @@
                 this.i = -1;
                 this.isShow = false;
             },
+            hidecourseModal(){
+                $('#courseModal').modal('hide')
+            },
             changeClickNum(index) {
                 this.clickNum = index;
             },
             changeCourseNum(index) {
                 this.courseNum = index;
+            },
+            jmpPay() {
+                this.$router.push('/payment')
+            },
+            handle() {
+                console.log("Video paused!, playing in 2 sec...");
+                setTimeout(() => {
+                    this.$refs.coursevideo.play();
+                }, 2000);
+            },
+            deletevideo() {
+                this.videosrc = "";
             },
             getNew(value) {
                 this.currentList = this.tableData.slice(value, value + this.limit);
@@ -163,9 +197,6 @@
             this.style1 = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;margin-top:-' + (document.documentElement.clientWidth * 0.17) + 'px;'
 
             $(document).on("show.bs.modal", ".modal", function () {
-                // $(this).draggable({
-                //     handle: ".modal-header"
-                // });
                 $(this).css("overflow-y", "scroll");
                 $("#courseModal").append("<div class='modal-backdrop fade in' id='courseBackdrop'> </div>");
             })
@@ -477,5 +508,26 @@
         width: 100%;
         min-height: 100%;
         object-fit: cover;
+    }
+
+    /*视频*/
+    .video-js {
+        height: 600px;
+        width: 800px;
+    }
+
+    .vjs-tech {
+        height: auto;
+        width: 100%;
+    }
+
+    .video-bck {
+        height: 400px;
+        width: 700px;
+    }
+
+    .video-name {
+        margin-bottom: 10px;
+        display: inline-block;
     }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app":style="appheight">
     <app-header/>
     <vue-element-loading :active="vueElementLoading" :is-full-screen="true"
     spinner="bar-fade-scale" color="#FF6700" />
@@ -24,11 +24,13 @@
     data() {
       return {
         height: 0,
-        width: 0
+        width: 0,
+        appheight:0,
       }
     },
     created: function () {
       this.height = document.documentElement.clientHeight,
+      this.appheight = 'min-height:' + this.height + 'px;';
       this.screenHeight = 'min-height:' + (this.height - 56) + 'px;';
       this.$store.dispatch('tryAutoLogin');
     },

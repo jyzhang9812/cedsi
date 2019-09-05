@@ -6,14 +6,8 @@
     </div>
     <div class="upload upload-height">
       <span class="upload-title">视频描述:</span>
-      <textarea
-        class="upload-textarea"
-        rows="8"
-        cols="70"
-        placeholder="请输入视频描述"
-        v-model="videoIntro"
-      />
-    </div>
+      <textarea class="upload-textarea" rows="8" cols="70" placeholder="请输入视频描述" v-model="videoIntro" />
+      </div>
     <div class="upload">
       <span class="upload-title">请选择章节:</span>
       <select-input
@@ -54,172 +48,137 @@
 </template>
 
 <script>
-import SelectInput from "../utils/selectInput";
-import AWS from "aws-sdk";
-import globalAxios from "axios";
+  import SelectInput from "../utils/selectInput";
+  import AWS from "aws-sdk";
+  import globalAxios from "axios";
 
-export default {
-  name: "uploadVideo",
-  data() {
-    return {
-      file: null,
-      fileName: "",
-      inputData: {
-        chapter: {
-          option: "",
-          list: []
-        }
+  export default {
+    name: "uploadVideo",
+    data() {
+      return {
+        file: null,
+        fileName: "",
+        videoName: "",
+        videoIntro: "",
+        type: "",
+        fileName: "暂未上传",
+        progressWidth: "0%",
+        isComplete: true
+      };
+    },
+    methods: {
+      changeOption(item, id) {
+        Object.keys(this.inputData).forEach(res => {
+          if (res === id) {
+            this.inputData[res].option = item;
+          }
+        });
       },
-      videoName: "",
-      videoIntro: "",
-      type: "",
-      fileName: "暂未上传",
-      progressWidth:"0%",
-      isComplete:true
-    };
-  },
-  methods: {
-    changeOption(item, id) {
-      Object.keys(this.inputData).forEach(res => {
-        if (res === id) {
-          this.inputData[res].option = item;
-        }
-      });
-    },
-    getFile(event) {
-      this.file = event.target.files[0];
-      console.log(this.file);
-      this.fileName = this.file.name;
-      this.type = this.file.type.split("/")[1];
-      this.size = this.file.size;
-    },
-    submit(event) {
-      var token = window.localStorage.getItem("idToken");
-      globalAxios
-        .post(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
+      getFile(event) {
+        this.file = event.target.files[0];
+        console.log(this.file);
+        this.fileName = this.file.name;
+        this.type = this.file.type.split("/")[1];
+        this.size = this.file.size;
+      },
+      submit(event) {
+        var token = window.localStorage.getItem("idToken");
+        globalAxios
+          .post(
+            "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
             this.courseId +
             "/video",
-          {
-            name: this.videoName,
-            comment: this.videoIntro,
-            chapterId: this.inputData.chapter.option.id,
-            type: this.type,
-            size: this.size + ""
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token
+            {
+              name: this.videoName,
+              comment: this.videoIntro,
+              chapterId: this.inputData.chapter.option.id,
+              type: this.type,
+              size: this.size + ""
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: token
+              }
             }
-          }
-        )
-        .then(
-          response => {
-            var that=this
-            console.log(response);
-            //this.$router.push({path:"/Admin/"})
-            //console.log(this.inputData.chapter.list);
-            AWS.config = new AWS.Config({
-              accessKeyId: response.data.AccessKeyId,
-              secretAccessKey: response.data.SecretAccessKey,
-              sessionToken:response.data.SessionToken,
-              region: "cn-northwest-1"
-            });
-            var s3 = new AWS.S3();
-            let formData = new FormData();
+          )
+          .then(
+            response => {
+              var that = this
+              console.log(response);
+              //this.$router.push({path:"/Admin/"})
+              //console.log(this.inputData.chapter.list);
+              AWS.config = new AWS.Config({
+                accessKeyId: response.data.AccessKeyId,
+                secretAccessKey: response.data.SecretAccessKey,
+                sessionToken: response.data.SessionToken,
+                region: "cn-northwest-1"
+              });
+              var s3 = new AWS.S3();
+              let formData = new FormData();
 
-            formData.append("caption", this.caption);
-            formData.append("hour", this.hour);
-            formData.append("particulars", this.particulars);
-            formData.append("content", this.file);
-            var config = {
-        onUploadProgress: progressEvent => {
-            var complete = (progressEvent.loaded / progressEvent.total * 100 | 0) + '%'
-            this.progress = complete
-        }
-    }
-            console.log(window.localStorage.getItem("user"));
-            const reader = new FileReader();
-            var content = reader.readAsArrayBuffer(this.file);
-            var params = {
-              ACL: "public-read",
-              Bucket: "cedsi",
-              Body: formData.get("content"),
-              Key: "course/video/" + response.data.id + "." + this.type,
-              ContentType: this.type,
-              Metadata: {
-                uploader: window.localStorage.getItem("user")
+              formData.append("caption", this.caption);
+              formData.append("hour", this.hour);
+              formData.append("particulars", this.particulars);
+              formData.append("content", this.file);
+              var config = {
+                onUploadProgress: progressEvent => {
+                  var complete = (progressEvent.loaded / progressEvent.total * 100 | 0) + '%'
+                  this.progress = complete
+                }
               }
-            //Key: "course/" + config.id + "." + file.type.split('/')[1],
-            };
-            s3.putObject(params,function(err, data) {
-              if (err) {
-                console.log(err, err.stack);
-              } else {
-                console.log(data);
-              }
-            }).on('httpUploadProgress',function(e){
-              var process=Number(e.loaded*100/e.total)
-              that.progressWidth=parseInt(process)+"%"
-              if(process==100){
-                that.isComplete=false
-              }
-            });
-          },
-          error => {
-            // this.$router.push({path:'/404'})
-            console.log(error);
-          }
-        );
+              console.log(window.localStorage.getItem("user"));
+              const reader = new FileReader();
+              var content = reader.readAsArrayBuffer(this.file);
+              var params = {
+                ACL: "public-read",
+                Bucket: "cedsi",
+                Body: formData.get("content"),
+                Key: "course/video/" + response.data.id + "." + this.type,
+                ContentType: this.type,
+                Metadata: {
+                  uploader: window.localStorage.getItem("user")
+                }
+                //Key: "course/" + config.id + "." + file.type.split('/')[1],
+              };
+              s3.putObject(params, function (err, data) {
+                if (err) {
+                  console.log(err, err.stack);
+                } else {
+                  console.log(data);
+                }
+              }).on('httpUploadProgress', function (e) {
+                var process = Number(e.loaded * 100 / e.total)
+                that.progressWidth = parseInt(process) + "%"
+                if (process == 100) {
+                  that.isComplete = false
+                }
+              });
+            },
+            error => {
+              // this.$router.push({path:'/404'})
+              console.log(error);
+            }
+          );
+      },
+      goback() {
+        this.$router.push({ path: "/Admin/" })
+      },
+      gotoVideo() {
+        this.$router.push({ path: "/Admin/" })
+      }
     },
-    goback(){
-      this.$router.push({path:"/Admin/"})
+    created() {
+      var courseId = this.$route.params.courseId;
+      this.$store.dispatch('getCourseChapter', courseId)
     },
-    gotoVideo(){
-      this.$router.push({path:"/Admin/"})
-    }
-  },
-  created() {
-    var token = window.localStorage.getItem("idToken");
-    //console.log(this.$route.params.courseId)
-    this.courseId = this.$route.params.courseId;
-    console.log(this.courseId);
-    globalAxios
-      .get(
-        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
-          this.courseId +
-          "/chapters",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token
-          }
-        }
-      )
-      .then(
-        response => {
-          console.log(response);
-          var chapterArr = [];
-          var chapterData = [];
-          chapterArr = response.data.data;
-          for (var i = 0; i < chapterArr.length; i++) {
-            var chapter = {};
-            chapter.name = chapterArr[i].CP_NAME;
-            chapter.id = chapterArr[i].CP_ID;
-            chapterData.push(chapter);
-          }
-          this.inputData.chapter.list = chapterData;
-          //console.log(this.inputData.chapter.list);
-        },
-        error => {
-          // this.$router.push({path:'/404'})
-          console.log(error);
-        }
-      );
-  },
-  components: { SelectInput }
-};
+    computed: {
+      inputData() {
+        return this.$store.state.inputData
+      }
+    },
+    components: { SelectInput }
+  };
 </script>
 
 <style>

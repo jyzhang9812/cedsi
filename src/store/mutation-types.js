@@ -15,5 +15,9 @@ export const changeMsgList = 'changeMsgList'
 export const changeMsgCurrentList = 'changeMsgCurrentList'
 
 
+export const changeAdminCourseList = 'changeAdminCourseList'
+export const changeVideo = 'changeVideo'
+export const changeVideoCurrentList = 'changeVideoCurrentList'
+
 export const changeAdminList = 'changeAdminList'
 export const changeAdminCurrentList = 'changeAdminCurrentList'

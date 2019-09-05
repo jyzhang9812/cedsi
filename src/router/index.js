@@ -2,6 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import index from '../components/container/index/index.vue'
 
+
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
 //Webpack懒加载
 const sidebar = resolve => {
   require.ensure(['../components/container/student/dashboard.vue'], () => {
@@ -332,7 +338,7 @@ export default new Router({
           }, component: homework
         },
         {
-          path: '/dashboard/', beforeEnter(to, from, next) {
+          path: '/dashboard/course', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {

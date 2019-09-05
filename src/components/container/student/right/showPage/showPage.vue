@@ -210,7 +210,7 @@
         position: absolute;
         width: 50px;
         height: 50px;
-        top: 80px;
+        top: 120px;
         z-index: 99999;
         background-color: #fff;
         vertical-align: middle;
@@ -219,9 +219,10 @@
     }
 
     .iconright {
-        position: relative;
-        left: 1080px;
-        top: 80px;
+        display: inline-block;
+        position: absolute;
+        right: 0;
+        top: 120px;
         border-radius: 50%;
         width: 50px;
         height: 50px;

@@ -5,6 +5,7 @@ const mutations = {
         console.log('--------------------')
         state.idToken = userData.token;
         state.userId = userData.userId;
+        // state.expirationDate = userData.expirationDate;
     },
     [TYPES.storeUser](state, user) {
         state.user = user
@@ -59,6 +60,17 @@ const mutations = {
         state.msgCurrentList = state.msgList.slice(value, value + state.limit);
     },
 
+    //Admin
+    [TYPES.changeAdminCourseList](state, List) {
+        state.adminCourseList = List
+    },
+    [TYPES.changeVideo](state, List) {
+        state.videoData = List
+    },
+    [TYPES.changeVideoCurrentList](state, value) {
+        state.videoCurrentList = state.videoData.slice(value, value + state.limit);
+    },
+    
     //superAdmin
     [TYPES.changeAdminList](state, adminList) {
         state.adminList = adminList

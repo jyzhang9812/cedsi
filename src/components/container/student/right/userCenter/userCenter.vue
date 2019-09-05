@@ -24,7 +24,7 @@
         data() {
             return {
                 curId: 0,
-                items: [{ item: '个人资料' }, { item: '支付中心' }],
+                items: [{ item: '个人资料' }, { item: '我的订单' }],
             }
         },
         methods: {

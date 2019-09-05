@@ -239,6 +239,17 @@ const state = {
     msgList: [],
     msgCurrentList: [],
 
+    //管理员
+    adminCourseList: [],
+    videoCurrentList: [],
+    videoData: [],
+    inputData: {
+        chapter: {
+            option: "",
+            list: []
+        }
+    },
+
     //超级管理员
     adminList: [],
     adminCurrentList: [],

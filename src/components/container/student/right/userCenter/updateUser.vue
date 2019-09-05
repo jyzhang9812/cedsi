@@ -1,16 +1,16 @@
 <template>
     <div class="personalcontent">
         <div class="contentdetail">
-            <form class="form" @submit.prevent="onSubmit">
+            <form class="form" @submit.prevent="submit">
                 <div class="formdetail">
                     <label class="formlabel" for="name">昵称</label>
                     <input class="input" placeholder="请输入用户名" v-model="user.username">
                 </div>
                 <div class="formdetail">
                     <label class="formlabel" for="gender">性别</label>
-                    <span class="modal-update-radio" v-for="(item,index) in radiolist">
-                        <input class="modal-update-radio" type="radio" :value='item.value' :checked="item.isCheck"
-                            v-model="user.gender" @change="changeInput(index)">
+                    <span style='margin-right: 50px' v-for="(item,index) in radiolist">
+                        <input type="radio" :value='item.value' :checked="item.isCheck" v-model="user.gender"
+                            @change="changeInput(index)">
                         {{item.name}}
                     </span>
                 </div>
@@ -20,9 +20,13 @@
                 </div>
                 <div class="formdetail">
                     <label class="formlabel" for="headsculpture">头像</label>
-                    <img id="headimage" :src="user.avatar" class="image" alt="">
-                    <input class="input headsculpture" type="file" name="headsculpture" id="headsculpture"
-                        accept="image/gif,image/jpeg,image/jpg,image/png" @change="changeImage($event)">
+                    <img id="headimage" :src="headsculpture" class="cover-image" alt="" v-show="headsculpture!==''">
+                    <div class="upload">
+                        <div class="upload-cover-btn">
+                            上传文件
+                            <input type="file" class="" @change="getFile($event)" style="opacity: 0">
+                        </div>
+                    </div>
                 </div>
                 <div class="formdetail">
                     <label class="formlabel" for="email">邮箱</label>
@@ -37,7 +41,7 @@
                     <input class="input" placeholder="请输入手机号码" v-model="user.phone">
                 </div>
                 <div class="formdetail">
-                    <button class="buttonsave" @click='submit'>
+                    <button class="buttonsave" @click='submit($event)'>
                         保存
                     </button>
                 </div>
@@ -47,22 +51,19 @@
 </template>
 
 <script>
+    import AWS from 'aws-sdk';
+    import instance from '../../../../../axios-auth.js';
     export default {
         name: 'updateUser',
         data() {
             return {
+                file: null,
+                fileName: '',
+                headsculpture: '',
                 radiolist: [{ name: '男', value: 1, isCheck: false }, { name: '女', value: 2, isCheck: false }],
             }
         },
         methods: {
-            changeImage(e) {
-                var file = e.target.files[0];
-                var reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function (e) {
-                    this.user.avatar = this.result
-                }
-            },
             changeInput(index) {
                 this.radiolist.map((v, i) => {
                     if (i == index) {
@@ -72,25 +73,83 @@
                     }
                 })
             },
-            submit() {
+            getFile(event) {
+                this.file = event.target.files[0]
+                console.log(this.file)
+                this.fileName = this.file.name
+                var reader = new FileReader();
+                var that = this;
+                reader.readAsDataURL(this.file);
+                reader.onload = function (e) {
+                    that.headsculpture = this.result
+                }
+            },
+            submit(event) {
+                let postImgToS3 = function (config, file) {
+                    AWS.config = new AWS.Config({
+                        accessKeyId: config.AccessKeyId,
+                        secretAccessKey: config.SecretAccessKey,
+                        sessionToken: config.SessionToken,
+                        region: 'cn-northwest-1'
+                    })
+                    var s3 = new AWS.S3();
+                    let formData = new FormData();
+                    formData.append('content', file);
+                    const reader = new FileReader();
+                    var content = reader.readAsArrayBuffer(file);
+                    var params = {
+                        ACL: 'public-read',
+                        Bucket: "cedsi",
+                        Body: formData.get('content'),
+                        Key: "user/avatar/" + config.id + "." + file.type.split('/')[1],
+                        ContentType: file.type,
+                        Metadata: { 'uploader': window.localStorage.getItem('user') }
+                    };
+                    s3.putObject(params, function (err, data) {
+                        if (err) {
+                            console.log(err, err.stack);
+                        } else {
+                            console.log(data);
+                            if (data.hasOwnProperty('ETag')) {
+                                alert("上传成功!");
+                                // this.$router.replace({ path: '/Admin/courseManagement/' });
+                            } else {
+                                alert("上传失败!");
+                            }
+                        }
+                    });
+                }
                 this.radiolist.map((v, i) => {
                     if (v.isCheck) {
                         console.log('被选中的值为:' + v.value)
                         this.user.gender = v.value
                     }
                 })
-                const formData = {
-                    avatar: this.user.avatar,
+                this.postFormData({
                     nickName: this.user.username,
                     email: this.user.email,
                     gender: this.user.gender,
                     mobile: this.user.mobile,
                     phone: this.user.phone,
-                    time: this.user.time
-                }
-                console.log(formData);
-                this.$store.dispatch('updateUser', formData)
-            }
+                    time: this.user.time,
+                    type: this.file.type.split('/')[1]
+                }, postImgToS3);
+            },
+            postFormData(formData, postImgToS3) {
+                let file = this.file;
+                instance.put('/student/studentinfo', formData, {
+                    headers: { 
+                        Authorization: localStorage.getItem('idToken'),
+                        'Content-Type': 'application/json'}
+                })
+                    .then((res) => {
+                        console.log(res);
+                        postImgToS3(res.data, file);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            },
         },
         created: function () {
             this.$store.commit('updateLoading', true)
@@ -135,7 +194,7 @@
     }
 
     .formdetail {
-        margin: 20px 0 0 10px; 
+        margin: 20px 0 0 10px;
     }
 
     /* 清除浮动 */
@@ -175,6 +234,10 @@
         border-color: #67c23a;
     }
 
+    input[type=radio] {
+        padding-right: 50px;
+    }
+
     .image {
         width: 150px;
         height: 150px;
@@ -204,5 +267,29 @@
         background-color: #409eff;
         border-color: #409eff;
         text-align: center;
+    }
+
+    .upload-cover-btn {
+        margin-left: 10px;
+        width: 80px;
+        height: 35px;
+        display: inline-block;
+        background-color: #409eff;
+        color: #fff;
+        border-radius: 5px;
+        line-height: 35px;
+        text-align: center
+    }
+
+    input[type=file] {
+        width: 80px;
+        height: 35px;
+        position: relative;
+        top: -35px;
+    }
+
+    .cover-image {
+        width: 200px;
+        height: 200px;
     }
 </style>

@@ -57,7 +57,7 @@
           {
             name: "全部课程",
             img: 'fa-2x fa-lightbulb-o',
-            path: "/dashboard/"
+            path: "/dashboard/course"
           },
           {
             name: "我的作品",

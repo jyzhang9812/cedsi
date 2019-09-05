@@ -3,6 +3,17 @@ import globalAxios from '../axios-auth';
 import router from '../router';
 
 const actions = {
+
+    //公用
+    //runtimeError处理
+    jmpToError(errorType) {
+        if (errorType == 'Runtime.ExitError') {
+            router.push({ path: '/404' })
+        }
+    },
+
+
+    //登录注册
     login({ commit, dispatch, state }, authData) {
         var token = ''
         return globalAxios.post("/user/login",
@@ -15,7 +26,7 @@ const actions = {
                     state.roleId = response.data.role;
                     state.user = authData.username
                     state.status = response.data.status
-                    console.log(token)
+                    console.log(state.expirationDate)
                     if (token === undefined) {
                         commit(TYPES.authUser, {
                             token: null,
@@ -32,7 +43,6 @@ const actions = {
                         localStorage.setItem('roleId', state.roleId)
                         localStorage.setItem('expirationDate', state.expirationDate)
                     }
-
 
                     if (state.status == 'fail') {
                         console.log('error')
@@ -61,9 +71,11 @@ const actions = {
                 }
             );
     },
+    //处理刷新页面state数据丢失问题
     tryAutoLogin({ commit, state }) {
         const token = localStorage.getItem('idToken');
         const expirationDate = Number(localStorage.getItem('expirationDate'));
+        console.log(expirationDate)
         const now = new Date();
         if (now.getTime() <= expirationDate) {
             console.log("token未过期");
@@ -75,6 +87,7 @@ const actions = {
         const userId = localStorage.getItem('userId');
         commit(TYPES.authUser, {
             token: token,
+            // expirationDate: expirationDate,
             userId: userId
         })
     },
@@ -88,7 +101,9 @@ const actions = {
         router.replace('/')
     },
 
+
     //students方法
+    //获取用户个人资料
     getUser({ commit, state }) {
         globalAxios.get('/student/studentinfo',
             {
@@ -116,6 +131,7 @@ const actions = {
                 console.log(error);
             })
     },
+    //用户更改个人资料
     updateUser({ commit, state }, userData) {
         globalAxios({
             method: "PUT",
@@ -135,6 +151,7 @@ const actions = {
                 console.log(error);
             })
     },
+    //获取用户课程
     getCourse({ commit, state }) {
         globalAxios.get('/student/courses',
             {
@@ -158,6 +175,7 @@ const actions = {
                 console.log(error);
             })
     },
+    //课程视频及信息
     getCourseDetail({ commit, state }, id) {
         globalAxios.get('/student/courses/' + id + '/chapters', {
             headers: {
@@ -203,6 +221,7 @@ const actions = {
                 }
             );
     },
+    //获取作业及项目
     getWork({ commit, state }, curId) {
         globalAxios.get('/student/works?type=' + curId,
             {
@@ -253,6 +272,7 @@ const actions = {
             }
         );
     },
+    //系统消息
     getMsg({ commit, state }, curId) {
         globalAxios.get('/student/message/' + (curId + 1),
             {
@@ -278,6 +298,7 @@ const actions = {
             }
         );
     },
+    //所在班级
     getClass({ commit, state }) {
         globalAxios.get('/student/class',
             {
@@ -303,6 +324,164 @@ const actions = {
         },
             error => {
                 commit(TYPES.updateLoading, false)
+                console.log(error);
+            }
+        );
+    },
+
+
+    // Admin方法
+    //获取课程目录
+    getCourseList({ dispatch, commit, state }) {
+        globalAxios.get(
+            "/admin/course",
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: state.idToken
+                }
+            }
+        ).then(
+            response => {
+                console.log(response.data);
+                var courseArr = [];
+                var courseList = [];
+                courseArr = response.data;
+                for (var i = 0; i < courseArr.length; i++) {
+                    var course = {};
+                    course.name = courseArr[i].COURSE_NAME;
+                    course.id = courseArr[i].ID;
+                    if (i == 0) course.isActive = true;
+                    else course.isActive = false;
+                    courseList.push(course);
+                }
+                commit(TYPES.changeAdminCourseList, courseList);
+                console.log(courseList)
+                globalAxios
+                    .get(
+                        "/admin/course/" + courseList[0].id + "/video",
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: state.idToken
+                            }
+                        }
+                    )
+                    .then(
+                        response => {
+                            console.log(response);
+                            if (response.data.errorType != '') {
+                                dispatch('jmpToError', response.data.errorType)
+                            } else {
+                                var videoArr = [];
+                                var videoData = [];
+                                videoArr = response.data.data;
+                                for (var i = 0; i < videoArr.length; i++) {
+                                    var video = {};
+                                    video.chapterName = videoArr[i].CP_NAME;
+                                    video.videoName = videoArr[i].RS_NAME;
+                                    video.introduction = videoArr[i].RS_COMMENT;
+                                    video.date = dispatch('timestampToTime', videoArr[i].RS_CREATE_TIME)
+                                    video.uploadAdmin = videoArr[i].RS_FOUNDER;
+                                    video.chapterNum = videoArr[i].CP_NUMBER;
+                                    video.videoUrl = videoArr[i].RS_URL;
+                                    videoData.push(video);
+                                }
+                                commit(TYPES.changeVideo, videoData);
+                                commit(TYPES.changeVideoCurrentList, 0);
+                                console.log(videoData);
+                            }
+                        },
+                        error => {
+                            // this.$router.push({path:'/404'})
+                            console.log(error);
+                        }
+                    );
+            },
+            error => {
+                // this.$router.push({path:'/404'})
+                console.log(error);
+            }
+        );
+    },
+    timestampToTime(timestamp) {
+        timestamp = String(timestamp);
+        timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
+        var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + "-";
+        var M = (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-";
+        var D = date.getDate() + " ";
+        var h = date.getHours() + ":";
+        var m = date.getMinutes() + ":";
+        var s = date.getSeconds();
+        return Y + M + D + h + m + s;
+    },
+    //切换课程下方视频数据
+    changeCourse({ dispatch, commit, state }, id) {
+        globalAxios.get(
+            "/admin/course/" + id + "/video",
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: state.idToken
+                }
+            }
+        ).then(
+            response => {
+                console.log(response);
+                var videoArr = [];
+                var videoData = [];
+                videoArr = response.data.data;
+                if (videoArr == null) {
+                    return null
+                } else {
+                    for (var i = 0; i < videoArr.length; i++) {
+                        var video = {};
+                        video.chapterName = videoArr[i].CP_NAME;
+                        video.videoName = videoArr[i].RS_NAME;
+                        video.introduction = videoArr[i].RS_COMMENT;
+                        video.date = dispatch('timestampToTime', videoArr[i].RS_CREATE_TIME)
+                        video.uploadAdmin = videoArr[i].RS_FOUNDER;
+                        video.chapterNum = videoArr[i].CP_NUMBER;
+                        video.videoUrl = videoArr[i].RS_URL;
+                        videoData.push(video);
+                    }
+                    commit(TYPES.changeVideo, videoData);
+                    commit(TYPES.changeVideoCurrentList, 0)
+                    console.log(videoData);
+                }
+            },
+            error => {
+                // this.$router.push({path:'/404'})
+                console.log(error);
+            }
+        );
+    },
+    //上传视频页面 获取章节数据
+    getCourseChapter({ dispatch, state }, courseId) {
+        globalAxios.get(
+            "/admin/course/" + courseId + "/chapters",
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: state.idToken
+                }
+            }
+        ).then(
+            response => {
+                console.log(response);
+                var chapterArr = [];
+                var chapterData = [];
+                chapterArr = response.data.data;
+                for (var i = 0; i < chapterArr.length; i++) {
+                    var chapter = {};
+                    chapter.name = chapterArr[i].CP_NAME;
+                    chapter.id = chapterArr[i].CP_ID;
+                    chapterData.push(chapter);
+                }
+                state.inputData.chapter.list = chapterData;
+            },
+            error => {
                 console.log(error);
             }
         );

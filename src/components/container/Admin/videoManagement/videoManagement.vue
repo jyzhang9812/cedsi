@@ -1,45 +1,24 @@
 <template>
   <div class="body">
-    <div
-      class="modal fade"
-      id="myVideo"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="myModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="myVideo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content modal-width">
           <div class="modal-header">
             <span class="video-name">{{videoName}}</span>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-hidden="true"
-              @click="deletevideo"
-            >&times;</button>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+              @click="deletevideo">&times;</button>
           </div>
           <div class="modal-body modal-padding">
-            <Media
-              :autoplay="false"
-              :kind="'video'"
-              :controls="true"
-              :src="videosrc"
-              style="height: 400px;width: 700px;"
-              @pause="handle()"
-            ></Media>
+            <Media :autoplay="false" :kind="'video'" :controls="true" :src="videosrc"
+              style="height: 400px;width: 700px;" @pause="handle()"></Media>
           </div>
         </div>
       </div>
     </div>
     <div class="course-nav">
-      <button
-        v-for="(course,index) in courseList"
-        :key="index"
+      <button v-for="(course,index) in courseList" :key="index"
         :class="course.isActive==true?'course-active-btn course-btn':'course-inactive-btn course-btn'"
-        @click="changeCourse(index)"
-      >{{course.name,}}</button>
+        @click="changeCourse(index)">{{course.name}}</button>
     </div>
     <div>
       <button class="btn btn-clear" @click="gotoUpload">上传视频</button>
@@ -61,7 +40,8 @@
             <td>{{video.date}}</td>
             <td>{{video.uploadAdmin}}</td>
             <td>
-              <span class="blue" @click="previewVideo(seq)" data-toggle="modal" data-target="#myVideo">预览</span>&nbsp;&nbsp;
+              <span class="blue" @click="previewVideo(seq)" data-toggle="modal"
+                data-target="#myVideo">预览</span>&nbsp;&nbsp;
               <span class="blue">编辑</span>&nbsp;&nbsp;
               <span class="red">删除</span>
             </td>
@@ -76,325 +56,217 @@
 </template>
 
 <script>
-import Pagination from "../utils/pagination";
-import globalAxios from "axios";
-import fs from "fs";
-import AWS from "aws-sdk";
-import Media from "@dongido/vue-viaudio";
+  import Pagination from "../utils/pagination";
+  import Media from "@dongido/vue-viaudio";
+  import { mapState } from 'vuex'
 
-export default {
-  name: "videos",
-  components: { Pagination },
-  data() {
-    return {
-      courseList: [],
-      file: null,
-      limit: 10,
-      fileName: "",
-      videoData: [],
-      tableTitle: [
-        "序号",
-        "视频名称",
-        "章节名称",
-        "操作说明",
-        "上传时间",
-        "创建人",
-        "操作"
-      ],
-      currentList: [],
-      error: true,
-      index: -1,
-      videosrc: "",
-      videoName:"",
-    };
-  },
-  methods: {
-    previewVideo(seq) {
-      this.index = this.currentPage * this.limit + seq;
-      this.videosrc = this.videoData[this.index].videoUrl;
-      this.videoName=this.videoData[this.index].videoName;
-      //window.location.href = this.videosrc;
+  export default {
+    name: "videos",
+    components: { Pagination },
+
+    data() {
+      return {
+        tableTitle: [
+          "序号",
+          "视频名称",
+          "章节名称",
+          "操作说明",
+          "上传时间",
+          "创建人",
+          "操作"
+        ],
+        error: true,
+        index: -1,
+        videosrc: "",
+        videoName: "",
+        currentPage: 0,
+      };
     },
-    handle() {
-      console.log("Video paused!, playing in 2 sec...");
-      setTimeout(() => {
-        this.$refs.coursevideo.play();
-      }, 2000);
-    },
-    deletevideo() {
-      this.videosrc = "";
-    },
-    changeTablePages(value) {
-      var currentPage = value / this.limit;
-      this.currentPage = currentPage;
-      this.currentList = this.videoData.slice(value, value + this.limit);
-    },
-    gotoUpload() {
-      var flag = 0;
-      for (var i = 0; i < this.courseList.length; i++) {
-        if (this.courseList[i].isActive == true) {
-          flag = i;
+
+    methods: {
+      previewVideo(seq) {
+        this.index = this.currentPage * this.limit + seq;
+        this.videosrc = this.videoData[this.index].videoUrl;
+        this.videoName = this.videoData[this.index].videoName;
+        //window.location.href = this.videosrc;
+      },
+      handle() {
+        console.log("Video paused!, playing in 2 sec...");
+        setTimeout(() => {
+          this.$refs.coursevideo.play();
+        }, 2000);
+      },
+      //删除视频
+      deletevideo() {
+        this.videosrc = "";
+      },
+      //换页
+      changeTablePages(value) {
+        var currentPage = value / this.limit;
+        this.currentPage = currentPage;
+        this.$store.commit("changeVideoCurrentList", this.currentPage * this.limit)
+      },
+      gotoUpload() {
+        var flag = 0;
+        for (var i = 0; i < this.courseList.length; i++) {
+          if (this.courseList[i].isActive == true) {
+            flag = i;
+          }
         }
-      }
-      this.$router.push({
-        path:
-          "/Admin/videoManagement/" + this.courseList[flag].id + "/uploadVideo"
-      });
+        console.log(this.courseList[flag].id)
+        this.$router.push({
+          path:
+            "/Admin/videoManagement/" + this.courseList[flag].id + "/uploadVideo"
+        });
+      },
+      changeCourse(index) {
+        console.log(index);
+        for (var i = 0; i < this.courseList.length; i++) {
+          this.courseList[i].isActive = false;
+        }
+        this.courseList[index].isActive = true;
+        this.$store.dispatch('changeCourse', this.courseList[index].id)
+        if (this.$store.dispatch('changeCourse', this.courseList[index].id)==null) {
+          this.error = true;
+          this.errorMsg = "暂时没有数据";
+        }
+      },
     },
-    changeCourse(index) {
-      console.log(index);
-      for (var i = 0; i < this.courseList.length; i++) {
-        this.courseList[i].isActive = false;
-      }
-      this.courseList[index].isActive = true;
-      var token = window.localStorage.getItem("idToken");
-      globalAxios
-        .get(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
-            this.courseList[index].id +
-            "/video",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token
-            }
-          }
-        )
-        .then(
-          response => {
-            console.log(response);
-            var videoArr = [];
-            var videoData = [];
-            videoArr = response.data.data;
-            if (videoArr == null) {
-              this.error = true;
-              this.errorMsg = "暂时没有数据";
-            } else {
-              for (var i = 0; i < videoArr.length; i++) {
-                var video = {};
-                video.chapterName = videoArr[i].CP_NAME;
-                video.videoName = videoArr[i].RS_NAME;
-                video.introduction = videoArr[i].RS_COMMENT;
-                video.date = this.timestampToTime(videoArr[i].RS_CREATE_TIME);
-                video.uploadAdmin = videoArr[i].RS_FOUNDER;
-                video.chapterNum = videoArr[i].CP_NUMBER;
-                video.videoUrl = videoArr[i].RS_URL;
-                videoData.push(video);
-              }
-              this.videoData = videoData;
-              console.log(videoData);
-              this.changeTablePages(0);
-            }
-          },
-          error => {
-            // this.$router.push({path:'/404'})
-            console.log(error);
-          }
-        );
+
+    created() {
+      this.$store.dispatch('getCourseList')
     },
-    timestampToTime(timestamp) {
-      timestamp = String(timestamp);
-      timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
-      var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
-      var Y = date.getFullYear() + "-";
-      var M =(date.getMonth() + 1 < 10? "0" + (date.getMonth() + 1): date.getMonth() + 1) + "-";
-      var D = date.getDate() + " ";
-      var h = date.getHours() + ":";
-      var m = date.getMinutes() + ":";
-      var s = date.getSeconds();
-      return Y + M + D + h + m + s;
+
+    computed: {
+      ...mapState({
+        courseList: state => state.adminCourseList,
+        videoData: state => state.videoData,
+        currentList: state => state.videoCurrentList,
+        limit: state => state.limit,
+      })
     }
-  },
-  mounted() {
-    this.changeTablePages(0);
-  },
-  created() {
-    var token = window.localStorage.getItem("idToken");
-    globalAxios
-      .get(
-        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token
-          }
-        }
-      )
-      .then(
-        response => {
-          console.log(response.data);
-          var courseArr = [];
-          var courseList = [];
-          courseArr = response.data;
-          for (var i = 0; i < courseArr.length; i++) {
-            var course = {};
-            course.name = courseArr[i].COURSE_NAME;
-            course.id = courseArr[i].ID;
-            if (i == 0) course.isActive = true;
-            else course.isActive = false;
-            courseList.push(course);
-          }
-          this.courseList = courseList;
-          //console.log(this.courseList);
-          globalAxios
-            .get(
-              "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
-                this.courseList[0].id +
-                "/video",
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: token
-                }
-              }
-            )
-            .then(
-              response => {
-                console.log(response);
-                var videoArr = [];
-                var videoData = [];
-                videoArr = response.data.data;
-                for (var i = 0; i < videoArr.length; i++) {
-                  var video = {};
-                  video.chapterName = videoArr[i].CP_NAME;
-                  video.videoName = videoArr[i].RS_NAME;
-                  video.introduction = videoArr[i].RS_COMMENT;
-                  video.date = this.timestampToTime(videoArr[i].RS_CREATE_TIME);
-                  video.uploadAdmin = videoArr[i].RS_FOUNDER;
-                  video.chapterNum = videoArr[i].CP_NUMBER;
-                  video.videoUrl = videoArr[i].RS_URL;
-                  videoData.push(video);
-                }
-                this.videoData = videoData;
-                console.log(videoData);
-                this.changeTablePages(0);
-              },
-              error => {
-                // this.$router.push({path:'/404'})
-                console.log(error);
-              }
-            );
-        },
-        error => {
-          // this.$router.push({path:'/404'})
-          console.log(error);
-        }
-      );
   }
-};
 </script>
 
 <style scoped>
-.body {
-  font-size: 12px;
-  color: #606266;
-  width: 98%;
-  margin: 0 auto;
-}
-.course-nav {
-  width: 100%;
-  text-align: center;
-}
-.course-btn {
-  font-size: 14px;
-  margin-right: 10px;
-  height: 40px;
-  line-height: 35px;
-  border-radius: 30px;
-  color: #fff;
-  margin-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-}
+  .body {
+    font-size: 12px;
+    color: #606266;
+    width: 98%;
+    margin: 0 auto;
+  }
 
-.course-btn:focus {
-  outline: none;
-}
-.course-inactive-btn {
-  background-color: #eee;
-  border: 1px solid #eee;
-  color: #666;
-}
-.course-inactive-btn:hover {
-  background-color: rgba(238, 238, 238, 0.575);
-  border: 1px solid rgba(238, 238, 238, 0.575);
-  color: #666;
-}
-.course-active-btn {
-  background-color: #409eff;
-  border: 1px solid #409eff;
-}
-.course-active-btn:hover {
-  background-color: #40a0ffcc;
-  border: 1px solid #40a0ffcc;
-}
+  .course-nav {
+    width: 100%;
+    text-align: center;
+  }
 
-.title {
-  text-align: center;
-}
+  .course-btn {
+    font-size: 14px;
+    margin-right: 10px;
+    height: 40px;
+    line-height: 35px;
+    border-radius: 30px;
+    color: #fff;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 
-.content td {
-  line-height: 23px;
-}
+  .course-btn:focus {
+    outline: none;
+  }
 
-table tr {
-  text-align: center !important;
-}
+  .course-inactive-btn {
+    background-color: #eee;
+    border: 1px solid #eee;
+    color: #666;
+  }
 
-table td {
-  vertical-align: middle !important;
-}
+  .course-inactive-btn:hover {
+    background-color: rgba(238, 238, 238, 0.575);
+    border: 1px solid rgba(238, 238, 238, 0.575);
+    color: #666;
+  }
 
-.outside {
-  margin-top: 20px;
-}
+  .course-active-btn {
+    background-color: #409eff;
+    border: 1px solid #409eff;
+  }
 
-.operation {
-  color: #409eff;
-  margin: 0 3px;
-  cursor: pointer;
-}
+  .course-active-btn:hover {
+    background-color: #40a0ffcc;
+    border: 1px solid #40a0ffcc;
+  }
 
-.btn {
-  background: #409eff;
-  color: #fff;
-  height: 30px;
-  border-radius: 5px;
-  font-size: 12px;
-  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-}
+  .title {
+    text-align: center;
+  }
 
-.btn:focus {
-  outline: none;
-}
+  .content td {
+    line-height: 23px;
+  }
 
-.btn:hover {
-  background: #66b1ff;
-}
+  table tr {
+    text-align: center !important;
+  }
 
-.btn-search {
-  width: 54px;
-}
+  table td {
+    vertical-align: middle !important;
+  }
 
-.btn-clear {
-  width: 88px;
-}
+  .outside {
+    margin-top: 20px;
+  }
 
-.blue {
-  cursor: pointer;
-  color: #409eff;
-}
+  .operation {
+    color: #409eff;
+    margin: 0 3px;
+    cursor: pointer;
+  }
 
-.red {
-  cursor: pointer;
-  color: #ff6947;
-}
-/*视频模态框*/
-.modal-width{
-  width: 700px;
-  height: 400px;
-}
-.modal-padding{
-  padding: 0;
-}
+  .btn {
+    background: #409eff;
+    color: #fff;
+    height: 30px;
+    border-radius: 5px;
+    font-size: 12px;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+
+  .btn:focus {
+    outline: none;
+  }
+
+  .btn:hover {
+    background: #66b1ff;
+  }
+
+  .btn-search {
+    width: 54px;
+  }
+
+  .btn-clear {
+    width: 88px;
+  }
+
+  .blue {
+    cursor: pointer;
+    color: #409eff;
+  }
+
+  .red {
+    cursor: pointer;
+    color: #ff6947;
+  }
+
+  /*视频模态框*/
+  .modal-width {
+    width: 700px;
+    height: 400px;
+  }
+
+  .modal-padding {
+    padding: 0;
+  }
 </style>

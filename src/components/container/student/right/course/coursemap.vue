@@ -99,7 +99,7 @@
         this.videosrc = "";
       },
       gotoCourseList() {
-        this.$router.push({ path: "/dashboard" });
+        this.$router.push({ path: "/dashboard/class" });
       }
     },
     created: function () {
