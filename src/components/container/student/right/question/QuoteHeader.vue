@@ -21,7 +21,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .quote_header{
         margin: 0;
         padding: 20px 0 10px 50px;

@@ -181,7 +181,7 @@
   };
 </script>
 
-<style>
+<style scoped>
 #upload-video {
   width: 98%;
   margin: 0 auto;

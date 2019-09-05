@@ -66,7 +66,7 @@ export default {
 
 };
 </script>
-<style>
+<style scoped>
 #payment {
   background-color: #f8fafc;
   min-width: 1200px;

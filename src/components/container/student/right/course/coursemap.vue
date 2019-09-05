@@ -118,7 +118,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   .coursemap {
     background: #2fd0ff;
   }

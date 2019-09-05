@@ -99,7 +99,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   .course-management {
     width: 98%;
     margin: 0 auto;

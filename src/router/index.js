@@ -204,6 +204,11 @@ const checkStudent = resolve => {
     resolve(require('../components/container/eduAdmin/activity/checkStudent.vue'));
   });
 };
+const addActivity = resolve => {
+  require.ensure(['../components/container/eduAdmin/activity/addActivity.vue'], () => {
+    resolve(require('../components/container/eduAdmin/activity/addActivity.vue'));
+  });
+};
 import { resolve } from 'url';
 //以下是超级管理员角色
 const superAdmin = resolve => {
@@ -220,11 +225,6 @@ const adminManagement = resolve => {
 const Admin = resolve => {
   require.ensure(['../components/container/Admin/adminSidebar.vue'], () => {
     resolve(require('../components/container/Admin/adminSidebar.vue'));
-  });
-};
-const eduAdminManagement = resolve => {
-  require.ensure(['../components/container/Admin/eduAdminManagement/eduAdminManagement.vue'], () => {
-    resolve(require('../components/container/Admin/eduAdminManagement/eduAdminManagement.vue'));
   });
 };
 const videoManagement = resolve => {
@@ -553,6 +553,15 @@ export default new Router({
               next('/signin')
             }
           }, component: eduActivity
+        },
+        {
+          path: '/eduAdmin/activity/addActivity', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: addActivity
         },
         {
           path: '/eduAdmin/activity/checkStudent', beforeEnter(to, from, next) {

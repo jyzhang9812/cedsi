@@ -1,0 +1,373 @@
+<template>
+  <div id="add-activity">
+    <div class="upload">
+      <span class="upload-title">活动名称:</span>
+      <input class="upload-input" placeholder="请输入活动名称" v-model="activityName" />
+    </div>
+    <div class="upload">
+      <span class="upload-title">活动地点:</span>
+      <input class="upload-input" placeholder="请输入活动地点" v-model="activityAddress" />
+    </div>
+    <div class="upload">
+      <span class="upload-title">活动时间:</span>
+      <date-picker
+        class="activity-time"
+        tips="选择开始时间"
+        id="datePicker"
+        :date="startDate"
+        @changeDate="changeDate"
+      ></date-picker>
+    </div>
+    <div class="upload">
+      <span class="upload-title">活动负责人:</span>
+      <select-input
+        class="upload-select"
+        id="activity"
+        tips="请选择活动负责人"
+        :option="inputData.activity.option.name"
+        @option="changeOption"
+        :drop-down-list="inputData.activity.list"
+      ></select-input>
+    </div>
+    <div class="upload">
+      <span class="upload-title">上传活动封面:</span>
+      <div class="upload-cover-btn">
+        上传文件
+        <input type="file" @change="getCoverFile($event)" style="opacity: 0" />
+      </div>
+    </div>
+    <div class="upload upload-height">
+      <span class="upload-title">预览:</span>
+      <div class="upload-cover-img">
+        <img id="headimage" :src="coverImage" class="cover-image" alt v-show="coverImage!==''" />
+      </div>
+    </div>
+    <div class="upload upload-height2">
+      <span class="upload-title" style="display:block">活动描述:</span>
+      <div class="item">
+        <div ref="editor" class="editor"></div>
+      </div>
+    </div>
+    <div class="upload">
+      <span class="upload-title">上传活动图片:</span>
+      <div class="upload-cover-btn upload-width">
+        上传图片 (最多上传三张)
+        <input
+          type="file"
+          @change="getActivityImg($event)"
+          style="opacity: 0"
+          multiple="multiple"
+        />
+      </div>
+    </div>
+    <div class="upload upload-height">
+      <span class="upload-title">预览:</span>
+      <div class="upload-cover-img">
+        <img
+          id="headimage"
+          :src="coverImages[0]"
+          class="cover-image"
+          alt
+          v-show="coverImages[0]!==''"
+        />
+      </div>
+      <div class="upload-cover-img">
+        <img
+          id="headimage"
+          :src="coverImages[1]"
+          class="cover-image"
+          alt
+          v-show="coverImages[1]!==''"
+        />
+      </div>
+      <div class="upload-cover-img">
+        <img
+          id="headimage"
+          :src="coverImages[2]"
+          class="cover-image"
+          alt
+          v-show="coverImages[2]!==''"
+        />
+      </div>
+    </div>
+    <div class="upload-footer">
+      <button class="btn upload-btn" @click="submit">确定</button>
+      <button class="btn upload-btn">取消</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import DatePicker from "../utils/datePicker";
+import SelectInput from "../../Admin/utils/selectInput";
+import AWS from "aws-sdk";
+import globalAxios from "axios";
+import E from "wangeditor";
+
+export default {
+  name: "addactivity",
+  components: { SelectInput, DatePicker },
+  data() {
+    return {
+      startDate: "",
+      inputData: {
+        activity: {
+          option: "",
+          list: [
+            {
+              name: "A老师",
+              id: "0"
+            },
+            {
+              name: "B老师",
+              id: "1"
+            }
+          ]
+        }
+      },
+      activityName: "",
+      activityPrin: "",
+      coverImage: "",
+      fileName: "",
+      activityAddress: "",
+      activityIntro: "",
+      cover: [],
+      coverImages: [],
+      coverFile: []
+    };
+  },
+  methods: {
+    changeDate(value) {
+      this.startDate = value;
+    },
+    changeOption(item, id) {
+      Object.keys(this.inputData).forEach(res => {
+        if (res === id) {
+          this.inputData[res].option = item;
+        }
+      });
+    },
+    getCoverFile(event) {
+      this.licenseFile = event.target.files[0];
+      console.log(this.licenseFile);
+      this.licenseFileName = this.licenseFile.name;
+      this.licenseType = this.licenseFile.type.split("/")[1];
+      this.licenseSize = this.licenseFile.size;
+      var reader = new FileReader();
+      var that = this;
+      reader.readAsDataURL(this.licenseFile);
+      reader.onload = function(e) {
+        that.coverImage = this.result;
+      };
+    },
+    getActivityImg(event) {
+      for (var i = 0; i < event.target.files.length; i++) {
+        let that = this;
+        let file = event.target.files[i];
+        let reader = new FileReader();
+        // 调用reader.readAsDataURL()方法，把图片转成base64
+        reader.readAsDataURL(file);
+        // 监听reader对象的onload事件，当图片加载完成时，把base64编码賦值给预览图片
+        reader.onload = function() {
+          file.src = this.result;
+          // console.log(this); 这里的this是FileReader对象
+          // console.log(file)
+          // 再把file对象添加到img数组
+          console.log(file.src);
+          that.coverImages.push(file.src);
+        };
+      }
+    },
+    submit() {
+      console.log(this.editor.txt.text());
+    }
+  },
+  mounted() {
+    this.editor = new E(this.$refs.editor);
+    let editor = this.editor;
+    editor.customConfig.uploadImgShowBase64 = true;
+    editor.customConfig.onchange = html => {
+      this.editorContent = html;
+    };
+    (editor.customConfig.menus = [
+      "head", // 标题
+      "bold", // 粗体
+      "fontSize", // 字号
+      "fontName", // 字体
+      "italic", // 斜体
+      "underline", // 下划线
+      "strikeThrough", // 删除线
+      "foreColor", // 文字颜色
+      "backColor", // 背景颜色
+      "link", // 插入链接
+      "list", // 列表
+      "justify", // 对齐方式
+      "quote", // 引用
+      "emoticon", // 表情
+      "image", // 插入图片
+      "table", // 表格
+      "video", // 插入视频
+      "code", // 插入代码
+      "undo", // 撤销
+      "redo" // 重复
+    ]),
+      editor.create();
+    editor.txt.html("<p></p>");
+  }
+};
+</script>
+
+<style>
+#add-activity {
+  width: 98%;
+  margin: 0 auto;
+  padding-top: 30px;
+}
+.upload {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 20px;
+}
+#add-activity .upload-title {
+  color: #606266;
+  display: block;
+  text-align: right;
+  width: 100px;
+  height: 40px;
+  float: left;
+  line-height: 40px;
+}
+.upload-input {
+  width: 300px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #409eff;
+  margin-left: 10px;
+  padding-left: 10px;
+}
+.upload-input:hover {
+  border: 1px solid #66b1ff;
+}
+.upload-input:focus {
+  outline: none;
+}
+.activity-time {
+  margin-left: 10px !important;
+  height: 40px !important;
+  width: 300px !important;
+}
+#datePicker {
+  width: 200px !important;
+}
+.upload-textarea {
+  border: 1px solid #409eff;
+  border-radius: 5px;
+  margin-left: 10px;
+  padding: 10px;
+}
+.upload-height {
+  height: 190px;
+}
+.upload-textarea:hover {
+  border: 1px solid #66b1ff;
+}
+.upload-textarea:focus {
+  outline: none;
+}
+.outside {
+  width: 300px !important;
+  height: 40px !important;
+  margin-left: 10px !important;
+}
+.inputBox,
+.inputbox {
+  height: 35px !important;
+  font-size: 14px !important;
+  width: 230px !important;
+}
+
+.dropdown-menu {
+  left: 100px !important;
+}
+.upload-footer {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.upload-btn {
+  background-color: #409eff;
+  color: #fff;
+  margin-left: 10px;
+}
+.upload-btn:hover {
+  color: #fff;
+}
+.upload-btn:focus {
+  outline: none;
+  color: #fff;
+}
+/**/
+.address-input select {
+  margin-left: 10px;
+  font-size: 14px;
+}
+.upload-cover-btn {
+  margin-left: 10px;
+  width: 80px;
+  height: 35px;
+  display: inline-block;
+  background-color: #409eff;
+  color: #fff;
+  border-radius: 5px;
+  line-height: 35px;
+  text-align: center;
+}
+input[type="file"] {
+  width: 80px;
+  height: 35px;
+  position: relative;
+  top: -35px;
+}
+.upload-cover-img {
+  display: inline-block;
+  border: 1px dashed #dcdfe6;
+  width: 290px;
+  height: 150px;
+  margin-left: 10px;
+  border-radius: 5px;
+  background-color: #f5f7fa;
+}
+.cover-image {
+  width: 100%;
+  height: 100%;
+}
+.upload-height {
+  height: 190px;
+}
+.editor {
+  width: 800px;
+  position: relative;
+}
+.w-e-toolbar {
+  position: relative;
+  left: 10px;
+}
+.w-e-text-container {
+  position: relative;
+  left: 110px;
+  width: 700px;
+}
+.w-e-text {
+  position: relative;
+  top: -10px;
+  background-color: #fff;
+}
+.upload-height2 {
+  height: 350px;
+}
+.upload-width {
+  width: 200px;
+}
+</style>
+
+
