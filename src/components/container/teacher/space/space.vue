@@ -1,5 +1,5 @@
 <template>
-  <div class="personalcenter">
+  <div id="space">
     <div class="personalcenterdetail">
       <div class="word">
         <span>个人中心</span>
@@ -111,19 +111,19 @@
     font-family: Helvetica, Arial, sans-serif;
   }
 
-  .personalcenterdetail {
+  #space .personalcenterdetail {
     font-family: Helvetica, Arial, sans-serif;
     display: block;
     width: 100%;
     flex: 1;
   }
 
-  .word span {
+  #space .word span {
     margin-bottom: 5px;
     margin-left: 6px;
   }
 
-  .personalcontent {
+  #space .personalcontent {
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
     border: 1px solid #ebeef5;
     background-color: #fff;
@@ -132,24 +132,24 @@
     margin: 15px 0;
   }
 
-  .contentdetail {
+  #space .contentdetail {
     padding: 20px;
     margin-bottom: 12px;
   }
 
-  .personal {
+  #space .personal {
     width: 1000px;
     margin: 10px 10px;
   }
 
-  .formdetail {
+  #space .formdetail {
     margin-left: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
   }
 
   /* 清除浮动 */
-  .formdetail::after {
+  #space .formdetail::after {
     content: ".";
     display: block;
     height: 0;
@@ -157,7 +157,7 @@
     visibility: hidden;
   }
 
-  .formlabel {
+  #space .formlabel {
     width: 80px;
     font-size: 12px;
     line-height: 15px;
@@ -167,7 +167,7 @@
     float: left;
   }
 
-  .input {
+  #space .input {
     width: 500px;
     line-height: 15px;
     color: #000;
@@ -177,28 +177,28 @@
     border: 1px solid #67c23a;
   }
 
-  .disabledinput {
+  #space .disabledinput {
     border-color: #e4e7ed;
     background-color: #f5f7fa;
     color: #c0c4cc;
   }
 
-  .inputfocus:focus {
+  #space .inputfocus:focus {
     border-color: #f56c6c;
   }
 
-  .image {
+  #space .image {
     width: 220px;
     height: 220px;
   }
 
-  .headsculpture {
+  #space .headsculpture {
     width: 500px;
     margin-left: 110px;
     margin-top: 10px;
   }
 
-  .remark {
+  #space .remark {
     width: 500px;
     height: 186px;
     padding: 5px 15px;
@@ -208,7 +208,7 @@
     border: 1px solid #409eff;
   }
 
-  .buttonsave {
+  #space .buttonsave {
     margin-left: 260px;
     padding: 9px 15px;
     font-size: 12px;

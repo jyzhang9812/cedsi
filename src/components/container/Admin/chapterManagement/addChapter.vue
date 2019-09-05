@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-video">
+  <div id="addChapter">
     <div class="upload">
       <span class="upload-title">章节名称:</span>
       <input class="upload-input" placeholder="请输入章节名称" v-model="chapterName" />
@@ -77,17 +77,17 @@ export default {
 </script>
 
 <style scoped>
-.upload-video {
+#addChapter{
   width: 98%;
   margin: 0 auto;
   padding-top: 30px;
 }
-.upload {
+#addChapter .upload {
   width: 100%;
   height: 50px;
   margin-bottom: 20px;
 }
-.upload-title {
+#addChapter .upload-title {
   color: #606266;
   display: block;
   text-align: right;
@@ -96,7 +96,7 @@ export default {
   float: left;
   line-height: 40px;
 }
-.upload-input {
+#addChapter .upload-input {
   width: 300px;
   height: 40px;
   border-radius: 5px;
@@ -104,53 +104,53 @@ export default {
   margin-left: 10px;
   padding-left: 10px;
 }
-.upload-input:hover {
+#addChapter .upload-input:hover {
   border: 1px solid #66b1ff;
 }
-.upload-input:focus {
+#addChapter .upload-input:focus {
   outline: none;
 }
-.upload-textarea {
+#addChapter .upload-textarea {
   border: 1px solid #409eff;
   border-radius: 5px;
   margin-left: 10px;
   padding: 10px;
 }
-.upload-height {
+#addChapter .upload-height {
   height: 190px;
 }
-.upload-textarea:hover {
+#addChapter .upload-textarea:hover {
   border: 1px solid #66b1ff;
 }
-.upload-textarea:focus {
+#addChapter .upload-textarea:focus {
   outline: none;
 }
-.outside[data-v-5567b275] {
+#addChapter .outside[data-v-5567b275] {
   width: 300px !important;
   height: 40px !important;
   margin-left: 10px !important;
 }
-.inputBox[data-v-5567b275] {
+#addChapter .inputBox[data-v-5567b275] {
   height: 35px !important;
   font-size: 14px !important;
   width: 230px !important;
 }
-.dropdown-menu {
+#addChapter .dropdown-menu {
   left: 100px !important;
 }
-.upload-footer {
+#addChapter .upload-footer {
   width: 100%;
   text-align: center;
 }
-.upload-btn {
+#addChapter .upload-btn {
   background-color: #409eff;
   color: #fff;
   margin-left: 10px;
 }
-.upload-btn:hover {
+#addChapter .upload-btn:hover {
   color: #fff;
 }
-.upload-btn:focus {
+#addChapter .upload-btn:focus {
   outline: none;
   color: #fff;
 }

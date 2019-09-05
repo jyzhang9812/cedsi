@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div id="videos">
     <span>课程视频管理</span>
     <div class="outside">
       <table class="table table-hover">
@@ -109,32 +109,32 @@
 </script>
 
 <style scoped>
-  .body {
+  #videos {
     font-size: 12px;
     color: #606266;
   }
 
-  .title {
+  #videos .title {
     text-align: center;
   }
 
-  .content td {
+  #videos .content td {
     line-height: 23px;
   }
 
-  table tr {
+  #videos table tr {
     text-align: center !important;
   }
 
-  table td {
+  #videos table td {
     vertical-align: middle !important;
   }
 
-  .outside {
+  #videos .outside {
     margin-top: 20px;
   }
 
-  .operation {
+  #videos .operation {
     color: #409eff;
     margin: 0 3px;
     cursor: pointer;

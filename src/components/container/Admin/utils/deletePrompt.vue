@@ -1,6 +1,6 @@
 <template>
   <!-- Modal -->
-  <div class="modal fade" :id="id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div id="deletePrompt" :id="id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -42,46 +42,46 @@
 </script>
 
 <style scoped>
-  .button-footer {
+  #datePicker .button-footer {
     width: 56px;
     height: 32px;
     border-radius: 5px;
   }
 
-  .button-confirm {
+  #datePicker .button-confirm {
     background-color: #409EFF;
     color: #FFF;
     border: 1px solid #409EFF;
   }
 
-  .button-confirm:focus,
-  .button-confirm:hover {
+  #datePicker .button-confirm:focus,
+  #datePicker .button-confirm:hover {
     outline: none;
     background-color: #66B1FF;
   }
 
-  .button-cancel {
+  #datePicker .button-cancel {
     background-color: #FFF;
     color: #606266;
     border: 1px solid #DCDFE6;
     margin-right: 10px;
   }
 
-  .button-cancel:focus,
-  .button-cancel:hover {
+  #datePicker .button-cancel:focus,
+  #datePicker .button-cancel:hover {
     outline: none;
     color: #409eff;
     background-color: #ecf5ff;
   }
 
-  .modal-body {
+  #datePicker .modal-body {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .glyphicon,
-  .glyphicon-exclamation-sign {
+  #datePicker .glyphicon,
+  #datePicker .glyphicon-exclamation-sign {
     font-size: 25px;
     color: #E6A23C;
     margin-right: 10px;

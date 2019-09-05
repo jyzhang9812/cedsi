@@ -6,7 +6,7 @@
  * @Description: teacher角色作品评论页面
  -->
 <template>
-  <div class="body">
+  <div id="topiccomment">
     <p>作品评论</p>
     <div class="option">
       <input type="text" class="form-control" id="keywords" placeholder="请输入评论关键词或作者" v-model="inputData.keywords">
@@ -171,7 +171,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .body {
+  #topiccomment  {
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
@@ -181,57 +181,57 @@
     color: #606266;
   }
 
-  .option {
+  #topiccomment .option {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
   }
 
-  .option input {
+  #topiccomment .option input {
     width: 220px;
     height: 32px;
   }
 
-  .blue {
+  #topiccomment .blue {
     color: #409EFF;
   }
 
-  .red {
+  #topiccomment .red {
 
     color: #FF6947;
 
   }
 
-  .filter {
+  #topiccomment .filter {
     margin-bottom: 30px;
   }
 
-  .form-control {
+  #topiccomment .form-control {
     padding: 0px 30px 0 15px;
     font-size: 12px;
     /* box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04) */
     margin-right: 5px;
   }
 
-  .panels {
+  #topiccomment .panels {
     text-align: center;
   }
 
-  .panels tr {
+  #topiccomment .panels tr {
     height: 40px;
     text-align: center;
   }
 
-  .panels th {
+  #topiccomment .panels th {
     text-align: center;
   }
 
-  table {
+  #topiccomment table {
     border: #eeeeee;
   }
 
-  .btn-my {
+  #topiccomment .btn-my {
     margin-right: 8px;
     height: 32px;
     border-radius: 4px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="outside">
+  <div id="choiceness">
     <span>精选作品</span>
     <div class="tab-bar">
       <span v-for="(title, index) in tabBarTitle" :key="index" @click="tabBarChange(title)">{{title}}
@@ -196,64 +196,64 @@
 </script>
 
 <style scoped>
-  .outside {
+  #choiceness {
     color: #606266;
     font-size: 12px;
   }
 
-  .blue {
+  #choiceness .blue {
     color: #409EFF;
     cursor: pointer;
   }
 
-  .red {
+  #choiceness .red {
     color: #FF6947;
     cursor: pointer;
   }
 
-  .title {
+  #choiceness .title {
     text-align: center;
   }
 
-  .content td {
+  #choiceness .content td {
     line-height: 30px;
   }
 
-  .panels {
+  #choiceness .panels {
     margin-top: 20px;
     font-size: 12px;
     color: #606266;
   }
 
-  .panels tr {
+  #choiceness .panels tr {
     height: 40px;
   }
 
-  table tr {
+  #choicenesstable tr {
     text-align: center !important;
   }
 
-  table td {
+  #choicenesstable td {
     vertical-align: middle !important;
   }
 
-  .tab-bar {
+  #choiceness .tab-bar {
     margin-top: 20px;
     font-size: 14px;
     color: #303133;
     display: flex;
   }
 
-  .tab-bar span {
+  #choiceness .tab-bar span {
     margin-right: 30px;
   }
 
-  .tab-bar span:hover {
+  #choiceness .tab-bar span:hover {
     color: #409eff;
     cursor: pointer;
   }
 
-  .divider {
+  #choiceness .divider {
     margin-top: 15px;
     display: block;
     height: 2px;
@@ -261,17 +261,17 @@
     background: #e4e7ed;
   }
 
-  .blue-bar {
+  #choiceness .blue-bar {
     background: #409eff;
     height: 100%;
     transition: all .2s;
   }
 
-  .uploadWorks {
+  #choiceness .uploadWorks {
     margin-top: 15px;
   }
 
-  .uploadWorks button {
+  #choiceness .uploadWorks button {
     padding: 0 15px;
     border: none;
     background: #409eff;
@@ -282,48 +282,48 @@
     transition: all .3s cubic-bezier(.645, .045, .355, 1);
   }
 
-  .uploadWorks button:focus {
+  #choiceness .uploadWorks button:focus {
     outline: none;
   }
 
-  .uploadWorks button:hover {
+  #choiceness .uploadWorks button:hover {
     background: #66b1FF;
   }
 
-  .btn-uploadWorks {
+  #choiceness .btn-uploadWorks {
     display: flex;
     justify-content: center;
     width: 720px;
   }
 
-  .btn-uploadWorks>button {
+  #choiceness .btn-uploadWorks>button {
     margin: 0 15px;
   }
 
-  .uploadWorks-page {
+  #choiceness .uploadWorks-page {
     display: flex;
     flex-direction: column;
   }
 
-  .uploadWorks-page>div {
+  #choiceness .uploadWorks-page>div {
     display: flex;
     align-items: center;
     width: 720px;
     margin-top: 20px;
   }
 
-  .uploadWorks-page>div>span {
+  #choiceness .uploadWorks-page>div>span {
     width: 100px;
     display: inline-block;
   }
 
-  .uploadWorks-page>div>span::before {
+  #choiceness .uploadWorks-page>div>span::before {
     content: "*";
     color: #FF6947;
     margin-right: 4px;
   }
 
-  .uploadWorks-page>div>input,
+  #choiceness .uploadWorks-page>div>input,
   textarea {
     width: 620px;
     border: 1px solid #409EFF;
@@ -332,20 +332,20 @@
     outline: none;
   }
 
-  .uploadWorks-page>div>input {
+  #choiceness .uploadWorks-page>div>input {
     height: 32px;
   }
 
-  .uploadWorks-page>div>textarea {
+  #choiceness .uploadWorks-page>div>textarea {
     padding-top: 5px;
     height: 64px;
   }
 
-  .uploadWorks-page>div>label {
+  #choiceness .uploadWorks-page>div>label {
     margin-left: 20px;
   }
 
-  .uploadWorks-page>div>label>img {
+  #choiceness .uploadWorks-page>div>label>img {
     width: 150px;
     height: 150px;
     margin: 0 20px;

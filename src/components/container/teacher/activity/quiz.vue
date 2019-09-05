@@ -6,7 +6,7 @@
  * @Description: teacher角色学生提问页面
  -->
 <template>
-  <div class="body">
+  <div id="quiz">
     <p>学生提问</p>
     <div class="filter">
       <div class="option">
@@ -178,7 +178,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .body {
+  #quiz {
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
@@ -188,57 +188,57 @@
     color: #606266;
   }
 
-  .option {
+  #quiz  .option {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
   }
 
-  .option input {
+  #quiz  .option input {
     width: 220px;
     height: 32px;
   }
 
-  .blue {
+  #quiz  .blue {
     color: #409EFF;
   }
 
-  .red {
+  #quiz  .red {
 
     color: #FF6947;
 
   }
 
-  .filter {
+  #quiz  .filter {
     margin-bottom: 30px;
   }
 
-  .form-control {
+  #quiz  .form-control {
     padding: 0px 30px 0 15px;
     font-size: 12px;
     /* box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04) */
     margin-right: 5px;
   }
 
-  .panels {
+  #quiz  .panels {
     text-align: center;
   }
 
-  .panels tr {
+  #quiz  .panels tr {
     height: 40px;
     text-align: center;
   }
 
-  .panels th {
+  #quiz  .panels th {
     text-align: center;
   }
 
-  table {
+  #quiz  table {
     border: #eeeeee;
   }
 
-  .btn-my {
+  #quiz  .btn-my {
     margin-right: 8px;
     height: 32px;
     border-radius: 4px;

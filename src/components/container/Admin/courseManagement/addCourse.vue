@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-video">
+  <div id="addCourse">
     <div class="upload">
       <span class="upload-title">课程名称:</span>
       <input class="upload-input" v-model='name' placeholder="请输入课程名称" />
@@ -120,18 +120,18 @@
     }
   };
 </script>
-<style scoped> 
-.upload-video {
+<style scoped>
+#addCourse{
   width: 98%;
   margin: 0 auto;
   padding-top: 30px;
 }
-.upload {
+#addCourse .upload {
   width: 100%;
   height: 50px;
   margin-bottom: 20px;
 }
-.upload-title {
+#addCourse .upload-title {
   color: #606266;
   display: block;
   text-align: right;
@@ -140,7 +140,7 @@
   float: left;
   line-height: 40px;
 }
-.upload-input {
+#addCourse .upload-input {
   width: 300px;
   height: 40px;
   border-radius: 5px;
@@ -148,57 +148,57 @@
   margin-left: 10px;
   padding-left: 10px;
 }
-.upload-input:hover {
+#addCourse .upload-input:hover {
   border: 1px solid #66b1ff;
 }
-.upload-input:focus {
+#addCourse .upload-input:focus {
   outline: none;
 }
-.upload-textarea {
+#addCourse .upload-textarea {
   border: 1px solid #409eff;
   border-radius: 5px;
   margin-left: 10px;
   padding: 10px;
 }
-.upload-height {
+#addCourse .upload-height {
   height: 190px;
 }
-.upload-textarea:hover {
+#addCourse .upload-textarea:hover {
   border: 1px solid #66b1ff;
 }
-.upload-textarea:focus {
+#addCourse .upload-textarea:focus {
   outline: none;
 }
-.outside[data-v-5567b275]{
+#addCourse .outside[data-v-5567b275]{
   width: 300px !important;
   height: 40px !important;
   margin-left: 10px !important;
 }
-.inputBox[data-v-5567b275]{
+#addCourse .inputBox[data-v-5567b275]{
     height: 35px !important;
     font-size: 14px !important;
     width: 230px !important;
 }
-.dropdown-menu{
+#addCourse .dropdown-menu{
     left: 100px !important;
 }
-.upload-footer{
+#addCourse .upload-footer{
     width: 100%;
     text-align: center
 }
-.upload-btn{
+#addCourse .upload-btn{
     background-color: #409eff;
     color: #fff;
     margin-left: 10px;
 }
-.upload-btn:hover{
+#addCourse .upload-btn:hover{
     color: #fff
 }
-.upload-btn:focus{
+#addCourse .upload-btn:focus{
     outline:none;
     color: #fff
 }
-.upload-cover-btn{
+#addCourse .upload-cover-btn{
   margin-left: 10px;
   width: 80px;
   height: 35px;
@@ -209,13 +209,13 @@
   line-height: 35px;
   text-align: center
 }
-input[type=file]{
+#addCourse input[type=file]{
   width: 80px;
   height: 35px;
   position: relative;
   top:-35px;
 }
-.upload-cover-img{
+#addCourse .upload-cover-img{
   display: inline-block;
   border: 1px dashed #dcdfe6;
   width: 290px;
@@ -224,7 +224,7 @@ input[type=file]{
   border-radius:5px; 
   background-color: #f5f7fa;
 }
-.cover-image{
+#addCourse .cover-image{
   width: 100%;
   height: 100%;
 }

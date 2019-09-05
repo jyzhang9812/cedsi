@@ -1,5 +1,5 @@
 <template>
-  <div class="subContainer">
+  <div id="adminManagement">
     <!-- 添加管理员模态框（Modal） -->
     <div
       class="modal fade"
@@ -251,12 +251,12 @@ export default {
 </script>
 
 <style scoped>
-.breadcrumb {
+#adminManagement .breadcrumb {
   background-color: #fff;
   color: #606266;
   margin-bottom: 0;
 }
-.subContainer {
+#adminManagement {
   font-size: 12px;
   color: #606266;
   width: 100%;
@@ -264,26 +264,26 @@ export default {
   padding: 10px;
 }
 
-.first-floor {
+#adminManagement .first-floor {
   margin-top: 20px;
 }
-.second-floor {
+#adminManagement .second-floor {
   font-size: 12px;
   color: #606266;
   margin-top: 20px;
 }
-.select-input {
+#adminManagement .select-input {
   display: inline-block;
 }
-label {
+#adminManagement label {
   display: inline;
 }
 
-.content td {
+#adminManagement .content td {
   line-height: 30px;
 }
 
-.textBox {
+#adminManagement .textBox {
   width: 180px;
   height: 32px;
   font-size: 12px;
@@ -294,22 +294,22 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.textBox:focus {
+#adminManagement .textBox:focus {
   outline: none;
 }
 
-.textBox:hover {
+#adminManagement .textBox:hover {
   border-color: #409eff;
 }
 
-/* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-.choose {
+/* #adminManagement .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
+#adminManagement .choose {
   background-image: url("../../../../../static/images/teach/choose.png");
   background-repeat: no-repeat;
   background-position: -1px -2px;
 }
 
-.btn {
+#adminManagement .btn {
   background: #409eff;
   color: #fff;
   height: 30px;
@@ -318,28 +318,28 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.btn:focus {
+#adminManagement .btn:focus {
   outline: none;
 }
 
-.btn:hover {
+#adminManagement .btn:hover {
   background: #66b1ff;
 }
 
-.btn-search {
+#adminManagement .btn-search {
   width: 54px;
 }
 
-.btn-clear {
+#adminManagement .btn-clear {
   width: 88px;
 }
 
-.blue {
+#adminManagement .blue {
   cursor: pointer;
   color: #409eff;
 }
 
-.red {
+#adminManagement .red {
   cursor: pointer;
   color: red;
 }
@@ -356,51 +356,51 @@ table td {
   vertical-align: middle !important;
 }
 
-.title {
+#adminManagement .title {
   text-align: center;
 }
 
-.select-input {
+#adminManagement #adminManagement .select-input {
   margin-right: 8px;
 }
 
-.btnactive {
+#adminManagement .btnactive {
   border-radius: 5px;
   line-height: 20px;
   height: 22px;
 }
-.btnactive:focus {
+#adminManagement .btnactive:focus {
   outline: none;
 }
 
 /*添加教师模态框*/
 
-.modal-dialog {
+#adminManagement .modal-dialog {
   top: 100px;
   position: relative;
 }
 
-.modal-header {
+#adminManagement .modal-header {
   background-color: #409eff;
   color: #fff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
-.add {
+#adminManagement .add {
   width: 100%;
 }
 
-.keypoint {
+#adminManagement .keypoint {
   color: red;
 }
-.keypointwhite {
+#adminManagement .keypointwhite {
   color: #fff;
 }
-.addtitle {
+#adminManagement .addtitle {
   color: #606266;
 }
 
-.addcon {
+#adminManagement .addcon {
   width: 75%;
   border: 1px solid #409eff;
   border-radius: 5px;
@@ -409,41 +409,41 @@ table td {
   margin-left: 20px;
   padding: 0 20px;
 }
-.addcon:hover {
+#adminManagement .addcon:hover {
   border: 1px solid #dcdfe6;
 }
-.addcon:focus {
+#adminManagement .addcon:focus {
   outline: none;
 }
 
-.content {
+#adminManagement .content {
   margin: 0 auto;
   width: 60%;
   height: 100%;
 }
-.modal-footer {
+#adminManagement .modal-footer {
   border: none;
   text-align: center;
 }
-.modal-select-input {
+#adminManagement .modal-select-input {
   display: inline-block;
   margin-left: 5px;
 }
-.inputBox {
+#adminManagement .inputBox {
   padding: 0;
 }
 /*正则表达式*/
-.err {
+#adminManagement .err {
   border: 1px solid red;
 }
-.inputtips {
+#adminManagement .inputtips {
   display: block;
   font-size: 10px;
   color: red;
   margin-left: 60px;
   margin-bottom: 10px;
 }
-.inputerr {
+#adminManagement .inputerr {
   display: block;
   font-size: 10px;
   color: red;
@@ -452,14 +452,14 @@ table td {
   height: 20px;
   margin-bottom: 10px;
 }
-.alterwidth {
+#adminManagement .alterwidth {
   width: 30%;
 }
-.altercontent {
+#adminManagement .altercontent {
   width: 300px;
   margin: 0 auto;
 }
-.alterimg {
+#adminManagement .alterimg {
   width: 25px;
   height: 25px;
   margin-right: 10px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="dropdown" @mouseover="clearIconShown" @mouseout="clearIconHidden">
+  <div id="selectInput" @mouseover="clearIconShown" @mouseout="clearIconHidden">
     <div class="outside" :id="id"
          data-toggle="dropdown" aria-haspopup="true"
          aria-expanded="true" @click="startRotate">
@@ -71,23 +71,23 @@
 
 <style scoped>
 
-  .dropdown {
+#selectInput{
     /* margin-left: 5px; */
     margin-right: 8px;
   }
 
   /* 此项真实有效，可能 IDE 不能识别VUE的动态 class 绑定*/
-  .beforeRotate {
+  #selectInput .beforeRotate {
     transition: all .3s;
   }
 
   /* 此项真实有效，可能 IDE 不能识别VUE的动态 class 绑定*/
-  .afterRotate {
+  #selectInput .afterRotate {
     transform: rotate(-180deg);
     transition: all .3s;
   }
 
-  .outside {
+  #selectInput .outside {
     display: inline-block;
     width: 180px;
     height: 32px;
@@ -97,11 +97,11 @@
     transition: all .3s cubic-bezier(.645, .045, .355, 1);
   }
 
-  .outside:hover {
+  #selectInput .outside:hover {
     border-color: #c0c4cc;
   }
 
-  .inputBox {
+  #selectInput .inputBox {
     padding-left: 15px;
     padding-right: 30px;
     font-size: 12px;
@@ -111,12 +111,12 @@
     cursor: pointer;
   }
 
-  .inputBox:focus {
+  #selectInput .inputBox:focus {
     outline: none;
   }
 
-  .menu-icon {
-    display: inline;
+  #selectInput .menu-icon {
+    display: inline-block;
     width: 14px;
     height: 14px;
     cursor: pointer;

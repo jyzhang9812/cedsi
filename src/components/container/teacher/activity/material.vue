@@ -6,7 +6,7 @@
  * @Description: teacher角色辅导资料页面
  -->
 <template>
-  <div class="body">
+  <div id="material">
     <p>辅导资料</p>
     <div class="filter">
       <div class="option">
@@ -230,7 +230,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .body {
+  #material {
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
@@ -239,13 +239,13 @@
     font-size: 12px;
     color: #606266;
   }
-  .checkbox {
+  #material .checkbox {
     vertical-align: middle;
     margin: 0;
     text-align: center;
   }
 
-  .option {
+  #material .option {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -257,21 +257,21 @@
     height: 32px;
   } */
 
-  .blue {
+  #material .blue {
     color: #409EFF;
   }
 
-  .red {
+  #material .red {
 
     color: #FF6947;
 
   }
 
-  .filter {
+  #material .filter {
     margin-bottom: 30px;
   }
 
-  .form-control {
+  #material .form-control {
     padding: 0px 30px 0 15px;
     font-size: 12px;
     /* box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04) */
@@ -280,24 +280,24 @@
     height: 32px;
   }
 
-  .panels {
+  #material .panels {
     text-align: center;
   }
 
-  .panels tr {
+  #material .panels tr {
     height: 40px;
     text-align: center;
   }
 
-  .panels th {
+  #material .panels th {
     text-align: center;
   }
 
-  table {
+  #material table {
     border: #eeeeee;
   }
 
-  .btn-my {
+  #material .btn-my {
     margin-right: 8px;
     height: 32px;
     border-radius: 4px;

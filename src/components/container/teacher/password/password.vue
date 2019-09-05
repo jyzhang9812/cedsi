@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div id="password">
     <form action="">
       <div class="item">
         <p>账号：</p><input type="text" disabled="disabled" placeholder="account">
@@ -47,7 +47,7 @@
 </script>
 
 <style scoped>
-  .body {
+  #password {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -56,7 +56,7 @@
     margin-left: 10px;
   }
 
-  .item {
+  #password .item {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -66,13 +66,13 @@
     font-size: 13px;
   }
 
-  .item p {
+  #password .item p {
     line-height: 32px;
     height: 32px;
     width: 60px;
   }
 
-  .item input {
+  #password .item input {
     width: 600px;
     display: block;
     height: 32px;
@@ -91,11 +91,11 @@
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   }
 
-  .but {
+  #password .but {
     margin-left: 310px;
   }
 
-  .btn-my {
+  #password .btn-my {
     height: 32px;
     border-radius: 4px;
     font-size: 13px;

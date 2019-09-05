@@ -1,5 +1,5 @@
 <template>
-    <div id="errorpage">
+    <div id="errorPage">
         <div class="form">
         <form>
             <div class="font">
@@ -29,10 +29,10 @@ export default {
 </script>
     
 <style scoped>
-    #errorpage{
+    #errorPage{
         min-height: 100%;
     }
-    .form {
+    #errorPage .form {
         width: 400px;
         margin: 30px auto;
         border: 1px solid #eee;
@@ -40,17 +40,17 @@ export default {
         box-shadow: 0 2px 3px #ccc;
     }
     
-    .font{
+    #errorPage .font{
         text-align: center;
         font-size: 1.5rem;
         color: #6e6e6e;
     }
     
-    .submit{
+    #errorPage .submit{
         text-align: center;
     }
 
-    .submit button {
+    #errorPage .submit button {
         border: 1px solid #50b8ee;
         font-weight: bolder;
         border-radius:12px;
@@ -61,15 +61,15 @@ export default {
         cursor: pointer;
     }
     
-    .submit button:hover,
-    .submit button:active {
+    #errorPage .submit button:hover,
+    #errorPage .submit button:active {
         background-color: #50b8ee;
         color: white;
     }
     
-    .submit button[disabled],
-    .submit button[disabled]:hover,
-    .submit button[disabled]:active {
+    #errorPage .submit button[disabled],
+    #errorPage .submit button[disabled]:hover,
+    #errorPage .submit button[disabled]:active {
         border: 1px solid #f4f9fa;
         background-color: #f4f9fa;
         color: #f4f9fa;

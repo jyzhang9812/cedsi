@@ -6,7 +6,7 @@
  * @Description: teacher角色活动评论页面
  -->
 <template>
-  <div class="body">
+  <div id="opuscomment">
     <p>活动评论管理</p>
     <div class="filter">
       <div class="option">
@@ -206,7 +206,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .body {
+  #opuscomment {
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
@@ -216,48 +216,48 @@
     color: #606266;
   }
 
-  .option {
+  #opuscomment .option {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
   }
 
-  .option input {
+  #opuscomment .option input {
     width: 220px;
     height: 32px;
   }
 
-  .blue {
+  #opuscomment .blue {
     color: #409EFF;
   }
 
-  .red {
+  #opuscomment .red {
 
     color: #FF6947;
 
   }
 
-  .filter {
+  #opuscomment .filter {
     margin-bottom: 30px;
   }
 
-  .form-control {
+  #opuscomment .form-control {
     padding: 0px 30px 0 15px;
     font-size: 12px;
     margin-right: 5px;
   }
 
-  .panels {
+  #opuscomment .panels {
     text-align: center;
   }
 
-  .panels tr {
+  #opuscomment .panels tr {
     height: 40px;
     text-align: center;
   }
 
-  .panels th {
+  #opuscomment .panels th {
     text-align: center;
   }
 
@@ -265,7 +265,7 @@
     border: #eeeeee;
   }
 
-  .btn-my {
+  #opuscomment .btn-my {
     margin-right: 8px;
     height: 32px;
     border-radius: 4px;

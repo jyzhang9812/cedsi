@@ -1,5 +1,5 @@
 <template>
-  <div id="add-organization">
+  <div id="addOrganization">
     <div class="upload">
       <span class="upload-title">机构名称:</span>
       <input class="upload-input" placeholder="请输入机构名称" v-model="organizationName" />
@@ -236,17 +236,17 @@ export default {
 </script>
 
 <style scoped>
-#add-organization {
+#addOrganization{
   width: 98%;
   margin: 0 auto;
   padding-top: 30px;
 }
-.upload {
+#addOrganization .upload {
   width: 100%;
   height: 50px;
   margin-bottom: 20px;
 }
-#add-organization .upload-title {
+#addOrganization .upload-title {
   color: #606266;
   display: block;
   text-align: right;
@@ -255,7 +255,7 @@ export default {
   float: left;
   line-height: 40px;
 }
-.upload-input {
+#addOrganization .upload-input {
   width: 300px;
   height: 40px;
   border-radius: 5px;
@@ -263,63 +263,63 @@ export default {
   margin-left: 10px;
   padding-left: 10px;
 }
-.upload-input:hover {
+#addOrganization .upload-input:hover {
   border: 1px solid #66b1ff;
 }
-.upload-input:focus {
+#addOrganization .upload-input:focus {
   outline: none;
 }
-.upload-textarea {
+#addOrganization .upload-textarea {
   border: 1px solid #409eff;
   border-radius: 5px;
   margin-left: 10px;
   padding: 10px;
 }
-.upload-height {
+#addOrganization .upload-height {
   height: 190px;
 }
-.upload-textarea:hover {
+#addOrganization .upload-textarea:hover {
   border: 1px solid #66b1ff;
 }
-.upload-textarea:focus {
+#addOrganization .upload-textarea:focus {
   outline: none;
 }
-.outside[data-v-d899aefc] {
+#addOrganization .outside[data-v-d899aefc] {
   width: 300px !important;
   height: 40px !important;
   margin-left: 10px !important;
 }
-.inputBox[data-v-d899aefc] {
+#addOrganization .inputBox[data-v-d899aefc] {
   height: 35px !important;
   font-size: 14px !important;
   width: 230px !important;
 }
-.dropdown-menu {
+#addOrganization .dropdown-menu {
   left: 100px !important;
 }
-.upload-footer {
+#addOrganization .upload-footer {
   width: 100%;
   text-align: center;
   margin-bottom: 20px;
 }
-.upload-btn {
+#addOrganization .upload-btn {
   background-color: #409eff;
   color: #fff;
   margin-left: 10px;
 }
-.upload-btn:hover {
+#addOrganization .upload-btn:hover {
   color: #fff;
 }
-.upload-btn:focus {
+#addOrganization .upload-btn:focus {
   outline: none;
   color: #fff;
 }
 /**/
-.address-input select {
+#addOrganization .address-input select {
   margin-left: 10px;
   font-size: 14px;
 }
-.upload-cover-btn {
+#addOrganization .upload-cover-btn {
   margin-left: 10px;
   width: 80px;
   height: 35px;
@@ -336,7 +336,7 @@ input[type="file"] {
   position: relative;
   top: -35px;
 }
-.upload-cover-img {
+#addOrganization .upload-cover-img {
   display: inline-block;
   border: 1px dashed #dcdfe6;
   width: 290px;
@@ -345,11 +345,11 @@ input[type="file"] {
   border-radius: 5px;
   background-color: #f5f7fa;
 }
-.cover-image {
+#addOrganization .cover-image {
   width: 100%;
   height: 100%;
 }
-.upload-height {
+#addOrganization .upload-height {
   height: 190px;
 }
 </style>

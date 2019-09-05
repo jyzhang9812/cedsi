@@ -1,5 +1,5 @@
 <template>
-  <div class="subContainer">
+  <div id="statistics">
     <span>学情分析</span>
     <div class="first-floor">
       <div class="select-input1">
@@ -745,47 +745,47 @@ export default {
 </script>
 
 <style scoped>
-.subContainer {
+#statistics  {
   font-size: 12px;
   color: #606266;
 }
 
-.second-floor {
+#statistics  .second-floor {
   margin-top: 20px;
 }
 
-.first-floor {
+#statistics  .first-floor {
   display: flex;
   margin-left: 5px;
   margin-top: 10px;
 }
 
-.third-floor {
+#statistics  .third-floor {
   margin-top: 20px;
   vertical-align: middle;
   font-size: 12px;
   margin-left: 5px;
 }
 
-.third-floor span {
+#statistics  .third-floor span {
   line-height: 30px;
 }
 
-.forth-floor {
+#statistics  .forth-floor {
   font-size: 12px;
   color: #606266;
   margin-top: 40px;
 }
 
-label {
+#statistics label {
   display: inline;
 }
 
-.content td {
+#statistics  .content td {
   line-height: 30px;
 }
 
-.textBox {
+#statistics  .textBox {
   width: 180px;
   height: 32px;
   font-size: 12px;
@@ -796,15 +796,15 @@ label {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.textBox:focus {
+#statistics  .textBox:focus {
   outline: none;
 }
 
-.textBox:hover {
+#statistics  .textBox:hover {
   border-color: #c0c4cc;
 }
 
-.choose-icon {
+#statistics  .choose-icon {
   display: inline-block;
   width: 14px;
   height: 14px;
@@ -814,13 +814,13 @@ label {
 }
 
 /* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-.choose {
-  background-image: url("../../../../../static/images/teach/choose.png");
+#statistics  .choose {
+  background-image: url("#statistics  ../../../../../static/images/teach/choose.png");
   background-repeat: no-repeat;
   background-position: -1px -2px;
 }
 
-.comment {
+#statistics  .comment {
   width: 68px;
   height: 32px;
   display: inline-block;
@@ -829,16 +829,16 @@ label {
   cursor: pointer;
 }
 
-.has-comment {
+#statistics  .has-comment {
   border-radius: 4px 0 0 4px;
 }
 
-.no-comment {
+#statistics  .no-comment {
   margin-right: 20px;
   border-radius: 0 4px 4px 0;
 }
 
-.btn {
+#statistics  .btn {
   
   height: 30px;
   border-radius: 5px;
@@ -848,32 +848,32 @@ label {
 }
 
 
-.btn:focus {
+#statistics  .btn:focus {
   outline: none;
 }
 
-.btn:hover {
+#statistics  .btn:hover {
   background: #66b1ff;
 }
 
-.btn-search {
+#statistics  .btn-search {
   background: #409eff;
   color: #fff;
   width: 54px;
 }
 
-.btn-clear {
+#statistics  .btn-clear {
   background: #409eff;
   color: #fff;
   width: 78px;
 }
 
-.blue {
+#statistics  .blue {
   cursor: pointer;
   color: #409eff;
 }
 
-.red {
+#statistics  .red {
   cursor: pointer;
   color: #ff6947;
 }
@@ -890,14 +890,14 @@ table td {
   vertical-align: middle !important;
 }
 
-.title {
+#statistics  .title {
   text-align: center;
 }
 
-.select-input {
+#statistics  .select-input {
   margin-right: 0;
 }
-.select-input1 {
+#statistics  .select-input1 {
   margin-right: 8px;
 }
 </style>
