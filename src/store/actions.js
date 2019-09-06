@@ -380,9 +380,6 @@ const actions = {
                     .then(
                         response => {
                             console.log(response);
-                            if (response.data.errorType != '') {
-                                dispatch('jmpToError', response.data.errorType)
-                            } else {
                                 var videoArr = [];
                                 var videoData = [];
                                 videoArr = response.data.data;
@@ -399,8 +396,6 @@ const actions = {
                                 }
                                 commit(TYPES.changeVideo, videoData);
                                 commit(TYPES.changeVideoCurrentList, 0);
-                                console.log(videoData);
-                            }
                         },
                         error => {
                             // this.$router.push({path:'/404'})
