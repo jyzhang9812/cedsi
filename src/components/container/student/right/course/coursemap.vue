@@ -22,7 +22,7 @@
                 <br />1.点击视频右下方【我要做作业】
                 <br />2.点击去发布，填写作品名称，选择封面后即可提交
               </p>
-              <button class="work-btn">我要做作业</button>
+              <button class="work-btn" @click='jmpToScratch'>我要做作业</button>
               <p class="preview">预览讲义</p>
             </div>
           </div>
@@ -100,6 +100,9 @@
       },
       gotoCourseList() {
         this.$router.push({ path: "/dashboard/class" });
+      },
+      jmpToScratch(){
+        // this.$router.push({ path: "/dashboard/class" });
       }
     },
     created: function () {
