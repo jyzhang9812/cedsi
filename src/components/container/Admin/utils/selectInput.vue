@@ -77,17 +77,17 @@
   }
 
   /* 此项真实有效，可能 IDE 不能识别VUE的动态 class 绑定*/
-#selectInput .beforeRotate {
+.beforeRotate {
     transition: all .3s;
   }
 
   /* 此项真实有效，可能 IDE 不能识别VUE的动态 class 绑定*/
-  #selectInput .afterRotate {
+.afterRotate {
     transform: rotate(-180deg);
     transition: all .3s;
   }
 
-  #selectInput .outside {
+.outside {
     display: inline-block;
     width: 180px;
     height: 32px;
@@ -97,11 +97,11 @@
     transition: all .3s cubic-bezier(.645, .045, .355, 1);
   }
 
-  #selectInput .outside:hover {
+.outside:hover {
     border-color: #c0c4cc;
   }
 
-  #selectInput .inputBox {
+.inputBox {
     padding-left: 15px;
     padding-right: 30px;
     font-size: 12px;
@@ -111,11 +111,11 @@
     cursor: pointer;
   }
 
-  #selectInput .inputBox:focus {
+.inputBox:focus {
     outline: none;
   }
 
-  #selectInput .menu-icon {
+.menu-icon {
     display: inline-block;
     width: 14px;
     height: 14px;

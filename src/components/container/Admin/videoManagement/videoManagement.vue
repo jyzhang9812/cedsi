@@ -126,10 +126,22 @@
         }
         this.courseList[index].isActive = true;
         this.$store.dispatch('changeCourse', this.courseList[index].id)
-        if (this.$store.dispatch('changeCourse', this.courseList[index].id)==null) {
+        if (this.$store.dispatch('changeCourse', this.courseList[index].id) == null) {
           this.error = true;
           this.errorMsg = "暂时没有数据";
         }
+      },
+      timestampToTime(timestamp) {
+        timestamp = String(timestamp);
+        timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
+        var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + "-";
+        var M = (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-";
+        var D = date.getDate() + " ";
+        var h = date.getHours() + ":";
+        var m = date.getMinutes() + ":";
+        var s = date.getSeconds();
+        return Y + M + D + h + m + s;
       },
     },
 
@@ -143,7 +155,17 @@
         videoData: state => state.videoData,
         currentList: state => state.videoCurrentList,
         limit: state => state.limit,
-      })
+      }),
+      // videoData: function (state) {
+      //   var video = this.$store.state.videoData
+      //   console.log(video)
+      //   if (video) {
+      //     for (let i = 0; i <= video.length; i++) {
+      //       video[i].date = this.timestampToTime(video[i].date)
+      //     }
+      //   }
+      //   return video;
+      // }
     }
   }
 </script>

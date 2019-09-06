@@ -246,7 +246,10 @@ const state = {
     inputData: {
         chapter: {
             option: "",
-            list: []
+            list: [{
+                id:'',
+                name:''
+            }]
         }
     },
 

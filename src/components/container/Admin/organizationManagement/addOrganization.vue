@@ -5,7 +5,7 @@
       <input class="upload-input" placeholder="请输入机构名称" v-model="organizationName" />
     </div>
     <div class="upload">
-      <span class="upload-title">机构地区:</span>
+      <span class="upload-title" style="margin-right:10px" >机构地区:</span>
       <v-distpicker
         class="address-input"
         @province="onChangeProvince"
@@ -14,7 +14,7 @@
       ></v-distpicker>
     </div>
     <div class="upload">
-      <span class="upload-title">机构类型:</span>
+      <span class="upload-title" style="margin-right:10px">机构类型:</span>
       <select-input
         class="upload-select"
         id="org"
@@ -22,6 +22,7 @@
         :option="inputData.org.option.name"
         @option="changeOption"
         :drop-down-list="inputData.org.list"
+        style="margin-left:100px;"
       ></select-input>
     </div>
     <div class="upload upload-height">
@@ -284,12 +285,12 @@ export default {
 #addOrganization .upload-textarea:focus {
   outline: none;
 }
-#addOrganization .outside[data-v-d899aefc] {
+#addOrganization .outside {
   width: 300px !important;
   height: 40px !important;
   margin-left: 10px !important;
 }
-#addOrganization .inputBox[data-v-d899aefc] {
+#addOrganization .inputBox {
   height: 35px !important;
   font-size: 14px !important;
   width: 230px !important;
@@ -316,7 +317,7 @@ export default {
 }
 /**/
 #addOrganization .address-input select {
-  margin-left: 10px;
+  margin-left: 100px;
   font-size: 14px;
 }
 #addOrganization .upload-cover-btn {

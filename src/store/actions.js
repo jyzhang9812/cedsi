@@ -380,22 +380,22 @@ const actions = {
                     .then(
                         response => {
                             console.log(response);
-                                var videoArr = [];
-                                var videoData = [];
-                                videoArr = response.data.data;
-                                for (var i = 0; i < videoArr.length; i++) {
-                                    var video = {};
-                                    video.chapterName = videoArr[i].CP_NAME;
-                                    video.videoName = videoArr[i].RS_NAME;
-                                    video.introduction = videoArr[i].RS_COMMENT;
-                                    video.date = dispatch('timestampToTime', videoArr[i].RS_CREATE_TIME)
-                                    video.uploadAdmin = videoArr[i].RS_FOUNDER;
-                                    video.chapterNum = videoArr[i].CP_NUMBER;
-                                    video.videoUrl = videoArr[i].RS_URL;
-                                    videoData.push(video);
-                                }
-                                commit(TYPES.changeVideo, videoData);
-                                commit(TYPES.changeVideoCurrentList, 0);
+                            var videoArr = [];
+                            var videoData = [];
+                            videoArr = response.data.data;
+                            for (var i = 0; i < videoArr.length; i++) {
+                                var video = {};
+                                video.chapterName = videoArr[i].CP_NAME;
+                                video.videoName = videoArr[i].RS_NAME;
+                                video.introduction = videoArr[i].RS_COMMENT;
+                                video.date = videoArr[i].RS_CREATE_TIME;
+                                video.uploadAdmin = videoArr[i].RS_FOUNDER;
+                                video.chapterNum = videoArr[i].CP_NUMBER;
+                                video.videoUrl = videoArr[i].RS_URL;
+                                videoData.push(video);
+                            }
+                            commit(TYPES.changeVideo, videoData);
+                            commit(TYPES.changeVideoCurrentList, 0);
                         },
                         error => {
                             // this.$router.push({path:'/404'})
@@ -409,18 +409,7 @@ const actions = {
             }
         );
     },
-    timestampToTime(timestamp) {
-        timestamp = String(timestamp);
-        timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
-        var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        var Y = date.getFullYear() + "-";
-        var M = (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-";
-        var D = date.getDate() + " ";
-        var h = date.getHours() + ":";
-        var m = date.getMinutes() + ":";
-        var s = date.getSeconds();
-        return Y + M + D + h + m + s;
-    },
+
     //切换课程下方视频数据
     changeCourse({ dispatch, commit, state }, id) {
         globalAxios.get(
@@ -445,7 +434,7 @@ const actions = {
                         video.chapterName = videoArr[i].CP_NAME;
                         video.videoName = videoArr[i].RS_NAME;
                         video.introduction = videoArr[i].RS_COMMENT;
-                        video.date = dispatch('timestampToTime', videoArr[i].RS_CREATE_TIME)
+                        video.date = videoArr[i].RS_CREATE_TIME
                         video.uploadAdmin = videoArr[i].RS_FOUNDER;
                         video.chapterNum = videoArr[i].CP_NUMBER;
                         video.videoUrl = videoArr[i].RS_URL;
