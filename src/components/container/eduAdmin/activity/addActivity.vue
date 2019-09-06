@@ -31,7 +31,7 @@
       <select-input
         class="upload-select"
         id="activity"
-        tips="请选择机构类型"
+        tips="请选择活动负责人"
         :option="inputData.activity.option.name"
         @option="changeOption"
         :drop-down-list="inputData.activity.list"

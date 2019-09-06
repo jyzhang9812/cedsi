@@ -9,7 +9,7 @@
       <textarea class="upload-textarea" rows="8" cols="70" placeholder="请输入视频描述" v-model="videoIntro" />
       </div>
     <div class="upload">
-      <span class="upload-title">请选择章节:</span>
+      <span class="upload-title" style="margin-right:10px">请选择章节:</span>
       <select-input
         class="upload-select"
         id="chapter"
@@ -18,6 +18,7 @@
         @option="changeOption"
         :drop-down-list="inputData.chapter.list"
         autocomplete="off"
+        style="margin-left:90px;"
       ></select-input>
     </div>
     <div class="upload">
