@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row" id="admin-sidebar">
     <div class="aside">
       <ul class="menu">
         <li v-for="item in aside" class="bg-hover" :key="item.name">
@@ -97,46 +97,46 @@
     display: flex;
   }
 
-  .menu {
+  #admin-sidebar .menu {
     list-style: none;
     padding-inline-start: 0;
     margin-block-start: 0;
     margin-block-end: 0;
   }
 
-  .menuPosition {
+  #admin-sidebar .menuPosition {
     float: right;
     padding: 20px 20px 0 0;
   }
 
-  .aside {
+  #admin-sidebar .aside {
     color: #FFF;
     background-color: #3766A6;
     width: 220px;
     min-width: 220px;
   }
 
-  .item-name {
+  #admin-sidebar .item-name {
     height: 50px;
     line-height: 50px;
     padding-left: 28px;
   }
 
-  .item-name:hover {
+  #admin-sidebar .item-name:hover {
     background-color: #2C5285;
   }
 
-  .children {
+  #admin-sidebar .children {
     height: 50px;
     line-height: 50px;
     padding-left: 49px;
   }
 
-  .children:hover {
+  #admin-sidebar .children:hover {
     background-color: #2C5285;
   }
 
-  .sonContainer {
+  #admin-sidebar .sonContainer {
     right: 0;
     bottom: 0;
     top: 56px;

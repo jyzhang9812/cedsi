@@ -18,7 +18,7 @@
       <select-input
         class="upload-select"
         id="org"
-        tips="请选章节"
+        tips="请选择机构类型"
         :option="inputData.org.option.name"
         @option="changeOption"
         :drop-down-list="inputData.org.list"

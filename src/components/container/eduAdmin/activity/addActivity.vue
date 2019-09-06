@@ -20,10 +20,18 @@
     </div>
     <div class="upload">
       <span class="upload-title">活动负责人:</span>
-      <select-input
+      <!-- <select-input
         class="upload-select"
         id="activity"
         tips="请选择活动负责人"
+        :option="inputData.activity.option.name"
+        @option="changeOption"
+        :drop-down-list="inputData.activity.list"
+      ></select-input> -->
+      <select-input
+        class="upload-select"
+        id="activity"
+        tips="请选择机构类型"
         :option="inputData.activity.option.name"
         @option="changeOption"
         :drop-down-list="inputData.activity.list"
@@ -173,7 +181,7 @@ export default {
           // console.log(this); 这里的this是FileReader对象
           // console.log(file)
           // 再把file对象添加到img数组
-          console.log(file.src);
+          //console.log(file.src);
           that.coverImages.push(file.src);
         };
       }

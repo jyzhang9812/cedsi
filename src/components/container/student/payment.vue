@@ -71,14 +71,14 @@ export default {
   background-color: #f8fafc;
   min-width: 1200px;
 }
-.payment-header {
+#payment .payment-header {
   width: 100%;
   height: 160px;
   background-color: #e3e6e9;
   margin: 0 auto;
   position: relative;
 }
-.payment-title {
+#payment .payment-title {
   font-size: 32px;
   line-height: 115px;
   color: #07111b;
@@ -87,7 +87,7 @@ export default {
   width: 65%;
   margin: 0 auto;
 }
-.payment-card {
+#payment .payment-card {
   height: 660px;
   width: 70%;
   margin: 0 auto;
@@ -97,14 +97,14 @@ export default {
   border-radius: 8px;
   background-color: #fff;
 }
-.card-title {
+#payment .card-title {
   margin: 0 auto;
   width: 90%;
   padding: 40px 0;
   font-size: 16px;
   color: #07111b;
 }
-.card-content {
+#payment .card-content {
   margin: 0 auto;
   width: 90%;
   background-color: #f3f5f7;
@@ -112,26 +112,26 @@ export default {
   height: 140px;
   margin-bottom: 20px;
 }
-.card-img {
+#payment .card-img {
   width: 160px;
   height: 90px;
   margin-right: 24px;
   float: left;
 }
-.order-title {
+#payment .order-title {
   float: left;
   font-size: 16px;
   width: 400px;
 }
-.order-price {
+#payment .order-price {
   display: inline-block;
   line-height: 95px;
   color: #93999f;
 }
-.order-price span {
+#payment .order-price span {
   color: #f01414;
 }
-.pay-method {
+#payment .pay-method {
   width: 90%;
   margin: 0 auto;
   padding: 30px 20px;
@@ -139,32 +139,32 @@ export default {
   border-bottom: 2px solid #d9dde1;
   height: 216px;
 }
-.pay-method span {
+#payment .pay-method span {
   font-size: 16px;
   display: block;
   margin-bottom: 30px;
 }
-.pay-img {
+#payment .pay-img {
   width: 196px;
   height: 90px;
   background-color: #f3f5f7;
   padding: 20px 10px;
 }
-.pay-img img {
+#payment .pay-img img {
   width: 100%;
   height: 100%;
 }
-.summary {
+#payment .summary {
   width: 206px;
   height: 176px;
   float: right;
   padding-top: 36px;
 }
-.summary span{
+#payment .summary span{
     font-size: 18px;
     color: #f01414
 }
-.pay{
+#payment .pay{
     width: 140px;
     height: 40px;
     background-color: #f01414;
@@ -174,23 +174,23 @@ export default {
     margin-top: 40px;
     font-size: 16px;
 }
-.mypay{
+#payment .mypay{
     top:100px;
     width: 25%;
     height: 364px;
 }
-.mypay-height{
+#payment .mypay-height{
     height: 100%;
 }
-.mypay-title{
+#payment .mypay-title{
     text-align: center;
     border-bottom: 1px solid #fff;
     margin-top: 30px;
 }
-.mypay-qrcode{
+#payment .mypay-qrcode{
     text-align: center
 }
-.mypay-qrcode img{
+#payment .mypay-qrcode img{
     display: block;
     margin: 10px auto;
 }

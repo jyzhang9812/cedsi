@@ -1,5 +1,5 @@
 <template>
-  <div id="selectInput" @mouseover="clearIconShown" @mouseout="clearIconHidden">
+  <div id="selectInput" @mouseover="clearIconShown" @mouseout="clearIconHidden" class="dropdown">
     <div class="outside" :id="id"
          data-toggle="dropdown" aria-haspopup="true"
          aria-expanded="true" @click="startRotate">
@@ -12,7 +12,7 @@
            class="menu-icon" @click="clearOption">
     </div>
     <ul class="dropdown-menu" :aria-labelledby="id">
-      <li v-for="item in dropDownList">
+      <li v-for="(item,index) in dropDownList" :key="index">
         <a href="#" @click="reportOption(item)">{{item.name}}</a>
       </li>
     </ul>
@@ -77,7 +77,7 @@
   }
 
   /* 此项真实有效，可能 IDE 不能识别VUE的动态 class 绑定*/
-  #selectInput .beforeRotate {
+#selectInput .beforeRotate {
     transition: all .3s;
   }
 
