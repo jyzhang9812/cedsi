@@ -171,6 +171,8 @@
     },
     created() {
       var courseId = this.$route.params.courseId;
+      this.courseId=courseId
+      console.log(this.courseId)
       this.$store.dispatch('getCourseChapter', courseId)
     },
     computed: {
