@@ -1,32 +1,31 @@
 <template>
-    <div id="homework" class="container">
+    <div id="create" class="container">
         <div>
             <searchBar></searchBar>
-            <rollPic></rollPic>
+            <createCard></createCard>
         </div>
     </div>
 </template>
 
 <script>
-    import rollPic from './rollPic.vue'
+    import createCard from './createCard.vue'
     import searchBar from '../searchBar.vue'
     export default {
-        name: 'homework',
+        name: 'create',
         components: {
-            rollPic,
+            createCard,
             searchBar,
         },
     }
-    //加入课程分类，时间筛选
+        //加入课程分类，时间筛选
 </script>
 
 <style scoped>
-    #homework {
+    #create {
         display: flex;
         flex-direction: column;
         width: 100%;
         background-color: #f4f9fa;
-        height: auto;
         min-height: 100%;
         padding: 0;
     }

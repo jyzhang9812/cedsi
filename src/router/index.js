@@ -39,6 +39,11 @@ const homework = resolve => {
     resolve(require('../components/container/student/right/homework/homework.vue'));
   });
 };
+const create = resolve => {
+  require.ensure(['../components/container/student/right/create/create.vue'], () => {
+    resolve(require('../components/container/student/right/create/create.vue'));
+  });
+};
 const myclass = resolve => {
   require.ensure(['../components/container/student/right/class/class.vue'], () => {
     resolve(require('../components/container/student/right/class/class.vue'));
@@ -57,11 +62,6 @@ const question = resolve => {
 const presentation = resolve => {
   require.ensure(['../components/container/student/right/presentation/presentation.vue'], () => {
     resolve(require('../components/container/student/right/presentation/presentation.vue'));
-  });
-};
-const userCenter = resolve => {
-  require.ensure(['../components/container/student/right/userCenter/userCenter.vue'], () => {
-    resolve(require('../components/container/student/right/userCenter/userCenter.vue'));
   });
 };
 const SignupPage = resolve => {
@@ -338,6 +338,15 @@ export default new Router({
           }, component: homework
         },
         {
+          path: '/dashboard/create', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: create
+        },
+        {
           path: '/dashboard/course', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
@@ -354,15 +363,6 @@ export default new Router({
               next('/signin')
             }
           }, component: presentation
-        },
-        {
-          path: '/dashboard/userCenter', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: userCenter
         },
         {
           path: '/dashboard/question', beforeEnter(to, from, next) {

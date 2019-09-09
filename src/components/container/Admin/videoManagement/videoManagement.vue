@@ -80,6 +80,7 @@
         videosrc: "",
         videoName: "",
         currentPage: 0,
+        videoData: [],
       };
     },
 
@@ -125,8 +126,16 @@
           this.courseList[i].isActive = false;
         }
         this.courseList[index].isActive = true;
-        this.$store.dispatch('changeCourse', this.courseList[index].id)
-        if (this.$store.dispatch('changeCourse', this.courseList[index].id) == null) {
+        this.$store.dispatch('changeCourse', this.courseList[index].id).then(() => {
+          this.videoData = this.$store.state.videoData
+          console.log('444444444444444')
+          if (this.videoData) {
+            for (let i = 0; i <= this.videoData.length; i++) {
+              this.videoData[i].date = this.timestampToTime(this.$store.state.videoData[i].date)
+            }
+          }
+        })
+        if (this.videoData == null) {
           this.error = true;
           this.errorMsg = "暂时没有数据";
         }
@@ -146,26 +155,24 @@
     },
 
     created() {
-      this.$store.dispatch('getCourseList')
+      this.$store.dispatch('getCourseList').then(() => {
+        this.videoData = this.$store.state.videoData
+        console.log('333333333333333')
+        if (this.videoData) {
+          for (let i = 0; i <= this.videoData.length; i++) {
+            this.videoData[i].date = this.timestampToTime(this.$store.state.videoData[i].date)
+          }
+        }
+      })
     },
 
     computed: {
       ...mapState({
         courseList: state => state.adminCourseList,
-        videoData: state => state.videoData,
+        // videoData: state => state.videoData,
         currentList: state => state.videoCurrentList,
         limit: state => state.limit,
       }),
-      // videoData: function (state) {
-      //   var video = this.$store.state.videoData
-      //   console.log(video)
-      //   if (video) {
-      //     for (let i = 0; i <= video.length; i++) {
-      //       video[i].date = this.timestampToTime(video[i].date)
-      //     }
-      //   }
-      //   return video;
-      // }
     }
   }
 </script>
