@@ -13,9 +13,9 @@
             </div>
             <div :class="{'collapse': item.close}">
               <ul class="menu nav">
-                <li v-for="(child,index) in item.children" class="children" @click="$router.push(child.route)" :key="index">
+                <router-link v-for="(child,index) in item.children" class="children" :to="child.route" :key="index" tag="li" active-class="active-teaclass">
                   {{child.name}}
-                </li>
+                </router-link>
               </ul>
             </div>
           </li>
@@ -182,9 +182,13 @@
     height: 50px;
     line-height: 50px;
     padding-left: 49px;
+    cursor: pointer;
   }
 
   .children:hover {
+    background-color: #2C5285;
+  }
+  .active-teaclass{
     background-color: #2C5285;
   }
 
