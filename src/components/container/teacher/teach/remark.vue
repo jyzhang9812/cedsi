@@ -43,8 +43,8 @@
         <tbody>
           <tr v-for="(line, seq) in currentList" :key="seq" class="content">
             <td>{{seq + 1}}</td>
-            <td v-for="(value, key, index) in line" :key="index" v-if="key !== 'id' && key !== 'commentStat'">
-              {{value}}
+            <td v-for="(value, key, index) in line" :key="index">
+              <span v-if="key !== 'id' && key !== 'commentStat'">{{value}}</span>              
             </td>
             <td>
               <span class="blue" @click="viewWork(line)">查看作品</span>&nbsp;&nbsp;

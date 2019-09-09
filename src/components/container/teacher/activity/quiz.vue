@@ -32,7 +32,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(list, index) in currentList">
+          <tr v-for="(list, index) in currentList" :key="index">
             <td>{{index+1}}</td>
             <td class="blue">{{list.title}}</td>
             <td>{{list.date}}</td>
