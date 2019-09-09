@@ -1,5 +1,6 @@
 <template>
     <div id='msg' class="body">
+        <searchBar></searchBar>
         <div class="menu">
             <button @click="tab(index)" v-for="(item,index) in items" class="tag"
                 :class="{active : index===curId}">{{item.item}}</button>
@@ -27,12 +28,14 @@
 
 
 <style scoped>
-    #msg .body {
+    #msg{
         width: 100%;
         height:100%;
+        background: #f4f9fa;
     }
 
-    #setup #msg .menu {
+    #msg .menu {
+        width: auto;
         height: auto;
         padding-top: 10px;
         padding-left: 40px;
@@ -44,14 +47,14 @@
     }
 
     #msg .tag {
-        background-color: none;
+        background-color: inherit;
         color: #575757;
         padding: 15px 32px;
         margin: 10px 4px 0px;
         text-align: center;
         text-decoration: none;
         padding: 4px 10px;
-        font-size: 16px;
+        font-size: 18px;
         border: none;
         font-weight: 550;
     }
@@ -246,12 +249,14 @@
 </style>
 
 <script>
+    import searchBar from'../searchBar.vue'
     import pagination from '../pagination.vue'
     import globalAxios from 'axios'
 
     export default {
         name: 'message',
         components: {
+            searchBar,
             pagination,
         },
         data() {

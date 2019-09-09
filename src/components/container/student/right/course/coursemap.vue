@@ -12,7 +12,7 @@
               <div class="box-title">
                 <p>{{courseName}}| 第{{courseNum}}节课 | {{chapterName}}</p>
               </div>
-              <button class="study-btn" data-toggle="modal" data-target="#myVideo">开始学习</button>
+              <button class="study-btn" data-toggle="modal" data-target="#myVideo" @click="gotoStudy(i)">开始学习</button>
             </div>
             <div class="right-box">
               <p class="course-intro">课程介绍</p>
@@ -31,7 +31,7 @@
       </div>
       <!-- /.modal -->
     </div>
-    <div class="modal fade" id="myVideo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="myVideo" ref='myVideo' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content video-bck">
           <div class="modal-header header-height">
@@ -78,11 +78,13 @@
         courseIntro: "",
         courseNum: "",
         videosrc: "",
-        chapterName: ""
+        chapterName: "",
+        i:0,
       };
     },
     methods: {
       gotoStudy(index) {
+        this.i = index
         this.chapterName = this.pointList[index].name;
         this.courseIntro = this.pointList[index].description;
         this.courseNum = this.pointList[index].number;

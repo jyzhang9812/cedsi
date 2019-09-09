@@ -34,11 +34,11 @@
 
 <script>
   import { error } from 'util';
-  import VueElementLoading from'vue-element-loading'
+  import VueElementLoading from 'vue-element-loading'
 
   export default {
     name: "dashboard",
-    components:{
+    components: {
       VueElementLoading
     },
     data() {
@@ -60,14 +60,24 @@
             path: "/dashboard/course"
           },
           {
-            name: "我的作品",
-            img: 'fa-cube',
-            path: "/dashboard/homework"
-          },
-          {
             name: "社区",
             img: 'fa-users',
             path: "/dashboard/community"
+          },
+          {
+            name: "我的作业",
+            img: 'fa-puzzle-piece',
+            path: "/dashboard/homework"
+          },
+          {
+            name: "创作中心",
+            img: 'fa-flask',
+            path: "/dashboard/create"
+          },
+          {
+            name: "我的消息",
+            img: 'fa-comments',
+            path: "/dashboard/message"
           },
           {
             name: "我的问题",
@@ -78,11 +88,6 @@
             name: "辅导资料",
             img: 'fa-book',
             path: "/dashboard/presentation"
-          },
-          {
-            name: "个人中心",
-            img: 'fa-user-circle-o',
-            path: "/dashboard/userCenter"
           },
         ],
         i: 0,
@@ -100,7 +105,7 @@
     },
     created: function () {
       this.height = document.documentElement.clientHeight
-      this.style = 'min-height:' + (this.height - 56) + 'px;'
+      this.style = 'min-height:' + this.height + 'px;'
       console.log(this.height)
       this.$store.commit('updateLoading', true)
       this.$store.dispatch('getUser')
@@ -141,7 +146,7 @@
   }
 
   #student .nav-width {
-    padding-right: 0px; 
+    padding-right: 0px;
   }
 
   #student .block:hover,

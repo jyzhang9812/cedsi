@@ -30,6 +30,7 @@
     },
     created: function () {
       this.height = document.documentElement.clientHeight,
+      console.log(this.height)
       this.appheight = 'min-height:' + this.height + 'px;';
       this.screenHeight = 'min-height:' + (this.height - 56) + 'px;';
       this.$store.dispatch('tryAutoLogin');
@@ -45,7 +46,6 @@
 <style>
   body, html, #app {
     margin: 0;
-    min-height: 620px;
     /* font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; */
     font-family: 'TianZhen19e6a6ae661ff1';
   }

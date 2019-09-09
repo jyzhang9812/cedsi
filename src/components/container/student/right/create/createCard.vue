@@ -1,10 +1,13 @@
 <template>
     <div id="rollPic" class="container-fluid">
-        <div class="menu">
+        <!-- <div class="menu">
             <button @click="tab(index)" v-for="(item,index) in items" class="tag"
-                :class="{active : index==curId}">{{item.COURSE_NAME}}</button>
-        </div>
+                :class="{active : index==curId}">{{item.item}}</button>
+        </div> -->
         <div class="row" style="margin-top: 10px">
+            <div class="col-md-4 createDiv" @click="this.$router.push('url')">
+                <i class="fa fa-5x fa-plus" style='color: #fff;position: relative;top:30%;' aria-hidden="true"></i>
+            </div>
             <div class="col-md-4" v-for="(item,index) in currentList" :key="index" @mouseover="show(index)"
                 @mouseleave="hidden(index)">
                 <div class="inside">
@@ -20,7 +23,7 @@
                 <div class="outside">
                     <div class="left">
                         <div class="up">
-                            <img class="work_type" :src='zuopin' />
+                            <img class="work_type" :src='curId==0?zuopin:products' />
                             <h5>{{item.name}}</h5>
                         </div>
                         <div class="down">
@@ -42,7 +45,7 @@
 
 <script>
     import pagination from '../pagination.vue'
-    import { mapState } from 'vuex'
+    import globalAxios from 'axios'
     export default {
         name: 'rollPic',
         components: {
@@ -51,6 +54,7 @@
         data() {
             return {
                 curId: 0,
+                items: [{ item: '作业' }, { item: '项目' },],
                 btn: 'btn',
                 btnh: 'btnhover',
                 clock: '../' + this.$store.state.url + 'dashboard/clock.png',
@@ -71,8 +75,8 @@
                 this.isShow = false;
             },
             tab(index) {
-                this.curId = index
-                this.$store.dispatch('getWork', this.$store.state.courseList[index].ID)
+                this.curId = index;
+                this.$store.dispatch('getWork', this.curId)
             },
             //换页
             getNew(value) {
@@ -85,28 +89,25 @@
             //let that = this.$router;
             this.style = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;'
             this.style1 = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;margin-top:-' + (document.documentElement.clientWidth * 0.17) + 'px;'
+            this.$store.dispatch('getWork', 1)
             this.$store.commit('updateLoading', true)
-            this.$store.dispatch('getCourse').then(() => {
-                this.$store.dispatch('getWork', this.$store.state.courseList[0].ID)
-            })
         },
         computed: {
-            ...mapState({
-                items: state => state.courseList,
-                tableData: state => state.workList,
-                currentList: state => state.workCurrentList,
-                limit: state => state.limit,
-            }),
+            currentList() {
+                return this.$store.state.workCurrentList
+            },
+            tableData() {
+                return this.$store.state.workList
+            },
+            limit() {
+                return this.$store.state.limit
+            }
         },
     }
 </script>
 
 
 <style scoped>
-    #rollPic {
-        height: 100%;
-    }
-
     #rollPic .menu {
         background-color: #f4f9fa;
         height: auto;
@@ -120,27 +121,44 @@
     }
 
     #rollPic .tag {
-        background-color: inherit;
-        color: #575757;
+        background-color: #fff;
+        color: #9196a1;
         padding: 15px 32px;
         margin: 10px 4px 0px;
         text-align: center;
         text-decoration: none;
         padding: 4px 10px;
-        font-size: 18px;
+        font-size: 15px;
+        border-radius: 20px;
         border: none;
-        font-weight: 550;
     }
 
     #rollPic .tag:hover,
-    #rollPic .active {  
-        color: #00bcd4;
+    #rollPic .active {
+        background-color: #9196a1;
+        text-align: center;
+        text-decoration: none;
+        padding: 4px 10px;
+        margin: 10px 4px 0px;
+        font-size: 15px;
+        border-radius: 20px;
+        border: none;
+        color: #fff;
     }
 
     #rollPic .col-md-4 {
         margin-top: 10px;
         margin-bottom: 10px;
         text-decoration: none;
+    }
+
+    .createDiv {
+        text-align: center;
+        width: 200px;
+        height: 200px;
+        background: #ff8d19;
+        border-radius: 20px;
+        margin-left:20px; 
     }
 
     #rollPic .img {
