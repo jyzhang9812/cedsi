@@ -88,17 +88,17 @@
                 ],
                 contents:[
                     [
-                        { name:"video1", src:"../../../../../../static/images/presentation/mp4.png" },
-                        { name:"video2", src:"../../../../../../static/images/presentation/mp4.png" },
+                        { name:"video1", src:"../../"+this.$store.state.url+"presentation/mp4.png" },
+                        { name:"video2", src:"../../"+this.$store.state.url+"presentation/mp4.png" },
                     ],
                     [
-                        { name:"ppt1", src:"../../../../../../static/images/presentation/ppt.png" },
-                        { name:"ppt2", src:"../../../../../../static/images/presentation/ppt.png" },
+                        { name:"ppt1", src:"../../"+this.$store.state.url+"presentation/ppt.png" },
+                        { name:"ppt2", src:"../../"+this.$store.state.url+"presentation/ppt.png" },
                     ],
                     [
-                        { name:"word1", src:"../../../../../../static/images/presentation/word.png" },
-                        { name:"word2", src:"../../../../../../static/images/presentation/word.png" },
-                        { name:"word2", src:"../../../../../../static/images/presentation/word.png" },
+                        { name:"word1", src:"../../"+this.$store.state.url+"presentation/word.png" },
+                        { name:"word2", src:"../../"+this.$store.state.url+"presentation/word.png" },
+                        { name:"word2", src:"../../"+this.$store.state.url+"presentation/word.png" },
                     ],
                 ],
                 limit: 12,

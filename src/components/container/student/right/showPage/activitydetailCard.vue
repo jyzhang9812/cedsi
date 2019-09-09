@@ -69,17 +69,17 @@ export default {
       activityDesc:
         "图论算法是所有计算机专业的同学必学的基础知识；也是在算法，数据结构，离散数学等领域的重要内容；是面试，升职，计算机专业考研，考博的必考内容；更是计算机网络，编译原理，社交网络算法等领域的基础。但是，由于图论算法本身的复杂性和抽象性，让大多数同学头疼不已。在这个课程中，bobo老师将用其独到的问题讲解方式，庖丁解牛，深入浅出，让大家在这个课程中，真正地玩转图论算法。",
       activityTeacherImg:
-        "../../../../../../static/images/activity/teacher.jpg",
+        "../../"+this.$store.state.url+"activity/teacher.jpg",
       activityTeacherName: "老师名字",
       activityImgList: [
         {
-          image: "../../../../../../static/images/activity/teacher.jpg"
+          image: "../../"+this.$store.state.url+"activity/teacher.jpg"
         },
         {
-          image: "../../../../../../static/images/activity/teacher.jpg"
+          image: "../../"+this.$store.state.url+"activity/teacher.jpg"
         },
         {
-          image: "../../../../../../static/images/activity/teacher.jpg"
+          image: "../../"+this.$store.state.url+"activity/teacher.jpg"
         }
       ],
       activityTime: "2019年6月2日",

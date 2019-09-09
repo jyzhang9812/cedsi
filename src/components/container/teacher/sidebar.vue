@@ -36,7 +36,7 @@
         aside: [
           {
             name: "教学管理",
-            iconSrc: "../../../../static/images/aside/teachingManagement.png",
+            iconSrc: this.$store.state.url+"aside/teachingManagement.png",
             children: [
               {
                 name: "作业点评",
@@ -55,7 +55,7 @@
           },
           {
             name: "活动管理",
-            iconSrc: "../../../../static/images/aside/activityManagement.png",
+            iconSrc:this.$store.state.url+"aside/activityManagement.png",
             children: [{
               name: "发布活动",
               route: "/console/activity"
@@ -83,7 +83,7 @@
           },
           {
             name: "统计分析",
-            iconSrc: "../../../../static/images/aside/statisticalAnalyses.png",
+            iconSrc: this.$store.state.url+"aside/statisticalAnalyses.png",
             children: [{
               name: "学情分析",
               route: "/console/statistics"
@@ -92,14 +92,14 @@
           },
           {
             name: "个人中心",
-            iconSrc: "../../../../static/images/aside/personalCenter.png",
+            iconSrc: this.$store.state.url+"aside/personalCenter.png",
             children: [],
             close: true,
             route: "/console/space"
           },
           {
             name: "修改密码",
-            iconSrc: "../../../../static/images/aside/modifyPwd.png",
+            iconSrc: this.$store.state.url+"aside/modifyPwd.png",
             children: [],
             close: true,
             route: "/console/password"

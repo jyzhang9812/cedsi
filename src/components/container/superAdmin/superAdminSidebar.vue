@@ -42,7 +42,7 @@
         aside: [
           {
             name: "管理员管理",
-            iconSrc: "../../../../static/images/eduAdmin/icon-02.png",
+            iconSrc: this.$store.state.url+"eduAdmin/icon-02.png",
             children: [],
             close: true,
             route: "/superAdmin/"

@@ -30,7 +30,7 @@
     },
     data() {
       return {
-        menuIconSrc: "../../../../../static/images/selectInput/menudown.png",
+        menuIconSrc: "../"+$store.state.url2+"selectInput/menudown.png",
         rotate: false
       }
     },

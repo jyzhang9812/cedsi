@@ -264,13 +264,6 @@ label {
   border-color: #409eff;
 }
 
-/* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-#organizationManagement .choose {
-  background-image: url("../../../../../static/images/teach/choose.png");
-  background-repeat: no-repeat;
-  background-position: -1px -2px;
-}
-
 #organizationManagement .btn {
   background: #409eff;
   color: #fff;

@@ -1,5 +1,6 @@
 const state = {
     url: '../../../../static/images/',
+    url2:'../../../static/images',
     idToken: null,
     expirationDate: null,
     userId: null,

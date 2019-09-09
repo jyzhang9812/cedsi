@@ -459,22 +459,6 @@
     border-color: #c0c4cc;
   }
 
-  #remark .choose-icon {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border: 1px solid #409eff;
-    margin-left: 20px;
-    margin-top: 10px;
-  }
-
-  /* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-  #remark .choose {
-    background-image: url("../../../../../static/images/teach/choose.png");
-    background-repeat: no-repeat;
-    background-position: -1px -2px;
-  }
-
   #remark .comment {
     width: 68px;
     height: 32px;

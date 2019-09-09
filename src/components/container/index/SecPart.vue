@@ -51,7 +51,7 @@ export default {
        {
          amoeba:{  
            backgroundColor: "#27c0c9",
-           backgroundImage: "url(" + require("../../../../static/images/index/amoeba-teal.png") + ") ",   
+           backgroundImage: "url("+this.$store.state.url+"index/amoeba-teal.png) ",   
          },
          logo:this.$store.state.url+"index/logo-moon2mars.png",
          title:"NASA Moon2Mars 挑战赛",
@@ -61,7 +61,7 @@ export default {
        {
          amoeba:{
            backgroundColor: "#903edb",
-           backgroundImage: "url(" + require("../../../../static/images/index/amoeba-purple.png") + ") ",
+           backgroundImage: "url("+this.$store.state.url+"index/amoeba-purple.png) ",
          },
          logo:this.$store.state.url+"index/logo-microbit.png",
          title:"bit 新课程   开始啦",
@@ -71,7 +71,7 @@ export default {
        {
          amoeba:{
            backgroundColor: "#5076ff",
-           backgroundImage: "url(" + require("../../../../static/images/index/amoeba-blue.png") + ") ",
+           backgroundImage: "url("+this.$store.state.url+"index/amoeba-blue.png) ",
          },
          logo:this.$store.state.url+"index/logo-jr.png",
          title:"新的赛迪斯Junior 移动应用程序",
