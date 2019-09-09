@@ -302,12 +302,6 @@ export default {
   border-color: #409eff;
 }
 
-/* #adminManagement .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-#adminManagement .choose {
-  background-image: url("../../../../../static/images/teach/choose.png");
-  background-repeat: no-repeat;
-  background-position: -1px -2px;
-}
 
 #adminManagement .btn {
   background: #409eff;
