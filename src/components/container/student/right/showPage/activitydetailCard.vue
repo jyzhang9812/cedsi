@@ -2,13 +2,13 @@
   <div id="activity-detial">
     <div
       class="activity-section1"
-      :style="{backgroundImage:'url('+require('../../'+$store.state.url+'activity/activitybg.png')+')'}"
+        :style="{backgroundImage:'url('+activitybgUrl+')'}"
     >
       <h1 class="activity-title">玩转算法系列--图论精讲 面试升职必备（Java版）</h1>
       <h2 class="activity-brief">难得一见的系统性讲解，涵盖图论领域经典算法底层实现，深入理解图论算法思想</h2>
       <div
         class="fixed-box"
-        :style="{backgroundImage:'url('+require('../../'+$store.state.url+'activity/fixedbg.png')+')'}"
+        :style="{backgroundImage:'url(../../'+$store.state.url+'activity/fixedbg.png'}"
       >
         <div class="activity-price">￥348.00</div>
         <button class="join-btn" @click="payment">我要报名</button>
@@ -18,21 +18,21 @@
       <div class="time-place">
         <div
           class="title-bg"
-          :style="{backgroundImage:'url('+require('../../'+$store.state.url+'activity/time.png')+')'}"
+          :style="{backgroundImage:'url(../../'+$store.state.url+'activity/time.png)'}"
         >活动时间</div>
         <div class="content">{{activityTime}}</div>
       </div>
       <div class="time-place">
         <div
           class="title-bg"
-          :style="{backgroundImage:'url('+require('../../'+$store.state.url+'activity/time.png')+')'}"
+          :style="{backgroundImage:'url(../../'+$store.state.url+'activity/time.png)'}"
         >活动地点</div>
         <div class="content">{{activityPlace}}</div>
       </div>
     </div>
     <div
       class="activity-section3"
-      :style="{backgroundImage:'url('+require('../../'+$store.state.url+'activity/activitydetial.png')+')'}"
+      :style="{backgroundImage:'url('+activitydetialUrl+')'}"
     >
       <div class="activity-left">
         <div class="info-name">{{activityName}}</div>
@@ -47,7 +47,7 @@
     </div>
     <div
       class="activity-section4"
-      :style="{backgroundImage:'url('+require('../../'+$store.state.url+'activity/activityfooter.jpg')+')'}"
+      :style="{backgroundImage:'url(../../'+$store.state.url+'activity/activityfooter.jpg)'}"
     >
       <div class="row activity-row">
         <div
@@ -71,6 +71,8 @@ export default {
       activityTeacherImg:
         "../../"+this.$store.state.url+"activity/teacher.jpg",
       activityTeacherName: "老师名字",
+      activitybgUrl:'https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/static/activitybg.png',
+      activitydetialUrl:'https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/static/activitydetial.png',
       activityImgList: [
         {
           image: "../../"+this.$store.state.url+"activity/teacher.jpg"
