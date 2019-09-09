@@ -64,7 +64,7 @@
     #new .nameOfClass {
         width: auto;
         min-width: 100px;
-        background: #75b598;
+        background: #51c79f;
         height: 40px;
         font-size: 15px;
         text-align: center;
@@ -201,7 +201,7 @@
         background-color: #484848 !important;
     }
     #new .table100.ver1 .row100 td:hover {
-        background-color: #c4f2ce;
+        background-color: #51c79f;
         color: #fff;
     }
 </style>

@@ -12,7 +12,7 @@
               <div class="box-title">
                 <p>{{courseName}}| 第{{courseNum}}节课 | {{chapterName}}</p>
               </div>
-              <button class="study-btn" data-toggle="modal" data-target="#myVideo">开始学习</button>
+              <button class="study-btn" data-toggle="modal" data-target="#myVideo" @click="gotoStudy(i)">开始学习</button>
             </div>
             <div class="right-box">
               <p class="course-intro">课程介绍</p>
@@ -22,7 +22,7 @@
                 <br />1.点击视频右下方【我要做作业】
                 <br />2.点击去发布，填写作品名称，选择封面后即可提交
               </p>
-              <button class="work-btn">我要做作业</button>
+              <button class="work-btn" @click='jmpToScratch'>我要做作业</button>
               <p class="preview">预览讲义</p>
             </div>
           </div>
@@ -31,7 +31,7 @@
       </div>
       <!-- /.modal -->
     </div>
-    <div class="modal fade" id="myVideo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="myVideo" ref='myVideo' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content video-bck">
           <div class="modal-header header-height">
@@ -78,11 +78,13 @@
         courseIntro: "",
         courseNum: "",
         videosrc: "",
-        chapterName: ""
+        chapterName: "",
+        i:0,
       };
     },
     methods: {
       gotoStudy(index) {
+        this.i = index
         this.chapterName = this.pointList[index].name;
         this.courseIntro = this.pointList[index].description;
         this.courseNum = this.pointList[index].number;
@@ -100,6 +102,9 @@
       },
       gotoCourseList() {
         this.$router.push({ path: "/dashboard/class" });
+      },
+      jmpToScratch(){
+        // this.$router.push({ path: "/dashboard/class" });
       }
     },
     created: function () {

@@ -80,6 +80,7 @@
         videosrc: "",
         videoName: "",
         currentPage: 0,
+        videoData: [],
       };
     },
 
@@ -125,25 +126,53 @@
           this.courseList[i].isActive = false;
         }
         this.courseList[index].isActive = true;
-        this.$store.dispatch('changeCourse', this.courseList[index].id)
-        if (this.$store.dispatch('changeCourse', this.courseList[index].id)==null) {
+        this.$store.dispatch('changeCourse', this.courseList[index].id).then(() => {
+          this.videoData = this.$store.state.videoData
+          console.log('444444444444444')
+          if (this.videoData) {
+            for (let i = 0; i <= this.videoData.length; i++) {
+              this.videoData[i].date = this.timestampToTime(this.$store.state.videoData[i].date)
+            }
+          }
+        })
+        if (this.videoData == null) {
           this.error = true;
           this.errorMsg = "暂时没有数据";
         }
       },
+      timestampToTime(timestamp) {
+        timestamp = String(timestamp);
+        timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
+        var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + "-";
+        var M = (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-";
+        var D = date.getDate() + " ";
+        var h = date.getHours() + ":";
+        var m = date.getMinutes() + ":";
+        var s = date.getSeconds();
+        return Y + M + D + h + m + s;
+      },
     },
 
     created() {
-      this.$store.dispatch('getCourseList')
+      this.$store.dispatch('getCourseList').then(() => {
+        this.videoData = this.$store.state.videoData
+        console.log('333333333333333')
+        if (this.videoData) {
+          for (let i = 0; i <= this.videoData.length; i++) {
+            this.videoData[i].date = this.timestampToTime(this.$store.state.videoData[i].date)
+          }
+        }
+      })
     },
 
     computed: {
       ...mapState({
         courseList: state => state.adminCourseList,
-        videoData: state => state.videoData,
+        // videoData: state => state.videoData,
         currentList: state => state.videoCurrentList,
         limit: state => state.limit,
-      })
+      }),
     }
   }
 </script>

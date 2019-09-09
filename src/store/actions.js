@@ -163,7 +163,7 @@ const actions = {
     },
     //获取用户课程
     getCourse({ commit, state }) {
-        globalAxios.get('/student/courses',
+        return globalAxios.get('/student/courses',
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -172,7 +172,7 @@ const actions = {
             }
         ).then(response => {
             var arr = [];
-            // console.log(response);
+            console.log(response);
             for (var i = 0; i < response.data.length; i++) {
                 arr.push(response.data[i])
             }
@@ -231,9 +231,9 @@ const actions = {
                 }
             );
     },
-    //获取作业及项目
-    getWork({ commit, state }, curId) {
-        globalAxios.get('/student/works?type=' + curId,
+    //获取作业
+    getWork({ commit, state }, courseId) {
+        globalAxios.get('/student/courses/' + courseId + '/homework',
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -244,34 +244,34 @@ const actions = {
             var arr = []
             var content = []
             console.log(response);
-            if (curId == 0) {
-                for (var i = 0; i < response.data.homework.length; i++) {
-                    arr.push(response.data.homework[i])
-                }
-                for (var i = 0; i < arr.length; i++) {
-                    var array = {}
-                    array.name = arr[i].HW_NAME;
-                    array.img_url = arr[i].HW_COVER;
-                    array.teacher_remark = arr[i].TEACHER_REMARK;
-                    array.rank = arr[i].HW_RANK;
-                    array.time = arr[i].SUBMIT_TIME;
-                    content.push(array);
-                }
+            // if (curId == 0) {
+            for (var i = 0; i < response.data.homework.length; i++) {
+                arr.push(response.data.homework[i])
             }
-            else {
-                for (var i = 0; i < response.data.product.length; i++) {
-                    arr.push(response.data.product[i])
-                }
-                for (var i = 0; i < arr.length; i++) {
-                    var array = {}
-                    array.name = arr[i].PRODUCT_NAME;
-                    array.img_url = arr[i].COVER_URL;
-                    array.teacher_remark = arr[i].TEACHER_REMARK;
-                    array.rank = arr[i].PRODUCT_RANK;
-                    array.time = arr[i].CREATE_TIME;
-                    content.push(array);
-                }
+            for (var i = 0; i < arr.length; i++) {
+                var array = {}
+                array.name = arr[i].HW_NAME;
+                array.img_url = arr[i].HW_COVER;
+                array.teacher_remark = arr[i].TEACHER_REMARK;
+                array.rank = arr[i].HW_RANK;
+                array.time = arr[i].SUBMIT_TIME;
+                content.push(array);
             }
+            // }
+            // else {
+            //     for (var i = 0; i < response.data.product.length; i++) {
+            //         arr.push(response.data.product[i])
+            //     }
+            //     for (var i = 0; i < arr.length; i++) {
+            //         var array = {}
+            //         array.name = arr[i].PRODUCT_NAME;
+            //         array.img_url = arr[i].COVER_URL;
+            //         array.teacher_remark = arr[i].TEACHER_REMARK;
+            //         array.rank = arr[i].PRODUCT_RANK;
+            //         array.time = arr[i].CREATE_TIME;
+            //         content.push(array);
+            //     }
+            // }
             commit(TYPES.changeWorkList, content)
             commit(TYPES.changeWorkCurrentList, 0)
             commit(TYPES.updateLoading, false)
@@ -343,7 +343,7 @@ const actions = {
     // Admin方法
     //获取课程目录
     getCourseList({ dispatch, commit, state }) {
-        globalAxios.get(
+        return globalAxios.get(
             "/admin/course",
             {
                 headers: {
@@ -353,7 +353,7 @@ const actions = {
             }
         ).then(
             response => {
-                console.log(response.data);
+                console.log('0000000000000')
                 var courseArr = [];
                 var courseList = [];
                 courseArr = response.data;
@@ -367,41 +367,9 @@ const actions = {
                 }
                 commit(TYPES.changeAdminCourseList, courseList);
                 console.log(courseList)
-                globalAxios
-                    .get(
-                        "/admin/course/" + courseList[0].id + "/video",
-                        {
-                            headers: {
-                                "Content-Type": "application/json",
-                                Authorization: state.idToken
-                            }
-                        }
-                    )
-                    .then(
-                        response => {
-                            console.log(response);
-                                var videoArr = [];
-                                var videoData = [];
-                                videoArr = response.data.data;
-                                for (var i = 0; i < videoArr.length; i++) {
-                                    var video = {};
-                                    video.chapterName = videoArr[i].CP_NAME;
-                                    video.videoName = videoArr[i].RS_NAME;
-                                    video.introduction = videoArr[i].RS_COMMENT;
-                                    video.date = dispatch('timestampToTime', videoArr[i].RS_CREATE_TIME)
-                                    video.uploadAdmin = videoArr[i].RS_FOUNDER;
-                                    video.chapterNum = videoArr[i].CP_NUMBER;
-                                    video.videoUrl = videoArr[i].RS_URL;
-                                    videoData.push(video);
-                                }
-                                commit(TYPES.changeVideo, videoData);
-                                commit(TYPES.changeVideoCurrentList, 0);
-                        },
-                        error => {
-                            // this.$router.push({path:'/404'})
-                            console.log(error);
-                        }
-                    );
+                return dispatch('changeCourse', courseList[0].id).then(() => {
+                    console.log('22222222222')
+                })
             },
             error => {
                 // this.$router.push({path:'/404'})
@@ -409,21 +377,10 @@ const actions = {
             }
         );
     },
-    timestampToTime(timestamp) {
-        timestamp = String(timestamp);
-        timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
-        var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        var Y = date.getFullYear() + "-";
-        var M = (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-";
-        var D = date.getDate() + " ";
-        var h = date.getHours() + ":";
-        var m = date.getMinutes() + ":";
-        var s = date.getSeconds();
-        return Y + M + D + h + m + s;
-    },
+
     //切换课程下方视频数据
     changeCourse({ dispatch, commit, state }, id) {
-        globalAxios.get(
+        return globalAxios.get(
             "/admin/course/" + id + "/video",
             {
                 headers: {
@@ -433,6 +390,7 @@ const actions = {
             }
         ).then(
             response => {
+                console.log('1111111111111')
                 console.log(response);
                 var videoArr = [];
                 var videoData = [];
@@ -445,7 +403,7 @@ const actions = {
                         video.chapterName = videoArr[i].CP_NAME;
                         video.videoName = videoArr[i].RS_NAME;
                         video.introduction = videoArr[i].RS_COMMENT;
-                        video.date = dispatch('timestampToTime', videoArr[i].RS_CREATE_TIME)
+                        video.date = videoArr[i].RS_CREATE_TIME
                         video.uploadAdmin = videoArr[i].RS_FOUNDER;
                         video.chapterNum = videoArr[i].CP_NUMBER;
                         video.videoUrl = videoArr[i].RS_URL;
