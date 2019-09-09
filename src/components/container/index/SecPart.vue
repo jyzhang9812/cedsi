@@ -6,7 +6,7 @@
          <p>{{header_p}}</p>
        </header>
        <div class="highlights" >
-         <button class="highlight-card --button" v-for="item in highlights"  :style=item.amoeba > 
+         <button class="highlight-card --button" v-for="(item,index) in highlights"  :style="item.amoeba"  :key="index"> 
            <span class="highlight-card__content">
              <span class="highlight-card__logo --square">
                <img :src="item.logo" alt="Moon to Mars logo">
@@ -20,7 +20,7 @@
     <div class="zf-row bottom">
        <div class="zf-column large-5 large-offset-0">
          <ul class="zf-row homepage-parent-circles text-center">
-           <li class="zf-column small-4" v-for="item in circles">
+           <li class="zf-column small-4" v-for="(item,index) in circles" :key="index">
              <a href="">
                <img :src="item.circle" alt="Code Drones">
                {{item.name}}
@@ -51,7 +51,7 @@ export default {
        {
          amoeba:{  
            backgroundColor: "#27c0c9",
-           backgroundImage: "url(" + require("../../../../static/images/index/amoeba-teal.png") + ") ",   
+           backgroundImage: "url("+this.$store.state.url+"index/amoeba-teal.png) ",   
          },
          logo:this.$store.state.url+"index/logo-moon2mars.png",
          title:"NASA Moon2Mars 挑战赛",
@@ -61,7 +61,7 @@ export default {
        {
          amoeba:{
            backgroundColor: "#903edb",
-           backgroundImage: "url(" + require("../../../../static/images/index/amoeba-purple.png") + ") ",
+           backgroundImage: "url("+this.$store.state.url+"index/amoeba-purple.png) ",
          },
          logo:this.$store.state.url+"index/logo-microbit.png",
          title:"bit 新课程   开始啦",
@@ -71,7 +71,7 @@ export default {
        {
          amoeba:{
            backgroundColor: "#5076ff",
-           backgroundImage: "url(" + require("../../../../static/images/index/amoeba-blue.png") + ") ",
+           backgroundImage: "url("+this.$store.state.url+"index/amoeba-blue.png) ",
          },
          logo:this.$store.state.url+"index/logo-jr.png",
          title:"新的赛迪斯Junior 移动应用程序",

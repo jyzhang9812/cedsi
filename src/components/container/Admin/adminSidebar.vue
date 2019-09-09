@@ -39,30 +39,23 @@
     data() {
       return {
         aside: [
-          // {
-          //   name: "教务管理",
-          //   iconSrc: "../../../../static/images/eduAdmin/icon-02.png",
-          //   children: [],
-          //   close: true,
-          //   route: "/Admin/"
-          // },
           {
             name: "视频管理",
-            iconSrc: "../../../../static/images/aside/teachingManagement.png",
+            iconSrc: this.$store.state.url+"aside/teachingManagement.png",
             children: [],
             close: true,
             route: "/Admin/"
           },
           {
             name: "课程管理",
-            iconSrc: "../../../../static/images/aside/activityManagement.png",
+            iconSrc: this.$store.state.url+"aside/activityManagement.png",
             children: [],
             close: true,
             route: "/Admin/courseManagement"
           },
           {
             name: "机构管理",
-            iconSrc: "../../../../static/images/aside/activityManagement.png",
+            iconSrc: this.$store.state.url+"aside/activityManagement.png",
             children: [],
             close: true,
             route: "/Admin/organizationManagement"

@@ -746,13 +746,6 @@ export default {
   border-color: #409eff;
 }
 
-/* .choose 此项真实有效， 可能编辑器不完全识别vue语法*/
-#classmanagement .choose {
-  background-image: url("../../../../../static/images/teach/choose.png");
-  background-repeat: no-repeat;
-  background-position: -1px -2px;
-}
-
 #classmanagement .btn {
   background: #409eff;
   color: #fff;

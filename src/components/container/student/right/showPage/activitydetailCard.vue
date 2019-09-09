@@ -2,13 +2,13 @@
   <div id="activity-detial">
     <div
       class="activity-section1"
-      :style="{backgroundImage:'url('+require('../../../../../../static/images/activity/activitybg.png')+')'}"
+      :style="{backgroundImage:'url('+require('../../'+$store.state.url+'activity/activitybg.png')+')'}"
     >
       <h1 class="activity-title">玩转算法系列--图论精讲 面试升职必备（Java版）</h1>
       <h2 class="activity-brief">难得一见的系统性讲解，涵盖图论领域经典算法底层实现，深入理解图论算法思想</h2>
       <div
         class="fixed-box"
-        :style="{backgroundImage:'url('+require('../../../../../../static/images/activity/fixedbg.png')+')'}"
+        :style="{backgroundImage:'url('+require('../../'+$store.state.url+'activity/fixedbg.png')+')'}"
       >
         <div class="activity-price">￥348.00</div>
         <button class="join-btn" @click="payment">我要报名</button>
@@ -18,21 +18,21 @@
       <div class="time-place">
         <div
           class="title-bg"
-          :style="{backgroundImage:'url('+require('../../../../../../static/images/activity/time.png')+')'}"
+          :style="{backgroundImage:'url('+require('../../'+$store.state.url+'activity/time.png')+')'}"
         >活动时间</div>
         <div class="content">{{activityTime}}</div>
       </div>
       <div class="time-place">
         <div
           class="title-bg"
-          :style="{backgroundImage:'url('+require('../../../../../../static/images/activity/time.png')+')'}"
+          :style="{backgroundImage:'url('+require('../../'+$store.state.url+'activity/time.png')+')'}"
         >活动地点</div>
         <div class="content">{{activityPlace}}</div>
       </div>
     </div>
     <div
       class="activity-section3"
-      :style="{backgroundImage:'url('+require('../../../../../../static/images/activity/activitydetial.png')+')'}"
+      :style="{backgroundImage:'url('+require('../../'+$store.state.url+'activity/activitydetial.png')+')'}"
     >
       <div class="activity-left">
         <div class="info-name">{{activityName}}</div>
@@ -47,7 +47,7 @@
     </div>
     <div
       class="activity-section4"
-      :style="{backgroundImage:'url('+require('../../../../../../static/images/activity/activityfooter.jpg')+')'}"
+      :style="{backgroundImage:'url('+require('../../'+$store.state.url+'activity/activityfooter.jpg')+')'}"
     >
       <div class="row activity-row">
         <div
@@ -69,17 +69,17 @@ export default {
       activityDesc:
         "图论算法是所有计算机专业的同学必学的基础知识；也是在算法，数据结构，离散数学等领域的重要内容；是面试，升职，计算机专业考研，考博的必考内容；更是计算机网络，编译原理，社交网络算法等领域的基础。但是，由于图论算法本身的复杂性和抽象性，让大多数同学头疼不已。在这个课程中，bobo老师将用其独到的问题讲解方式，庖丁解牛，深入浅出，让大家在这个课程中，真正地玩转图论算法。",
       activityTeacherImg:
-        "../../../../../../static/images/activity/teacher.jpg",
+        "../../"+this.$store.state.url+"activity/teacher.jpg",
       activityTeacherName: "老师名字",
       activityImgList: [
         {
-          image: "../../../../../../static/images/activity/teacher.jpg"
+          image: "../../"+this.$store.state.url+"activity/teacher.jpg"
         },
         {
-          image: "../../../../../../static/images/activity/teacher.jpg"
+          image: "../../"+this.$store.state.url+"activity/teacher.jpg"
         },
         {
-          image: "../../../../../../static/images/activity/teacher.jpg"
+          image: "../../"+this.$store.state.url+"activity/teacher.jpg"
         }
       ],
       activityTime: "2019年6月2日",

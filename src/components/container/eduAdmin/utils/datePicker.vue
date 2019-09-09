@@ -18,8 +18,8 @@
     },
     data() {
       return {
-        inputPrefixSrc: "../../../static/images/datepicker/calendar.png",
-        inputSuffixSrc: "../../../static/images/datepicker/delete.png",
+        inputPrefixSrc: this.$store.state.url2+"datepicker/calendar.png",
+        inputSuffixSrc: this.$store.state.url2+"datepicker/delete.png",
         time: ""
       }
     },
@@ -59,15 +59,11 @@
 
   .icon-prefix {
     display: inline;
-    height: 18px;
-    width: 18px;
     margin-left: 5px;
   }
 
   .icon-suffix {
     display: inline;
-    height: 18px;
-    width: 18px;
     cursor: pointer;
   }
 

@@ -10,7 +10,7 @@
 				</h4>
 			</div>
             <div class="modal-body mypay-qrcode">
-				<img src="../../../../static/images/payment/qrcode.png" />
+				<img :src="qrcodeImage" />
                 <span>使用微信扫描二维码进行支付</span>
 			</div>
 		</div><!-- /.modal-content -->
@@ -18,7 +18,7 @@
 </div>
     <div
       class="payment-header"
-      :style="{backgroundImage:'url('+require('../../../../static/images/payment/headerbg.jpg')+')'}"
+      :style="{backgroundImage:'url('+$store.state.url+'payment/headerbg.jpg)'}"
     >
       <div class="payment-title">支付中心</div>
     </div>
@@ -37,7 +37,7 @@
       <div class="pay-method">
         <span>支付方式</span>
         <div class="pay-img">
-          <img src="../../../../static/images/payment/WePayLogo.png" />
+          <img :src="wechatImage" />
         </div>
       </div>
       <div class="summary">
@@ -55,14 +55,16 @@ export default {
         return{
             orderName:"玩转算法系列--图论精讲 面试升职必备（Java版）",
             orderPrice:"￥ 348.00",
-            orderNum:"66666666666"
+            orderNum:"66666666666",
+            qrcodeImage:this.$store.state.url+"payment/qrcode.png",
+            wechatImage:this.$store.state.url+"payment/WePayLogo.png"
         }
     },
     methods:{
         closeModal(){
             setTimeout("$('#myPay').modal('hide')",5000);//5s延时自动关闭
         }																					
-    }
+    },
 
 };
 </script>

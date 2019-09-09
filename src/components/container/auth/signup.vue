@@ -1,7 +1,6 @@
 <template>
-
   <div id="signup" class="bcg"
-    :style="{backgroundImage:'url('+require('../../../../static/images/auth/bg-01.jpg')+')'}">
+    :style="{backgroundImage:'url('+$store.state.url+'auth/bg-01.jpg)'}">
     <div style="width: 400px;">
       <ul class="nav nav-pills" role="tablist">
         <li :key="index" :class="index==0?'active':''" v-for='(role,index) in roleList'>
@@ -23,7 +22,7 @@
               <input type="text" id="account" v-model="account" class="input100" placeholder="账号">
               <span class="focus-input100" data-placeholder=""></span>
             </div>
-            <div class="text-center p-t-90" v-if='submit && !checkaccount()'v-show='index!=0'>
+            <div class="text-center p-t-90" v-if='submit && !checkaccount()' v-show='index!=0'>
               <p style="color: #f87c56">
                 企业账号不能为空
               </p>
@@ -55,7 +54,6 @@
                 确认密码与原密码不符合，请重试
               </p>
             </div>
-
             <div class="container-login100-form-btn">
               <button type="submit" class="login100-form-btn">确定</button>
             </div>
@@ -71,6 +69,7 @@
 <script>
   // import axios from 'axios';
   // import axios from '../../axios-auth';
+  import crypto from 'crypto';
   export default {
     data() {
       return {
@@ -89,10 +88,12 @@
     methods: {
       onSubmit() {
         this.submit = 1
+        var password = this.password;
+        password=crypto.createHash('SHA256').update(password).digest('hex');
         const formData = {
           account: this.account,
           username: this.username,
-          password: this.password,
+          password: password,
           confirmPassword: this.confirmPassword,
           role: this.role,
         }

@@ -15,12 +15,14 @@
           </div>
           <div :class="{'collapse': item.close}">
             <ul class="menu nav">
-              <li v-for="child in item.children"
+              <router-link v-for="child in item.children"
+              active-class="u-link--Active"
+              tag="li"
                   class="children"
-                  @click="$router.push(child.route)"
+                 :to="child.route"
                   :key="child.name">
                 {{child.name}}
-              </li>
+              </router-link>
             </ul>
           </div>
         </li>
@@ -42,14 +44,14 @@
         aside: [
           {
             name: "工作台",
-            iconSrc: "../../../../static/images/aside/staging.png",
+            iconSrc: this.$store.state.url+"aside/staging.png",
             children: [],
             close: true,
             route: "/eduAdmin/"
           },
           {
             name: "教务管理",
-            iconSrc: "../../../../static/images/eduAdmin/icon-02.png",
+            iconSrc:  this.$store.state.url+"eduAdmin/icon-02.png",
             children: [
                {name: "班级管理", route: "/eduAdmin/classManagement"},
                {name: "学生管理", route: "/eduAdmin/stuManagement"},
@@ -59,7 +61,7 @@
           },
           {
             name: "教学管理",
-            iconSrc: "../../../../static/images/aside/teachingManagement.png",
+            iconSrc:  this.$store.state.url+"aside/teachingManagement.png",
             children: [
                {name: "作业点评", route: "/eduAdmin/teaching"},
             ],
@@ -67,7 +69,7 @@
           },
           {
             name: "活动管理",
-            iconSrc: "../../../../static/images/aside/activityManagement.png",
+            iconSrc:  this.$store.state.url+"aside/activityManagement.png",
             children: [
                {name: "发布活动", route: "/eduAdmin/activity"},
             ],
@@ -75,7 +77,7 @@
           },
           {
             name: "统计分析",
-            iconSrc: "../../../../static/images/aside/statisticalAnalyses.png",
+            iconSrc:  this.$store.state.url+"aside/statisticalAnalyses.png",
             children: [
                {name: "学情分析", route: "/eduAdmin/statistics"}
             ],
@@ -148,6 +150,9 @@
   }
 
   #eduSidebar .children:hover {
+    background-color: #2C5285;
+  }
+  .u-link--Active{
     background-color: #2C5285;
   }
 

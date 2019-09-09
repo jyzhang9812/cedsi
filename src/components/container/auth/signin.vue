@@ -1,6 +1,6 @@
 <template>
   <div id="signin" class="bcg"
-    :style="{backgroundImage:'url('+require('../../../../static/images/auth/bg-01.jpg')+')'}">
+    :style="{backgroundImage:'url('+imagesurl+')'}">
     <div class="signin-form">
       <span class="login100-form-logo">
         <i class="zmdi zmdi-landscape"></i>
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import crypto from 'crypto';
   export default {
     data() {
       return {
@@ -55,8 +56,10 @@
     },
     methods: {
       onSubmit() {
+        var password = this.password;
+        password=crypto.createHash('SHA256').update(password).digest('hex');
         const formData = {
-          password: this.password,
+          password: password,
           username: this.username
         }
         this.$store.dispatch('login', formData)
@@ -66,6 +69,9 @@
           })
       }
     },
+    created(){
+      this.imagesurl=this.$store.state.url+'auth/bg-01.jpg'
+    }
   }
 </script>
 

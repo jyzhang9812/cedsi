@@ -12,7 +12,7 @@
            class="menu-icon" @click="clearOption">
     </div>
     <ul class="dropdown-menu" :aria-labelledby="id">
-      <li v-for="item in dropDownList">
+      <li v-for="(item,index) in dropDownList" :key="index">
         <a href="#" @click="reportOption(item)">{{item}}</a>
       </li>
     </ul>
@@ -31,9 +31,9 @@
     data() {
       return {
         rotate: false,
-        deleteIcon: "../../../../../static/images/datepicker/delete.png",
-        menudownIcon: "../../../../../static/images/selectInput/menudown.png",
-        menuIconSrc: "../../../../../static/images/selectInput/menudown.png"
+        deleteIcon: "../"+this.$store.state.url+"datepicker/delete.png",
+        menudownIcon: "../"+this.$store.state.url+"selectInput/menudown.png",
+        menuIconSrc: "../"+this.$store.state.url+"selectInput/menudown.png"
       }
     },
     methods: {
