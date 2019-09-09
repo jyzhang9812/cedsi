@@ -3,7 +3,7 @@
         <div class="threeImg">
             <div class="Containt">
                 <div class="iconleft" v-on:click="zuohua">
-                    <img class="el-icon-arrow" :src=leftImg></img>
+                    <img class="el-icon-arrow" :src=leftImg>
                 </div>
                 <ul :style="{'left':calleft + 'px'}">
                     <li class="course_card" v-for="(item,index) in superurl" :key="index" @mouseover="show(index)" @mouseleave="hidden(index)">
@@ -19,7 +19,7 @@
                     </li>
                 </ul>
                 <div class="iconright" v-on:click="youhua">
-                    <img class="el-icon-arrow" :src=rightImg></img>
+                    <img class="el-icon-arrow" :src=rightImg>
                 </div> 
             </div>
         </div>
@@ -27,11 +27,11 @@
             <div class="menu">
                 <button  @click="tab(index)"
                 v-for="(item,index) in items" class="tag"
-                :class="{active : index===curId}">{{item.item}}</button>
+                :class="{active : index===curId}" :key="index">{{item.item}}</button>
             </div>
-            <div class="presentation" v-show="index===curId" v-for="(content, index) in contents">
-                <div class="presentation_item"v-for="(content, index) in contents[index]">
-                    <img class="item_img" :src="content.src"></img>
+            <div class="presentation" v-show="index===curId" v-for="(content, index) in contents" :key="index">
+                <div class="presentation_item" v-for="(content, index) in contents[index]" :key="index">
+                    <img class="item_img" :src="content.src">
                     <span>{{content.name}}</span>
                 </div>
             </div>

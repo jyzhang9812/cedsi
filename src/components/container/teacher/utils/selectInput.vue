@@ -12,7 +12,7 @@
            class="menu-icon" @click="clearOption">
     </div>
     <ul class="dropdown-menu" :aria-labelledby="id">
-      <li v-for="item in dropDownList">
+      <li v-for="(item,index) in dropDownList" :key="index">
         <a href="#" @click="reportOption(item)">{{item}}</a>
       </li>
     </ul>

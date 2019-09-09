@@ -3,7 +3,7 @@
     <div class="asidebg">
       <div class="aside">
         <ul class="menu">
-          <li v-for="item in aside" class="bg-hover">
+          <li v-for="(item,index) in aside" class="bg-hover" :key="index">
             <div class="item-name" @click="dropDownListListener(item)">
               <i><img :alt="item.name" :src="item.iconSrc" class="aside-icon"></i>
               <span>{{item.name}}</span>
@@ -13,7 +13,7 @@
             </div>
             <div :class="{'collapse': item.close}">
               <ul class="menu nav">
-                <li v-for="child in item.children" class="children" @click="$router.push(child.route)">
+                <li v-for="(child,index) in item.children" class="children" @click="$router.push(child.route)" :key="index">
                   {{child.name}}
                 </li>
               </ul>

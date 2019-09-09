@@ -4,7 +4,7 @@
         <div class="worddetail" :style="bg">
             <h2>被更多人信赖</h2>
             <div class="wordcontainer">
-                <div class="trisection" v-for="item in word">
+                <div class="trisection" v-for="(item,index) in word" :key="index">
                     <div class="tricard">
                         <blockquote :style="douhao">
                             <p>
@@ -28,7 +28,6 @@
                 </a>
             </div>
         </div>
-    </div>
     </div>
 </template>
 

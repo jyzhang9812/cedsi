@@ -6,7 +6,7 @@
          <p>{{header_p}}</p>
        </header>
        <div class="highlights" >
-         <button class="highlight-card --button" v-for="item in highlights"  :style=item.amoeba > 
+         <button class="highlight-card --button" v-for="(item,index) in highlights"  :style="item.amoeba"  :key="index"> 
            <span class="highlight-card__content">
              <span class="highlight-card__logo --square">
                <img :src="item.logo" alt="Moon to Mars logo">
@@ -20,7 +20,7 @@
     <div class="zf-row bottom">
        <div class="zf-column large-5 large-offset-0">
          <ul class="zf-row homepage-parent-circles text-center">
-           <li class="zf-column small-4" v-for="item in circles">
+           <li class="zf-column small-4" v-for="(item,index) in circles" :key="index">
              <a href="">
                <img :src="item.circle" alt="Code Drones">
                {{item.name}}

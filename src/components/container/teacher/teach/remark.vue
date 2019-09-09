@@ -1,14 +1,14 @@
 <template>
   <div id="remark">
     <span>作业点评</span>
-    <div class="first-floor">
+    <!-- <div class="first-floor">
       <label for="tel-name"></label>
       <input type="text" placeholder="请输入姓名" class="textBox" id="tel-name" v-model="inputData.telOrName">
       <date-picker tips="选择开始时间" id="datePicker_start" :date="inputData.startDate" @changeDate="changeDate">
       </date-picker>
       <date-picker tips="选择结束时间" id="datePicker_end" :date="inputData.endDate" @changeDate="changeDate">
       </date-picker>
-    </div>
+    </div> -->
     <div class="second-floor">
       <div class="select-input">
         <select-input id="classes" tips="请选择班级" :option="inputData.classes.option" @option="changeOption"
@@ -37,7 +37,7 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th v-for="title in tableTitle" class="title">{{title}}</th>
+            <th v-for="(title,index) in tableTitle" class="title" :key="index">{{title}}</th>
           </tr>
         </thead>
         <tbody>

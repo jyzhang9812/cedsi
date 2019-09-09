@@ -90,8 +90,6 @@
 
   .menu-icon {
     display: inline;
-    width: 14px;
-    height: 14px;
   }
 
 </style>
