@@ -99,7 +99,7 @@
             iconSrc: this.$store.state.url + "aside/personalCenter.png",
             children: [{
               name: "消息通知",
-              route: "/console"
+              route: "/console/message"
             },
             {
               name: "个人资料",
