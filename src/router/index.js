@@ -158,6 +158,11 @@ const asider = resolve => {
     resolve(require('../components/container/teacher/sidebar.vue'));
   });
 };
+const tMessage = resolve => {
+  require.ensure(['../components/container/teacher/message/tMessage.vue'], () => {
+    resolve(require('../components/container/teacher/message/tMessage.vue'));
+  });
+};
 //以下是教务角色
 const eduAdmin = resolve => {
   require.ensure(['../components/container/eduAdmin/eduSidebar.vue'], () => {
@@ -523,7 +528,16 @@ export default new Router({
               next('/signin')
             }
           }, component: statistics
-        }
+        },
+        {
+          path: '/console/message', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: tMessage
+        },
       ]
     },
     {
