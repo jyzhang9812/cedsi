@@ -39,7 +39,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="(list,index) in currentList">
+                        <tr v-for="(list,index) in currentList" :key="index">
                           <td>
                             <input type="checkbox" class="checkbox">
                           </td>
@@ -91,7 +91,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(list, index) in currentList">
+          <tr v-for="(list, index) in currentList" :key="index">
             <td>{{index+1}}</td>
             <td>{{list.school}}</td>
             <td>{{list.author}}</td>

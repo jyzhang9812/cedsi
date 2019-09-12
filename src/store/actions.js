@@ -457,6 +457,47 @@ const actions = {
             }
         );
     },
+    //章节管理页面 获取章节详细信息
+    getChapterDetial({ dispatch, state ,commit}, courseId) {
+        return globalAxios.get(
+            "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
+            courseId +
+            "/chapters",
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: state.idToken
+                }
+            }
+        ).then(
+            response => {
+                //console.log(response.data);
+                var chapterArr = [];
+                var chapterData = [];
+                chapterArr = response.data.data;
+                state.chapterLength = chapterArr.length
+                //console.log(state.chapterLength)
+                for (var i = 0; i < state.chapterLength; i++) {
+                    var chapter = {};
+                    chapter.chapterName = chapterArr[i].CP_NAME;
+                    chapter.introduction = chapterArr[i].CP_DESCRIPTION;
+                    //chapter.date = this.timestampToTime(chapterArr[i].CP_UPLOAD_TIME);
+                    chapter.uploadAdmin = chapterArr[i].CP_FOUNDER;
+                    chapter.chapterNum = chapterArr[i].CP_NUMBER;
+                    chapter.id = chapterArr[i].CP_ID;
+                    chapterData.push(chapter);
+                }
+                state.chapterData = chapterData;
+                //console.log(chapterData);
+                commit(TYPES.changeChapterList, chapterData)
+                commit(TYPES.changeChapterCurrentList, 0)
+            },
+            error => {
+                console.log(error);
+            }
+        );
+    },
+
 
 
     //superAdmin方法

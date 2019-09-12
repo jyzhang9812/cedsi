@@ -6,7 +6,7 @@
     </div>
     <div class="upload">
       <span class="upload-title">章节序号:</span>
-      <input class="upload-input" placeholder="请输入章节序号" v-model="chapterNum" />
+      <input class="upload-input" :value="chapterNum" disabled/>
     </div>
     <div class="upload upload-height">
       <span class="upload-title">章节描述:</span>
@@ -71,7 +71,8 @@ export default {
     }
   },
   created() {
-    this.courseId = this.$route.params.courseId;
+    this.courseId = this.$route.query.courseId;
+    this.chapterNum = this.$route.query.chapterNum;
   }
 };
 </script>
@@ -141,6 +142,7 @@ export default {
 #addChapter .upload-footer {
   width: 100%;
   text-align: center;
+  margin-bottom: 20px;
 }
 #addChapter .upload-btn {
   background-color: #409eff;

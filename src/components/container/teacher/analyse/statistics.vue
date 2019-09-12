@@ -84,7 +84,7 @@
       </div>
        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
       <button class="btn btn-search" @click="search(formData),afterSearch()">搜索</button>
-      <button class="btn btn-clear" @click="clearChoices">清空筛选</button>
+      <button class="btn btn-clear" @click="clearChoices(),afterSearch()">清空筛选</button>
     </div>
     <div class="forth-floor">
       <table class="table table-hover">
@@ -595,6 +595,7 @@ export default {
       this.optionsInit();
       this.cleanFormdata();
       this.cleanButtonStyle();
+      this.search({});
     },
     optionsInit() {
       this.inputData = {

@@ -86,7 +86,7 @@
           <span>上传封面</span>
           <button>选择封面</button>
           <label>
-            <img src="/static/images/auth/bg-02.jpg" alt="">
+            <img src="https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/static/bg-02.jpg" alt="">
             henrenx.png
           </label>
         </div>

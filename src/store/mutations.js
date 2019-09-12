@@ -69,6 +69,12 @@ const mutations = {
     [TYPES.changeVideoCurrentList](state, value) {
         state.videoCurrentList = state.videoData.slice(value, value + state.limit);
     },
+    [TYPES.changeChapterList](state, List) {
+        state.chapterData = List
+    },
+    [TYPES.changeChapterCurrentList](state, value) {
+        state.chapterCurrentList = state.chapterData.slice(value, value + state.limit);
+    },
     
     //superAdmin
     [TYPES.changeAdminList](state, adminList) {

@@ -58,14 +58,14 @@
   }
 
   .icon-prefix {
-    display: inline;
+    /* display: inline; */
     height: 18px;
     width: 18px;
     margin-left: 5px;
   }
 
   .icon-suffix {
-    display: inline;
+    /* display: inline; */
     height: 18px;
     width: 18px;
     cursor: pointer;

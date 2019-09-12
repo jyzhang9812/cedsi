@@ -40,18 +40,18 @@
       return {
         aside: [
           {
-            name: "视频管理",
-            iconSrc: this.$store.state.url+"aside/teachingManagement.png",
-            children: [],
-            close: true,
-            route: "/Admin/"
-          },
-          {
             name: "课程管理",
             iconSrc: this.$store.state.url+"aside/activityManagement.png",
             children: [],
             close: true,
             route: "/Admin/courseManagement"
+          },
+          {
+            name: "视频管理",
+            iconSrc: this.$store.state.url+"aside/teachingManagement.png",
+            children: [],
+            close: true,
+            route: "/Admin/"
           },
           {
             name: "机构管理",

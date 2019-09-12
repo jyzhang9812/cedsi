@@ -70,7 +70,7 @@ import crypto from 'crypto';
       }
     },
     created(){
-      this.imagesurl=this.$store.state.url+'auth/bg-01.jpg'
+      this.imagesurl="https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/static/bg-01.jpg"
     }
   }
 </script>
