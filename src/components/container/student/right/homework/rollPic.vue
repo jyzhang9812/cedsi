@@ -1,19 +1,57 @@
 <template>
     <div id="rollPic" class="container-fluid">
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="myHomework" data-backdrop='false' tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body head">
+                        <div class="left">
+                            <iframe v-if='num>=0' :src="currentList[num].url"></iframe>
+                        </div>
+                        <div class="right">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h3>作者</h3>
+                            <p>dwqenwrehgnruy</p>
+                            <h3>作品描述</h3>
+                            <p>dwqenwrehgnruy</p>
+                            <h3>操作说明</h3>
+                            <p>dwqenwrehgnruy</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <p>老师点评：</p>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
         <div class="menu">
             <button @click="tab(index)" v-for="(item,index) in items" class="tag"
                 :class="{active : index==curId}">{{item.COURSE_NAME}}</button>
         </div>
+        <div id="selectMenu">
+            <div>
+                <button @click="selectTab(index)" v-for="(item,index) in selectItems" class="tag"
+                    :class="{active : index==selectId}">{{item}}</button>
+            </div>
+            <div style="padding-right: 20px;" @click='changeDirection'>
+                <i class="fa fa-2x fa-long-arrow-up" :style="isUpload?'color:#00bcd4':'color:#ccc'"
+                    aria-hidden="true"></i>
+                <i class="fa fa-2x fa-long-arrow-down" :style="isUpload?'color:#ccc':'color:#00bcd4'"
+                    aria-hidden="true"></i>
+            </div>
+        </div>
         <div class="row" style="margin-top: 10px">
             <div class="col-md-4" v-for="(item,index) in currentList" :key="index" @mouseover="show(index)"
-                @mouseleave="hidden(index)">
-                <div class="inside">
+                @mouseleave="hidden(index)" @click='show(index)'>
+                <div class="inside" data-toggle="modal" data-target="#myHomework" data-index="index">
                     <img class="img" :style="style" :src="item.img_url" />
                     <div class='details' v-show="index==i">
                         <div class="detail_item">
                             <img class="icon" v-for='j in parseInt(item.rank)' :src=star_active />
                             <img class="icon" v-for='j in 5-parseInt(item.rank)' :src=star />
-                            <span> {{item.teacher_remark}}</span>
+                            <span>{{item.teacher_remark}}</span>
                         </div>
                     </div>
                 </div>
@@ -29,8 +67,9 @@
                         </div>
                     </div>
                     <div class="right">
-                        <button class="edit">编辑</button>
-                        <button class="delete" v-on:click='del(index)'>删除</button>
+                        <button class="edit" data-toggle="modal" data-target="#myHomework"
+                            data-index="index">查看</button>
+                        <button class="delete" @click='del(index)'>删除</button>
                     </div>
                 </div>
             </div>
@@ -51,6 +90,7 @@
         data() {
             return {
                 curId: 0,
+                num: -1,
                 btn: 'btn',
                 btnh: 'btnhover',
                 clock: '../' + this.$store.state.url + 'dashboard/clock.png',
@@ -59,10 +99,14 @@
                 star_active: '../' + this.$store.state.url + 'dashboard/star_active.png',
                 star: '../' + this.$store.state.url + 'dashboard/star.png',
                 i: -1,
+                selectItems: ['未提交', '已提交'],
+                selectId: 0,
+                isUpload: true,
             }
         },
         methods: {
             show(index) {
+                this.num = index;
                 this.i = index;
                 this.isShow = true;
             },
@@ -74,11 +118,21 @@
                 this.curId = index
                 this.$store.dispatch('getWork', this.$store.state.courseList[index].ID)
             },
+            selectTab(index) {
+                this.selectId = index
+                this.currentList = []
+            },
+            changeDirection(){
+                this.isUpload = !this.isUpload
+            },
             //换页
             getNew(value) {
                 var currentPage = value / this.limit;
                 this.currentPage = currentPage;
                 this.$store.commit("changeWorkCurrentList", this.currentPage * this.limit)
+            },
+            del(index) {
+
             },
         },
         created: function () {
@@ -133,8 +187,34 @@
     }
 
     #rollPic .tag:hover,
-    #rollPic .active {  
+    #rollPic .active {
         color: #00bcd4;
+    }
+
+    #selectMenu {
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    #selectMenu .tag {
+        background-color: #ccc;
+        color: #fff;
+        display: inline-block;
+        margin: 10px;
+        padding: 7px 20px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        border: none;
+    }
+
+    #selectMenu .tag:hover,
+    #selectMenu button.active {
+        background-color: #00bcd4;
+        color: #fff;
     }
 
     #rollPic .col-md-4 {
@@ -295,5 +375,56 @@
     #rollPic .work_type {
         width: 34.7px;
         height: 20px;
+    }
+
+    #myHomework {
+        width: 100%;
+        height: auto;
+        background: (255, 255, 255, .5)
+    }
+
+    #myHomework .modal-dialog {
+        width: 60%;
+        height: auto;
+        background: (255, 255, 255, .5)
+    }
+
+    #myHomework iframe {
+        width: 100%;
+        height: 500px;
+        background-color: #fff;
+        border-radius: 10px;
+    }
+
+    #myHomework .head {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #myHomework .left {
+        width: 65%;
+        height: auto;
+    }
+
+    #myHomework .right {
+        width: 30%;
+        height: 441px;
+        overflow-x: scroll;
+        margin-left: 5%;
+    }
+
+    #myHomework .right .close {
+        position: relative;
+        top: 0;
+        right: 0;
+    }
+
+    #myHomework .right p {
+        color: #777;
+        font-size: 16px;
+    }
+
+    #myHomework .right h3 {
+        color: #50b8ee;
     }
 </style>

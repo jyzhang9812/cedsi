@@ -89,7 +89,7 @@
         text-align: center;
         text-decoration: none;
         padding: 4px 10px;
-        font-size: 16px;
+        font-size: 18px;
         border: none;
         font-weight: 550;
     }
@@ -211,6 +211,7 @@
     /* 社区 */
     #community .community_card {
         border-radius: 8px;
+        margin-bottom: 30px;
         width: 100%;
         height: auto;
         background: #fff;
