@@ -36,15 +36,14 @@ import Pagination from "../utils/pagination";
 import globalAxios from "axios";
 import fs from "fs";
 import AWS from "aws-sdk";
+  import { mapState } from 'vuex';
 
 export default {
   name: "chapters",
   components: { Pagination },
   data() {
     return {
-      chapterList: [],
       file: null,
-      limit: 10,
       fileName: "",
       chapterData: [],
       tableTitle: [
@@ -55,7 +54,7 @@ export default {
         "创建人",
         "操作"
       ],
-      currentList: []
+      chapterData:[]
     };
   },
   methods: {
@@ -64,18 +63,12 @@ export default {
     },
     gotoAdd() {
       this.$router.push({
-        path:
-          "/Admin/chapterManagement/" +
-          this.courseId +
-          "/addChapter"
+        name:"addChapter",
+        query:{
+            courseId:this.courseId,
+            chapterNum:this.chapterLength+1
+        }
       });
-    },
-    changechapter(index) {
-      console.log(index);
-      for (var i = 0; i < this.chapterList.length; i++) {
-        this.chapterList[i].isActive = false;
-      }
-      this.chapterList[index].isActive = true;
     },
     timestampToTime(timestamp) {
       timestamp = String(timestamp);
@@ -90,51 +83,67 @@ export default {
       return Y + M + D + h + m + s;
     }
   },
-  mounted() {
-    this.changeTablePages(0);
-    this.courseId = this.$route.params.courseId;
-    var token = window.localStorage.getItem("idToken");
-    globalAxios
-      .get(
-        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
-        this.courseId +
-        "/chapters",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token
-          }
-        }
-      )
-      .then(
-        response => {
-          console.log(response.data);
-          var chapterArr = [];
-          var chapterData = [];
-          chapterArr = response.data.data;
-          for (var i = 0; i < chapterArr.length; i++) {
-            var chapter = {};
-            chapter.chapterName = chapterArr[i].CP_NAME;
-            chapter.introduction = chapterArr[i].CP_DESCRIPTION;
-            chapter.date = this.timestampToTime(chapterArr[i].CP_UPLOAD_TIME);
-            chapter.uploadAdmin = chapterArr[i].CP_FOUNDER;
-            chapter.chapterNum = chapterArr[i].CP_NUMBER;
-            chapter.id=chapterArr[i].CP_ID;
-            chapterData.push(chapter);
-          }
-          this.chapterData = chapterData;
-          console.log(chapterData);
-          this.changeTablePages(0);
-        },
-        error => {
-          // this.$router.push({path:'/404'})
-          console.log(error);
-        }
-      );
-  },
   created() {
-    console.log("created被调用了")
-  }
+    this.courseId = this.$route.params.courseId;
+    this.$store.dispatch('getChapterDetial',this.courseId).then(() => {
+        this.chapterData = this.$store.state.chapterData
+        console.log(this.$store.state.chapterData)
+        //console.log('333333333333333')
+        if (this.chapterData) {
+          for (let i = 0; i <= this.chapterData.length; i++) {
+            this.chapterData[i].date = this.timestampToTime(this.$store.state.chapterData[i].date)
+          }
+        }
+      })
+    //var token = window.localStorage.getItem("idToken");
+    // globalAxios
+    //   .get(
+    //     "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
+    //     this.courseId +
+    //     "/chapters",
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: token
+    //       }
+    //     }
+    //   )
+    //   .then(
+    //     response => {
+    //       console.log(response.data);
+    //       var chapterArr = [];
+    //       var chapterData = [];
+    //       chapterArr = response.data.data;
+    //       this.chapterLength = chapterArr.length
+    //       console.log(this.chapterLength)
+    //       for (var i = 0; i < this.chapterLength; i++) {
+    //         var chapter = {};
+    //         chapter.chapterName = chapterArr[i].CP_NAME;
+    //         chapter.introduction = chapterArr[i].CP_DESCRIPTION;
+    //         chapter.date = this.timestampToTime(chapterArr[i].CP_UPLOAD_TIME);
+    //         chapter.uploadAdmin = chapterArr[i].CP_FOUNDER;
+    //         chapter.chapterNum = chapterArr[i].CP_NUMBER;
+    //         chapter.id=chapterArr[i].CP_ID;
+    //         chapterData.push(chapter);
+    //       }
+    //       this.chapterData = chapterData;
+    //       console.log(chapterData);
+    //       this.changeTablePages(0);
+    //     },
+    //     error => {
+    //       // this.$router.push({path:'/404'})
+    //       console.log(error);
+    //     }
+    //   );
+  },
+  computed: {
+      ...mapState({
+        chapterList: state => state.chapterData,
+        // videoData: state => state.videoData,
+        currentList: state => state.chapterCurrentList,
+        limit: state => state.limit,
+      }),
+    }
 };
 </script>
 

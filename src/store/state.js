@@ -253,6 +253,10 @@ const state = {
             }]
         }
     },
+    chapterData:[],
+    chapterCurrentList:[],
+    chapterLength:0,
+
 
     //超级管理员
     adminList: [],

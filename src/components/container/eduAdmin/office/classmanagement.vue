@@ -14,7 +14,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">新增班级</h4>
+            <h4 class="modal-title" id="myModalLabel">{{modalTitle}}班级</h4>
           </div>
           <div class="modal-body">
             <div class="content">
@@ -25,6 +25,7 @@
                   :class="isName==false?'addcon':'addcon err'"
                   placeholder="请输入班级名称"
                   v-model="addClassName"
+                  :disabled="isChange"
                 />
                 <span :class="isName==true?'inputtips':'inputerr'">不超过10个字符</span>
               </div>
@@ -72,7 +73,7 @@
       <!-- /.modal -->
     </div>
     <!-- 排课模态框（Modal） -->
-    <div
+    <!-- <div
       class="modal fade"
       id="courseScheduling"
       tabindex="-1"
@@ -88,13 +89,11 @@
           </div>
           <div class="modal-body">
             <div class="course">
-              <!-- 选项卡菜单-->
               <ul id="myTab" class="nav nav-pills" role="tablist">
                 <li v-for="(course,index) in courseList" :key="index" :class="index==0?'active':''">
                   <a :href="'#'+course.name" role="tab" data-toggle="pill">{{course.name}}</a>
                 </li>
               </ul>
-              <!-- 选项卡面板 -->
               <div id="myTabContent" class="tab-content">
                 <div
                   :class="index==0?'tab-pane fade in active':'tab-pane fade in'"
@@ -124,10 +123,8 @@
             </div>
           </div>
         </div>
-        <!-- /.modal-content -->
       </div>
-      <!-- /.modal -->
-    </div>
+    </div>-->
     <!-- 查看学生模态框（Modal） -->
     <div
       class="modal fade"
@@ -207,6 +204,41 @@
       </div>
       <!-- /.modal -->
     </div>
+     <!-- 提示模态框（Modal） -->
+    <div
+      class="modal fade"
+      id="alterModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog alterwidth">
+        <div class="modal-content">
+          <div class="modal-header alterheader">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">提示</h4>
+          </div>
+          <div class="modal-body">
+            <div class="altercontent" aria-hidden="true">
+              <img :src="alterimg" class="alterimg" />
+              <span>{{alterMes}}</span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              @click="submitDelete()"
+            >确定</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal -->
+    </div>
     <div class="classroute">
       <ol class="breadcrumb">
         <li>教务管理</li>
@@ -255,7 +287,7 @@
             <td>{{classes.courseName}}</td>
             <td>{{classes.courseMemberCount}}</td>
             <td style="width:150px">
-              <span class="blue" data-toggle="modal" data-target="#courseScheduling">排课</span>&nbsp;&nbsp;
+              <!-- <span class="blue" data-toggle="modal" data-target="#courseScheduling">排课</span>&nbsp;&nbsp; -->
               <span class="blue" data-toggle="modal" data-target="#checkStudent">查看学生</span>&nbsp;&nbsp;
               <span
                 class="blue"
@@ -263,6 +295,12 @@
                 data-target="#addClass"
                 @click="updateClass(seq)"
               >编辑</span>&nbsp;&nbsp;
+              <span
+                class="red"
+                data-toggle="modal"
+                data-target="#alterModal"
+                @click="deleteClass(seq)"
+              >删除</span>
               <span class="blue" data-toggle="modal" data-target="#addStudents">批量导入学生</span>
             </td>
           </tr>
@@ -359,34 +397,34 @@ export default {
           remark: "好"
         }
       ],
-      courseList: [
-        {
-          name: "Scratch1",
-          courseContent: [
-            {
-              sonConName: "初遇地球--机器人解体1",
-              sonConDate: "2019-07-23 00:00"
-            },
-            {
-              sonConName: "初遇地球--机器人解体2",
-              sonConDate: "2019-03-01 00:00"
-            }
-          ]
-        },
-        {
-          name: "Scratch2",
-          courseContent: [
-            {
-              sonConName: "初遇地球--机器人解体3",
-              sonConDate: "2019-03-01 00:00"
-            },
-            {
-              sonConName: "初遇地球--机器人解体4",
-              sonConDate: "2019-03-01 00:00"
-            }
-          ]
-        }
-      ],
+      // courseList: [
+      //   {
+      //     name: "Scratch1",
+      //     courseContent: [
+      //       {
+      //         sonConName: "初遇地球--机器人解体1",
+      //         sonConDate: "2019-07-23 00:00"
+      //       },
+      //       {
+      //         sonConName: "初遇地球--机器人解体2",
+      //         sonConDate: "2019-03-01 00:00"
+      //       }
+      //     ]
+      //   },
+      //   {
+      //     name: "Scratch2",
+      //     courseContent: [
+      //       {
+      //         sonConName: "初遇地球--机器人解体3",
+      //         sonConDate: "2019-03-01 00:00"
+      //       },
+      //       {
+      //         sonConName: "初遇地球--机器人解体4",
+      //         sonConDate: "2019-03-01 00:00"
+      //       }
+      //     ]
+      //   }
+      // ],
       //添加新班级
       addClassName: "",
       isName: true,
@@ -396,7 +434,12 @@ export default {
       message:
         "<div v-show='isShowAlter' class='alert alert-success alter-width' role='alert'>修改成功!</div>",
       isShowAlter: false,
-      currentList: []
+      currentList: [],
+      isChange: false, //班级名称是否可修改
+      modalTitle: "", //模态框名称
+      //提示框
+      alterimg: this.$store.state.url + "eduAdmin/alter.png",
+      alterMes: "",
     };
   },
   watch: {
@@ -432,7 +475,7 @@ export default {
               "Content-Type": "application/json",
               Authorization: token
             },
-            data:{sheet:this.xlsxJson}
+            data: { sheet: this.xlsxJson }
           }).then(
             response => {
               console.log(response);
@@ -492,17 +535,27 @@ export default {
     },
     //编辑班级
     updateClass(seq) {
-      this.updateIndex = seq;
-      this.addClassName = this.tableData[seq].className;
-      this.addClassData.startDate = this.tableData[seq].addDate;
-      this.addClassData.teacher.option = this.tableData[seq].teacher;
+      this.modalTitle="编辑"
+      this.isChange = true;
+      this.updateIndex = this.currentPage * this.limit + seq;
+      this.addClassName = this.tableData[this.updateIndex].className;
+      var teacher = {};
+      teacher.name = this.tableData[this.updateIndex].teacherName;
+      teacher.id = this.tableData[this.updateIndex].teacherId;
+      var course = {};
+      course.name = this.tableData[this.updateIndex].courseName;
+      course.id = this.tableData[this.updateIndex].courseId;
+      this.addClassData.teacher.option = teacher;
+      this.addClassData.course.option = course;
     },
     //添加班级
     addClass() {
+      this.modalTitle="添加"
+      this.isChange = false;
       this.updateIndex = -1;
       this.addClassName = "";
-      this.addClassData.startDate = "";
       this.addClassData.teacher.option = "";
+      this.addClassData.course.option = "";
     },
     //编辑或更改提交
     submit() {
@@ -510,19 +563,46 @@ export default {
       var token = window.localStorage.getItem("idToken");
       var newClass = {};
       console.log(this.updateIndex);
-      if (this.updateIndex > 0) {
-        this.tableData[this.updateIndex].className = this.addClassName;
-        this.tableData[this.updateIndex].addDate = this.addClassData.startDate;
-        this.tableData[
-          this.updateIndex
-        ].teacher = this.addClassData.teacher.option;
-      } else {
+      //编辑提交
+      if (this.updateIndex >= 0) {
+        var updateClass={}
+        updateClass.courseId=this.addClassData.course.option.id;
+        updateClass.courseName=this.addClassData.course.option.name;
+        updateClass.teacherId=this.addClassData.teacher.option.id;
+        updateClass.classId=this.tableData[this.updateIndex].classId
+        console.log(updateClass)
+        globalAxios
+        .post(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/"+updateClass.classId+"/course",
+          updateClass,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            }
+          }
+        )
+        .then(
+          response => {
+            console.log(response);
+            this.tableData[this.updateIndex].teacherName = this.addClassData.teacher.option.name;
+            this.tableData[this.updateIndex].teacherId = this.addClassData.teacher.option.id;
+            this.tableData[this.updateIndex].courseName = this.addClassData.course.option.name;
+            this.tableData[this.updateIndex].courseId = this.addClassData.course.option.id;
+          },
+          error => {
+
+          }
+        )
+       } 
+      //修改提交
+      else {
         newClass.className = this.addClassName;
         newClass.teacherId = this.addClassData.teacher.option.id;
         // newClass.course = JSON.stringify(this.addClassData.course.option);
         newClass.courseId = this.addClassData.course.option.id;
         newClass.courseName = this.addClassData.course.option.name;
-      }
+      
       console.log(newClass);
       globalAxios
         .post(
@@ -558,6 +638,7 @@ export default {
                     classes.classId = classList[i].CLASS_ID;
                     classes.className = classList[i].CLASS_NAME;
                     classes.teacherName = classList[i].TEACHER_NAME;
+                    classes.courseId = classList[i].COURSE_ID;
                     classes.courseName = classList[i].COURSE_NAME;
                     classes.courseMemberCount = classList[i].CLASS_MEMBER_COUNT;
                     classArr.push(classes);
@@ -575,6 +656,7 @@ export default {
             console.log(error);
           }
         );
+      }
     },
     //更改学生备注
     updateRemark(seq) {
@@ -589,6 +671,8 @@ export default {
       }, 2000);
     },
     changeTablePages(value) {
+      var currentPage = value / this.limit;
+      this.currentPage = currentPage;
       this.currentList = this.tableData.slice(value, value + this.limit);
     },
     //搜索
@@ -612,9 +696,14 @@ export default {
         }
       }
       return restTableList;
-    }
+    },
+    deleteClass(seq) {
+      this.index = seq;
+      this.alterMes = "确认删除吗？";
+    },
   },
   mounted() {
+    //获取班级列表
     //this.tableData = this.originalTableData
     var token = window.localStorage.getItem("idToken");
     globalAxios
@@ -631,11 +720,14 @@ export default {
         response => {
           console.log(response);
           var classList = response.data;
+          console.log(classList);
           var classArr = [];
           for (var i = 0; i < classList.length; i++) {
             var classes = {};
+            classes.classId = classList[i].CLASS_ID
             classes.className = classList[i].CLASS_NAME;
             classes.teacherName = classList[i].TEACHER_NAME;
+            classes.teacherId = classList[i].TEACHER_ID;
             classes.courseName = classList[i].COURSE_NAME;
             classes.courseMemberCount = classList[i].CLASS_MEMBER_COUNT;
             classArr.push(classes);
@@ -648,6 +740,7 @@ export default {
           console.log(error);
         }
       );
+    //获取教师列表以及课程列表
     globalAxios
       .get(
         "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/msg",
@@ -670,12 +763,13 @@ export default {
             teacherArr.push(teacher);
           }
           this.addClassData.teacher.list = teacherArr;
+          console.log(this.addClassData.teacher.list);
           var courseList = response.data.course;
           var courseArr = [];
           for (var i = 0; i < courseList.length; i++) {
             var course = {};
             course.name = courseList[i].COURSE_NAME;
-            course.id = courseList[i].ID;
+            course.id = courseList[i].COURSE_ID;
             courseArr.push(course);
           }
           this.addClassData.course.list = courseArr;
@@ -774,6 +868,10 @@ export default {
 #classmanagement .blue {
   cursor: pointer;
   color: #409eff;
+}
+#classmanagement .red {
+  cursor: pointer;
+  color: red;
 }
 
 #classmanagement table {
@@ -942,5 +1040,17 @@ export default {
   position: relative;
   margin: 20px auto;
   visibility: hidden;
+}
+#classmanagement .alterwidth {
+  width: 30%;
+}
+#classmanagement .altercontent {
+  width: 300px;
+  margin: 0 auto;
+}
+#classmanagement .alterimg {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
 }
 </style>

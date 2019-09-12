@@ -699,13 +699,13 @@ export default new Router({
           }, component: chapterManagement
         },
         {
-          path: '/Admin/chapterManagement/:courseId/addChapter', beforeEnter(to, from, next) {
+          path: '/Admin/chapterManagement/addChapter', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {
               next('/signin')
             }
-          }, component: addChapter
+          }, component: addChapter,name:'addChapter'
         },
         {
           path: '/Admin/organizationManagement', beforeEnter(to, from, next) {

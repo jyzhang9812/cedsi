@@ -3,14 +3,14 @@
     <div class="modal fade" id="myVideo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content modal-width">
-          <div class="modal-header">
+          <div class="modal-header video-header">
             <span class="video-name">{{videoName}}</span>
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
               @click="deletevideo">&times;</button>
           </div>
           <div class="modal-body modal-padding">
             <Media :autoplay="false" :kind="'video'" :controls="true" :src="videosrc"
-              style="height: 400px;width: 700px;" @pause="handle()"></Media>
+              style="height: 400px;width: 698px;" @pause="handle()"></Media>
           </div>
         </div>
       </div>
@@ -297,5 +297,12 @@
 
   .modal-padding {
     padding: 0;
+  }
+  video:focus {
+    outline: none;
+  }
+  .video-header{
+    border: none;
+    font-size: 14px;
   }
 </style>
