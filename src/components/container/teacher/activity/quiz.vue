@@ -11,7 +11,7 @@
     <div class="filter">
       <div class="option">
         <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
-        <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
+        <selectInput :option="inputData.course.option" :dropDownList="inputData.course.list" tips="请选择课程" id="course"
           @option="changeOption">
         </selectInput>
         <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
@@ -26,7 +26,7 @@
             <th>问题标题</th>
             <th>发布时间</th>
             <th>学生姓名</th>
-            <th>所属学校</th>
+            <th>课程</th>
             <th>状态</th>
             <th>操作</th>
           </tr>
@@ -37,7 +37,7 @@
             <td class="blue">{{list.title}}</td>
             <td>{{list.date}}</td>
             <td>{{list.author}}</td>
-            <td>{{list.school}}</td>
+            <td>{{list.course}}</td>
             <td>{{list.status}}</td>
             <td><span class="blue">解答</span>&nbsp;&nbsp;<span class="red">删除</span></td>
           </tr>
@@ -60,44 +60,44 @@
         tableData: [],
         inputData: {
           keywords: "",
-          school: {
+          course: {
             option: "",
-            list: ["赛迪思","雁塔路小学","翠华路小学","回民街小学"]
+            list: ["Java","语文","Python","超维数学"]
           }
         },
         quizList: [{
             title: "函数如何书写",
             date: "2019-01-02 17:00",
             author: "小赛",
-            school: "回民街小学",
+            course: "Java",
             status: "已解答"
           },
           {
             title: "类是干什么的",
             date: "2019-02-02 17:00",
             author: "小迪",
-            school: "雁塔路小学",
+            course: "Java",
             status: "已解答"
           },
           {
             title: "不会啊",
             date: "2019-03-02 17:00",
             author: "小李",
-            school: "翠华路小学",
+            course: "语文",
             status: "未解答"
           },
           {
             title: "好难",
             date: "2019-04-02 17:00",
             author: "小王",
-            school: "赛迪思",
+            course: "Python",
             status: "已解答"
           },
           {
             title: "辛苦",
             date: "2019-05-02 17:00",
             author: "小刘",
-            school: "赛迪思",
+            course: "超维数学",
             status: "未解答"
           }
         ]
