@@ -26,7 +26,6 @@
     name: "deletePrompt",
     props: {
       id: { type: String, default: "hello vue" },
-      workId: { type: String, default: "hello world" },
       promptWords: { type: String, default: "此操作将永久删除该文件, 是否继续?" }
     },
     methods: {
