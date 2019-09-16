@@ -471,7 +471,7 @@ const actions = {
             }
         ).then(
             response => {
-                //console.log(response.data);
+                console.log(response.data);
                 var chapterArr = [];
                 var chapterData = [];
                 chapterArr = response.data.data;
@@ -479,9 +479,10 @@ const actions = {
                 //console.log(state.chapterLength)
                 for (var i = 0; i < state.chapterLength; i++) {
                     var chapter = {};
+                    chapter.chapterId = chapterArr[i].CP_ID;
                     chapter.chapterName = chapterArr[i].CP_NAME;
                     chapter.introduction = chapterArr[i].CP_DESCRIPTION;
-                    //chapter.date = this.timestampToTime(chapterArr[i].CP_UPLOAD_TIME);
+                    chapter.date = chapterArr[i].CP_UPLOAD_TIME;
                     chapter.uploadAdmin = chapterArr[i].CP_FOUNDER;
                     chapter.chapterNum = chapterArr[i].CP_NUMBER;
                     chapter.id = chapterArr[i].CP_ID;
