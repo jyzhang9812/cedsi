@@ -1,5 +1,4 @@
 <template>
-  <!-- Modal -->
   <div class="modal fade" :id="id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
@@ -15,7 +14,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="button-footer button-cancel" data-dismiss="modal">取消</button>
-          <button type="button" :id="id + 'btn'" class="button-footer button-confirm">确定</button>
+          <button type="button" class="button-footer button-confirm" @click="submit">确定</button>
         </div>
       </div>
     </div>
@@ -30,11 +29,8 @@
       workId: { type: String, default: "hello world" },
       promptWords: { type: String, default: "此操作将永久删除该文件, 是否继续?" }
     },
-    mounted() {
-      $('#' + this.id + 'btn').on('click', () => {
-        $('#' + this.id).modal('hide');
-        this.$emit('deleteWork', this.workId);
-      });
+    methods: {
+      submit() { this.$emit('deleteWork'); $('#' + this.id).modal('hide'); }
     }
   }
 </script>
