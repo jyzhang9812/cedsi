@@ -47,12 +47,16 @@
             <td>
               <span class="blue" @click="viewWork(line)">查看作品</span>&nbsp;&nbsp;
               <span class="blue" @click="remarkWork(line)">点评</span>&nbsp;&nbsp;
+              <span class="blue" @click="popModal('turnDown')">驳回</span>&nbsp;&nbsp;
               <span class="red" @click="popModal('delete')">删除</span>
             </td>
           </tr>
         </tbody>
       </table>
       <delete-prompt :id="deletePromptId" @deleteWork="deleteWork" :work-id="currentWorkId">
+      </delete-prompt>
+      <delete-prompt :id="trunDownPromptId" @deleteWork="turnDownWork" :work-id="currentWorkId"
+        :promptWords="promptWords">
       </delete-prompt>
     </div>
     <div class="fifth-floor">
@@ -295,6 +299,16 @@
         }, 1000);
       },
       /**
+       * 驳回作品, 是表格里每行数据中 驳回 操作绑定的事件处理函数
+       * 
+       * @param {String} workId
+       */
+      turnDownWork(workId) {
+        setTimeout(() => {
+          alert("驳回成功!" + workId)
+        }, 1000);
+      },
+      /**
        * 查看作品, 参数为当前行数据, 是表格里每行数据中 查看作品 操作绑定的事件处理函数
        * 
        * @param {Object} item
@@ -358,6 +372,9 @@
         if (type === "delete") {
           $('#' + this.deletePromptId).modal('show');
         }
+        else if (type === 'turnDown') {
+          $('#' + this.trunDownPromptId).modal('show');
+        }
       },
       /**
        * 拉取选择框的选项数据
@@ -411,7 +428,15 @@
       /**
        * 删除提示框组件需要绑定的 id 属性, 纯字符串, 无任何特殊含义
        */
-      deletePromptId() { return "remarkDeletePrompt" }
+      deletePromptId() { return "remarkDeletePrompt" },
+      /**
+       * 驳回提示框组件需要绑定的 id 属性, 纯字符串, 无任何特殊含义
+       */
+      trunDownPromptId() { return "remarkTurnDownPrompt" },
+      /**
+       * 驳回提示框的提示语     
+      */
+      promptWords() { return "确定驳回该学生的作业吗?" }
     },
     created() { this.pullClassAndCourseData() },
     components: { DeletePrompt, Pagination, SelectInput, DatePicker }

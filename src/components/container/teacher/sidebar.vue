@@ -40,7 +40,7 @@
             iconSrc: this.$store.state.url + "aside/teachingManagement.png",
             children: [{
               name: "课程规划",
-              route: "/console"
+              route: "/console/coursePlan"
             },
             {
               name: "视频管理",
@@ -57,7 +57,7 @@
             iconSrc: this.$store.state.url + "aside/activityManagement.png",
             children: [{
               name: "布置作业",
-              route: "/console"
+              route: "/console/postJob"
             },
             {
               name: "批改作业",
@@ -72,10 +72,8 @@
           {
             name: "活动管理",
             iconSrc: this.$store.state.url + "aside/activityManagement.png",
-            children: [{
-              name: "发布活动",
-              route: "/console/activity"
-            }],
+            route: "/console/activity",
+            children: [],
             close: true
           },
           {

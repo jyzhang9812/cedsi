@@ -11,7 +11,7 @@
         </div>
         <div class="modal-body">
           <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-          <span>此操作将永久删除该文件, 是否继续?</span>
+          <span>{{promptWords}}</span>
         </div>
         <div class="modal-footer">
           <button type="button" class="button-footer button-cancel" data-dismiss="modal">取消</button>
@@ -26,11 +26,9 @@
   export default {
     name: "deletePrompt",
     props: {
-      id: String,
-      workId: {
-        type: String,
-        default: "hello world"
-      }
+      id: { type: String, default: "hello vue" },
+      workId: { type: String, default: "hello world" },
+      promptWords: { type: String, default: "此操作将永久删除该文件, 是否继续?" }
     },
     mounted() {
       $('#' + this.id + 'btn').on('click', () => {
