@@ -18,7 +18,7 @@
             <td>{{chapter.date}}</td>
             <td>{{chapter.uploadAdmin}}</td>
             <td>
-              <span class="blue">编辑</span>&nbsp;&nbsp;
+              <span class="blue" @click="updateChapter(seq)">编辑</span>&nbsp;&nbsp;
               <span class="red">删除</span>
             </td>
           </tr>
@@ -36,7 +36,7 @@ import Pagination from "../utils/pagination";
 import globalAxios from "axios";
 import fs from "fs";
 import AWS from "aws-sdk";
-  import { mapState } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   name: "chapters",
@@ -54,19 +54,35 @@ export default {
         "创建人",
         "操作"
       ],
-      chapterData:[]
+      chapterData:[],
+      currentPage:0
     };
   },
   methods: {
+    //换页
     changeTablePages(value) {
-      this.currentList = this.chapterData.slice(value, value + this.limit);
+      var currentPage = value / this.limit;
+      this.currentPage = currentPage;
+      this.$store.commit("changeChapterCurrentList", this.currentPage * this.limit)
     },
     gotoAdd() {
       this.$router.push({
-        name:"addChapter",
+        path:"/Admin/chapterManagement/" + this.courseId + "/addChapter",
+        // name:"addChapter",
         query:{
-            courseId:this.courseId,
-            chapterNum:this.chapterLength+1
+        //     courseId:this.courseId,
+             chapterNum:this.chapterLength+1
+        }
+      });
+    },
+    updateChapter(seq){
+      this.chapterIndex=this.currentPage*this.limit+seq
+      this.chapterId=this.chapterData[this.chapterIndex].chapterId
+      this.$router.push({
+        path:"/Admin/chapterManagement/" + this.courseId + "/addChapter",
+        query:{
+            chapterId:this.chapterId,
+            chapterNum:this.chapterIndex+1
         }
       });
     },
@@ -142,6 +158,7 @@ export default {
         // videoData: state => state.videoData,
         currentList: state => state.chapterCurrentList,
         limit: state => state.limit,
+        chapterLength: state => state.chapterLength,
       }),
     }
 };
