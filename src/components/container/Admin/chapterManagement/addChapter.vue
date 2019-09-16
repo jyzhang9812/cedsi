@@ -123,15 +123,11 @@ export default {
     if (this.$route.query.chapterId == null) //增加
       this.chapterId=-1
     else {    //如果是修改避免刷新章节内容为空
-    console.log("bianji")
       this.$store.dispatch("getChapterDetial", this.courseId).then(() => {
         this.chapterData = this.$store.state.chapterData;
         console.log(this.$store.state.chapterData);
         //console.log('333333333333333')
         if (this.chapterData) {
-          for (let i = 0; i <= this.chapterData.length; i++) {
-            this.chapterData[i].date = this.timestampToTime(this.$store.state.chapterData[i].date)
-          }
           console.log(this.$route.query.chapterNum);
           this.chapterId = this.$route.query.chapterId;
           this.chapterName = this.chapterList[this.chapterNum - 1].chapterName,
