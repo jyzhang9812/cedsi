@@ -1,11 +1,14 @@
 <template>
     <div id="new" class="limiter">
         <div class="container-table100">
+            <div style="margin-bottom: 10px;">
+                <button class="nameOfClass" v-for='(item,index) in myClass' @click='changeClass(index)':class="{active : index===curId}">{{item.name}}</button>
+            </div>
             <div class="wrap-table100">
                 <div style="margin-bottom: 10px;">
-                    <button class="nameOfClass">{{myClass.name}}</button>
-                    <img class="avastimg" :src="myClass.teacher.avatar">
-                    代课老师：{{myClass.teacher.teacher_name}}
+                    <img class="avastimg" :src="nowClass.teacher.avatar">
+                    <span>代课老师：{{nowClass.teacher.teacher_name}}</span>
+                    <span style="margin-left: 20px">班级人数：{{nowClass.memberCount}}</span>
                 </div>
                 <div class="table100 ver1 m-b-110">
                     <table data-vertable="ver1">
@@ -19,7 +22,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="row100" v-for="(item,index) in myClass.classmates" :key="index">
+                            <tr class="row100" v-for="(item,index) in nowClass.classmates" :key="index">
                                 <td class="column100">{{index+1}}</td>
                                 <td class="column100"><img class="avastimg" :src="item.AVATAR"></td>
                                 <td class="column100">{{item.STUDENT_NAME}}</td>
@@ -35,26 +38,34 @@
 </template>
 
 <script>
-    import globalAxios from 'axios'
     export default {
         name: 'class',
         data() {
             return {
-                uClass: {
+                nowClass: {
                     teacher: {
                         avatar: '',
                         teacher_name: ''
                     }
-                }
+                },
+                curId:0,
             }
+        },
+        methods:{
+            changeClass(index){
+                this.curId = index
+                this.nowClass = this.myClass[this.curId]
+            },
         },
         created: function () {
             this.$store.commit('updateLoading', true)
-            this.$store.dispatch('getClass')
+            this.$store.dispatch('getClass').then(()=>{
+                this.nowClass = this.myClass[this.curId]
+            })
         },
         computed: {
             myClass: function (state) {
-                return Array.isArray(this.$store.state.myClass) ? this.uClass : this.$store.state.myClass
+                return this.$store.state.myClass
             },
         },
     }
@@ -74,25 +85,29 @@
         color: #fff;
         border-radius: 12px;
     }
-    /* .nameOfClass:hover {
+
+    #new button.nameOfClass:hover,#new button.active {
         color: #75b598;
         background: #fff;
-    } */
+    }
     #new .avastimg {
         vertical-align: middle;
         width: 40px;
     }
+
     /*[ RESTYLE TAG ]*/
     * {
         margin: 0px;
         padding: 0px;
         box-sizing: border-box;
     }
+
     #new body,
     #new html {
         height: 100%;
         font-family: sans-serif;
     }
+
     /* ------------------------------------ */
     #new a {
         margin: 0px;
@@ -101,12 +116,15 @@
         -o-transition: all 0.4s;
         -moz-transition: all 0.4s;
     }
+
     #new a:focus {
         outline: none !important;
     }
+
     #new a:hover {
         text-decoration: none;
     }
+
     /* ------------------------------------ */
     #new h1,
     #new h2,
@@ -116,65 +134,79 @@
     #new h6 {
         margin: 0px;
     }
+
     #new p {
         margin: 0px;
     }
+
     #new ul,
     #new li {
         margin: 0px;
         list-style-type: none;
     }
+
     /* ------------------------------------ */
     #new button {
         outline: none !important;
         border: none;
         background: transparent;
     }
+
     #new button:hover {
         cursor: pointer;
     }
+
     #new iframe {
         border: none !important;
     }
+
     /*//////////////////////////////////////////////////////////////////
     [ Table ]*/
     #new .limiter {
         width: 100%;
         margin: 0 auto;
     }
+
     #new .container-table100 {
         width: 100%;
         min-height: 100vh;
         padding: 10px 30px;
     }
+
     #new .wrap-table100 {
         width: 100%;
         margin-top: 20px;
     }
+
     /*//////////////////////////////////////////////////////////////////
     [ Table ]*/
     #new table {
         width: 100%;
         background-color: #fff;
     }
+
     #new th,
     #new td {
         font-weight: unset;
         padding-right: 10px;
     }
+
     #new .column100 {
         width: 130px;
         padding-left: 25px;
         text-align: center;
     }
+
     #new .row100.head th {
         padding-top: 24px;
         padding-bottom: 20px;
     }
+
     #new .row100 td {
         padding-top: 10px;
         padding-bottom: 8px;
     }
+
     /*==================================================================
     [ Ver1 ]*/
     #new .table100.ver1 td {
@@ -183,6 +215,7 @@
         color: #808080;
         line-height: 1.4;
     }
+
     #new .table100.ver1 th {
         font-family: Montserrat-Medium;
         font-size: 15px;
@@ -191,15 +224,19 @@
         text-transform: uppercase;
         background-color: #3d857a;
     }
+
     #new .table100.ver1 .row100:hover {
         background-color: #eff4e7;
     }
+
     #new .table100.ver1 .hov-column-ver1 {
         background-color: #eff4e7;
     }
+
     #new .table100.ver1 .hov-column-head-ver1 {
         background-color: #484848 !important;
     }
+
     #new .table100.ver1 .row100 td:hover {
         background-color: #51c79f;
         color: #fff;

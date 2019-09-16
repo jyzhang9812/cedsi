@@ -160,7 +160,7 @@
         console.log('333333333333333')
         if (this.videoData) {
           for (let i = 0; i <= this.videoData.length; i++) {
-            this.videoData[i].date = this.timestampToTime(this.$store.state.videoData[i].date)
+            this.videoData[i].date = this.timestampToTime(this.videoData[i].date)
           }
         }
       })

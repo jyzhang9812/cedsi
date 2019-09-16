@@ -115,7 +115,7 @@ const actions = {
     //students方法
     //获取用户个人资料
     getUser({ commit, state }) {
-        globalAxios.get('/student/studentinfo',
+        return globalAxios.get('/student/studentinfo',
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -250,6 +250,8 @@ const actions = {
             }
             for (var i = 0; i < arr.length; i++) {
                 var array = {}
+                array.id = arr[i].HW_ID;
+                array.url = './static/build/player.html?fileUrl=' + arr[i].HW_URL;
                 array.name = arr[i].HW_NAME;
                 array.img_url = arr[i].HW_COVER;
                 array.teacher_remark = arr[i].TEACHER_REMARK;
@@ -284,7 +286,7 @@ const actions = {
     },
     //系统消息
     getMsg({ commit, state }, curId) {
-        globalAxios.get('/student/message/' + (curId + 1),
+        return globalAxios.get('/student/message/' + (curId + 1),
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -310,7 +312,7 @@ const actions = {
     },
     //所在班级
     getClass({ commit, state }) {
-        globalAxios.get('/student/class',
+        return globalAxios.get('/student/class',
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -319,17 +321,23 @@ const actions = {
             }
         ).then(response => {
             console.log(response);
-            var myClass = {}
-            var arr = []
-
-            myClass.name = response.data.className
-            myClass.teacher = response.data.teacher
-            myClass.memberCount = response.data.member_count
-            for (var i = 0; i < response.data.classmates.length; i++) {
-                arr.push(response.data.classmates[i])
+            var myClasses = []
+            if (response.data) {
+                for (let i = 0; i < response.data.length; i++) {
+                    var myClass={}
+                    var arr=[]
+                    myClass.name = response.data[i].className
+                    myClass.teacher = response.data[i].teacher
+                    myClass.memberCount = response.data[i].member_count
+                    for (let j = 0; j < response.data[i].classmates.length; j++) {
+                        arr.push(response.data[i].classmates[j])
+                    }
+                    myClass.classmates = arr
+                    console.log(arr)
+                    myClasses.push(myClass)
+                }
             }
-            myClass.classmates = arr
-            commit(TYPES.getClass, myClass)
+            commit(TYPES.getClass, myClasses)
             commit(TYPES.updateLoading, false)
         },
             error => {

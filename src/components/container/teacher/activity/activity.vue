@@ -48,7 +48,7 @@
               <td>{{list.school}}</td>
               <td>{{list.reply}}/{{list.view}}</td>
               <td>{{list.status}}</td>
-              <td><span class="blue">编辑</span></td>
+              <td><span class="blue">编辑</span>&nbsp;&nbsp;<span class="red">删除</span></td>
             </tr>
           </tbody>
         </table>

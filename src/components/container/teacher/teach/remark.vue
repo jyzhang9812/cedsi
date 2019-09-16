@@ -2,13 +2,13 @@
   <div id="remark">
     <span>作业点评</span>
     <!-- <div class="first-floor">
-      <label for="tel-name"></label>
-      <input type="text" placeholder="请输入姓名" class="textBox" id="tel-name" v-model="inputData.telOrName">
-      <date-picker tips="选择开始时间" id="datePicker_start" :date="inputData.startDate" @changeDate="changeDate">
-      </date-picker>
-      <date-picker tips="选择结束时间" id="datePicker_end" :date="inputData.endDate" @changeDate="changeDate">
-      </date-picker>
-    </div> -->
+  <label for="tel-name"></label>
+  <input type="text" placeholder="请输入姓名" class="textBox" id="tel-name" v-model="inputData.telOrName">
+  <date-picker tips="选择开始时间" id="datePicker_start" :date="inputData.startDate" @changeDate="changeDate">
+  </date-picker>
+  <date-picker tips="选择结束时间" id="datePicker_end" :date="inputData.endDate" @changeDate="changeDate">
+  </date-picker>
+  </div> -->
     <div class="second-floor">
       <div class="select-input">
         <select-input id="classes" tips="请选择班级" :option="inputData.classes.option" @option="changeOption"
@@ -21,8 +21,8 @@
         </select-input>
       </div>
       <div class="select-input">
-        <select-input id="order" tips="请选择课次" :option="inputData.order.option" @option="changeOption"
-          :drop-down-list="inputData.order.list">
+        <select-input id="chapter" tips="请选择章节" :option="inputData.chapter.option" @option="changeOption"
+          :drop-down-list="inputData.chapter.list">
         </select-input>
       </div>
     </div>
@@ -43,13 +43,11 @@
         <tbody>
           <tr v-for="(line, seq) in currentList" :key="seq" class="content">
             <td>{{seq + 1}}</td>
-            <td v-for="(value, key, index) in line" :key="index">
-              <span v-if="key !== 'id' && key !== 'commentStat'">{{value}}</span>              
-            </td>
+            <td v-for="(value, key, index) in line" :key="index"> {{value}} </td>
             <td>
               <span class="blue" @click="viewWork(line)">查看作品</span>&nbsp;&nbsp;
               <span class="blue" @click="remarkWork(line)">点评</span>&nbsp;&nbsp;
-              <span class="red" @click="popModal('delete', line.id)">删除</span>
+              <span class="red" @click="popModal('delete')">删除</span>
             </td>
           </tr>
         </tbody>
@@ -77,41 +75,20 @@
       return {
         limit: 10,
         currentWorkId: "hello",
-        comment: {
-          commentStatus: 0,
-          hasComment: "",
-          noComment: ""
-        },
+        comment: { commentStatus: 0, hasComment: "", noComment: "" },
+        originalInputData: [],
         inputData: {
-          telOrName: "",
-          startDate: "",
-          endDate: "",
-          classes: {
-            option: "",
-            list: ["1班", "2班", "3班", "4班", "5班"]
-          },
-          course: {
-            option: "",
-            list: ["课程一", "课程二", "课程三"]
-          },
-          order: {
-            option: "",
-            list: ["开学第一课", "开学第二课", "开学第三课"]
-          }
+          classes: { option: "", list: [], id: [] },
+          course: { option: "", list: [], id: [] },
+          chapter: { option: "", list: [], id: [] }
         },
         tableTitle: [
-          "序号",
-          "作者姓名",
-          "提交时间",
-          "作品",
-          "班级",
-          "课程名称",
-          "章节",
-          "操作"
+          "序号", "作者姓名", "提交时间", "作品",
+          "班级", "课程名称", "章节", "操作"
         ],
         originalTableData: [],
-        currentList: [],
-        tableData: []
+        tableData: [],
+        currentList: []
       }
     },
     methods: {
@@ -123,11 +100,11 @@
        * 
        * @param {String} comment
        * @param {Array<Object>} tableData
-      */
+       */
       changeComment(comment, tableData) {
         let condition1 = comment === 'has',
           condition2 = comment === 'no';
-        tableData = tableData || this.tableData;
+        tableData = tableData || this.originalTableData;
         this.comment.commentStatus = condition1 ? 1 : (condition2 ? 2 : 0);
         this.comment.hasComment = condition1 ? this.blueCommentStyle : this.whiteCommentStyle;
         this.comment.noComment = condition2 ? this.blueCommentStyle : this.whiteCommentStyle;
@@ -139,7 +116,7 @@
        * 
        * @param {String} value
        * @param {String} id
-      */
+       */
       changeDate(value, id) {
         if (id === "datePicker_start") {
           this.inputData.startDate = value;
@@ -151,8 +128,6 @@
        * 清空筛选, 是 清空筛选 按钮绑定的事件处理函数
        */
       clearChoices() {
-        this.inputData.startDate = "";
-        this.inputData.endDate = "";
         this.changeComment('init', this.originalTableData);
         Object.keys(this.inputData).forEach((res) => {
           if (this.inputData[res].hasOwnProperty("option")) {
@@ -167,21 +142,41 @@
        * 
        * @param {String} item
        * @param {String} id
-      */
+       */
       changeOption(item, id) {
-        Object.keys(this.inputData).forEach((res) => {
-          if (res === id) {
-            this.inputData[res].option = item;
-          }
-        });
+        this.inputData[id].option = item;
+        if (id === 'classes') {
+          let courseName = this.changeCourseOfInputData(item);
+          let classId = this.searchClassId(item, courseName);
+          this.pullHomeworkWithId(classId);
+        } else if (id === 'course') {
+          let className = this.inputData.classes.option;
+          let classId = this.searchClassId(clasName, item);
+          this.pullHomeworkWithId(classId);
+        } else if (id === 'chapter') {
+          // !!! there undone !!!
+          // !!! there undone !!!
+          // !!! there undone !!!
+        }
       },
       /**
        * 分页跳转, 是 pagination 分页组件绑定的事件处理函数
        * 
        * @param {Number} value
-      */
+       */
       changeTablePages(value) {
-        this.currentList = this.tableData.slice(value, value + this.limit);
+        let currentList = [];
+        this.tableData.slice(value, value + this.limit).forEach(item => {
+          currentList.push({
+            STUDENT_NAME: item.STUDENT_NAME,
+            SUBMIT_TIME: item.SUBMIT_TIME,
+            HW_NAME: item.HW_NAME,
+            CLASS_NAME: this.inputData.classes.option,
+            COURSE_NAME: item.COURSE_NAME,
+            CP_NAME: item.CP_NAME
+          });
+        });
+        this.currentList = currentList;
       },
       /**
        * 时间过滤器
@@ -190,7 +185,7 @@
        * @param {String} endTime
        * @param {Array<Object>} tableList
        * @return {Array<object>}
-      */
+       */
       timeFilter(startTime, endTime, tableList) {
         if (startTime === "" && endTime === "") return tableList;
         startTime = startTime === "" ? 0 : startTime;
@@ -214,7 +209,7 @@
        * @param {String} telOrName
        * @param {Array<Object>} tableList
        * @return {Array<Object>}
-      */
+       */
       telOrNameFilter(telOrName, tableList) {
         if (telOrName === "") return tableList;
         let testArg = "tel";
@@ -236,13 +231,13 @@
        * 
        * @param {Number} commentCode
        * @param {Array<Object>} tableList
-      */
+       */
       commentStatFilter(commentCode, tableList) {
         if (!commentCode) return tableList;
         let restTableList = tableList.slice(0),
-          status = commentCode === 1 ? "已点评" : "未点评";
+          status = commentCode === 1;
         for (let i = 0, j = restTableList.length; i < j; i++) {
-          if (restTableList[i].commentStat !== status) {
+          if (!!restTableList[i].TEACHER_REMARK !== status) {
             restTableList.splice(i, 1);
             j -= 1;
             i -= 1;
@@ -256,15 +251,15 @@
        * @param {Array<Object>} inputData
        * @param {Array<Object>} tableList
        * @return {Array<Object>}
-      */
+       */
       selectInputFilter(inputData, tableList) {
         let restTableList = tableList.slice(0);
         for (let i = 0, j = restTableList.length; i < j; i++) {
           for (let res of Object.keys(inputData)) {
-            let condition1 = inputData[res].hasOwnProperty("option")
-              && inputData[res].option !== "";
-            let condition2 = restTableList[i].hasOwnProperty(res)
-              && restTableList[i][res] !== inputData[res].option;
+            let condition1 = inputData[res].hasOwnProperty("option") &&
+              inputData[res].option !== "";
+            let condition2 = restTableList[i].hasOwnProperty(res) &&
+              restTableList[i][res] !== inputData[res].option;
             if (condition1 && condition2) {
               restTableList.splice(i, 1);
               i -= 1;
@@ -277,7 +272,7 @@
       },
       /**
        * 搜索, 是 搜索 按钮绑定的事件处理函数, 用到了上面定义的过滤器函数
-      */
+       */
       conditionSearch() {
         let temp = this.timeFilter(
           this.inputData.startDate,
@@ -293,38 +288,61 @@
        * 删除作品, 是表格里每行数据中 删除 操作绑定的事件处理函数
        * 
        * @param {String} workId
-      */
+       */
       deleteWork(workId) {
         setTimeout(() => {
           alert("删除成功!" + workId)
         }, 1000);
-        // 调用删除接口时, 考虑是否再拉取!
-        // this.axios.delete("url")
-        //   .then((res) => {
-        //     if (!condition) {
-        //       // 显示删除成功
-        //     } else {
-        //       // 显示删除失败原因
-        //     }
-        //   })
-        //   .catch((err) => {
-        //     // 显示异常原因
-        //   });
       },
       /**
        * 查看作品, 参数为当前行数据, 是表格里每行数据中 查看作品 操作绑定的事件处理函数
        * 
        * @param {Object} item
-      */
+       */
       viewWork(item) {
         let id = this.searchWorkId(item);
         // 打开新窗口, 可能会传递sb3文件之类的参数
+      },
+      searchWorkId(item) {
+        console.log("拿下来了!");
+      },
+      /**
+       * 通过班级名称获取对应的课程
+       *
+       * @param {String} className
+       * @return {String}
+       */
+      changeCourseOfInputData(className) {
+        let result = [];
+        this.originalInputData
+          .filter(item => item.CLASS_NAME === className)
+          .forEach(item => { result.push(item.COURSE_NAME) });
+        this.inputData.course.list = result;
+        this.inputData.course.option = result[0] || '';
+        return result[0] || '';
+      },
+      /**
+       * 通过班级名称和课程名称寻找 CLASS_ID
+       *
+       * @param {String} className
+       * @param {String} courseName
+       * @return {String}
+       */
+      searchClassId(className, courseName) {
+        let result = '';
+        this.originalInputData
+          .filter(item =>
+            item.CLASS_NAME === className &&
+            item.COURSE_NAME === courseName
+          )
+          .map(item => result = item.CLASS_ID);
+        return result;
       },
       /**
        * 作品点评, 参数为当前行数据, 是表格里每行数据中 点评 操作绑定的事件处理函数
        * 
        * @param {Object} item
-      */
+       */
       remarkWork(item) {
         let id = this.searchWorkId(item);
         // 弹框, 给个点评输入框即可
@@ -334,7 +352,7 @@
        * 
        * @param {String} type
        * @param {String} workId
-      */
+       */
       popModal(type, workId) {
         this.currentWorkId = workId;
         if (type === "delete") {
@@ -342,59 +360,60 @@
         }
       },
       /**
-      * 拉取作业点评的数据
-      *
-      * @return {Object}
-      */
-      pullOriginalData() {
-        this.originalTableData.splice(0);
-        instance
-          .get('/teacher/works', { headers: { Authorization: localStorage.getItem('idToken') } })
+       * 拉取选择框的选项数据
+       */
+      pullClassAndCourseData() {
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        instance.get('/teacher/class', config)
           .then((res) => {
-            res.data.forEach((item) => {
-              this.originalTableData.push({
-                id: item.HW_ID,
-                authorName: item.STUDENT_NAME,
-                submitTime: item.SUBMIT_TIME,
-                workName: item.HW_NAME,
-                classes: item.CLASS_NAME,
-                course: item.COURSE_NAME,
-                order: item.CP_NAME,
-                commentStat: item.TEACHER_REMARK ? "已点评" : "未点评"
-              });
-            });
-            this.changeComment('has', this.originalTableData);
             console.log(res.data);
+            let className = res.data[0].CLASS_NAME;
+            let classId = res.data[0].CLASS_ID;
+            let classesChche = [];
+            this.originalInputData = res.data;
+            res.data.forEach((item) => {
+              classesChche.push(item.CLASS_NAME);
+            });
+            this.inputData.classes.list = Array.from(new Set(classesChche));
+            this.changeOption(className, 'classes');
           })
-          .catch((err) => {
-            console.log(err);
-          });
-
+          .catch((err) => { console.log(err) });
+      },
+      /**
+       * 通过 CLASS_ID 来拉取表格内的数据
+       * 
+       * @param {String} classId
+      */
+      pullHomeworkWithId(classId) {
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        instance.get('/teacher/class/' + classId + '/homework', config)
+          .then(res => {
+            console.log(res);
+            let CP_NAMECache = [];
+            this.originalTableData = this.tableData = res.data.data;
+            this.tableData.forEach(item => { CP_NAMECache.push(item.CP_NAME) });
+            this.inputData.chapter.list = Array.from(new Set(CP_NAMECache));
+            this.inputData.chapter.option = this.inputData.chapter.list[0] || '';
+            this.changeComment('no');
+          })
+          .catch(err => { console.log(err) });
       }
     },
     computed: {
       /**
        * 已点评与未点评按钮的状态样式
-      */
-      blueCommentStyle() {
-        return "background-color: #409EFF; color: #FFF;";
-      },
+       */
+      blueCommentStyle() { return "background-color: #409EFF; color: #FFF;" },
       /**
        * 已点评与未点评按钮的状态样式
-      */
-      whiteCommentStyle() {
-        return "background-color: #FFF; color: #000;";
-      },
+       */
+      whiteCommentStyle() { return "background-color: #FFF; color: #000;" },
       /**
        * 删除提示框组件需要绑定的 id 属性, 纯字符串, 无任何特殊含义
-      */
-      deletePromptId() {
-        return "remarkDeletePrompt";
-      }
+       */
+      deletePromptId() { return "remarkDeletePrompt" }
     },
-    mounted() {
-      this.pullOriginalData();
-    },
+    created() { this.pullClassAndCourseData() },
     components: { DeletePrompt, Pagination, SelectInput, DatePicker }
   }
 </script>

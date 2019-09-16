@@ -6,7 +6,7 @@
         </div>
         <div>
             <button class="button">
-                付费全部解锁
+                开始创作
             </button>
         </div>
     </div>
