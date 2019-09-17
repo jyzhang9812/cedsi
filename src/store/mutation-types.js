@@ -14,6 +14,9 @@ export const changeWorkCurrentList = 'changeWorkCurrentList'
 export const changeMsgList = 'changeMsgList'
 export const changeMsgCurrentList = 'changeMsgCurrentList'
 
+export const changeAllList = 'changeAllList'
+export const changeAllCurrentList = 'changeAllCurrentList'
+
 
 export const changeAdminCourseList = 'changeAdminCourseList'
 export const changeVideo = 'changeVideo'

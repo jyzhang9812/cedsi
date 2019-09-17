@@ -42,7 +42,7 @@
 
 <script>
   import pagination from '../pagination.vue'
-  import globalAxios from 'axios'
+  import { mapState } from 'vuex'
 
   export default {
     name: "courseCard",
@@ -88,15 +88,11 @@
       this.$store.dispatch('getCourse')
     },
     computed: {
-      currentList() {
-        return this.$store.state.courseCurrentList
-      },
-      tableData() {
-        return this.$store.state.courseList
-      },
-      limit() {
-        return this.$store.state.limit
-      }
+      ...mapState({
+        tableData: state => state.courseList,
+        currentList: state => state.courseCurrentList,
+        limit: state => state.limit,
+      }),
     },
   }
 </script>

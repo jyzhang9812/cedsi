@@ -70,7 +70,7 @@
 
 <script>
   import Media from "@dongido/vue-viaudio";
-  import globalAxios from "axios";
+  import { mapState } from 'vuex'
   export default {
     data() {
       return {
@@ -110,12 +110,10 @@
       this.$store.dispatch('getCourseDetail', this.$route.query.id)
     },
     computed: {
-      courseName: function (state) {
-        return this.$store.state.courseName
-      },
-      pointList: function (state) {
-        return this.$store.state.pointList
-      },
+      ...mapState({
+        courseName: state => state.courseName,
+        pointList:state => state.pointList,
+      }),
     },
   };
 </script>

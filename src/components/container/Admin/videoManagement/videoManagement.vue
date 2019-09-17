@@ -80,7 +80,6 @@
         videosrc: "",
         videoName: "",
         currentPage: 0,
-        videoData: [],
       };
     },
 
@@ -156,7 +155,6 @@
 
     created() {
       this.$store.dispatch('getCourseList').then(() => {
-        this.videoData = this.$store.state.videoData
         console.log('333333333333333')
         if (this.videoData) {
           for (let i = 0; i <= this.videoData.length; i++) {
@@ -169,7 +167,7 @@
     computed: {
       ...mapState({
         courseList: state => state.adminCourseList,
-        // videoData: state => state.videoData,
+        videoData: state => state.videoData,
         currentList: state => state.videoCurrentList,
         limit: state => state.limit,
       }),

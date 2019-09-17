@@ -146,7 +146,7 @@
         flex-direction: column;
         width: 100%;
         background-color: #f4f9fa;
-        min-height: 620px;
+        min-height: 100%;
         padding: 0;
     }    
     #presentation .threeImg {

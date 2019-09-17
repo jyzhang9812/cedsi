@@ -2,7 +2,8 @@
     <div id="new" class="limiter">
         <div class="container-table100">
             <div style="margin-bottom: 10px;">
-                <button class="nameOfClass" v-for='(item,index) in myClass' @click='changeClass(index)':class="{active : index===curId}">{{item.name}}</button>
+                <button class="nameOfClass" v-for='(item,index) in myClass' @click='changeClass(index)'
+                    :class="{active : index===curId}">{{item.name}}</button>
             </div>
             <div class="wrap-table100">
                 <div style="margin-bottom: 10px;">
@@ -38,6 +39,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
     export default {
         name: 'class',
         data() {
@@ -48,25 +50,25 @@
                         teacher_name: ''
                     }
                 },
-                curId:0,
+                curId: 0,
             }
         },
-        methods:{
-            changeClass(index){
+        methods: {
+            changeClass(index) {
                 this.curId = index
                 this.nowClass = this.myClass[this.curId]
             },
         },
         created: function () {
             this.$store.commit('updateLoading', true)
-            this.$store.dispatch('getClass').then(()=>{
+            this.$store.dispatch('getClass').then(() => {
                 this.nowClass = this.myClass[this.curId]
             })
         },
         computed: {
-            myClass: function (state) {
-                return this.$store.state.myClass
-            },
+            ...mapState({
+                myClass: state => state.myClass,
+            }),
         },
     }
 </script>
@@ -86,10 +88,12 @@
         border-radius: 12px;
     }
 
-    #new button.nameOfClass:hover,#new button.active {
+    #new button.nameOfClass:hover,
+    #new button.active {
         color: #75b598;
         background: #fff;
     }
+
     #new .avastimg {
         vertical-align: middle;
         width: 40px;

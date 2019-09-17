@@ -59,6 +59,13 @@ const mutations = {
         state.msgCurrentList = state.msgList.slice(value, value + state.limit);
     },
 
+    [TYPES.changeAllList](state, List) {
+        state.allCourseList = List
+    },
+    [TYPES.changeAllCurrentList](state, value) {
+        state.allCourseCurrentList = state.allCourseList.slice(value, value + state.limit);
+    },
+
     //Admin
     [TYPES.changeAdminCourseList](state, List) {
         state.adminCourseList = List

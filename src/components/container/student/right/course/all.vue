@@ -1,7 +1,7 @@
 <template>
     <div id='allCourse' class="container-fluid layout">
         <!-- 模态框（Modal） -->
-        <div class="modal fade" id="courseModal" data-backdrop='false' tabindex="-1" role="dialog"
+        <!-- <div class="modal fade" id="courseModal" data-backdrop='false' tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog courseModal-dialog">
                 <div class="modal-content courseModal-content">
@@ -26,7 +26,7 @@
                             <div class="courseInfo">
                                 <img :src="currentList[courseNum].COVER" alt="">
                                 <div>
-                                    <h3>course name</h3>
+                                    <h3>{{currentList[courseNum].COURSE_NAME}}</h3>
                                     <p>drtykurgvhttvhtvrtydkacbwdhcevbehv ehc hevbfhwbqklebcqhebqh vq vq vqe
                                         vqehwebihcbweruvbrwihvbwreivbwirvbwrvbwhbvwrhbwrivbrhv</p>
                                 </div>
@@ -39,9 +39,10 @@
                             </button>
                         </div>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                </div>  /.modal-content
+            </div>  /.modal-dialog
+        </div>-->
+        <!-- /.modal -->
         <!-- 视频播放 -->
         <div class="modal fade" id="myVideo" data-backdrop='false' tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel" aria-hidden="true">
@@ -65,7 +66,7 @@
         </div>
         <div class="row">
             <div class="col-md-4" v-for="(item,index) in currentList" :key="index" data-toggle="modal"
-                data-target="#courseModal" @click='changeCourseNum(index)'>
+                data-target="#myVideo" @click='changeCourseNum(index)'>
                 <!-- <router-link :to="{name:'coursemap',params:{id:item.ID}}" class="box"> -->
                 <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
                     <img class="img" :style="style" :src="item.COVER">
@@ -76,11 +77,11 @@
                     </div>
                     <div class="details" :style="style1" v-show="index==i">
                         <h5>课程简介</h5>
-                        <p>asdvtebtrdntfsdfsd vfrvffvd</p>
+                        <p>{{item.INTRO}}</p>
                     </div>
                 </div>
                 <div class="outside">
-                    <h4>{{item.NAME}}</h4>
+                    <h4>{{item.COURSE_NAME}}</h4>
                     <div class="right">
                         <button :class="(index==i)?'btnh btn_green':'btn'">试听</button>
                         <button :class="(index==i)?'btnh':'btn'" @click='jmpPay'>解锁课程</button>
@@ -97,7 +98,7 @@
 <script>
     import pagination from '../pagination.vue'
     import Media from "@dongido/vue-viaudio";
-    import globalAxios from 'axios'
+    import { mapState } from 'vuex'
     export default {
         name: "courseCard",
         components: {
@@ -107,7 +108,7 @@
             return {
                 clickNum: 0,
                 courseNum: 0,
-                videosrc: "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/course/video/level1-1.mp4",
+                videosrc: "",
                 items: [
                     { item: '热门课程' },
                     { item: '人工智能' },
@@ -115,11 +116,7 @@
                     { item: '编程类' },
                 ],
                 curId: 0,
-                limit: 6,
-                currentList: [],
-                tableData: [],
                 isShow: false,
-                inside_detail: [],
                 i: -1,
                 superurl: [
                     {
@@ -168,6 +165,9 @@
             },
             changeCourseNum(index) {
                 this.courseNum = index;
+                this.$store.dispatch('getCourseDetail',this.currentList[index].ID).then(()=>{
+                    this.videosrc = this.$store.state.pointList[0].videoSrc
+                })
             },
             jmpPay() {
                 this.$router.push('/payment')
@@ -181,9 +181,11 @@
             deletevideo() {
                 this.videosrc = "";
             },
+            //换页
             getNew(value) {
-                this.currentList = this.tableData.slice(value, value + this.limit);
-                console.log(this.currentList)
+                var currentPage = value / this.limit;
+                this.currentPage = currentPage;
+                this.$store.commit("changeAllCurrentList", this.currentPage * this.limit)
             },
             tab(index) {
                 this.curId = index;
@@ -203,29 +205,16 @@
                 $('#courseBackdrop').remove();
             })
 
-            var token = window.localStorage.getItem('idToken')
-            globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses',
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': token
-                    }
-                }
-            ).then(response => {
-                var arr = [];
-                console.log(response);
-                for (var i = 0; i < response.data.length; i++) {
-                    arr.push(response.data[i])
-                }
-                this.inside_detail = arr;
-                this.tableData = this.inside_detail;
-                this.getNew(0);
-            },
-                error => {
-                    // this.$router.push({path:'/404'})
-                    console.log(error);
-                })
+            this.$store.commit('updateLoading', true)
+            this.$store.dispatch('getAllCourse')
         },
+        computed: {
+            ...mapState({
+                tableData: state => state.allCourseList,
+                currentList: state => state.allCourseCurrentList,
+                limit: state => state.limit,
+            }),
+        }
     }
 </script>
 
@@ -359,10 +348,8 @@
     #allCourse .details p {
         width: 80%;
         height: 80%;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        margin: 0;
+        text-align: center;
+        margin: 0 auto;
     }
 
     #allCourse .lock_circle {
