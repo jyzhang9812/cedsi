@@ -46,14 +46,16 @@
             <td v-for="(value, key, index) in line" :key="index"> {{value}} </td>
             <td>
               <span class="blue" @click="viewWork(line)">查看作品</span>&nbsp;&nbsp;
-              <span class="blue" @click="remarkWork(line)">点评</span>&nbsp;&nbsp;
+              <span class="blue" @click="popModal('remark')">点评</span>&nbsp;&nbsp;
+              <span class="blue" @click="popModal('turndown')">驳回</span>&nbsp;&nbsp;
               <span class="red" @click="popModal('delete')">删除</span>
             </td>
           </tr>
         </tbody>
       </table>
-      <delete-prompt :id="deletePromptId" @deleteWork="deleteWork" :work-id="currentWorkId">
-      </delete-prompt>
+      <delete-prompt :id="bindingIds.delete" @deleteWork="deleteWork"></delete-prompt>
+      <turn-down-work :id="bindingIds.turndown" @turnDownWorkResult="turnDownWork"></turn-down-work>
+      <input-modal :id="bindingIds.remark" @remarkResult="remarkWork"></input-modal>
     </div>
     <div class="fifth-floor">
       <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit">
@@ -68,6 +70,8 @@
   import Pagination from "../utils/pagination";
   import DeletePrompt from "../utils/deletePrompt";
   import instance from "../../../../axios-auth.js"
+  import InputModal from "../utils/inputModal";
+  import TurnDownWork from "../utils/turnDownWork";
 
   export default {
     name: "remark",
@@ -88,7 +92,12 @@
         ],
         originalTableData: [],
         tableData: [],
-        currentList: []
+        currentList: [],
+        bindingIds: {
+          delete: "remarkDeletePrompt",
+          turndown: "remarkTurnDownPrompt",
+          remark: "remarkPrompt"
+        }
       }
     },
     methods: {
@@ -151,7 +160,7 @@
           this.pullHomeworkWithId(classId);
         } else if (id === 'course') {
           let className = this.inputData.classes.option;
-          let classId = this.searchClassId(clasName, item);
+          let classId = this.searchClassId(className, item);
           this.pullHomeworkWithId(classId);
         } else if (id === 'chapter') {
           // !!! there undone !!!
@@ -289,10 +298,17 @@
        * 
        * @param {String} workId
        */
-      deleteWork(workId) {
-        setTimeout(() => {
-          alert("删除成功!" + workId)
-        }, 1000);
+      deleteWork() {
+        setTimeout(() => { alert("删除成功!") }, 1000);
+      },
+      /**
+       * 驳回作品, 是表格里每行数据中 驳回 操作绑定的事件处理函数
+       * 
+       * @param {String} workId
+       */
+      turnDownWork(data) {
+        console.log(data);
+        setTimeout(() => { alert("驳回成功!") }, 1000);
       },
       /**
        * 查看作品, 参数为当前行数据, 是表格里每行数据中 查看作品 操作绑定的事件处理函数
@@ -343,22 +359,16 @@
        * 
        * @param {Object} item
        */
-      remarkWork(item) {
-        let id = this.searchWorkId(item);
-        // 弹框, 给个点评输入框即可
+      remarkWork(remarkResult) {
+        console.log(remarkResult);
+        // 还需要做一些前后端连接工作
       },
       /**
        * 弹出模态框, 提示用户是否进一步删除作品
        * 
        * @param {String} type
-       * @param {String} workId
        */
-      popModal(type, workId) {
-        this.currentWorkId = workId;
-        if (type === "delete") {
-          $('#' + this.deletePromptId).modal('show');
-        }
-      },
+      popModal(type) { $('#' + this.bindingIds[type]).modal('show') },
       /**
        * 拉取选择框的选项数据
        */
@@ -409,12 +419,12 @@
        */
       whiteCommentStyle() { return "background-color: #FFF; color: #000;" },
       /**
-       * 删除提示框组件需要绑定的 id 属性, 纯字符串, 无任何特殊含义
-       */
-      deletePromptId() { return "remarkDeletePrompt" }
+       * 驳回提示框的提示语     
+      */
+      promptWords() { return "确定驳回该学生的作业吗?" },
     },
     created() { this.pullClassAndCourseData() },
-    components: { DeletePrompt, Pagination, SelectInput, DatePicker }
+    components: { DeletePrompt, Pagination, SelectInput, DatePicker, InputModal, TurnDownWork }
   }
 </script>
 
