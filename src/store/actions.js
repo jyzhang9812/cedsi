@@ -408,6 +408,8 @@ const actions = {
                 } else {
                     for (var i = 0; i < videoArr.length; i++) {
                         var video = {};
+                        video.chapterId = videoArr[i].CP_ID;
+                        video.videoId = videoArr[i].RS_ID;
                         video.chapterName = videoArr[i].CP_NAME;
                         video.videoName = videoArr[i].RS_NAME;
                         video.introduction = videoArr[i].RS_COMMENT;

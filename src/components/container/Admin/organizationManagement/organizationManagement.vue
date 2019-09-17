@@ -35,6 +35,38 @@
       </div>
       <!-- /.modal -->
     </div>
+    <!-- 分配课程模态框（Modal） -->
+    <div
+      class="modal fade"
+      id="courseModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog alterwidth">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">分配课程</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-4 course-group" v-for="(course,index) in allCourseList" :key="index">
+                <input type="checkbox" class="course" v-model="authCourseList" :value="course" />
+                {{course.name}}
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="submit()">确定</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal -->
+    </div>
     <div class="classroute">
       <ol class="breadcrumb">
         <li>机构管理</li>
@@ -71,7 +103,12 @@
               <span class="blue" @click="See(seq)">查看营业执照</span>
               <!-- <span class="blue">下载相关文件</span> -->
               <br />
-              <span class="blue">编辑</span>
+              <span
+                class="blue"
+                data-toggle="modal"
+                data-target="#courseModal"
+                @click="getCourseList(seq)"
+              >分配课程</span>
               <span
                 class="red"
                 data-toggle="modal"
@@ -90,6 +127,7 @@
 <script>
 import pagination from "../../teacher/utils/pagination.vue";
 import globalAxios from "axios";
+import { error } from "util";
 export default {
   name: "adminManagement",
   components: { pagination },
@@ -115,8 +153,15 @@ export default {
       alterMes: "",
       //当前页码
       currentPage: 0,
-      index: 0
+      index: 0,
+      authCourseList: [], //已授权课程
+      allCourseList: []   //全部课程
     };
+  },
+  watch: {
+    checkedId(val, oldVal) {
+      this.authCourseList=val
+    }
   },
   methods: {
     deleteOrganization(seq) {
@@ -149,8 +194,8 @@ export default {
     //     );
     //   this.getNew(this.currentPage * this.limit);
     // },
-    See(index){
-      window.location.href=this.tableData[index].license
+    See(index) {
+      window.location.href = this.tableData[index].license;
     },
     addOrganization() {
       this.$router.push({
@@ -168,6 +213,78 @@ export default {
     getNew(value) {
       this.currentList = this.tableData.slice(value, value + this.limit);
       //console.log(this.currentList)
+    },
+    getCourseList(seq) {
+      this.index = this.currentPage * this.limit + seq;
+      var orgId = this.tableData[this.index].id;
+      console.log(orgId)
+      var token = window.localStorage.getItem("idToken");
+      globalAxios
+        .get(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/org/" +
+            orgId +
+            "/course",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            }
+          }
+        )
+        .then(
+          response => {
+            console.log(response.data);
+            //所有课程
+            var allCourseList=[]
+            var allCourseData=response.data.data.all
+            for(var i=0;i<allCourseData.length;i++){
+              var allcourse={}
+              allcourse.id=allCourseData[i].ID
+              allcourse.name=allCourseData[i].COURSE_NAME
+              allCourseList.push(allcourse)
+            }
+            this.allCourseList=allCourseList
+            //已选中的课程
+            var authCourseList=[]
+            var authCourseData=response.data.data.authorization
+            for(var i=0;i<authCourseData.length;i++){
+              var authcourse={}
+              authcourse.id=authCourseData[i].COURSE_ID
+              authcourse.name=authCourseData[i].COURSE_NAME
+              authCourseList.push(authcourse)
+            }
+            this.authCourseList=authCourseList
+            console.log(this.allCourseList)
+            console.log(this.authCourseList)
+          },
+          error => {}
+        );
+    },
+    //确认提交
+    submit(){
+      console.log(this.authCourseList)
+      var postCourse={}
+      postCourse.courseList=this.authCourseList
+      var orgId = this.tableData[this.index].id;
+      var token = window.localStorage.getItem("idToken");
+      globalAxios
+        .post(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/org/" +
+            orgId +
+            "/course",postCourse,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            }
+          }
+        )
+        .then(
+          response => {
+            console.log(response);
+          },
+          error => {}
+        );
     }
   },
   mounted() {
@@ -197,18 +314,17 @@ export default {
             org.intro = orgList[i].INTRODUCTION;
             org.location = orgList[i].ORG_LOCATION;
             org.id = orgList[i].ORG_ID;
-            org.license=orgList[i].BUSINESS_LICENSE;
+            org.license = orgList[i].BUSINESS_LICENSE;
             orgArr.push(org);
           }
-          this.tableData=orgArr
+          this.tableData = orgArr;
           this.changeTablePages(0);
         },
         error => {
           console.log(error);
         }
       );
-  },
-
+  }
 };
 </script>
 
@@ -218,7 +334,7 @@ export default {
   color: #606266;
   margin-bottom: 0;
 }
-#organizationManagement{
+#organizationManagement {
   font-size: 12px;
   color: #606266;
   width: 100%;
@@ -428,6 +544,13 @@ table td {
 #organizationManagement .alterimg {
   width: 25px;
   height: 25px;
+  margin-right: 10px;
+}
+#organizationManagement .course-group {
+  margin-left: 30px;
+  font-size: 15px;
+}
+#organizationManagement .course {
   margin-right: 10px;
 }
 </style>
