@@ -113,7 +113,6 @@
                 class="red"
                 data-toggle="modal"
                 data-target="#alterModal"
-                @click="deleteAdmin(seq)"
               >删除</span>
             </td>
           </tr>
