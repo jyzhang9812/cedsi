@@ -54,7 +54,7 @@
           },
           {
             name: "作业管理",
-            iconSrc: this.$store.state.url + "aside/activityManagement.png",
+            iconSrc: this.$store.state.url + "aside/homework.png",
             children: [{
               name: "布置作业",
               route: "/console/postJob"
@@ -78,7 +78,7 @@
           },
           {
             name: "学生提问",
-            iconSrc: this.$store.state.url + "aside/activityManagement.png",
+            iconSrc: this.$store.state.url + "aside/questions.png",
             route: "/console/question",
             children: [],
             close: true
