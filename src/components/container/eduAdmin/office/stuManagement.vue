@@ -1,5 +1,33 @@
 <template>
   <div id="stuManagement">
+    <!-- 批量导入（Modal） -->
+    <div
+      class="modal fade"
+      id="addStudents"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">批量导入学生</h4>
+          </div>
+          <div class="modal-body">
+            <input type="file" @change="importExcel($event.target)" />
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary">确定</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal -->
+    </div>
     <!-- 添加学生模态框（Modal） -->
     <div
       class="modal fade"
@@ -273,19 +301,10 @@
     <div class="first-floor">
       <label for="tel-name"></label>
       <input type="text" placeholder="请输入姓名、手机号" class="textBox" v-model="inputData.telOrName" />
-      <!-- <div class="select-input">
-        <select-input
-          id="school"
-          tips="请选择学校"
-          :option="inputData.school.option"
-          @option="changeOption"
-          :drop-down-list="inputData.school.list"
-        ></select-input>
-      </div>-->
       <div class="select-input">
         <select-input
           id="classes"
-          tips="请选择班级名称"
+          tips="请选择班级"
           :option="inputData.classes.option"
           @option="changeOption"
           :drop-down-list="inputData.classes.list"
@@ -305,6 +324,12 @@
         data-target="#addStudent"
         @click="addStudent()"
       >新增学生</button>
+      <button
+        class="btn btn-clear"
+        data-toggle="modal"
+        data-target="#addStudents"
+        @click="addStudent()"
+      >批量导入</button>
     </div>
     <div class="forth-floor">
       <table class="table table-hover">
@@ -316,16 +341,13 @@
         <tbody>
           <tr v-for="(student, seq) in currentList" class="content" :key="seq">
             <td>{{seq + 1}}</td>
-            <td>{{student.account}}</td>
+            <td>{{student.id}}</td>
+            <td><img :src="student.avatar" class="student-avatar"></td>
             <td>{{student.name}}</td>
-            <td>{{student.telephone}}</td>
-            <td>{{student.school}}</td>
-            <td>{{student.className}}</td>
+            <td>{{student.gender}}</td>
+            <td>{{student.phone}}</td>
             <td>{{student.grade}}</td>
-            <td>{{student.classes}}</td>
-            <td>{{student.teacher}}</td>
-            <td>{{student.addDate}}</td>
-            <td>
+            <!-- <td>
               <input class="tips" :value="student.remark" />
             </td>
             <td style="width:100px">
@@ -343,7 +365,7 @@
                 data-target="#alterModal"
                 @click="addAlterMes()"
               >停课</span>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       </table>
@@ -355,77 +377,43 @@
 <script>
 import pagination from "../../teacher/utils/pagination.vue";
 import DatePicker from "../utils/datePicker";
-import SelectInput from "../utils/selectInput";
+import SelectInput from "../../Admin/utils/selectInput";
+import globalAxios from "axios";
+import XLSX from "xlsx";
+
 
 export default {
   name: "stuManagement",
   data() {
     return {
-      limit: 2,
+      limit: 10,
       currentList: [],
       inputData: {
         telOrName: "",
-        // school: {
-        //   option: "",
-        //   list: ["师大一中", "师大二中", "师大三中"]
-        // },
         classes: {
           option: "",
-          list: ["1班", "2班", "3班", "4班", "5班"]
+          list: [
+            {
+              name:"1班",
+              id:"01"
+            },
+            {
+              name:"2班",
+              id:"02"
+            },
+          ]
         }
       },
       tableTitle: [
         "序号",
-        "学生/账号",
-        "学生",
+        "学号",
+        "头像",
+        "姓名",
+        "性别",
         "手机号",
-        "学校",
-        "班级名称",
         "年级",
-        "班级",
-        "老师",
-        "录入时间",
-        "备注",
-        "操作"
       ],
-      tableData: [
-        {
-          account: "赛大迪",
-          name: "小迪",
-          telephone: "12342411111",
-          school: "赛迪斯",
-          className: "赛迪斯",
-          grade: "初一",
-          classes: "九班",
-          teacher: "程老师",
-          addDate: "2018-5-2 11:32",
-          remark: "是个好孩子"
-        },
-        {
-          account: "赛大迪",
-          name: "小迪",
-          telephone: "12342411111",
-          school: "赛迪斯",
-          className: "赛迪斯",
-          grade: "初一",
-          classes: "九班",
-          teacher: "程老师",
-          addDate: "2018-5-2 11:32",
-          remark: "还行"
-        },
-        {
-          account: "赛大迪",
-          name: "小迪",
-          telephone: "12342411111",
-          school: "赛迪斯",
-          className: "赛迪斯",
-          grade: "初一",
-          classes: "九班",
-          teacher: "程老师",
-          addDate: "2018-5-2 11:32",
-          remark: "努力"
-        }
-      ],
+      tableData: [],
       studentInfo: {
         name: "",
         telephone: "",
@@ -473,6 +461,7 @@ export default {
       studentGrade: "",
       checkSex: [],
       updateIndex: -1, //是编辑还是添加
+      //提示框
       alterimg: this.$store.state.url + "eduAdmin/alter.png",
       alterMes: ""
     };
@@ -509,6 +498,63 @@ export default {
     }
   },
   methods: {
+    //批量导入学生
+     importExcel(file) {
+      var file = file.files[0]; // 使用传统的input方法需要加上这一步
+      const types = file.name.split(".")[1];
+      const fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(
+        item => item === types
+      );
+      if (!fileType) {
+        alert("格式错误！请重新选择");
+        return;
+      }
+      this.file2Xce(file).then(tabJson => {
+        if (tabJson && tabJson.length > 0) {
+          this.xlsxJson = tabJson[0].sheet;
+          console.log(this.xlsxJson);
+          var token = window.localStorage.getItem("idToken");
+          globalAxios({
+            url:
+              "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/133/students",
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            },
+            data: { sheet: this.xlsxJson }
+          }).then(
+            response => {
+              console.log(response);
+            },
+            error => {
+              console.log(error);
+            }
+          );
+        }
+      });
+    },
+    file2Xce(file) {
+      return new Promise(function(resolve, reject) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const data = e.target.result;
+          this.wb = XLSX.read(data, {
+            type: "binary"
+          });
+          const result = [];
+          this.wb.SheetNames.forEach(sheetName => {
+            result.push({
+              sheetName: sheetName,
+              sheet: XLSX.utils.sheet_to_json(this.wb.Sheets[sheetName])
+            });
+          });
+          resolve(result);
+        };
+        // reader.readAsBinaryString(file.raw)
+        reader.readAsBinaryString(file); // 传统input方法
+      });
+    },
     clearChoices() {
       this.optionsInit();
     },
@@ -580,7 +626,45 @@ export default {
   },
   mounted() {
     //this.tableData = this.originalTableData;
-    this.changeTablePages(0);
+    
+  },
+  created(){
+var token = window.localStorage.getItem("idToken");
+      globalAxios
+        .get(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/student", 
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            }
+          }
+        )
+        .then(
+          response => {
+            console.log(response);
+            //所有学生
+            var allStudent=response.data.data
+            var allStudentList=[]
+            for(var i=0;i<allStudent.length;i++){
+              var student={}
+              student.id=allStudent[i].STUDENT_ID
+              student.name=allStudent[i].STUDENT_NAME
+              student.avatar=allStudent[i].AVATAR
+              if(allStudent[i].GENDER=="0")
+                student.gender="女"
+              else
+                student.gender="男"
+              student.phone=allStudent[i].MOBILE_PHONE
+              student.grade=allStudent[i].GRADE
+              allStudentList.push(student)
+            }
+            this.tableData=allStudentList
+            console.log(this.tableData)
+            this.changeTablePages(0);
+          },
+          error => {}
+        );
   },
   components: { SelectInput, DatePicker, pagination }
 };
@@ -688,6 +772,10 @@ export default {
 
 #stuManagement table td {
   vertical-align: middle !important;
+}
+.student-avatar{
+  width: 40px;
+  height: 40px;
 }
 
 #stuManagement .title {
