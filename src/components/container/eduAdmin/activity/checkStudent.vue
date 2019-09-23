@@ -5,17 +5,6 @@
         <li>学生名单</li>
       </ol>
     </div>
-    <!-- <div class="first-floor">
-      <label for="class-name"></label>
-      <input
-        type="text"
-        placeholder="请输入学生姓名"
-        class="textBox"
-        id="class-name"
-        v-model="inputData.organizationName"
-      />
-      <button class="btn btn-search">搜索</button>
-    </div> -->
     <div class="second-floor">
       <table class="table table-hover">
         <thead>
@@ -168,9 +157,6 @@ export default {
           age:'15',
           school:'师大附中'
       }
-
-      
-      
       ], //页面表格内容
       //提示框
       alterimg: this.$store.state.url + "organization/alter.png",
@@ -208,34 +194,6 @@ export default {
         path: "/eduAdmin/activity"
       });
     },
-    // submitDelete() {
-    //   var deleteorganization = this.tableData[this.index];
-    //   console.log(deleteorganization);
-    //   var token = window.localStorage.getItem("idToken");
-    //   console.log(token);
-    //   this.$http
-    //     .delete(
-    //       "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-    //       { userId: deleteorganization.id },
-    //       {
-    //         "Content-Type": "application/json",
-    //         Authorization: token
-    //       }
-    //     )
-    //     .then(
-    //       response => {
-    //         console.log(response);
-    //         this.tableData.splice(this.index, 1);
-    //       },
-    //       error => {
-    //         console.log(error);
-    //       }
-    //     );
-    //   this.getNew(this.currentPage * this.limit);
-    // },
-    See(index){
-      window.location.href=this.tableData[index].license
-    },
     addOrganization() {
       this.$router.push({
         path: "/Admin/organizationManagement/addOrganization"
@@ -257,42 +215,6 @@ export default {
   mounted() {
     this.changeTablePages(0);
   },
-//   created() {
-//     var token = window.localStorage.getItem("idToken");
-//     globalAxios
-//       .get(
-//         "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/org",
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: token
-//           }
-//         }
-//       )
-//       .then(
-//         response => {
-//           var orgList = [];
-//           var orgArr = [];
-//           orgList = response.data.data;
-//           for (var i = 0; i < orgList.length; i++) {
-//             var org = {};
-//             org.name = orgList[i].ORG_NAME;
-//             org.headmaster = orgList[i].HEADMASTER;
-//             org.intro = orgList[i].INTRODUCTION;
-//             org.location = orgList[i].ORG_LOCATION;
-//             org.id = orgList[i].ORG_ID;
-//             org.license=orgList[i].BUSINESS_LICENSE;
-//             orgArr.push(org);
-//           }
-//           this.tableData=orgArr
-//           this.changeTablePages(0);
-//         },
-//         error => {
-//           console.log(error);
-//         }
-//       );
-//   },
-
 };
 </script>
 

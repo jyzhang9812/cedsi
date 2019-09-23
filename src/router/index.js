@@ -194,6 +194,11 @@ const stuManagement = resolve => {
     resolve(require('../components/container/eduAdmin/office/stuManagement.vue'));
   });
 };
+const addStudent = resolve => {
+  require.ensure(['../components/container/eduAdmin/office/addStudent.vue'], () => {
+    resolve(require('../components/container/eduAdmin/office/addStudent.vue'));
+  });
+};
 const teaching = resolve => {
   require.ensure(['../components/container/eduAdmin/teaching/teaching.vue'], () => {
     resolve(require('../components/container/eduAdmin/teaching/teaching.vue'));
@@ -623,6 +628,15 @@ export default new Router({
               next('/signin')
             }
           }, component: classManagement
+        },
+        {
+          path: '/eduAdmin/classManagement/:classId/addStudent', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: addStudent
         },
         {
           path: '/eduAdmin/stuManagement', beforeEnter(to, from, next) {
