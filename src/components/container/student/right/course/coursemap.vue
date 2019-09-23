@@ -41,7 +41,7 @@
           </div>
           <div class="modal-body modal-box">
             <Media :autoplay="false" :kind="'video'" :controls="true" :src="videosrc"
-              style="height: 400px;width: 700px;" @pause="handle()"></Media>
+              style="height: 400px;width: 700px;"></Media>
           </div>
         </div>
       </div>
@@ -90,12 +90,6 @@
         this.courseNum = this.pointList[index].number;
         this.videosrc = this.pointList[index].videoSrc;
         console.log(this.videosrc)
-      },
-      handle() {
-        console.log("Video paused!, playing in 2 sec...");
-        setTimeout(() => {
-          this.$refs.coursevideo.play();
-        }, 2000);
       },
       deletevideo() {
         this.videosrc = "";

@@ -23,7 +23,7 @@
         <thead>
           <tr>
             <th>序号</th>
-            <th>问题标题</th>
+            <th>问题描述</th>
             <th>发布时间</th>
             <th>学生姓名</th>
             <th>课程</th>

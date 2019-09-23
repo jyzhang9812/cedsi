@@ -70,11 +70,14 @@
         </div>
         <div class="item">
           <p>截止时间：</p>
-          <date-picker tips="选择截止时间" id="postJob_deadline" :date="inputData.deadline" @changeDate="changeDate">
+          <date-picker tips="选择截止时间" class="datePicker" id="postJob_deadline" :date="inputData.deadline"
+            @changeDate="changeDate">
           </date-picker>
         </div>
         <div class="item">
-          <div ref="editor_postJob" class="editor"></div>
+          <!-- <div ref="editor_postJob" class="editor"></div> -->
+          <p>作业内容：</p>
+          <textarea class="form-control" rows="10"></textarea>
         </div>
         <div class="item1">
           <button type="button" class="btn-my">保存草稿</button>
@@ -91,7 +94,8 @@
   import Pagination from "../utils/pagination";
   import DatePicker from "../utils/datePicker";
   import selectInput from "../utils/selectInput";
-  import E from 'wangeditor';
+  import instance from "../../../../axios-auth.js"
+  // import E from 'wangeditor';
 
   export default {
     name: 'postJob',
@@ -144,11 +148,29 @@
       }
     },
     methods: {
+      pullHomeworkData() {
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        return new Promise((resolve, reject) => {
+          instance.get("teacher/homework", config)
+            .then(res => { resolve(res) })
+            .catch(err => { reject(err) });
+        });
+      },
       changeOption(item, id) {
 
       },
       changeTablePages(value) {
-
+        let result = [];
+        this.tableData.forEach(item => {
+          result.push({
+            hwName: item.HW_NAME,
+            deadline: item.DEADLINE,
+            classes: item.CLASS_ID,
+            course: item.COURSE_ID,
+            chapter: item.CP_ID
+          });
+        });
+        this.currentList = result;
       },
       conditionSearch() {
 
@@ -156,6 +178,12 @@
       clearChoices() {
 
       },
+      /**
+       * 编辑作业, 需要把相应的数据进行填充
+       * 
+       * @param {Object} item
+       * 
+      */
       editWork(item) {
         console.log(item);
       },
@@ -191,21 +219,33 @@
     computed: {
       deletePromptId() { return "postJob_deletePrompt" }
     },
+    created() {
+      this.pullHomeworkData()
+        .then(res => {
+          console.log(res);
+          this.originalTableData = res.data || [];
+          this.tableData = res.data || [];
+          this.changeTablePages(0);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     mounted() {
-      let editor = new E(this.$refs.editor_postJob);
-      editor.customConfig.uploadImgShowBase64 = true;
-      editor.customConfig.onchange = (html) => {
-        this.editorContent = html
-      };
-      editor.customConfig.menus = [
-        'head', 'bold', 'fontSize', 'fontName',
-        'italic', 'underline', 'strikeThrough', 'foreColor',
-        'backColor', 'link', 'list', 'justify',
-        'quote', 'emoticon', 'image', 'table',
-        'video', 'code', 'undo', 'redo'
-      ],
-        editor.create();
-      editor.txt.html('<p>请输入内容</p>');
+      // let editor = new E(this.$refs.editor_postJob);
+      // editor.customConfig.uploadImgShowBase64 = true;
+      // editor.customConfig.onchange = (html) => {
+      //   this.editorContent = html
+      // };
+      // editor.customConfig.menus = [
+      //   'head', 'bold', 'fontSize', 'fontName',
+      //   'italic', 'underline', 'strikeThrough', 'foreColor',
+      //   'backColor', 'link', 'list', 'justify',
+      //   'quote', 'emoticon', 'image', 'table',
+      //   'video', 'code', 'undo', 'redo'
+      // ],
+      //   editor.create();
+      // editor.txt.html('<p>请输入内容</p>');
     },
     components: { DeletePrompt, Pagination, DatePicker, selectInput }
   }
@@ -316,7 +356,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   #teacher-postJob .item p {
@@ -326,14 +366,8 @@
     margin-right: 5px;
   }
 
-  #teacher-postJob .file {
-    height: 32px;
-  }
-
-  #teacher-postJob .checkbox {
-    vertical-align: middle;
-    margin: 0;
-    height: 32px;
+  #teacher-postJob .item .dropdown {
+    margin-right: 35px;
   }
 
   #teacher-postJob .editor {
@@ -347,5 +381,15 @@
     justify-content: flex-start;
     margin-top: 20px;
     margin-left: 356px;
+  }
+
+  #teacher-postJob .datePicker {
+    margin-left: 0;
+  }
+
+  #teacher-postJob .form-control {
+    width: 750px;
+    padding: 10px;
+    font-size: 14px;
   }
 </style>
