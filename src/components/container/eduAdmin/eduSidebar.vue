@@ -4,7 +4,7 @@
       <ul class="menu">
         <li v-for="item in aside" class="bg-hover" :key="item.name">
           <div class="item-name" @click="dropDownListListener(item)">
-            <i><img :alt="item.name" :src="item.iconSrc"></i>
+            <i><img :alt="item.name" :src="item.iconSrc" class="aside-icon"></i>
             <span>{{item.name}}</span>
             <span
               class="menuPosition"
@@ -131,6 +131,10 @@
     width: 220px;
     min-width: 170px;
     min-height: 620px;
+  }
+  .aside-icon {
+    width: 18px;
+    height: 18px;
   }
 
   #eduSidebar .item-name {
