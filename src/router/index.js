@@ -163,6 +163,16 @@ const tMessage = resolve => {
     resolve(require('../components/container/teacher/message/tMessage.vue'));
   });
 };
+const postJob = resolve => {
+  require.ensure(['../components/container/teacher/teach/postJob.vue'], () => {
+    resolve(require('../components/container/teacher/teach/postJob.vue'));
+  });
+}
+const coursePlan = resolve => {
+  require.ensure(['../components/container/teacher/teach/coursePlan.vue'], () => {
+    resolve(require('../components/container/teacher/teach/coursePlan.vue'));
+  });
+}
 //以下是教务角色
 const eduAdmin = resolve => {
   require.ensure(['../components/container/eduAdmin/eduSidebar.vue'], () => {
@@ -215,6 +225,7 @@ const addActivity = resolve => {
   });
 };
 import { resolve } from 'url';
+// import { resolveSoa } from 'dns';
 //以下是超级管理员角色
 const superAdmin = resolve => {
   require.ensure(['../components/container/superAdmin/superAdminSidebar.vue'], () => {
@@ -538,6 +549,24 @@ export default new Router({
             }
           }, component: tMessage
         },
+        {
+          path: '/console/postJob', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: postJob
+        },
+        {
+          path: '/console/coursePlan', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: coursePlan
+        }
       ]
     },
     {
@@ -674,7 +703,7 @@ export default new Router({
             } else {
               next('/signin')
             }
-          }, component: videoManagement
+          }, component: courseManagement
         },
         {
           path: '/Admin/videoManagement/:courseId/uploadVideo', beforeEnter(to, from, next) {
@@ -686,13 +715,13 @@ export default new Router({
           }, component: uploadVideo
         },
         {
-          path: '/Admin/courseManagement', beforeEnter(to, from, next) {
+          path: '/Admin/videoManagement', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {
               next('/signin')
             }
-          }, component: courseManagement
+          }, component: videoManagement
         },
         {
           path: '/Admin/courseManagement/addCourse', beforeEnter(to, from, next) {
@@ -713,13 +742,13 @@ export default new Router({
           }, component: chapterManagement
         },
         {
-          path: '/Admin/chapterManagement/addChapter', beforeEnter(to, from, next) {
+          path: '/Admin/chapterManagement/:courseId/addChapter', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {
               next('/signin')
             }
-          }, component: addChapter,name:'addChapter'
+          }, component: addChapter, name: 'addChapter'
         },
         {
           path: '/Admin/organizationManagement', beforeEnter(to, from, next) {

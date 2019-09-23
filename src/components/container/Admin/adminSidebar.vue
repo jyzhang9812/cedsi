@@ -44,14 +44,14 @@
             iconSrc: this.$store.state.url+"aside/activityManagement.png",
             children: [],
             close: true,
-            route: "/Admin/courseManagement"
+            route: "/Admin/"
           },
           {
             name: "视频管理",
             iconSrc: this.$store.state.url+"aside/teachingManagement.png",
             children: [],
             close: true,
-            route: "/Admin/"
+            route: "/Admin/videoManagement"
           },
           {
             name: "机构管理",

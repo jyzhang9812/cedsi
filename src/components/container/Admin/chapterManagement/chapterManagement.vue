@@ -1,5 +1,40 @@
 <template>
   <div id="chapterManagement">
+    <!-- 提示模态框（Modal） -->
+    <div
+      class="modal fade"
+      id="alterModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog alterwidth">
+        <div class="modal-content">
+          <div class="modal-header alterheader">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">提示</h4>
+          </div>
+          <div class="modal-body">
+            <div class="altercontent" aria-hidden="true">
+              <img :src="alterimg" class="alterimg" />
+              <span>{{alterMes}}</span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              @click="submitDelete()"
+            >确定</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal -->
+    </div>
     <div>
       <button class="btn btn-clear" @click="gotoAdd">添加章节</button>
     </div>
@@ -18,8 +53,13 @@
             <td>{{chapter.date}}</td>
             <td>{{chapter.uploadAdmin}}</td>
             <td>
-              <span class="blue">编辑</span>&nbsp;&nbsp;
-              <span class="red">删除</span>
+              <span class="blue" @click="updateChapter(seq)">编辑</span>&nbsp;&nbsp;
+              <span
+                class="red"
+                @click="deleteChapter(seq)"
+                data-toggle="modal"
+                data-target="#alterModal"
+              >删除</span>
             </td>
           </tr>
         </tbody>
@@ -36,7 +76,7 @@ import Pagination from "../utils/pagination";
 import globalAxios from "axios";
 import fs from "fs";
 import AWS from "aws-sdk";
-  import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
   name: "chapters",
@@ -54,27 +94,85 @@ export default {
         "创建人",
         "操作"
       ],
+      chapterData: [],
+      currentPage: 0,
+      //提示框
+      alterimg: this.$store.state.url + "eduAdmin/alter.png",
+      alterMes: ""
     };
   },
   methods: {
+    //换页
     changeTablePages(value) {
-      this.currentList = this.chapterData.slice(value, value + this.limit);
+      var currentPage = value / this.limit;
+      this.currentPage = currentPage;
+      this.$store.commit(
+        "changeChapterCurrentList",
+        this.currentPage * this.limit
+      );
     },
     gotoAdd() {
       this.$router.push({
-        name:"addChapter",
-        query:{
-            courseId:this.courseId,
-            chapterNum:this.chapterLength+1
+        path: "/Admin/chapterManagement/" + this.courseId + "/addChapter",
+        // name:"addChapter",
+        query: {
+          //     courseId:this.courseId,
+          chapterNum: this.chapterLength + 1
         }
       });
     },
+    updateChapter(seq) {
+      this.chapterIndex = this.currentPage * this.limit + seq;
+      this.chapterId = this.chapterData[this.chapterIndex].chapterId;
+      this.$router.push({
+        path: "/Admin/chapterManagement/" + this.courseId + "/addChapter",
+        query: {
+          chapterId: this.chapterId,
+          chapterNum: this.chapterIndex + 1
+        }
+      });
+    },
+    deleteChapter(seq) {
+      this.alterMes = "确认删除吗？";
+      this.chapterIndex = this.currentPage * this.limit + seq;
+    },
+    submitDelete() {
+      var token = window.localStorage.getItem("idToken");
+      this.chapterId = this.chapterData[this.chapterIndex].chapterId;
+      globalAxios
+        .delete(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
+            this.courseId +
+            "/chapters/" +
+            this.chapterId,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            }
+          }
+        )
+        .then(
+          response => {
+            console.log(response);
+            this.chapterList.splice(this.chapterIndex, 1);
+            this.changeTablePages(this.currentPage * this.limit);
+          },
+          error => {
+            // this.$router.push({path:'/404'})
+            console.log(error);
+          }
+        );
+    },
     timestampToTime(timestamp) {
       timestamp = String(timestamp);
-      timestamp = timestamp.length == 10 ? timestamp*1000 : timestamp * 1
+      timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
       var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
       var Y = date.getFullYear() + "-";
-      var M =(date.getMonth() + 1 < 10? "0" + (date.getMonth() + 1): date.getMonth() + 1) + "-";
+      var M =
+        (date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1)
+          : date.getMonth() + 1) + "-";
       var D = date.getDate() + " ";
       var h = date.getHours() + ":";
       var m = date.getMinutes() + ":";
@@ -84,26 +182,33 @@ export default {
   },
   created() {
     this.courseId = this.$route.params.courseId;
-    this.$store.dispatch('getChapterDetial',this.courseId).then(() => {
-        if (this.currentList) {
-          for (let i = 0; i <= this.currentList.length; i++) {
-            this.currentList[i].date = this.timestampToTime(this.currentList[i].date)
-          }
+    this.$store.dispatch("getChapterDetial", this.courseId).then(() => {
+      this.chapterData = this.$store.state.chapterData;
+      console.log(this.$store.state.chapterData);
+      //console.log('333333333333333')
+      if (this.chapterData) {
+        for (let i = 0; i <= this.chapterData.length; i++) {
+          this.chapterData[i].date = this.timestampToTime(
+            this.$store.state.chapterData[i].date
+          );
         }
-      })
+      }
+    });
   },
   computed: {
-      ...mapState({
-        chapterList: state => state.chapterData,
-        currentList: state => state.chapterCurrentList,
-        limit: state => state.limit,
-      }),
-    }
+    ...mapState({
+      chapterList: state => state.chapterData,
+      // videoData: state => state.videoData,
+      currentList: state => state.chapterCurrentList,
+      limit: state => state.limit,
+      chapterLength: state => state.chapterLength
+    })
+  }
 };
 </script>
 
 <style scoped>
-#chapterManagement{
+#chapterManagement {
   font-size: 12px;
   color: #606266;
   width: 98%;
@@ -205,5 +310,24 @@ export default {
 #chapterManagement .red {
   cursor: pointer;
   color: #ff6947;
+}
+#chapterManagement .alterwidth {
+  width: 30%;
+}
+#chapterManagement .altercontent {
+  width: 300px;
+  margin: 0 auto;
+}
+#chapterManagement .alterimg {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+}
+#chapterManagement .modal-footer {
+  border: none;
+  text-align: center;
+}
+#chapterManagement .alterheader{
+  border: none;
 }
 </style>
