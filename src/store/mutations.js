@@ -37,6 +37,7 @@ const mutations = {
             state.pointList[i].name = List.list[i].name
             state.pointList[i].videoSrc = List.list[i].videoSrc
             state.pointList[i].flag = List.list[i].flag
+            state.pointList[i].chapterId = List.list[i].chapterId
         }
     },
 
