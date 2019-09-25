@@ -7,7 +7,7 @@
                 <div class="recommend_title">
                     <h3 style="color: #fff">精品活动</h3>
                     <p>
-                        <button class="button">查看更多</button>
+                        <button class="button">开始创作</button>
                         <i class="fa fa-trophy fa-2x" style="color: #ffbf35" aria-hidden="true"></i>
                         <i class="fa fa-cog fa-2x" style="color: #fff" aria-hidden="true"></i>
                     </p>

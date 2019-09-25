@@ -6,7 +6,7 @@
     </div>
     <div class="upload">
       <span class="upload-title">章节序号:</span>
-      <input class="upload-input" placeholder="请输入章节序号" v-model="chapterNum" />
+      <input class="upload-input" :value="chapterNum" disabled />
     </div>
     <div class="upload upload-height">
       <span class="upload-title">章节描述:</span>
@@ -27,57 +27,125 @@
 
 <script>
 import globalAxios from "axios";
+import { mapState } from "vuex";
 export default {
   name: "addChapter",
   data() {
     return {
       chapterName: "",
       chapterDesc: "",
-      chapterNum:"",
-      courseId: ""
+      chapterNum: "",
+      courseId: "",
+      chapterId: ""
     };
   },
   methods: {
+    timestampToTime(timestamp) {
+      timestamp = String(timestamp);
+      timestamp = timestamp.length == 10 ? timestamp*1000 : timestamp * 1
+      var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      var Y = date.getFullYear() + "-";
+      var M =(date.getMonth() + 1 < 10? "0" + (date.getMonth() + 1): date.getMonth() + 1) + "-";
+      var D = date.getDate() + " ";
+      var h = date.getHours() + ":";
+      var m = date.getMinutes() + ":";
+      var s = date.getSeconds();
+      return Y + M + D + h + m + s;
+    },
     submit() {
       var token = window.localStorage.getItem("idToken");
       var newChapter = {};
       newChapter.chapterName = this.chapterName;
       newChapter.chapterDesc = this.chapterDesc;
-      newChapter.chapterNum=this.chapterNum;
+      newChapter.chapterNum = this.chapterNum;
+      console.log(this.chapterId)
       //console.log(this.chapterName,this.chapterDesc,this.courseId)
-      globalAxios
-        .post(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
-            this.courseId +
-            "/chapters",
-          newChapter,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token
+      if (this.chapterId != -1) {
+        //如果是编辑
+        globalAxios
+          .put(
+            "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
+              this.courseId +
+              "/chapters/" +
+              this.chapterId,
+            newChapter,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: token
+              }
             }
-          }
-        )
-        .then(
-          response => {
-            console.log(response);
-            this.$router.push({ path: "/Admin/chapterManagement/"+this.courseId });
-          },
-          error => {
-            // this.$router.push({path:'/404'})
-            console.log(error);
-          }
-        );
+          )
+          .then(
+            response => {
+              console.log(response);
+              this.$router.push({
+                path: "/Admin/chapterManagement/" + this.courseId
+              });
+            },
+            error => {
+              // this.$router.push({path:'/404'})
+              console.log(error);
+            }
+          );
+      } else {
+        globalAxios
+          .post(
+            "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
+              this.courseId +
+              "/chapters",
+            newChapter,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: token
+              }
+            }
+          )
+          .then(
+            response => {
+              console.log(response);
+              this.$router.push({
+                path: "/Admin/chapterManagement/" + this.courseId
+              });
+            },
+            error => {
+              // this.$router.push({path:'/404'})
+              console.log(error);
+            }
+          );
+      }
     }
   },
-  created() {
+  mounted() {
     this.courseId = this.$route.params.courseId;
+    this.chapterNum = this.$route.query.chapterNum;
+    if (this.$route.query.chapterId == null) //增加
+      this.chapterId=-1
+    else {    //如果是修改避免刷新章节内容为空
+      this.$store.dispatch("getChapterDetial", this.courseId).then(() => {
+        this.chapterData = this.$store.state.chapterData;
+        console.log(this.$store.state.chapterData);
+        //console.log('333333333333333')
+        if (this.chapterData) {
+          console.log(this.$route.query.chapterNum);
+          this.chapterId = this.$route.query.chapterId;
+          this.chapterName = this.chapterList[this.chapterNum - 1].chapterName,
+          this.chapterDesc = this.chapterList[this.chapterNum - 1].introduction;
+        }
+      });
+    }
+  },
+  computed: {
+    ...mapState({
+      chapterList: state => state.chapterData
+    })
   }
 };
 </script>
 
 <style scoped>
-#addChapter{
+#addChapter {
   width: 98%;
   margin: 0 auto;
   padding-top: 30px;
@@ -141,6 +209,7 @@ export default {
 #addChapter .upload-footer {
   width: 100%;
   text-align: center;
+  margin-bottom: 20px;
 }
 #addChapter .upload-btn {
   background-color: #409eff;

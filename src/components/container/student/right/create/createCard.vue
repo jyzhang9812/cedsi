@@ -5,9 +5,6 @@
                 :class="{active : index==curId}">{{item.item}}</button>
         </div> -->
         <div class="row" style="margin-top: 10px">
-            <div class="col-md-4 createDiv" @click="this.$router.push('url')">
-                <i class="fa fa-5x fa-plus" style='color: #fff;position: relative;top:30%;' aria-hidden="true"></i>
-            </div>
             <div class="col-md-4" v-for="(item,index) in currentList" :key="index" @mouseover="show(index)"
                 @mouseleave="hidden(index)">
                 <div class="inside">
@@ -150,15 +147,6 @@
         margin-top: 10px;
         margin-bottom: 10px;
         text-decoration: none;
-    }
-
-    .createDiv {
-        text-align: center;
-        width: 200px;
-        height: 200px;
-        background: #ff8d19;
-        border-radius: 20px;
-        margin-left:20px; 
     }
 
     #rollPic .img {

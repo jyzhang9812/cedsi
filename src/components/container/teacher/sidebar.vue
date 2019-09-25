@@ -13,9 +13,10 @@
             </div>
             <div :class="{'collapse': item.close}">
               <ul class="menu nav">
-                <li v-for="(child,index) in item.children" class="children" @click="$router.push(child.route)" :key="index">
+                <router-link v-for="(child,index) in item.children" class="children" :to="child.route" :key="index"
+                  tag="li" active-class="active-teaclass">
                   {{child.name}}
-                </li>
+                </router-link>
               </ul>
             </div>
           </li>
@@ -36,54 +37,55 @@
         aside: [
           {
             name: "教学管理",
-            iconSrc: this.$store.state.url+"aside/teachingManagement.png",
-            children: [
-              {
-                name: "作业点评",
-                route: "/console/homework"
-              },
-              {
-                name: "精选作品",
-                route: "/console/choiceness"
-              },
-              {
-                name: "视频管理",
-                route: "/console/video"
-              }
-            ],
+            iconSrc: this.$store.state.url + "aside/teachingManagement.png",
+            children: [{
+              name: "课程规划",
+              route: "/console/coursePlan"
+            },
+            {
+              name: "视频管理",
+              route: "/console/video"
+            },
+            {
+              name: "辅导资料",
+              route: "/console/material"
+            }],
+            close: true
+          },
+          {
+            name: "作业管理",
+            iconSrc: this.$store.state.url + "aside/homework.png",
+            children: [{
+              name: "布置作业",
+              route: "/console/postJob"
+            },
+            {
+              name: "批改作业",
+              route: "/console/homework"
+            },
+            {
+              name: "精选作品",
+              route: "/console/choiceness"
+            }],
             close: true
           },
           {
             name: "活动管理",
-            iconSrc:this.$store.state.url+"aside/activityManagement.png",
-            children: [{
-              name: "发布活动",
-              route: "/console/activity"
-            },
-              {
-                name: "学生提问",
-                route: "/console/question"
-              },
-              // 2019-07-22
-              // 由于业务逻辑不清楚, 暂时关掉这两个页面
-              // {
-              //   name: "活动评论",
-              //   route: "/console/opuscomment"
-              // },
-              // {
-              //   name: "作品评论",
-              //   route: "/console/topiccomment"
-              // },
-              {
-                name: "辅导资料",
-                route: "/console/material"
-              }
-            ],
+            iconSrc: this.$store.state.url + "aside/activityManagement.png",
+            route: "/console/activity",
+            children: [],
+            close: true
+          },
+          {
+            name: "学生提问",
+            iconSrc: this.$store.state.url + "aside/questions.png",
+            route: "/console/question",
+            children: [],
             close: true
           },
           {
             name: "统计分析",
-            iconSrc: this.$store.state.url+"aside/statisticalAnalyses.png",
+            iconSrc: this.$store.state.url + "aside/statisticalAnalyses.png",
             children: [{
               name: "学情分析",
               route: "/console/statistics"
@@ -92,19 +94,21 @@
           },
           {
             name: "个人中心",
-            iconSrc: this.$store.state.url+"aside/personalCenter.png",
-            children: [],
+            iconSrc: this.$store.state.url + "aside/personalCenter.png",
+            children: [{
+              name: "消息通知",
+              route: "/console/message"
+            },
+            {
+              name: "个人资料",
+              route: "/console/space"
+            },
+            {
+              name: "修改密码",
+              route: "/console/password"
+            }],
             close: true,
-            route: "/console/space"
-          },
-          {
-            name: "修改密码",
-            iconSrc: this.$store.state.url+"aside/modifyPwd.png",
-            children: [],
-            close: true,
-            route: "/console/password"
-          }
-        ],
+          }],
         height: 0,
         style: ''
       }
@@ -112,9 +116,9 @@
     methods: {
       dropDownListListener(item) {
         if (item.children.length === 0) {
-          this.$router.push(item.route);
+          this.$router.push(item.route)
         } else {
-          item.close = !item.close;
+          item.close = !item.close
         }
       }
     }
@@ -182,9 +186,14 @@
     height: 50px;
     line-height: 50px;
     padding-left: 49px;
+    cursor: pointer;
   }
 
   .children:hover {
+    background-color: #2C5285;
+  }
+
+  .active-teaclass {
     background-color: #2C5285;
   }
 
@@ -193,5 +202,4 @@
     padding: 0;
     width: 100%;
   }
-
 </style>

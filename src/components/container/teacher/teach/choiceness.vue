@@ -86,7 +86,7 @@
           <span>上传封面</span>
           <button>选择封面</button>
           <label>
-            <img src="/static/images/auth/bg-02.jpg" alt="">
+            <img src="https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/static/bg-02.jpg" alt="">
             henrenx.png
           </label>
         </div>
@@ -109,7 +109,7 @@
     data() {
       return {
         limit: 10,
-        tabBarTitle: ["学生作品审核", "上传精选作品"],
+        tabBarTitle: ["学生作品审核"],
         currentTabBarTitle: "学生作品审核",
         tableTitle_0: ["序号", "作者姓名", "手机号码", "提交时间", "作品", "所属学校", "状态", "操作"],
         tableData_0: [

@@ -14,10 +14,10 @@
                         {{item.name}}
                     </span>
                 </div>
-                <div class="formdetail">
+                <!-- <div class="formdetail">
                     <label class="formlabel" for="time">加入时间</label>
                     <input class="input disabledinput" value='user.time' disabled="disabled" v-model="user.time">
-                </div>
+                </div> -->
                 <div class="formdetail">
                     <label class="formlabel" for="headsculpture">头像</label>
                     <img id="headimage" :src="headsculpture" class="cover-image" alt="" v-show="headsculpture!==''">
@@ -166,14 +166,7 @@
 </script>
 
 <style scoped>
-    * {
-        box-sizing: border-box;
-        border: 0;
-        outline: 0;
-        font-size: 16px;
-        font-family: Helvetica, Arial, sans-serif;
-    }
-
+  
     #personalcontent {
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
         border: 1px solid #ebeef5;

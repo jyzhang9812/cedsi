@@ -115,7 +115,7 @@ const actions = {
     //students方法
     //获取用户个人资料
     getUser({ commit, state }) {
-        globalAxios.get('/student/studentinfo',
+        return globalAxios.get('/student/studentinfo',
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -198,6 +198,7 @@ const actions = {
                     console.log(response)
                     var chaptersArr = response.data.data.chapter_message.chapters;
                     var finishChaptersArr = response.data.data.chapter_message.finish_chapters;
+                    state.finishChaptersLength = finishChaptersArr.length;
                     var List = {
                         name: '',
                         list: []
@@ -219,10 +220,12 @@ const actions = {
                         point.number = chaptersArr[i].CP_NUMBER;
                         point.name = chaptersArr[i].CP_NAME;
                         point.videoSrc = chaptersArr[i].CP_RESOURCE.VIDEO;
+                        point.chapterId = chaptersArr[i].CP_ID;
                         List.list.push(point);
                     }
                     List.name = response.data.data.courseName,
-                        commit(TYPES.changeCouseDetail, List)
+                    console.log(List)
+                    commit(TYPES.changeCouseDetail, List)
                     commit(TYPES.updateLoading, false)
                 },
                 error => {
@@ -250,6 +253,8 @@ const actions = {
             }
             for (var i = 0; i < arr.length; i++) {
                 var array = {}
+                array.id = arr[i].HW_ID;
+                array.url = './static/build/player.html?fileUrl=' + arr[i].HW_URL;
                 array.name = arr[i].HW_NAME;
                 array.img_url = arr[i].HW_COVER;
                 array.teacher_remark = arr[i].TEACHER_REMARK;
@@ -284,7 +289,7 @@ const actions = {
     },
     //系统消息
     getMsg({ commit, state }, curId) {
-        globalAxios.get('/student/message/' + (curId + 1),
+        return globalAxios.get('/student/message/' + (curId + 1),
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -310,7 +315,7 @@ const actions = {
     },
     //所在班级
     getClass({ commit, state }) {
-        globalAxios.get('/student/class',
+        return globalAxios.get('/student/class',
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -319,17 +324,23 @@ const actions = {
             }
         ).then(response => {
             console.log(response);
-            var myClass = {}
-            var arr = []
-
-            myClass.name = response.data.className
-            myClass.teacher = response.data.teacher
-            myClass.memberCount = response.data.member_count
-            for (var i = 0; i < response.data.classmates.length; i++) {
-                arr.push(response.data.classmates[i])
+            var myClasses = []
+            if (response.data) {
+                for (let i = 0; i < response.data.length; i++) {
+                    var myClass={}
+                    var arr=[]
+                    myClass.name = response.data[i].className
+                    myClass.teacher = response.data[i].teacher
+                    myClass.memberCount = response.data[i].member_count
+                    for (let j = 0; j < response.data[i].classmates.length; j++) {
+                        arr.push(response.data[i].classmates[j])
+                    }
+                    myClass.classmates = arr
+                    console.log(arr)
+                    myClasses.push(myClass)
+                }
             }
-            myClass.classmates = arr
-            commit(TYPES.getClass, myClass)
+            commit(TYPES.getClass, myClasses)
             commit(TYPES.updateLoading, false)
         },
             error => {
@@ -400,6 +411,8 @@ const actions = {
                 } else {
                     for (var i = 0; i < videoArr.length; i++) {
                         var video = {};
+                        video.chapterId = videoArr[i].CP_ID;
+                        video.videoId = videoArr[i].RS_ID;
                         video.chapterName = videoArr[i].CP_NAME;
                         video.videoName = videoArr[i].RS_NAME;
                         video.introduction = videoArr[i].RS_COMMENT;
@@ -449,6 +462,48 @@ const actions = {
             }
         );
     },
+    //章节管理页面 获取章节详细信息
+    getChapterDetial({ dispatch, state ,commit}, courseId) {
+        return globalAxios.get(
+            "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
+            courseId +
+            "/chapters",
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: state.idToken
+                }
+            }
+        ).then(
+            response => {
+                console.log(response.data);
+                var chapterArr = [];
+                var chapterData = [];
+                chapterArr = response.data.data;
+                state.chapterLength = chapterArr.length
+                //console.log(state.chapterLength)
+                for (var i = 0; i < state.chapterLength; i++) {
+                    var chapter = {};
+                    chapter.chapterId = chapterArr[i].CP_ID;
+                    chapter.chapterName = chapterArr[i].CP_NAME;
+                    chapter.introduction = chapterArr[i].CP_DESCRIPTION;
+                    chapter.date = chapterArr[i].CP_UPLOAD_TIME;
+                    chapter.uploadAdmin = chapterArr[i].CP_FOUNDER;
+                    chapter.chapterNum = chapterArr[i].CP_NUMBER;
+                    chapter.id = chapterArr[i].CP_ID;
+                    chapterData.push(chapter);
+                }
+                state.chapterData = chapterData;
+                //console.log(chapterData);
+                commit(TYPES.changeChapterList, chapterData)
+                commit(TYPES.changeChapterCurrentList, 0)
+            },
+            error => {
+                console.log(error);
+            }
+        );
+    },
+
 
 
     //superAdmin方法

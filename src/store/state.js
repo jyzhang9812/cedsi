@@ -12,6 +12,7 @@ const state = {
     content: [],
     myClass: [],
     status: null,
+    finishChaptersLength:0,
     pointList: [
         {
             width: "8%",
@@ -253,6 +254,10 @@ const state = {
             }]
         }
     },
+    chapterData:[],
+    chapterCurrentList:[],
+    chapterLength:0,
+
 
     //超级管理员
     adminList: [],

@@ -1,6 +1,6 @@
 <template>
   <div id="teacherManagement">
-    <!-- 添加班级模态框（Modal） -->
+    <!-- 添加教师模态框（Modal） -->
     <div
       class="modal fade"
       id="addTeacher"
@@ -32,8 +32,8 @@
                 <span class="addtitle">账号</span>
                 <input
                   :class="isAccount==false?'addcon':'addcon err'"
-                  placeholder="请输入教师账号"
-                  v-model="teacherAccount"
+                  placeholder="请输入教师工号"
+                  v-model="teacherJobNum"
                 />
               </div>
               <span :class="isAccount==true?'inputtips':'inputerr'">不超过15个字符</span>
@@ -49,21 +49,39 @@
               </div>
               <span :class="isPassword==true?'inputtips':'inputerr'">不超过20个字符</span>
               <div class="add">
-                <span class="keypointwhite">*</span>
-                <span class="addtitle">职务</span>
-                <input class="addcon" placeholder="请输入职务" v-model="teacherDuty" />
-              </div>
-              <span class="inputerr"></span>
+                  <span class="keypoint">*</span>
+                  <label class="addtitle">性别</label>
+                  <div class="sexradio">
+                    <input
+                      type="radio"
+                      name="sex"
+                      value="1"
+                      checked="checked"
+                      class="sexradio1"
+                      v-model="teacherSex"
+                    />
+                    <span class="sexname">男</span>
+                    <input
+                      type="radio"
+                      name="sex"
+                      value="0"
+                      class="sexradio1"
+                      v-model="teacherSex"
+                    />
+                    <span class="sexname">女</span>
+                  </div>
+                </div>
+                <span class="inputerr"></span>
               <div class="add">
                 <span class="keypointwhite">*</span>
-                <span class="addtitle">职称</span>
-                <input class="addcon" placeholder="请输入职称" v-model="teacherTitle" />
+                <span class="addtitle">简介</span>
+                <textarea class="teacher-textarea" rows="8" cols="70" placeholder="请输入简介" v-model="teacherIntro" />
               </div>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary">确定</button>
+            <button type="button" class="btn btn-primary" @click="submit()" data-dismiss="modal">确定</button>
           </div>
         </div>
       </div>
@@ -136,24 +154,11 @@
         <tbody>
           <tr v-for="(teacher, seq) in currentList" :key="seq" class="content">
             <td>{{seq+1}}</td>
-            <td>{{teacher.name}}</td>
-            <td>{{teacher.duty}}</td>
-            <td>{{teacher.titles}}</td>
-            <td>{{teacher.character}}</td>
-            <td>{{teacher.school}}</td>
+            <td>{{teacher.teacherJobNum}}</td>
+            <td>{{teacher.teacherName}}</td>
+            <td>{{teacher.gender}}</td>
+            <td style="width:250px;">{{teacher.introduction}}</td>
             <td>
-              <button
-                :class="teacher.status==='启用'?'btnactive btn-success':'btnactive btn-warning'"
-                @click="changeTeacherStatus(seq)"
-              >{{teacher.status}}</button>
-            </td>
-            <td>
-              <span
-                class="blue"
-                data-toggle="modal"
-                data-target="#addTeacher"
-                @click="updateTeacher(seq)"
-              >编辑</span>&nbsp;&nbsp;
               <span
                 class="red"
                 data-toggle="modal"
@@ -172,65 +177,41 @@
 <script>
 import pagination from "../../teacher/utils/pagination.vue";
 import SelectInput from "../utils/selectInput";
+import globalAxios from "axios";
+import crypto from 'crypto';
 export default {
   name: "classmanagement",
   components: { SelectInput, pagination },
   data() {
     return {
-      limit: 2,
+      limit: 3,
       currentList: [],
       inputData: {
         teacherName: ""
       },
       tableTitle: [
         "序号",
+        "账号",
         "姓名",
-        "职务",
-        "职称",
-        "所属角色",
-        "所属学校",
-        "状态",
+        "性别",
+        "简介",
         "操作"
       ],
-      tableData: [
-        {
-          name: "祁老师",
-          duty: "任课教师",
-          titles: "副教授",
-          character: "教师",
-          school: "赛迪斯",
-          status: "启用"
-        },
-        {
-          name: "祁老师",
-          duty: "任课教师",
-          titles: "副教授",
-          character: "教师",
-          school: "赛迪斯",
-          status: "禁用"
-        },
-        {
-          name: "祁老师",
-          duty: "任课教师",
-          titles: "副教授",
-          character: "教师",
-          school: "赛迪斯",
-          status: "启用"
-        }
-      ],
+      tableData: [],
       //新增教师
       teacherName: "",
       isName: true,
-      teacherAccount: "",
+      teacherJobNum: "",
       isAccount: true,
       teacherPassword: "",
       isPassword: true,
-      teacherDuty: "",
-      teacherTitle: "",
+      teacherIntro: "",
       //提示框
       alterimg: this.$store.state.url + "eduAdmin/alter.png",
       alterMes: "",
-      index: -1
+      index: -1,
+      teacherSex: [],
+      currentPage:0
     };
   },
   watch: {
@@ -241,7 +222,7 @@ export default {
         this.isName = true;
       }
     },
-    teacherAccount(val, oldVal) {
+    teacherJobNum(val, oldVal) {
       if (val.length <= 15 && val.length > 0) {
         this.isAccount = false;
       } else {
@@ -257,62 +238,121 @@ export default {
     }
   },
   methods: {
-    optionsInit() {
-      this.inputData = {
-        teacherName: ""
-        // school: {
-        //   option: "",
-        //   list: ["师大一中", "师大二中", "师大三中"]
-        // }
-      };
-    },
-    changeOption(item, id) {
-      Object.keys(this.inputData).forEach(res => {
-        if (res === id) {
-          this.inputData[res].option = item;
-        }
-      });
-    },
-    clearChoices() {
-      this.optionsInit();
-    },
-    changeTeacherStatus(seq) {
-      if (this.tableData[seq].status == "启用") {
-        this.tableData[seq].status = "禁用";
-      } else {
-        this.tableData[seq].status = "启用";
-      }
-    },
     deleteTeacher(seq) {
-      this.index = seq;
+      this.index = this.currentPage*this.limit+seq;
       this.alterMes = "确认删除吗？";
     },
     submitDelete() {
-      this.tableData.splice(this.index, 1);
-    },
-    //编辑教师
-    updateTeacher(seq) {
-      this.index = seq;
-      this.teacherName = this.tableData[seq].name;
-      this.teacherAccount = "hhh";
-      this.teacherPassword = "xxxx";
-      this.teacherDuty = this.tableData[seq].duty;
-      this.teacherTitle = this.tableData[seq].titles;
+      console.log(this.tableData[this.index].teacherId)
+      var teacherId=this.tableData[this.index].teacherId
+      var token = window.localStorage.getItem("idToken");
+       globalAxios
+      .delete(
+        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/teacher?teacherId=" + teacherId,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token
+          }
+        }
+      )
+      .then(
+        response => {
+          console.log(response)
+          this.tableData.splice(this.index, 1);
+          this.changeTablePages(this.currentPage * this.limit);
+        },
+        error => {
+          // this.$router.push({path:'/404'})
+          console.log(error);
+        }
+      );
     },
     addTeacher() {
       this.teacherName = "";
-      this.teacherAccount = "";
+      this.teacherJobNum = "";
       this.teacherPassword = "";
-      this.teacherDuty = "";
-      this.teacherTitle = "";
     },
     changeTablePages(value) {
+      var currentPage = value / this.limit;
+      this.currentPage = currentPage;
       this.currentList = this.tableData.slice(value, value + this.limit);
+    },
+    //确定增加教师
+    submit(){
+      var that=this
+      var teacher={}
+      teacher.teacherName=this.teacherName
+      teacher.teacherId=this.teacherJobNum
+      teacher.password=crypto.createHash('SHA256').update(this.teacherPassword).digest('hex');
+      teacher.gender=this.teacherSex
+      teacher.introduction=this.teacherIntro
+      console.log(teacher)
+       var token = window.localStorage.getItem("idToken");
+       globalAxios
+      .post(
+        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/teacher",
+        teacher,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token
+          }
+        }
+      )
+      .then(
+        response => {
+          that.getTeacherList()
+        },
+        error => {
+          // this.$router.push({path:'/404'})
+          console.log(error);
+        }
+      );
+    },
+    getTeacherList(){
+    //获取教师列表
+    var token = window.localStorage.getItem("idToken");
+    globalAxios
+      .get(
+        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/teacher",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token
+          }
+        }
+      )
+      .then(
+        response => {
+          console.log(response);
+          var teacherList = response.data;
+          console.log(teacherList);
+          var teacherArr = [];
+          for (var i = 0; i < teacherList.length; i++) {
+            var teacher = {};
+            teacher.teacherId = teacherList[i].TEACHER_ID
+            teacher.teacherName = teacherList[i].TEACHER_NAME;
+            if(teacherList[i].GENDER == "1")
+              teacher.gender = "男"
+            else
+              teacher.gender = "女"
+            teacher.teacherJobNum = teacherList[i].JOB_NUMBER;
+            teacher.introduction = teacherList[i].INTRO;
+            teacherArr.push(teacher);
+          }
+          this.tableData = teacherArr;
+          this.changeTablePages(0);
+        },
+        error => {
+          // this.$router.push({path:'/404'})
+          console.log(error);
+        }
+      );
     }
   },
   mounted() {
-    //this.tableData = this.originalTableData;
-    this.changeTablePages(0);
+    this.getTeacherList()
   }
 };
 </script>
@@ -459,6 +499,10 @@ export default {
 }
 #teacherManagement .addtitle {
   color: #606266;
+  display: block;
+  float: left;
+  line-height: 35px;
+  margin-right: 5px;
 }
 
 #teacherManagement .addcon {
@@ -524,5 +568,28 @@ export default {
   width: 25px;
   height: 25px;
   margin-right: 10px;
+}
+#teacherManagement .sexradio {
+  width: 180px;
+  margin-left: 10px;
+  display: inline-block;
+  height: 33px;
+  padding-left: 30px;
+  line-height: 33px;
+}
+#teacherManagement .sexradio1 {
+  margin-right: 10px;
+}
+#teacherManagement .sexname {
+  display: inline-block;
+  margin-right: 10px;
+}
+#teacherManagement .teacher-textarea{
+  width: 260px;
+  height: 100px;
+  margin-left: 20px;
+  border:1px solid #409eff;
+  border-radius: 5px;
+  padding-left: 20px;
 }
 </style>

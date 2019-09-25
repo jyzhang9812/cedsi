@@ -82,7 +82,7 @@
                 <div class="outside">
                     <h4>{{item.NAME}}</h4>
                     <div class="right">
-                        <button :class="(index==i)?'btnh btn_green':'btn'" @click="hidecourseModal" data-toggle="modal" data-target="#myVideo">试听</button>
+                        <button :class="(index==i)?'btnh btn_green':'btn'">试听</button>
                         <button :class="(index==i)?'btnh':'btn'" @click='jmpPay'>解锁课程</button>
                     </div>
                 </div>
@@ -163,9 +163,6 @@
                 this.i = -1;
                 this.isShow = false;
             },
-            hidecourseModal(){
-                $('#courseModal').modal('hide')
-            },
             changeClickNum(index) {
                 this.clickNum = index;
             },
@@ -186,6 +183,7 @@
             },
             getNew(value) {
                 this.currentList = this.tableData.slice(value, value + this.limit);
+                console.log(this.currentList)
             },
             tab(index) {
                 this.curId = index;
@@ -196,6 +194,7 @@
             this.style = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;'
             this.style1 = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;margin-top:-' + (document.documentElement.clientWidth * 0.17) + 'px;'
 
+            //模态框遮罩层手动开闭
             $(document).on("show.bs.modal", ".modal", function () {
                 $(this).css("overflow-y", "scroll");
                 $("#courseModal").append("<div class='modal-backdrop fade in' id='courseBackdrop'> </div>");
@@ -203,6 +202,7 @@
             $(document).on("hide.bs.modal", ".modal", function () {
                 $('#courseBackdrop').remove();
             })
+
             var token = window.localStorage.getItem('idToken')
             globalAxios.get('https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses',
                 {
@@ -220,18 +220,12 @@
                 this.inside_detail = arr;
                 this.tableData = this.inside_detail;
                 this.getNew(0);
-                // return response.json();
             },
                 error => {
                     // this.$router.push({path:'/404'})
                     console.log(error);
                 })
         },
-
-        mounted() {
-            this.tableData = this.inside_detail;
-            this.getNew(0);
-        }
     }
 </script>
 

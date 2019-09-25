@@ -37,6 +37,7 @@ const mutations = {
             state.pointList[i].name = List.list[i].name
             state.pointList[i].videoSrc = List.list[i].videoSrc
             state.pointList[i].flag = List.list[i].flag
+            state.pointList[i].chapterId = List.list[i].chapterId
         }
     },
 
@@ -68,6 +69,12 @@ const mutations = {
     },
     [TYPES.changeVideoCurrentList](state, value) {
         state.videoCurrentList = state.videoData.slice(value, value + state.limit);
+    },
+    [TYPES.changeChapterList](state, List) {
+        state.chapterData = List
+    },
+    [TYPES.changeChapterCurrentList](state, value) {
+        state.chapterCurrentList = state.chapterData.slice(value, value + state.limit);
     },
     
     //superAdmin

@@ -158,6 +158,21 @@ const asider = resolve => {
     resolve(require('../components/container/teacher/sidebar.vue'));
   });
 };
+const tMessage = resolve => {
+  require.ensure(['../components/container/teacher/message/tMessage.vue'], () => {
+    resolve(require('../components/container/teacher/message/tMessage.vue'));
+  });
+};
+const postJob = resolve => {
+  require.ensure(['../components/container/teacher/teach/postJob.vue'], () => {
+    resolve(require('../components/container/teacher/teach/postJob.vue'));
+  });
+}
+const coursePlan = resolve => {
+  require.ensure(['../components/container/teacher/teach/coursePlan.vue'], () => {
+    resolve(require('../components/container/teacher/teach/coursePlan.vue'));
+  });
+}
 //以下是教务角色
 const eduAdmin = resolve => {
   require.ensure(['../components/container/eduAdmin/eduSidebar.vue'], () => {
@@ -177,6 +192,11 @@ const classManagement = resolve => {
 const stuManagement = resolve => {
   require.ensure(['../components/container/eduAdmin/office/stuManagement.vue'], () => {
     resolve(require('../components/container/eduAdmin/office/stuManagement.vue'));
+  });
+};
+const addStudent = resolve => {
+  require.ensure(['../components/container/eduAdmin/office/addStudent.vue'], () => {
+    resolve(require('../components/container/eduAdmin/office/addStudent.vue'));
   });
 };
 const teaching = resolve => {
@@ -210,6 +230,7 @@ const addActivity = resolve => {
   });
 };
 import { resolve } from 'url';
+// import { resolveSoa } from 'dns';
 //以下是超级管理员角色
 const superAdmin = resolve => {
   require.ensure(['../components/container/superAdmin/superAdminSidebar.vue'], () => {
@@ -523,6 +544,33 @@ export default new Router({
               next('/signin')
             }
           }, component: statistics
+        },
+        {
+          path: '/console/message', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: tMessage
+        },
+        {
+          path: '/console/postJob', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: postJob
+        },
+        {
+          path: '/console/coursePlan', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: coursePlan
         }
       ]
     },
@@ -580,6 +628,15 @@ export default new Router({
               next('/signin')
             }
           }, component: classManagement
+        },
+        {
+          path: '/eduAdmin/classManagement/:classId/addStudent', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: addStudent
         },
         {
           path: '/eduAdmin/stuManagement', beforeEnter(to, from, next) {
@@ -660,7 +717,7 @@ export default new Router({
             } else {
               next('/signin')
             }
-          }, component: videoManagement
+          }, component: courseManagement
         },
         {
           path: '/Admin/videoManagement/:courseId/uploadVideo', beforeEnter(to, from, next) {
@@ -672,13 +729,13 @@ export default new Router({
           }, component: uploadVideo
         },
         {
-          path: '/Admin/courseManagement', beforeEnter(to, from, next) {
+          path: '/Admin/videoManagement', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {
               next('/signin')
             }
-          }, component: courseManagement
+          }, component: videoManagement
         },
         {
           path: '/Admin/courseManagement/addCourse', beforeEnter(to, from, next) {
@@ -705,7 +762,7 @@ export default new Router({
             } else {
               next('/signin')
             }
-          }, component: addChapter
+          }, component: addChapter, name: 'addChapter'
         },
         {
           path: '/Admin/organizationManagement', beforeEnter(to, from, next) {

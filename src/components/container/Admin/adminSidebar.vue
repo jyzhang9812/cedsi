@@ -4,7 +4,7 @@
       <ul class="menu">
         <li v-for="item in aside" class="bg-hover" :key="item.name">
           <div class="item-name" @click="dropDownListListener(item)">
-            <i><img :alt="item.name" :src="item.iconSrc"></i>
+            <i><img :alt="item.name" :src="item.iconSrc" class="aside-icon"></i>
             <span>{{item.name}}</span>
             <span
               class="menuPosition"
@@ -40,18 +40,18 @@
       return {
         aside: [
           {
-            name: "视频管理",
-            iconSrc: this.$store.state.url+"aside/teachingManagement.png",
+            name: "课程管理",
+            iconSrc: this.$store.state.url+"aside/activityManagement.png",
             children: [],
             close: true,
             route: "/Admin/"
           },
           {
-            name: "课程管理",
-            iconSrc: this.$store.state.url+"aside/activityManagement.png",
+            name: "视频管理",
+            iconSrc: this.$store.state.url+"aside/teachingManagement.png",
             children: [],
             close: true,
-            route: "/Admin/courseManagement"
+            route: "/Admin/videoManagement"
           },
           {
             name: "机构管理",
@@ -135,6 +135,10 @@
     top: 56px;
     flex-grow: 1;
     min-width: 800px;
+  }
+  .aside-icon {
+    width: 18px;
+    height: 18px;
   }
 
 </style>

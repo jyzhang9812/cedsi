@@ -28,9 +28,9 @@
 
 
 <style scoped>
-    #msg{
+    #msg {
         width: 100%;
-        height:100%;
+        height: 100%;
         background: #f4f9fa;
     }
 
@@ -249,9 +249,9 @@
 </style>
 
 <script>
-    import searchBar from'../searchBar.vue'
+    import searchBar from '../searchBar.vue'
     import pagination from '../pagination.vue'
-    import globalAxios from 'axios'
+    import { mapState } from 'vuex'
 
     export default {
         name: 'message',
@@ -264,6 +264,7 @@
                 curId: 0,
                 //当前页码
                 currentPage: 0,
+                currentList: [],
                 items: [
                     { item: '系统消息' },
                     { item: '通知公告' },
@@ -276,7 +277,14 @@
         methods: {
             tab(index) {
                 this.curId = index;
-                this.$store.dispatch('getMsg', this.curId)
+                this.$store.dispatch('getMsg', this.curId).then(() => {
+                    this.currentList = this.$store.state.msgCurrentList
+                    if (this.currentList) {
+                        for (let i = 0; i <= this.currentList.length; i++) {
+                            this.currentList[i].DISPATCH_DATE = this.timestampToTime(this.currentList[i].DISPATCH_DATE)
+                        }
+                    }
+                })
             },
             //换页
             getNew(value) {
@@ -284,21 +292,36 @@
                 this.currentPage = currentPage;
                 this.$store.commit("changeMsgCurrentList", this.currentPage * this.limit)
             },
+            timestampToTime(timestamp) {
+                timestamp = String(timestamp);
+                timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
+                var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                var Y = date.getFullYear() + "-";
+                var M = (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-";
+                var D = date.getDate() + " ";
+                var h = date.getHours() + ":";
+                var m = date.getMinutes() + ":";
+                var s = date.getSeconds();
+                return Y + M + D + h + m + s;
+            },
         },
         created: function () {
-            this.$store.dispatch('getMsg', this.curId)
+            this.$store.dispatch('getMsg', this.curId).then(() => {
+                this.currentList = this.$store.state.msgCurrentList
+                if (this.currentList) {
+                    for (let i = 0; i <= this.currentList.length; i++) {
+                        this.currentList[i].DISPATCH_DATE = this.timestampToTime(this.currentList[i].DISPATCH_DATE)
+                    }
+                }
+            })
             this.$store.commit('updateLoading', true)
         },
         computed: {
-            currentList() {
-                return this.$store.state.msgCurrentList
-            },
-            tableData() {
-                return this.$store.state.msgList
-            },
-            limit() {
-                return this.$store.state.limit
-            }
+            ...mapState({
+                tableData: state => state.msgList,
+                // currentList: state => state.msgCurrentList,
+                limit: state => state.limit,
+            }),
         },
     }
 </script>

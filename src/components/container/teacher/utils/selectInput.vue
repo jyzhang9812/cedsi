@@ -116,7 +116,7 @@
   }
 
   .menu-icon {
-    display: inline;
+    /* display: inline; */
     width: 14px;
     height: 14px;
     cursor: pointer;

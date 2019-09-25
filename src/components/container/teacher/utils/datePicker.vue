@@ -3,8 +3,7 @@
     <img class="icon-prefix" :src="inputPrefixSrc" alt="">
     <label :for="id"></label>
     <input type="text" :id="id" :value="date" :placeholder='tips' class="inputbox">
-    <img class="icon-suffix" :src="inputSuffixSrc" alt=""
-         @click="clearBox" v-show="this.date !== ''">
+    <img class="icon-suffix" :src="inputSuffixSrc" alt="" @click="clearBox" v-show="this.date !== ''">
   </div>
 </template>
 
@@ -12,21 +11,19 @@
   export default {
     name: 'laydate',
     props: {
-      tips: String,
-      id: String,
-      date: String
+      tips: { type: String, default: '' },
+      id: { type: String, default: 'OUR_VUE_IS_BEST' },
+      date: { type: String, default: '' }
     },
     data() {
       return {
-        inputPrefixSrc: this.$store.state.url2+"datepicker/calendar.png",
-        inputSuffixSrc: this.$store.state.url2+"datepicker/delete.png",
+        inputPrefixSrc: this.$store.state.url2 + "datepicker/calendar.png",
+        inputSuffixSrc: this.$store.state.url2 + "datepicker/delete.png",
         time: ""
       }
     },
     methods: {
-      clearBox() {
-        this.$emit('changeDate', "", this.id);
-      }
+      clearBox() { this.$emit('changeDate', "", this.id) }
     },
     mounted() {
       laydate.render({
@@ -58,14 +55,14 @@
   }
 
   .icon-prefix {
-    display: inline;
+    /* display: inline; */
     height: 18px;
     width: 18px;
     margin-left: 5px;
   }
 
   .icon-suffix {
-    display: inline;
+    /* display: inline; */
     height: 18px;
     width: 18px;
     cursor: pointer;
