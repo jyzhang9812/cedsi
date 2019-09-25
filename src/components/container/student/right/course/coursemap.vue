@@ -163,6 +163,10 @@ export default {
           .then(
             response => {
               console.log(response);
+              this.pointList[this.i+1].flag=true;
+              this.pointList[this.i+1].bgImg ="../../static/images/scratch/coordinateed.6a1e9a5.png";
+              this.pointList[this.i+1].status = "已完成";
+              console.log(this.pointList[this.i+1]);
             },
             error => {}
           );
