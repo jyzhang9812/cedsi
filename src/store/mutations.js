@@ -18,6 +18,9 @@ const mutations = {
     [TYPES.updateLoading](state, num) {
         state.vueElementLoading = num
     },
+    [TYPES.changeActivity](state, arr) {
+        state.slidePic = arr
+    },
 
     //student
     [TYPES.getUserInfo](state, UserInfo) {

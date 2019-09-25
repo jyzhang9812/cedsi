@@ -16,16 +16,16 @@
                     <img class="el-icon-arrow" :src=leftImg />
                 </div>
                 <ul :style="{'left':calleft[0] + 'px'}">
-                    <li class="course_card" v-for="(item,index) in superurl" :key="index" @mouseover="show(index)"
+                    <li class="course_card" v-for="(item,index) in slidePic" :key="index" @mouseover="show(index)"
                         @mouseleave="hidden(index)">
                         <div class="inside">
-                            <img class="img" :src="item.url">
+                            <img class="img" :src="item.cover">
                             <div class="details" v-show="index==i">
                                 <div class="detail_item">
-                                    <h4><strong>活动名{{item.course_name}}</strong></h4>
+                                    <h4><strong>{{item.title}}</strong></h4>
                                     <button class="btn" @click="gotoActivity">查看详情</button>
                                 </div>
-                                <p style="margin-left: 10px;">活动介绍啥的asdfghjklreitohitbbdwdwicw</p>
+                                <p style="margin-left: 10px;">{{item.subtitle}}</p>
                             </div>
                         </div>
                     </li>
@@ -55,15 +55,14 @@
 
 
 <script>
-    import pagination from '../pagination.vue'
     import userCard from './userCard.vue'
     import communityCard from './communityCard.vue'
     import allCourseCard from './allCourseCard.vue'
+    import { mapState } from 'vuex'
 
     export default {
         name: 'presentation',
         components: {
-            pagination,
             userCard,
             communityCard,
             allCourseCard
@@ -85,32 +84,6 @@
                         componentName: 'userCard',
                         title: '优秀作者'
                     },],
-                superurl: [
-                    {
-                        url: 'https://www.tynker.com/image/dashboard/student/learn/tutorials/nasa-design-a-mission-patch.png?width=600&height=400&mode=cover&format=jpg&quality=75&cache=1m&v=1',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/hour-of-code/2017/mod-minecraft.png?width=600&height=400&mode=cover&format=jpg&quality=75&cache=1m&v=1',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/hour-of-code/2018/crystal-clash/crystal-clash.png?width=600&height=400&mode=cover&format=jpg&quality=75&cache=1m&v=1',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/hour-of-code/2016/spin-draw/spin-draw-1.png?width=600&height=400&mode=cover&format=jpg&quality=75&cache=1m&v=1',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/ide/imgs/templates/new.png?width=600&height=400&mode=cover&format=jpg&quality=75&cache=1m&v=1',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/hour-of-code/2017/dragon-blast/dragon-blast-1.png?width=600&height=400&mode=cover&format=jpg&quality=85&cache=1m&v=1',
-                        img: '',
-                    },
-                ],
                 calleft: [0, 0, 0, 0],
                 i: -1,
                 curId: 0,
@@ -121,7 +94,7 @@
         },
         methods: {
             gotoActivity() {
-                this.$router.push({ path: '/dashboard/showPage/activedetailCard' })
+                this.$router.push({ path: '/activedetailCard' })
             },
             tab(index) {
                 this.curId = index;
@@ -155,9 +128,14 @@
                 }
             },
         },
-        // created() {
-        //     this.change('video_res', 2);
-        // }
+        created: function () {
+            this.$store.dispatch('getActivity')
+        },
+        computed: {
+            ...mapState({
+                slidePic: state => state.slidePic,
+            }),
+        },
     }
 </script>
 

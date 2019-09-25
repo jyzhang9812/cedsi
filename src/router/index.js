@@ -394,17 +394,6 @@ export default new Router({
             }
           }, component: question
         },
-        {
-          path: '/dashboard/showPage/activedetailCard',
-          beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          },
-          component: activitydetailCard
-        },
       ]
     },
     {
@@ -417,6 +406,18 @@ export default new Router({
         }
       },
       component: payment
+    },
+
+    {
+      path: '/activedetailCard',
+      beforeEnter(to, from, next) {
+        if (window.localStorage.getItem("idToken")) {
+          next()
+        } else {
+          next('/signin')
+        }
+      },
+      component: activitydetailCard
     },
     {
       path: '/dashboard/coursemap', beforeEnter(to, from, next) {

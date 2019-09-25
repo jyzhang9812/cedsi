@@ -92,7 +92,7 @@
     }
 
     .worddetail {
-        margin: 30px auto;
+        margin: 30px auto 0;
         width: 100%;
         height: 750px;
         /* border: 5px solid #000; */

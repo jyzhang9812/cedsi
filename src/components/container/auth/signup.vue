@@ -1,6 +1,6 @@
 <template>
   <div id="signup" class="bcg"
-    :style="{backgroundImage:'url('+$store.state.url+'auth/bg-01.jpg)'}">
+  :style="{backgroundImage:'url('+imagesurl+')'}">
     <div style="width: 400px;">
       <ul class="nav nav-pills" role="tablist">
         <li :key="index" :class="index==0?'active':''" v-for='(role,index) in roleList'>
@@ -131,6 +131,9 @@
         }
         else return 0;
       }
+    },
+    created(){
+      this.imagesurl="https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/static/bg-01.jpg"
     }
   }
 </script>
@@ -149,7 +152,7 @@
   .nav-pills>li {
     width: 100px;
     float: left;
-    margin-bottom: -1px;
+    margin-bottom: -10px;
   }
 
   .nav-pills>li.active>a,

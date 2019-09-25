@@ -3,6 +3,7 @@ export const storeUser = 'storeUser'
 export const clearAuthData = 'clearAuthData'
 export const updateLoading = 'updateLoading'
 export const getUser = 'getUser'
+export const changeActivity = 'changeActivity'
 
 export const getUserInfo = 'getUserInfo'
 export const getClass = 'getClass'

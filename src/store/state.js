@@ -8,6 +8,7 @@ const state = {
     userId: null,
     user: null,
     vueElementLoading: false,//loading组件是否打开
+    slidePic:[],
 
     //学生
     userInfo: [],

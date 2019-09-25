@@ -11,7 +11,42 @@ const actions = {
             router.push({ path: '/404' })
         }
     },
-
+    //获取首页
+    getActivity({ commit, state }) {
+        return globalAxios.get("/activity")
+            .then(
+                response => {
+                    console.log(response);
+                    let arr = []
+                    let b = []
+                    for (var i = 0; i < response.data.length; i++) {
+                        arr.push(response.data[i])
+                    }
+                    for (var i = 0; i < arr.length; i++) {
+                        var array = {}
+                        array.id = arr[i].ID;
+                        array.cover = arr[i].COVER;
+                        array.title = arr[i].TITLE;
+                        array.subtitle = arr[i].SUBTITLE;
+                        array.content = arr[i].CONTENT;
+                        array.avatar = arr[i].AVATAR;
+                        array.teacher = arr[i].TEACHER_NAME;
+                        array.release_time = arr[i].RELEASE_TIME
+                        array.type = arr[i].ACTIVITY_TYPE;
+                        array.time = arr[i].ACTIVITY_TIME;
+                        array.price = arr[i].ACTIVITY_PRICE;
+                        array.place = arr[i].ACTIVITY_PLACE;
+                        array.principal_id = arr[i].PRINCIPAL_ID
+                        b.push(array);
+                    }
+                    commit(TYPES.changeActivity, b)
+                },
+                error => {
+                    router.push({ path: '/404' })
+                    console.log(error);
+                }
+            );
+    },
 
     //登录注册
     login({ commit, dispatch, state }, authData) {
