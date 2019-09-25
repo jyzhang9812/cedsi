@@ -233,6 +233,7 @@ const actions = {
                     console.log(response)
                     var chaptersArr = response.data.data.chapter_message.chapters;
                     var finishChaptersArr = response.data.data.chapter_message.finish_chapters;
+                    state.finishChaptersLength = finishChaptersArr.length;
                     var List = {
                         name: '',
                         list: []
@@ -254,10 +255,12 @@ const actions = {
                         point.number = chaptersArr[i].CP_NUMBER;
                         point.name = chaptersArr[i].CP_NAME;
                         point.videoSrc = chaptersArr[i].CP_RESOURCE.VIDEO;
+                        point.chapterId = chaptersArr[i].CP_ID;
                         List.list.push(point);
                     }
                     List.name = response.data.data.courseName,
-                        commit(TYPES.changeCouseDetail, List)
+                    console.log(List)
+                    commit(TYPES.changeCouseDetail, List)
                     commit(TYPES.updateLoading, false)
                 },
                 error => {

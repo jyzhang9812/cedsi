@@ -31,7 +31,8 @@
       </div>
       <!-- /.modal -->
     </div>
-    <div class="modal fade" id="myVideo" ref='myVideo' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="myVideo" ref="myVideo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content video-bck">
           <div class="modal-header header-height">
@@ -41,7 +42,7 @@
           </div>
           <div class="modal-body modal-box">
             <Media :autoplay="false" :kind="'video'" :controls="true" :src="videosrc"
-              style="height: 400px;width: 700px;"></Media>
+              style="height: 400px;width: 700px;" @ended="videoEnd()"></Media>
           </div>
         </div>
       </div>
@@ -69,47 +70,79 @@
 </template>
 
 <script>
-  import Media from "@dongido/vue-viaudio";
-  import { mapState } from 'vuex'
-  export default {
-    data() {
-      return {
-        mapUrl: this.$store.state.url + "scratch/bg.f0d850a.jpg",
-        courseIntro: "",
-        courseNum: "",
-        videosrc: "",
-        chapterName: "",
-        i:0,
-      };
+import Media from "@dongido/vue-viaudio";
+import globalAxios from "axios";
+import { mapState } from 'vuex'
+export default {
+  data() {
+    return {
+      mapUrl: this.$store.state.url + "scratch/bg.f0d850a.jpg",
+      courseIntro: "",
+      courseNum: "",
+      videosrc: "",
+      chapterName: "",
+      i: 0,
+      videoend: false,
+      chapterId: ""
+    };
+  },
+  methods: {
+    gotoStudy(index) {
+      this.i = index;
+      this.chapterName = this.pointList[index].name;
+      this.courseIntro = this.pointList[index].description;
+      this.courseNum = this.pointList[index].number;
+      this.videosrc = this.pointList[index].videoSrc;
+      this.chapterId = this.pointList[index].chapterId;
     },
-    methods: {
-      gotoStudy(index) {
-        this.i = index
-        this.chapterName = this.pointList[index].name;
-        this.courseIntro = this.pointList[index].description;
-        this.courseNum = this.pointList[index].number;
-        this.videosrc = this.pointList[index].videoSrc;
-        console.log(this.videosrc)
-      },
-      deletevideo() {
-        this.videosrc = "";
-      },
-      gotoCourseList() {
-        this.$router.push({ path: "/dashboard/class" });
-      },
+    deletevideo() {
+      this.videosrc = "";
     },
-    created: function () {
-      this.screenHeight = "min-height:" + (this.height - 56) + "px;";
-      this.$store.commit('updateLoading', true)
-      this.$store.dispatch('getCourseDetail', this.$route.query.id)
+    gotoCourseList() {
+      this.$router.push({ path: "/dashboard/class" });
     },
-    computed: {
+    videoEnd() {
+      if (this.i == this.$store.state.finishChaptersLength - 1) {
+        var token = window.localStorage.getItem("idToken");
+        globalAxios
+          .post(
+            "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses/" +
+            this.courseId +
+            "/chapters/" +
+            this.chapterId,
+            {},
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: token
+              }
+            }
+          )
+          .then(
+            response => {
+              console.log(response);
+              this.pointList[this.i + 1].flag = true;
+              this.pointList[this.i + 1].bgImg = "../../static/images/scratch/coordinateed.6a1e9a5.png";
+              this.pointList[this.i + 1].status = "已完成";
+              console.log(this.pointList[this.i + 1]);
+            },
+            error => { }
+          );
+      }
+    }
+  },
+  created: function() {
+    this.courseId = this.$route.query.id;
+    this.screenHeight = "min-height:" + (this.height - 56) + "px;";
+    this.$store.commit("updateLoading", true);
+    this.$store.dispatch("getCourseDetail", this.$route.query.id);
+  },
+  computed: {
       ...mapState({
-        courseName: state => state.courseName,
-        pointList:state => state.pointList,
-      }),
-    },
-  };
+    courseName: state => state.courseName,
+    pointList: state => state.pointList,
+  }),
+}}
 </script>
 
 <style scoped>
@@ -191,7 +224,7 @@
     line-height: 15px;
     height: 30px;
     color: #fff;
-    background: #22A0FF;
+    background: #22a0ff;
     border-radius: 6px;
   }
 

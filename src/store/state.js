@@ -15,6 +15,7 @@ const state = {
     content: [],
     myClass: [],
     status: null,
+    finishChaptersLength:0,
     pointList: [
         {
             width: "8%",
