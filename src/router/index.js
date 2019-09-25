@@ -409,7 +409,7 @@ export default new Router({
     },
 
     {
-      path: '/activedetailCard',
+      path: '/activitydetailCard',
       beforeEnter(to, from, next) {
         if (window.localStorage.getItem("idToken")) {
           next()

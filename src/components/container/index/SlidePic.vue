@@ -45,9 +45,9 @@
             return {
             }
         },
-        method:{
+        methods:{
             gotoActivity() {
-                this.$router.push({ path: '/activedetailCard' })
+                this.$router.push({ path: '/activitydetailCard' })
             },
         },
         created: function () {
