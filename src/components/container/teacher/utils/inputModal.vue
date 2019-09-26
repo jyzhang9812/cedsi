@@ -10,6 +10,10 @@
         <div class="modal-body">
           <star-rating :star-size="50" :increment="0.5" class="star" @rating-selected="setRaing"></star-rating>
           <textarea placeholder="给TA一点鼓励吧!" class="area" v-model="comment"></textarea>
+          <div class="star">
+            <input type="checkbox">
+            <span>设为精选作品</span>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -29,7 +33,7 @@
     data() { return { stars: 0, comment: '' } },
     methods: {
       setRaing(stars) { this.stars = stars },
-      submit() { 
+      submit() {
         this.$emit('remarkResult', { stars: this.stars, comment: this.comment });
         $('#' + this.id).modal('hide');
         this.stars = 0;
@@ -42,10 +46,9 @@
 
 <style scoped>
   .area {
-    margin-top: 15px;
+    margin: 15px 0 10px 10%;
     height: 100px;
-    width: 80%;
-    margin-left: 10%;
+    width: 80%;    
     border: 1px solid #409EFF;
     border-radius: 4px;
     padding-left: 15px;
@@ -57,6 +60,6 @@
   }
 
   .star {
-    justify-content: center;
+    margin-left: 10%;
   }
 </style>

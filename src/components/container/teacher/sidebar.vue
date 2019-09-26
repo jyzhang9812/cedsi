@@ -55,18 +55,16 @@
           {
             name: "作业管理",
             iconSrc: this.$store.state.url + "aside/homework.png",
-            children: [{
-              name: "布置作业",
-              route: "/console/postJob"
-            },
-            {
-              name: "批改作业",
-              route: "/console/homework"
-            },
-            {
-              name: "精选作品",
-              route: "/console/choiceness"
-            }],
+            children: [
+              {
+                name: "布置作业",
+                route: "/console/postJob"
+              },
+              {
+                name: "批改作业",
+                route: "/console/homework"
+              }
+            ],
             close: true
           },
           {
