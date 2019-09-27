@@ -158,7 +158,7 @@
 
 <style scoped>
     #rollPic {
-        height: 100%;
+        min-height: 100%;
     }
 
     #rollPic .menu {

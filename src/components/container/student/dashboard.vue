@@ -35,7 +35,7 @@
 <script>
   import { error } from 'util';
   import VueElementLoading from 'vue-element-loading'
-
+  import { mapState } from 'vuex'
   export default {
     name: "dashboard",
     components: {
@@ -111,9 +111,9 @@
       this.$store.dispatch('getUser')
     },
     computed: {
-      user: function (state) {
-        return this.$store.state.userInfo
-      },
+      ...mapState({
+        user: state => state.userInfo,
+      }),
     },
   };
 </script>

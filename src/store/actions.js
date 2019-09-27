@@ -11,7 +11,42 @@ const actions = {
             router.push({ path: '/404' })
         }
     },
-
+    //获取首页
+    getActivity({ commit, state }) {
+        return globalAxios.get("/activity")
+            .then(
+                response => {
+                    console.log(response);
+                    let arr = []
+                    let b = []
+                    for (var i = 0; i < response.data.length; i++) {
+                        arr.push(response.data[i])
+                    }
+                    for (var i = 0; i < arr.length; i++) {
+                        var array = {}
+                        array.id = arr[i].ID;
+                        array.cover = arr[i].COVER;
+                        array.title = arr[i].TITLE;
+                        array.subtitle = arr[i].SUBTITLE;
+                        array.content = arr[i].CONTENT;
+                        array.avatar = arr[i].AVATAR;
+                        array.teacher = arr[i].TEACHER_NAME;
+                        array.release_time = arr[i].RELEASE_TIME
+                        array.type = arr[i].ACTIVITY_TYPE;
+                        array.time = arr[i].ACTIVITY_TIME;
+                        array.price = arr[i].ACTIVITY_PRICE;
+                        array.place = arr[i].ACTIVITY_PLACE;
+                        array.principal_id = arr[i].PRINCIPAL_ID
+                        b.push(array);
+                    }
+                    commit(TYPES.changeActivity, b)
+                },
+                error => {
+                    router.push({ path: '/404' })
+                    console.log(error);
+                }
+            );
+    },
 
     //登录注册
     login({ commit, dispatch, state }, authData) {
@@ -26,7 +61,7 @@ const actions = {
                     state.roleId = response.data.role;
                     state.user = authData.username
                     state.status = response.data.status
-                    console.log(state.expirationDate)
+                    // console.log(state.expirationDate)
                     if (token === undefined) {
                         commit(TYPES.authUser, {
                             token: null,
@@ -123,7 +158,7 @@ const actions = {
                 }
             }
         ).then(response => {
-            console.log(response.data)
+            // console.log(response.data)
             var user = {}
             var arr = response.data
             user.avatar = arr.AVATAR,
@@ -172,7 +207,7 @@ const actions = {
             }
         ).then(response => {
             var arr = [];
-            console.log(response);
+            // console.log(response);
             for (var i = 0; i < response.data.length; i++) {
                 arr.push(response.data[i])
             }
@@ -186,7 +221,7 @@ const actions = {
             })
     },
     //课程视频及信息
-    getCourseDetail({ commit, state }, id) {
+    getCourseDetail({ commit, dispatch, state }, id) {
         globalAxios.get('/student/courses/' + id + '/chapters', {
             headers: {
                 'Content-Type': 'application/json',
@@ -246,7 +281,7 @@ const actions = {
         ).then(response => {
             var arr = []
             var content = []
-            console.log(response);
+            // console.log(response);
             // if (curId == 0) {
             for (var i = 0; i < response.data.homework.length; i++) {
                 arr.push(response.data.homework[i])
@@ -323,12 +358,12 @@ const actions = {
                 }
             }
         ).then(response => {
-            console.log(response);
+            // console.log(response);
             var myClasses = []
             if (response.data) {
                 for (let i = 0; i < response.data.length; i++) {
-                    var myClass={}
-                    var arr=[]
+                    var myClass = {}
+                    var arr = []
                     myClass.name = response.data[i].className
                     myClass.teacher = response.data[i].teacher
                     myClass.memberCount = response.data[i].member_count
@@ -348,6 +383,32 @@ const actions = {
                 console.log(error);
             }
         );
+    },
+
+    //获取全部课程
+    getAllCourse({ commit, state }) {
+        return globalAxios.get('/courses',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': state.idToken
+                }
+            }
+        ).then(response => {
+            var arr = [];
+            // console.log(response);
+            for (var i = 0; i < response.data.length; i++) {
+                arr.push(response.data[i])
+            }
+            commit(TYPES.changeAllList, arr)
+            commit(TYPES.changeAllCurrentList, 0)
+            commit(TYPES.updateLoading, false)
+        },
+            error => {
+                commit(TYPES.updateLoading, false)
+                console.log(error);
+            })
+
     },
 
 
@@ -463,11 +524,9 @@ const actions = {
         );
     },
     //章节管理页面 获取章节详细信息
-    getChapterDetial({ dispatch, state ,commit}, courseId) {
+    getChapterDetial({ dispatch, state, commit }, courseId) {
         return globalAxios.get(
-            "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
-            courseId +
-            "/chapters",
+            "/admin/course/" + courseId + "/chapters",
             {
                 headers: {
                     "Content-Type": "application/json",
@@ -481,11 +540,11 @@ const actions = {
                 var chapterData = [];
                 chapterArr = response.data.data;
                 state.chapterLength = chapterArr.length
-                //console.log(state.chapterLength)
                 for (var i = 0; i < state.chapterLength; i++) {
                     var chapter = {};
                     chapter.chapterId = chapterArr[i].CP_ID;
                     chapter.chapterName = chapterArr[i].CP_NAME;
+                    chapter.date = chapterArr[i].CP_UPLOAD_TIME;
                     chapter.introduction = chapterArr[i].CP_DESCRIPTION;
                     chapter.date = chapterArr[i].CP_UPLOAD_TIME;
                     chapter.uploadAdmin = chapterArr[i].CP_FOUNDER;
@@ -494,7 +553,6 @@ const actions = {
                     chapterData.push(chapter);
                 }
                 state.chapterData = chapterData;
-                //console.log(chapterData);
                 commit(TYPES.changeChapterList, chapterData)
                 commit(TYPES.changeChapterCurrentList, 0)
             },

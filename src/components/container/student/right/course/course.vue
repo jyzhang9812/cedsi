@@ -14,9 +14,6 @@
             courseCard,
             searchBar,
         },
-        // mounted(){
-        //     this.$store.commit('add',1)
-        // }
 }   
 </script>
 
@@ -25,6 +22,7 @@
         display: flex;
         flex-direction: column;
         width: 100%;
+        height: 100%;
         background-color: #f4f9fa;
         color: #fff;
         padding: 0;

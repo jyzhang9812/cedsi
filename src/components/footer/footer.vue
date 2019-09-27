@@ -3,13 +3,6 @@
         <div>
             <p>Copyright&nbsp;&copy;&nbsp;2018&nbsp;备案号：京ICP备17070826号-4</p>
         </div>
-        <nav>
-            <ul>
-                <li>
-                    <p>Powered by <a>陕西师范大学</a></p>
-                </li>
-            </ul>
-        </nav>
     </footer>
 </template>
       
@@ -18,8 +11,7 @@
     width: 100%;
     height: 53px;
     display: flex;
-    flex-flow: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     background-color: #293037;
     padding: 0 20px;

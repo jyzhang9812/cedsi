@@ -10,14 +10,14 @@
 
 <script>
     // import topbar from'./TopBar.vue'
-    import slidepic from'./SlidePic.vue'
-    import secpart from'./SecPart.vue'
-    import pathway from'./Pathway.vue'
-    import word from'./Word.vue'
-    import joinin from'./JoinIn.vue'
+    import slidepic from './SlidePic.vue'
+    import secpart from './SecPart.vue'
+    import pathway from './Pathway.vue'
+    import word from './Word.vue'
+    import joinin from './JoinIn.vue'
     export default {
         name: 'index',
-        components:{
+        components: {
             // topbar,
             slidepic,
             secpart,

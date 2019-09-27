@@ -1,4 +1,6 @@
 const state = {
+    //公用
+    limit: 6,
     url: '../../../../static/images/',
     url2:'../../../static/images',
     idToken: null,
@@ -6,6 +8,7 @@ const state = {
     userId: null,
     user: null,
     vueElementLoading: false,//loading组件是否打开
+    slidePic:[],
 
     //学生
     userInfo: [],
@@ -240,6 +243,8 @@ const state = {
     workCurrentList: [],
     msgList: [],
     msgCurrentList: [],
+    allCourseList:[],
+    allCourseCurrentList:[],
 
     //管理员
     adminCourseList: [],
@@ -262,8 +267,5 @@ const state = {
     //超级管理员
     adminList: [],
     adminCurrentList: [],
-
-    //公用
-    limit: 12
 }
 export default state
