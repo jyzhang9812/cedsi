@@ -84,7 +84,7 @@
                     <h4>{{item.COURSE_NAME}}</h4>
                     <div class="right">
                         <button :class="(index==i)?'btnh btn_green':'btn'">试听</button>
-                        <button :class="(index==i)?'btnh':'btn'" @click='jmpPay'>解锁课程</button>
+                        <button :class="(index==i)?'btnh':'btn'" @click='jmpPay(index)'>解锁课程</button>
                     </div>
                 </div>
                 <!-- </router-link> -->
@@ -169,8 +169,8 @@
                     this.videosrc = this.$store.state.pointList[0].videoSrc
                 })
             },
-            jmpPay() {
-                this.$router.push('/payment')
+            jmpPay(index) {
+                this.$router.push({path:'/payment',query: { title: this.currentList[index].COURSE_NAME, price: this.currentList[index].PRICE, cover: this.currentList[index].COVER} })
             },
             handle() {
                 console.log("Video paused!, playing in 2 sec...");

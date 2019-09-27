@@ -23,7 +23,7 @@
                             <div class="details" v-show="index==i">
                                 <div class="detail_item">
                                     <h4><strong>{{item.title}}</strong></h4>
-                                    <button class="btn" @click="gotoActivity">查看详情</button>
+                                    <button class="btn" @click="gotoActivity(index)">查看详情</button>
                                 </div>
                                 <p style="margin-left: 10px;">{{item.subtitle}}</p>
                             </div>
@@ -93,8 +93,8 @@
             }
         },
         methods: {
-            gotoActivity() {
-                this.$router.push({ path: '/activitydetailCard' })
+            gotoActivity(index) {
+                this.$router.push({ path: '/activitydetailCard',query:{index:index}})
             },
             tab(index) {
                 this.curId = index;
@@ -228,6 +228,7 @@
         -ms-transform: scale(1.05);
         -o-transform: scale(1.05);
         transform: scale(1.05);
+        cursor: pointer;
     }
 
     #showPage p {

@@ -396,7 +396,7 @@ const actions = {
             }
         ).then(response => {
             var arr = [];
-            // console.log(response);
+            console.log(response);
             for (var i = 0; i < response.data.length; i++) {
                 arr.push(response.data[i])
             }
