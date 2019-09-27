@@ -16,7 +16,7 @@
                                 <div class="zf-row">
                                     <div class="zf-column col-md-6">
                                         <div class="explore">
-                                            <button @click="gotoActivity" class="button"
+                                            <button @click="gotoActivity(index)" class="button"
                                                 style="margin-bottom: 0.5rem;">点击报名</button>
                                         </div>
                                     </div>
@@ -46,8 +46,8 @@
             }
         },
         methods:{
-            gotoActivity() {
-                this.$router.push({ path: '/activitydetailCard' })
+            gotoActivity(index) {
+                this.$router.push({ path: '/activitydetailCard',query:{index:index}})
             },
         },
         created: function () {

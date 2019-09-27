@@ -4,6 +4,23 @@
       <span class="upload-title">课程名称:</span>
       <input class="upload-input" v-model='name' placeholder="请输入课程名称" />
     </div>
+    <div class="upload">
+      <span class="upload-title">是否付费:</span>
+      <span style='margin:30px 0 0 50px' v-for="(item,index) in radiolist">
+        <input type="radio" :value='item.value' :checked="item.isCheck" @change="changeInput(index)">
+        {{item.name}}
+      </span>
+    </div>
+    <div v-if='radiolist[2,1].isCheck==true' class="upload">
+      <span class="upload-title">付费金额:</span>
+      <input class="upload-input" v-model='price' placeholder="请输入付费金额" />
+      </span>
+    </div>
+    <!-- <div v-if='radiolist[2,1].isCheck==true' class="upload">
+      <span class="upload-title">付费章节:</span>
+      <input class="upload-input" v-model='chapter' placeholder="请输入付费开始章节" />
+      </span>
+    </div> -->
     <div class="upload upload-height">
       <span class="upload-title">课程描述:</span>
       <textarea class="upload-textarea" rows="8" cols="70" v-model='description' placeholder="请输入课程描述" />
@@ -40,15 +57,30 @@
         fileName: '',
         headsculpture: '',
         name: '',
-        description: ''
+        price: null,
+        // chapter: null,
+        ispay: 0,
+        description: '',
+        radiolist: [{ name: '免费', value: 1, isCheck: false }, { name: '付费', value: 2, isCheck: false }],
       };
     },
     methods: {
+      changeInput(index) {
+        this.radiolist.map((v, i) => {
+          if (i == index) {
+            v.isCheck = true
+          } else {
+            v.isCheck = false
+          }
+        })
+      },
       calcelUpload() {
         this.headsculpture = '';
         this.file = null;
         this.fileName = '';
         this.name = '';
+        this.price = null;
+        // this.chapter = null;
         this.description = '';
         this.$router.replace({ path: '/Admin/courseManagement/' });
       },
@@ -98,8 +130,17 @@
             }
           });
         }
+        this.radiolist.map((v, i) => {
+          if (v.isCheck) {
+            console.log('被选中的值为:' + v.value)
+            this.ispay = v.value
+          }
+        })
         this.postFormData({
           name: this.name,
+          ispay: this.ispay,
+          price: this.price,
+          // chapter: this.chapter,
           introduction: this.description,
           type: this.file.type.split('/')[1]
         }, postImgToS3);
@@ -120,6 +161,7 @@
     }
   };
 </script>
+
 <style scoped>
 #addCourse{
   width: 98%;

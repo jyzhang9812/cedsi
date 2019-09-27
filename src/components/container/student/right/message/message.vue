@@ -1,5 +1,5 @@
 <template>
-    <div id='msg' class="body">
+    <div id='msg' class="container">
         <searchBar></searchBar>
         <div class="menu">
             <button @click="tab(index)" v-for="(item,index) in items" class="tag"
@@ -7,9 +7,6 @@
         </div>
         <div class="main">
             <div class="cardbox" v-for="(item,index) in currentList">
-                <div class="card_header">
-                    <img style="cursor: pointer" src="" alt="">
-                </div>
                 <div class="card_content">
                     {{item.MESSAGE_CONTENT}}{{item.MESSAGE_TYPE}}
                 </div>
@@ -32,6 +29,7 @@
         width: 100%;
         min-height: 100%;
         background: #f4f9fa;
+        padding: 0;
     }
 
     #msg .menu {
@@ -65,32 +63,21 @@
     }
 
     #msg .main {
-        min-width: 400px;
-        min-height: 600px;
-        padding-top: 20px;
-        padding-right: 20px;
-        padding-left: 20px;
+        width: inherit;
+        min-height: inherit;
+        padding: 20px 0 0 0;
         display: flex;
-        flex-direction: row;
         flex-wrap: wrap;
+        flex-direction: row;
         justify-content: flex-start;
     }
 
     #msg .cardbox {
-        width: 48%;
-        height: 220px;
-        margin-left: 20px;
-        margin-bottom: 40px;
-        display: flex;
-        display: -webkit-flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        justify-content: center;
+        width: 45%;
+        margin: 20px 0 0 3%;
         background-color: white;
         border-radius: 10px;
         border: 1px solid #e7e7e7;
-        min-width: 400px;
-
     }
 
     #msg .cardbox:hover {
@@ -107,15 +94,7 @@
     }
 
     #msg .card_header {
-        display: flex;
-        display: -webkit-flex;
-        flex-direction: row-reverse;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        padding-left: 20px;
-        padding-right: 20px;
-        padding-top: 10px;
+        text-align: left
     }
 
     #msg .card_header img {
@@ -125,11 +104,11 @@
     }
 
     #msg .card_content {
-        padding: 10px 40px;
+        padding: 20px 20px 0 20px;
         height: auto;
         color: #2f2f2f;
         text-align: justify;
-        font-size: 125%;
+        font-size: 110%;
         font-style: initial;
     }
 
@@ -137,7 +116,7 @@
     #msg .card_content::before {
         content: "\201C";
         font-family: MS PGothic;
-        font-size: 60px;
+        font-size: 30px;
         font-weight: bold;
         color: #06AFA6;
         box-sizing: inherit;
@@ -146,6 +125,7 @@
     #msg .card_footer {
         padding: 0px 40px 10px 40px;
         margin-left: auto;
+        text-align: end;
     }
 
 
