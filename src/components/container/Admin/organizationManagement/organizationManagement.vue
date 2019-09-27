@@ -73,7 +73,7 @@
       </ol>
     </div>
     <div class="first-floor">
-      <label for="class-name"></label>
+      <!-- <label for="class-name"></label>
       <input
         type="text"
         placeholder="请输入机构账号"
@@ -81,7 +81,7 @@
         id="class-name"
         v-model="inputData.organizationName"
       />
-      <button class="btn btn-search">搜索</button>
+      <button class="btn btn-search">搜索</button> -->
       <button class="btn btn-clear" @click="addOrganization()">新增机构</button>
     </div>
     <div class="second-floor">
@@ -109,11 +109,11 @@
                 data-target="#courseModal"
                 @click="getCourseList(seq)"
               >分配课程</span>
-              <span
+              <!-- <span
                 class="red"
                 data-toggle="modal"
                 data-target="#alterModal"
-              >删除</span>
+              >删除</span> -->
             </td>
           </tr>
         </tbody>
