@@ -84,6 +84,11 @@ const payment = resolve => {
     resolve(require('../components/container/student/payment.vue'));
   });
 };
+const payOK = resolve => {
+  require.ensure(['../components/container/student/payOK.vue'], () => {
+    resolve(require('../components/container/student/payOK.vue'));
+  });
+};
 //import ErrorPage from '../components/container/auth/errorPage.vue'
 const ErrorPage = resolve => {
   require.ensure(['../components/container/auth/errorPage.vue'], () => {
@@ -407,7 +412,17 @@ export default new Router({
       },
       component: payment
     },
-
+    {
+      path: '/payOK',
+      beforeEnter(to, from, next) {
+        if (window.localStorage.getItem("idToken")) {
+          next()
+        } else {
+          next('/signin')
+        }
+      },
+      component: payOK
+    },
     {
       path: '/activitydetailCard',
       beforeEnter(to, from, next) {
