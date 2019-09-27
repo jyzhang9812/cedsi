@@ -298,7 +298,7 @@
         <li>学生管理</li>
       </ol>
     </div>
-    <div class="first-floor">
+    <!-- <div class="first-floor">
       <label for="tel-name"></label>
       <input type="text" placeholder="请输入姓名、手机号" class="textBox" v-model="inputData.telOrName" />
       <div class="select-input">
@@ -310,9 +310,9 @@
           :drop-down-list="inputData.classes.list"
         ></select-input>
       </div>
-    </div>
+    </div> -->
     <div class="second-floor">
-      <label for="tel-name"></label>
+      <!-- <label for="tel-name"></label>
       <input type="text" placeholder="请输入年级" class="textBox" v-model="inputData.telOrName" />
       <label for="tel-name"></label>
       <input type="text" placeholder="请输入班级" class="textBox" v-model="inputData.telOrName" />
@@ -323,7 +323,7 @@
         data-toggle="modal"
         data-target="#addStudent"
         @click="addStudent()"
-      >新增学生</button>
+      >新增学生</button> -->
       <button
         class="btn btn-clear"
         data-toggle="modal"

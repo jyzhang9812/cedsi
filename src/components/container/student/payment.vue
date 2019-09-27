@@ -1,21 +1,33 @@
 <template>
   <div id="payment">
-      <!-- 模态框（Modal） -->
-    <div class="modal fade" id="myPay" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myToggleModalLabel" aria-hidden="true">
-	<div class="modal-dialog mypay">
-		<div class="modal-content mypay-height">
-			<div class="modal-header mypay-title">
-				<h4 class="modal-title" id="myModalLabel">
-					微信支付{{orderPrice}}
-				</h4>
-			</div>
-            <div class="modal-body mypay-qrcode">
-				<img :src="qrcodeImage" />
-                <span>使用微信扫描二维码进行支付</span>
-			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal -->
-</div>
+    <!-- 模态框（Modal） -->
+    <div
+      class="modal fade"
+      id="myPay"
+      data-keyboard="false"
+      data-backdrop="static"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myToggleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog mypay">
+        <div class="modal-content mypay-height">
+          <div class="modal-header mypay-title">
+            <h4 class="modal-title" id="myModalLabel">微信支付{{orderPrice}}</h4>
+          </div>
+          <div class="modal-body mypay-qrcode">
+            <!-- <img :src="qrcodeImage" /> -->
+            <div id="query">
+              <canvas id="canvas"></canvas>
+            </div>
+            <span>使用微信扫描二维码进行支付</span>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal -->
+    </div>
     <div
       class="payment-header"
       :style="{backgroundImage:'url('+$store.state.url+'payment/headerbg.jpg)'}"
@@ -27,7 +39,10 @@
         <span>订单：{{orderNum}}</span>
       </div>
       <div class="card-content">
-        <img src="https://www.tynker.com/image/course-card/vertical/minecraft-starter.png" class="card-img" />
+        <img
+          src="https://www.tynker.com/image/course-card/vertical/minecraft-starter.png"
+          class="card-img"
+        />
         <div class="order-title">{{orderName}}</div>
         <div class="order-price">
           实付金额:
@@ -41,31 +56,38 @@
         </div>
       </div>
       <div class="summary">
-            应付金额:
-          <span>{{orderPrice}}</span>
-          <button class="pay" data-toggle="modal" data-target="#myPay" @click="closeModal">立即支付</button>
+        应付金额:
+        <span>{{orderPrice}}</span>
+        <button class="pay" data-toggle="modal" data-target="#myPay" @click="closeModal">立即支付</button>
       </div>
     </div>
-
   </div>
 </template>
 <script>
+import QRCode from "qrcode";
 export default {
-    data(){
-        return{
-            orderName:"玩转算法系列--图论精讲 面试升职必备（Java版）",
-            orderPrice:"￥ 348.00",
-            orderNum:"66666666666",
-            qrcodeImage:this.$store.state.url+"payment/qrcode.png",
-            wechatImage:this.$store.state.url+"payment/WePayLogo.png"
-        }
+  data() {
+    return {
+      orderName: "玩转算法系列--图论精讲 面试升职必备（Java版）",
+      orderPrice: "￥ 348.00",
+      orderNum: "66666666666",
+      qrcodeImage: this.$store.state.url + "payment/qrcode.png",
+      wechatImage: this.$store.state.url + "payment/WePayLogo.png"
+    };
+  },
+  methods: {
+    closeModal() {
+      this.qrCode();
+      setTimeout("$('#myPay').modal('hide')", 10000); //5s延时自动关闭 
     },
-    methods:{
-        closeModal(){
-            setTimeout("$('#myPay').modal('hide')",5000);//5s延时自动关闭
-        }																					
-    },
-
+    qrCode() {
+      var url = "weixin://wxpay/bizpayurl?pr=OotflPF";
+      QRCode.toCanvas(canvas, url, function(error) {
+        if (error) console.error(error);
+        console.log("success!");
+      });
+    }
+  }
 };
 </script>
 <style scoped>
@@ -162,38 +184,38 @@ export default {
   float: right;
   padding-top: 36px;
 }
-#payment .summary span{
-    font-size: 18px;
-    color: #f01414
+#payment .summary span {
+  font-size: 18px;
+  color: #f01414;
 }
-#payment .pay{
-    width: 140px;
-    height: 40px;
-    background-color: #f01414;
-    color: #fff;
-    line-height: 38px;
-    border: 1px solid #f01414;
-    margin-top: 40px;
-    font-size: 16px;
+#payment .pay {
+  width: 140px;
+  height: 40px;
+  background-color: #f01414;
+  color: #fff;
+  line-height: 38px;
+  border: 1px solid #f01414;
+  margin-top: 40px;
+  font-size: 16px;
 }
-#payment .mypay{
-    top:100px;
-    width: 25%;
-    height: 364px;
+#payment .mypay {
+  top: 100px;
+  width: 25%;
+  height: 364px;
 }
-#payment .mypay-height{
-    height: 100%;
+#payment .mypay-height {
+  height: 100%;
 }
-#payment .mypay-title{
-    text-align: center;
-    border-bottom: 1px solid #fff;
-    margin-top: 30px;
+#payment .mypay-title {
+  text-align: center;
+  border-bottom: 1px solid #fff;
+  margin-top: 30px;
 }
-#payment .mypay-qrcode{
-    text-align: center
+#payment .mypay-qrcode {
+  text-align: center;
 }
-#payment .mypay-qrcode img{
-    display: block;
-    margin: 10px auto;
+#payment .mypay-qrcode img {
+  display: block;
+  margin: 10px auto;
 }
 </style>

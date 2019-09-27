@@ -23,7 +23,6 @@
                 class="study-btn"
                 data-toggle="modal"
                 data-target="#myVideo"
-                @click="gotoStudy(i)"
               >开始学习</button>
             </div>
             <div class="right-box">
@@ -119,7 +118,7 @@ export default {
       chapterName: "",
       i: 0,
       videoend: false,
-      chapterId: ""
+      chapterId: "",
     };
   },
   methods: {
