@@ -2,7 +2,7 @@
     <div class="searchBar">
         <div class="searchBoxContainer">
             <input class="searchBox" placeholder="课程名...">
-            <img class="searchImg" :src=searchImg @click="searchData">
+            <i class="fa fa-search fa-lg" aria-hidden="true"></i>
         </div>
         <div>
             <button class="button">
@@ -13,14 +13,12 @@
 </template>
 
 <script>
-    // import Bus from '../../../../store/bus.js'
     export default {
         name: 'searchBar',
         components:{
         },
         data() {
             return {
-                searchImg:'../../' + this.$store.state.url + 'dashboard/search.png',
             }
         },
         methods:{
@@ -50,6 +48,10 @@
         color: #fff;
         margin: 0 30px;
         display: flex;
+    }
+    .searchBoxContainer i{
+        text-align: center;
+        margin: 3% auto;
     }
     ::placeholder{
         color: #e7e7e7;

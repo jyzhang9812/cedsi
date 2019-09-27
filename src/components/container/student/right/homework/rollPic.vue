@@ -49,8 +49,10 @@
                     <img class="img" :style="style" :src="item.img_url" />
                     <div class='details' v-show="index==i">
                         <div class="detail_item">
-                            <img class="icon" v-for='j in parseInt(item.rank)' :src=star_active />
-                            <img class="icon" v-for='j in 5-parseInt(item.rank)' :src=star />
+                            <i class="fa fa-star fa-lg" aria-hidden="true" style="color: #ffbf35"
+                                v-for='j in parseInt(item.rank)'></i>
+                            <i class="fa fa-star-o fa-lg" aria-hidden="true" style="color: #ffbf35"
+                                v-for='j in 5-parseInt(item.rank)'></i>
                             <span>{{item.teacher_remark}}</span>
                         </div>
                     </div>
@@ -62,7 +64,7 @@
                             <h5>{{item.name}}</h5>
                         </div>
                         <div class="down">
-                            <img class="icon" :src=clock />
+                            <i class="fa fa-clock-o fa-lg" aria-hidden="true" style="color: #50b8ee"></i>
                             <span>{{item.time}}</span>
                         </div>
                     </div>
@@ -93,11 +95,8 @@
                 num: -1,
                 btn: 'btn',
                 btnh: 'btnhover',
-                clock: '../' + this.$store.state.url + 'dashboard/clock.png',
                 zuopin: '../' + this.$store.state.url + 'dashboard/zuopin.png',
                 products: '../' + this.$store.state.url + 'dashboard/xiangmu.png',
-                star_active: '../' + this.$store.state.url + 'dashboard/star_active.png',
-                star: '../' + this.$store.state.url + 'dashboard/star.png',
                 i: -1,
                 selectItems: ['未提交', '已提交'],
                 selectId: 0,
@@ -122,7 +121,7 @@
                 this.selectId = index
                 this.currentList = []
             },
-            changeDirection(){
+            changeDirection() {
                 this.isUpload = !this.isUpload
             },
             //换页
