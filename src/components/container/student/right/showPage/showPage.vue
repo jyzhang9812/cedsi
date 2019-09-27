@@ -13,7 +13,7 @@
                     </p>
                 </div>
                 <div class="iconleft" v-on:click="zuohua(0)" v-show='calleft[0]!=0'>
-                    <img class="el-icon-arrow" :src=leftImg />
+                    <i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i>
                 </div>
                 <ul :style="{'left':calleft[0] + 'px'}">
                     <li class="course_card" v-for="(item,index) in slidePic" :key="index" @mouseover="show(index)"
@@ -31,7 +31,7 @@
                     </li>
                 </ul>
                 <div class="iconright" v-on:click="youhua(0)" v-show='!calleft[0]>0'>
-                    <img class="el-icon-arrow" :src=rightImg />
+                    <i class="fa fa-chevron-right fa-2x" aria-hidden="true"></i>
                 </div>
             </div>
         </div>
@@ -39,14 +39,14 @@
         <div class="threeImg">
             <div class='Containt' v-for="(item,index) in arrComponent" :key="index">
                 <div class="iconleft" v-on:click="zuohua(index+1)" v-show='calleft[index+1]!=0'>
-                    <img class="el-icon-arrow" :src=leftImg />
+                    <i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i>
                 </div>
                 <div class="recommend_title">
                     <h3>{{item.title}}</h3>
                 </div>
                 <component v-bind:is="item.componentName" :calleft="calleft[index+1]"></component>
                 <div class="iconright" v-on:click="youhua(index+1)" v-show='!calleft[index+1]>0'>
-                    <img class="el-icon-arrow" :src=rightImg />
+                    <i class="fa fa-chevron-right fa-2x" aria-hidden="true"></i>
                 </div>
             </div>
         </div>
@@ -69,8 +69,6 @@
         },
         data() {
             return {
-                leftImg: '../../../' + this.$store.state.url + 'dashboard/left.png',
-                rightImg: '../../../' + this.$store.state.url + 'dashboard/right.png',
                 arrComponent: [
                     {
                         componentName: 'allCourseCard',
@@ -94,7 +92,7 @@
         },
         methods: {
             gotoActivity(index) {
-                this.$router.push({ path: '/activitydetailCard',query:{index:index}})
+                this.$router.push({ path: '/activitydetailCard', query: { index: index } })
             },
             tab(index) {
                 this.curId = index;
@@ -184,8 +182,9 @@
         justify-content: space-between;
     }
 
-    .iconleft {
+    .iconleft{
         position: absolute;
+        text-align: center;
         width: 50px;
         height: 50px;
         top: 120px;
@@ -199,6 +198,7 @@
     .iconright {
         display: inline-block;
         position: absolute;
+        text-align: center;
         right: 0;
         top: 120px;
         border-radius: 50%;
@@ -210,7 +210,9 @@
         opacity: 0.5;
         justify-content: center;
     }
-
+    .iconleft i,.iconright i{
+        margin: 10px auto;
+    }
     .recommend_title i {
         width: 50px;
         height: 55px;

@@ -7,23 +7,23 @@
             <img class="img" :style="style" :src="item.COVER">
             <div class="details" :style="style1" v-show="index==i">
               <div class="detail_item">
-                <img class="icon" :src=classImg>
+                <i class="fa fa-desktop fa-lg" aria-hidden="true" style="color: #fcb3a5"></i>
                 <span>开课进度: {{item.status.haveStarted}} / {{item.status.chaptersNum}}</span>
               </div>
               <div class="detail_item">
-                <img class="icon" :src=learnImg>
+                <i class="fa fa-clock-o fa-lg" aria-hidden="true" style="color: #9447ec"></i>
                 <span>学习进度: {{item.status.haveLearned}} / {{item.status.chaptersNum}}</span>
               </div>
               <div class="detail_item">
-                <img class="icon" :src=starImg>
+                <i class="fa fa-star fa-lg" aria-hidden="true" style="color: #ffbf35"></i>
                 <span>总星数: {{item.status.homeworkStars}}</span>
               </div>
               <div class="detail_item">
-                <img class="icon" :src=hwkImg>
+                <i class="fa fa-paper-plane fa-lg" aria-hidden="true" style="color: #50b8ee"></i>
                 <span>作业提交次数: {{item.status.homeworkNum}}</span>
               </div>
               <div class="detail_item">
-                <img class="icon" :src=createImg>
+                <i class="fa fa-pencil fa-lg" aria-hidden="true" style="color: #5ccfa6"></i>
                 <span>自由创作次数: {{item.status.creationNums}}</span>
               </div>
             </div>
@@ -54,11 +54,6 @@
         currentPage: 0,
         btn: "btn",
         btnh: "btnhover",
-        classImg: '../../../' + this.$store.state.url + 'dashboard/class.png',
-        learnImg: '../../../' + this.$store.state.url + 'dashboard/learn.png',
-        hwkImg: '../../../' + this.$store.state.url + 'dashboard/homework.png',
-        starImg: '../../../' + this.$store.state.url + 'dashboard/star_active.png',
-        createImg: '../../../' + this.$store.state.url + 'dashboard/create.png',
         isShow: false,
         inside_detail: [],
         calleft: 0,
@@ -192,6 +187,9 @@
     justify-content: flex-start;
     position: relative;
     border-radius: 20px;
+  }
+  #coursecard .detail_item i{
+    margin: 3px 15px 0 10px;
   }
 
   #coursecard .outside {
