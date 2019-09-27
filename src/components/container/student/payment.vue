@@ -11,7 +11,9 @@
             </h4>
           </div>
           <div class="modal-body mypay-qrcode">
-            <img :src="qrcodeImage" />
+            <div id="query">
+              <canvas id="canvas"></canvas>
+            </div>
             <span>使用微信扫描二维码进行支付</span>
           </div>
         </div><!-- /.modal-content -->
@@ -48,6 +50,7 @@
   </div>
 </template>
 <script>
+  import QRCode from "qrcode";
   import { mapState } from 'vuex'
   export default {
     data() {
@@ -61,9 +64,17 @@
       }
     },
     methods: {
-      closeModal() {
-        setTimeout("$('#myPay').modal('hide')", 5000);//5s延时自动关闭
-      }
+    closeModal() {
+      this.qrCode();
+      setTimeout("$('#myPay').modal('hide')", 10000); //5s延时自动关闭 
+    },
+    qrCode() {
+      var url = "weixin://wxpay/bizpayurl?pr=OotflPF";
+      QRCode.toCanvas(canvas, url, function(error) {
+        if (error) console.error(error);
+        console.log("success!");
+      });
+    }
     },
     created: function () {
       this.title = this.$route.query.title

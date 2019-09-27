@@ -495,7 +495,6 @@ export default {
         // newClass.course = JSON.stringify(this.addClassData.course.option);
         newClass.courseId = this.addClassData.course.option.id;
         newClass.courseName = this.addClassData.course.option.name;
-      
       console.log(newClass);
       globalAxios
         .post(
@@ -610,6 +609,7 @@ export default {
             classes.teacherName = classList[i].TEACHER_NAME;
             classes.teacherId = classList[i].TEACHER_ID;
             classes.courseName = classList[i].COURSE_NAME;
+            classes.courseId = classList[i].COURSE_ID;
             classes.courseMemberCount = classList[i].CLASS_MEMBER_COUNT;
             classArr.push(classes);
           }
