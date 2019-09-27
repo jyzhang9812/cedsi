@@ -5,22 +5,15 @@
       <div class="filter">
         <div class="option">
           <div class="select-input">
-            <select-input id="classes" tips="请选择班级" :option="inputData.classes.option" @option="changeOption"
-              :drop-down-list="inputData.classes.list">
+            <select-input id="classes1" tips="请选择班级" :option="inputData.classes1.option" @option="changeOption1"
+              :drop-down-list="inputData.classes1.list">
             </select-input>
           </div>
           <div class="select-input">
-            <select-input id="course" tips="请选择课程" :option="inputData.course.option" @option="changeOption"
-              :drop-down-list="inputData.course.list">
+            <select-input id="chapter1" tips="请选择章节" :option="inputData.chapter1.option" @option="changeOption1"
+              :drop-down-list="inputData.chapter1.list">
             </select-input>
           </div>
-          <div class="select-input">
-            <select-input id="chapter" tips="请选择章节" :option="inputData.chapter.option" @option="changeOption"
-              :drop-down-list="inputData.chapter.list">
-            </select-input>
-          </div>
-          <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
-          <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
           <button type="button" class="btn-my" @click="newHomeWork">新增作业</button>
         </div>
       </div>
@@ -52,36 +45,28 @@
       <form action="">
         <div class="item">
           <p>作业名称：</p>
-          <input type="text" class="title" placeholder="请输入作业名称">
+          <input type="text" class="title" placeholder="请输入作业名称" v-model="inputData.homework.HW_NAME">
         </div>
         <div class="item">
           <p>选择班级：</p>
-          <select-input :option="inputData.classes.option" :dropDownList="inputData.classes.list" tips="选择班级"
-            id="classes" @option="changeOption">
-          </select-input>
-          <p>课程名称：</p>
-          <select-input :option="inputData.course.option" :dropDownList="inputData.course.list" tips="选择课程" id="course"
-            @option="changeOption">
+          <select-input :option="inputData.classes2.option" :dropDownList="inputData.classes2.list" tips="选择班级"
+            id="classes2" @option="changeOption2">
           </select-input>
           <p>章节名称：</p>
-          <select-input :option="inputData.chapter.option" :dropDownList="inputData.chapter.list" tips="选择章节"
-            id="chapter" @option="changeOption">
+          <select-input :option="inputData.chapter2.option" :dropDownList="inputData.chapter2.list" tips="选择章节"
+            id="chapter2" @option="changeOption2">
           </select-input>
-        </div>
-        <div class="item">
           <p>截止时间：</p>
-          <date-picker tips="选择截止时间" class="datePicker" id="postJob_deadline" :date="inputData.deadline"
+          <date-picker tips="选择截止时间" class="datePicker" id="postJob_deadline" :date="inputData.homework.DEADLINE"
             @changeDate="changeDate">
           </date-picker>
         </div>
         <div class="item">
-          <!-- <div ref="editor_postJob" class="editor"></div> -->
           <p>作业内容：</p>
-          <textarea class="form-control" rows="10"></textarea>
+          <textarea class="form-control" rows="10" v-model="inputData.homework.CONTENT"></textarea>
         </div>
         <div class="item1">
-          <button type="button" class="btn-my">保存草稿</button>
-          <button type="button" class="btn-my">直接发布</button>
+          <button type="button" class="btn-my" @click="saveAsDraft">保存草稿</button>
           <button type="button" class="btn-my" @click="newHomeWork">取消编辑</button>
         </div>
       </form>
@@ -95,7 +80,6 @@
   import DatePicker from "../utils/datePicker";
   import selectInput from "../utils/selectInput";
   import instance from "../../../../axios-auth.js"
-  // import E from 'wangeditor';
 
   export default {
     name: 'postJob',
@@ -108,46 +92,23 @@
           "序号", '作业名称', '截止时间', '班级',
           '课程名称', '章节名称', '操作'
         ],
+        currentList: [],
         inputData: {
-          classes: { option: "", list: [], id: [] },
-          course: { option: "", list: [], id: [] },
-          chapter: { option: "", list: [], id: [] }
+          homework: { CONTENT: "", DEADLINE: "", HW_NAME: "" },
+          classes1: { option: "", list: [], id: [] },
+          chapter1: { option: "", list: [], id: [] },
+          classes2: { option: "", list: [], id: [] },
+          chapter2: { option: "", list: [], id: [] },
         },
-        currentList: [
-          {
-            hwName: '小猫钓鱼',
-            deadline: '2019-09-26',
-            classes: '赛迪思6班',
-            course: '操作系统',
-            chapter: '处理器的设置'
-          },
-          {
-            hwName: '小猫钓鱼',
-            deadline: '2019-09-26',
-            classes: '赛迪思6班',
-            course: '操作系统',
-            chapter: '处理器的设置'
-          },
-          {
-            hwName: '小猫钓鱼',
-            deadline: '2019-09-26',
-            classes: '赛迪思6班',
-            course: '操作系统',
-            chapter: '处理器的设置'
-          },
-          {
-            hwName: '小猫钓鱼',
-            deadline: '2019-09-26',
-            classes: '赛迪思6班',
-            course: '操作系统',
-            chapter: '处理器的设置'
-          }
-        ],
+        originalInputData: [],
         tableData: [],
         originalTableData: []
       }
     },
     methods: {
+      /**
+       * 获取此教师的所有作业 (仅仅是自己布置的, 其他老师的看不到)
+      */
       pullHomeworkData() {
         let config = { headers: { Authorization: localStorage.getItem('idToken') } };
         return new Promise((resolve, reject) => {
@@ -156,37 +117,68 @@
             .catch(err => { reject(err) });
         });
       },
-      changeOption(item, id) {
-
+      /**
+       * 列表界面做筛选功能的 Select-Input 输入选择框绑定函数
+      */
+      changeOption1(item, id) {
+        this.inputData[id].option = item;
+        if (id === "classes1") {
+          this.tableData = this.selectInputFilter(item, "CLASS_NAME");
+          this.changeChapters(item);
+        } else {
+          this.tableData = this.selectInputFilter(item, "CP_NAME");
+        }
+        this.changeTablePages(0);
       },
+      /**
+       * 新增界面做选择功能的 Select-Input 输入选择框绑定函数
+       * 
+       * @param {String} item
+       * @param {String} id
+      */
+      changeOption2(item, id) {
+        this.inputData[id].option = item;
+        if (id === "classes2") {
+          this.getChaptersOfClass(this.searchForCourseId(item))
+            .then(chapters => {
+              console.log(chapters);
+              this.inputData.chapter2.list = chapters.map(item => {
+                return item.CP_NAME;
+              });
+              this.inputData.chapter2.id = chapters.map(item => {
+                return item.CP_ID;
+              });
+              this.inputData.chapter2.option = "";
+            })
+            .catch(err => { console.log(err) });
+        }
+      },
+      /**
+       * 改变页码的 pagination 翻页绑定函数
+       * 
+       * @param {Number} value
+      */
       changeTablePages(value) {
-        let result = [];
-        this.tableData.forEach(item => {
-          result.push({
-            hwName: item.HW_NAME,
-            deadline: item.DEADLINE,
-            classes: item.CLASS_ID,
-            course: item.COURSE_ID,
-            chapter: item.CP_ID
+        this.currentList = this.tableData.slice(value, value + this.limit)
+          .map(item => {
+            return {
+              hwName: item.HW_NAME, deadline: item.DEADLINE,
+              classes: item.CLASS_NAME, course: item.COURSE_NAME,
+              chapter: item.CP_NAME
+            };
           });
-        });
-        this.currentList = result;
-      },
-      conditionSearch() {
-
-      },
-      clearChoices() {
-
       },
       /**
        * 编辑作业, 需要把相应的数据进行填充
        * 
        * @param {Object} item
-       * 
       */
       editWork(item) {
         console.log(item);
       },
+      /**
+       * 删除作业的绑定函数
+      */
       deleteWork() {
 
       },
@@ -201,7 +193,33 @@
        * @param {String} id
        */
       changeDate(value, id) {
-        this.inputData.deadline = value;
+        this.inputData.homework.DEADLINE = value;
+      },
+      /**
+       * 保存草稿 是新增页面的保存草稿按钮
+      */
+      saveAsDraft() {
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        let chapter2 = this.inputData.chapter2;
+        let homework = this.inputData.homework;
+        let postData = {
+          CLASS_ID: this.searchForClassId(this.inputData.classes2.option),
+          COURSE_ID: this.searchForCourseId(this.inputData.classes2.option),
+          CONTENT: homework.CONTENT,
+          CP_ID: chapter2.id[chapter2.list.findIndex(item => item === chapter2.option)],
+          DEADLINE: homework.DEADLINE,
+          HW_NAME: homework.HW_NAME
+        };
+        console.log(postData);
+        instance.post("teacher/homework", postData, config)
+          .then(res => {
+            console.log(res);
+            if (res.status === 200) {
+              alert("保存成功!");
+              this.newHomeWork();
+            } else { console.log("保存失败!") }
+          })
+          .catch(err => { console.log(err) });
       },
       /**
        * 弹出模态框, 提示用户是否进一步删除作品
@@ -215,11 +233,87 @@
           $('#' + this.deletePromptId).modal('show');
         }
       },
+      /**
+       * 拉取选择框的选项数据
+       */
+      pullClassAndCourseData() {
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        instance.get('/teacher/class', config)
+          .then((res) => {
+            console.log(res.data);
+            this.originalInputData = res.data;
+            this.inputData.classes1.list = res.data.map((item) => {
+              return item.CLASS_NAME;
+            });
+            this.inputData.classes2.list = this.inputData.classes1.list;
+          })
+          .catch((err) => { console.log(err) });
+      },
+      /**
+       * 班级选择输入框的过滤器
+       * 
+       * @param {String} tagName
+       * @param {String} attributeName
+       * @return {Array<Object>}
+      */
+      selectInputFilter(tagName, attributeName) {
+        return (tagName === "") ? this.originalTableData :
+          this.originalTableData.filter(item => {
+            return item[attributeName] === tagName;
+          });
+      },
+      /**
+       * 章节选择输入框的过滤器
+       * 
+       * @param {String} className
+      */
+      changeChapters(className) {
+        let result = this.tableData
+          .filter(item => { return item.CLASS_NAME === className })
+          .map(item => { return item.CP_NAME });
+        this.inputData.chapter1.list = Array.from(new Set(result));
+        this.inputData.chapter1.option = "";
+      },
+      /**
+       * 获取某个课程(班级) 的所有章节
+       * 
+       * @param {String} classId
+      */
+      getChaptersOfClass(classId) {
+        console.log(classId);
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        return new Promise((resolve, reject) => {
+          instance.get(`teacher/course/${classId}/chapters`, config)
+            .then(res => { resolve(res.data) })
+            .catch(err => { reject(err) });
+        });
+      },
+      /**
+       * 通过班级名称寻找课程 ID 
+       * 
+       * @param {String} className
+       * @return {String}
+      */
+      searchForCourseId(className) {
+        return this.originalInputData.find(item => {
+          return item.CLASS_NAME === className;
+        }).COURSE_ID;
+      },
+      /**
+       * 通过班级名称寻找班级 ID
+       *
+       * @param {String} className
+       * @return {String}
+      */
+      searchForClassId(className) {
+        return this.originalInputData.find(item => {
+          return item.CLASS_NAME === className;
+        }).CLASS_ID;
+      }
     },
-    computed: {
-      deletePromptId() { return "postJob_deletePrompt" }
-    },
+    computed: { deletePromptId() { return "postJob_deletePrompt" } },
     created() {
+      this.pullClassAndCourseData();
       this.pullHomeworkData()
         .then(res => {
           console.log(res);
@@ -227,26 +321,9 @@
           this.tableData = res.data || [];
           this.changeTablePages(0);
         })
-        .catch(err => {
-          console.log(err);
-        });
+        .catch(err => { console.log(err) });
     },
-    mounted() {
-      // let editor = new E(this.$refs.editor_postJob);
-      // editor.customConfig.uploadImgShowBase64 = true;
-      // editor.customConfig.onchange = (html) => {
-      //   this.editorContent = html
-      // };
-      // editor.customConfig.menus = [
-      //   'head', 'bold', 'fontSize', 'fontName',
-      //   'italic', 'underline', 'strikeThrough', 'foreColor',
-      //   'backColor', 'link', 'list', 'justify',
-      //   'quote', 'emoticon', 'image', 'table',
-      //   'video', 'code', 'undo', 'redo'
-      // ],
-      //   editor.create();
-      // editor.txt.html('<p>请输入内容</p>');
-    },
+    mounted() { },
     components: { DeletePrompt, Pagination, DatePicker, selectInput }
   }
 </script>
