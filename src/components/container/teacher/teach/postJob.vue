@@ -174,7 +174,16 @@
        * @param {Object} item
       */
       editWork(item) {
-        console.log(item);
+        let work = this.searchForWorkId(item);
+        this.newHomeWork();
+        this.inputData.homework = {
+          CONTENT: work.CONTENT,
+          DEADLINE: work.DEADLINE,
+          HW_NAME: work.HW_NAME
+        };
+        this.changeOption2(work.CLASS_NAME, "classes2");
+        this.inputData.classes2.option = work.CLASS_NAME;
+        this.inputData.chapter2.option = work.CP_NAME;
       },
       /**
        * 删除作业的绑定函数
@@ -309,6 +318,34 @@
         return this.originalInputData.find(item => {
           return item.CLASS_NAME === className;
         }).CLASS_ID;
+      },
+      /**
+       * 发布作业(给学生发送通知)
+      */
+      postJob(line) {
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        let workId = this.searchForWorkId(line).HOMEWORK_ID;
+        instance.post(`teacher/homework/${workId}`, { homework_id: workId }, config)
+          .then(res => {
+            console.log(res);
+            if (res.status === 200) {
+              alert("发布成功!");
+            } else {
+              alert("发布失败!");
+            }
+          })
+          .catch(err => { console.log(err) });
+      },
+      /**
+       * 寻找某条作业的 ID
+       * 
+       * @param {Object} line
+       * @return {String}
+      */
+      searchForWorkId(line) {
+        return this.originalTableData.find(item => {
+          return (item.CLASS_NAME + item.HW_NAME) === (line.classes + line.hwName);
+        });
       }
     },
     computed: { deletePromptId() { return "postJob_deletePrompt" } },

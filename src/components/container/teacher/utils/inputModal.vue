@@ -11,7 +11,7 @@
           <star-rating :star-size="50" :increment="0.5" class="star" @rating-selected="setRaing"></star-rating>
           <textarea placeholder="给TA一点鼓励吧!" class="area" v-model="comment"></textarea>
           <div class="star">
-            <input type="checkbox">
+            <input type="checkbox" v-model="selectedWork">
             <span>设为精选作品</span>
           </div>
         </div>
@@ -30,14 +30,15 @@
   export default {
     name: 'inputModal',
     props: { id: { type: String, default: 'helloWorld' } },
-    data() { return { stars: 0, comment: '' } },
+    data() { return { stars: 0, comment: '', selectedWork: false } },
     methods: {
       setRaing(stars) { this.stars = stars },
       submit() {
-        this.$emit('remarkResult', { stars: this.stars, comment: this.comment });
+        this.$emit('remarkResult', { stars: this.stars, comment: this.comment, selectedWork: this.selectedWork });
         $('#' + this.id).modal('hide');
         this.stars = 0;
         this.comment = '';
+        this.selectedWork = false;
       }
     },
     components: { StarRating }
@@ -48,7 +49,7 @@
   .area {
     margin: 15px 0 10px 10%;
     height: 100px;
-    width: 80%;    
+    width: 80%;
     border: 1px solid #409EFF;
     border-radius: 4px;
     padding-left: 15px;

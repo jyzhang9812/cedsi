@@ -31,9 +31,9 @@
             <td v-for="(value, key, index) in line" :key="index"> {{value}} </td>
             <td>
               <span class="blue" @click="viewWork(line)">查看作品</span>&nbsp;&nbsp;
-              <span class="blue" @click="popModal('remark')">点评</span>&nbsp;&nbsp;
-              <span class="blue" @click="popModal('turndown')">驳回</span>&nbsp;&nbsp;
-              <span class="red" @click="popModal('delete')">删除</span>
+              <span class="blue" @click="popModal('remark', line)">点评</span>&nbsp;&nbsp;
+              <span class="blue" @click="popModal('turndown', line)">驳回</span>&nbsp;&nbsp;
+              <span class="red" @click="popModal('delete', line)">删除</span>
             </td>
           </tr>
         </tbody>
@@ -63,7 +63,7 @@
     data() {
       return {
         limit: 10,
-        currentWorkId: "hello",
+        currentWorkId: "",
         comment: { commentStatus: 0, hasComment: "", noComment: "" },
         originalInputData: [],
         inputData: {
@@ -114,13 +114,12 @@
       changeOption(item, id) {
         this.inputData[id].option = item;
         if (id === 'classes') {
-          let courseName = this.changeCourseOfInputData(item);
-          let classId = this.searchClassId(item, courseName);
+          let classId = this.searchClassId(item);
           this.pullHomeworkWithId(classId);
         } else if (id === 'chapter') {
-          // !!! there undone !!!
-          // !!! there undone !!!
-          // !!! there undone !!!
+          let result = this.selectInputFilter(this.inputData, this.originalTableData);
+          this.tableData = result;
+          this.changeTablePages(0);
         }
       },
       /**
@@ -141,7 +140,7 @@
           });
         });
         this.currentList = currentList;
-      },      
+      },
       /**
        * 点评过滤器
        * 
@@ -185,7 +184,7 @@
           }
         }
         return restTableList;
-      },      
+      },
       /**
        * 删除作品, 是表格里每行数据中 删除 操作绑定的事件处理函数
        * 
@@ -204,64 +203,66 @@
         setTimeout(() => { alert("驳回成功!") }, 1000);
       },
       /**
-       * 查看作品, 参数为当前行数据, 是表格里每行数据中 查看作品 操作绑定的事件处理函数
+       * 查看作品, 参数为当前行数据
        * 
        * @param {Object} item
        */
-      viewWork(item) {
-        let id = this.searchWorkId(item);
-        // 打开新窗口, 可能会传递sb3文件之类的参数
-      },
-      searchWorkId(item) {
-        console.log("拿下来了!");
-      },
+      viewWork(item) { },
       /**
-       * 通过班级名称获取对应的课程
+       * 寻找某一条作业的 ID
        *
-       * @param {String} className
+       * @param {Object} line
        * @return {String}
-       */
-      changeCourseOfInputData(className) {
-        let result = [];
-        this.originalInputData
-          .filter(item => item.CLASS_NAME === className)
-          .forEach(item => { result.push(item.COURSE_NAME) });
-        this.inputData.course.list = result;
-        this.inputData.course.option = result[0] || '';
-        return result[0] || '';
+      */
+      searchForWorkId(line) {
+        return this.originalTableData
+          .find(item => {
+            return item.STUDENT_NAME + item.SUBMIT_TIME ===
+              line.STUDENT_NAME + line.SUBMIT_TIME;
+          }).HW_ID;
       },
       /**
        * 通过班级名称和课程名称寻找 CLASS_ID
        *
        * @param {String} className
-       * @param {String} courseName
        * @return {String}
        */
-      searchClassId(className, courseName) {
+      searchClassId(className) {
         let result = '';
-        this.originalInputData
-          .filter(item =>
-            item.CLASS_NAME === className &&
-            item.COURSE_NAME === courseName
-          )
+        return this.originalInputData
+          .filter(item => item.CLASS_NAME === className)
           .map(item => result = item.CLASS_ID);
         return result;
       },
       /**
-       * 作品点评, 参数为当前行数据, 是表格里每行数据中 点评 操作绑定的事件处理函数
+       * 作品点评, 参数为当前行数据
        * 
-       * @param {Object} item
+       * @param {Object} remarkResult
        */
       remarkWork(remarkResult) {
         console.log(remarkResult);
-        // 还需要做一些前后端连接工作
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        let putData = {
+          teacherRemark: remarkResult.comment,
+          homeworkRank: remarkResult.stars,
+          selectedWork: remarkResult.selectedWork,
+          homeworkId: this.currentWorkId
+        };
+        instance.put(`teacher/stuhomework/${this.currentWorkId}`, putData, config)
+          .then(res => { console.log(res) })
+          .catch(err => { console.log(err) });
       },
       /**
        * 弹出模态框, 提示用户是否进一步删除作品
        * 
        * @param {String} type
        */
-      popModal(type) { $('#' + this.bindingIds[type]).modal('show') },
+      popModal(type, line) {
+        $('#' + this.bindingIds[type]).modal('show');
+        console.log(line);
+        this.currentWorkId = this.searchForWorkId(line);
+        console.log(this.currentWorkId);
+      },
       /**
        * 拉取选择框的选项数据
        */
@@ -272,12 +273,10 @@
             console.log(res.data);
             let className = res.data[0].CLASS_NAME;
             let classId = res.data[0].CLASS_ID;
-            let classesChche = [];
             this.originalInputData = res.data;
-            res.data.forEach((item) => {
-              classesChche.push(item.CLASS_NAME);
-            });
-            this.inputData.classes.list = Array.from(new Set(classesChche));
+            this.inputData.classes.list = res.data.map(item => {
+              return item.CLASS_NAME;
+            })
             this.changeOption(className, 'classes');
           })
           .catch((err) => { console.log(err) });
@@ -303,17 +302,8 @@
       }
     },
     computed: {
-      /**
-       * 已点评与未点评按钮的状态样式
-       */
       blueCommentStyle() { return "background-color: #409EFF; color: #FFF;" },
-      /**
-       * 已点评与未点评按钮的状态样式
-       */
       whiteCommentStyle() { return "background-color: #FFF; color: #000;" },
-      /**
-       * 驳回提示框的提示语     
-      */
       promptWords() { return "确定驳回该学生的作业吗?" },
     },
     created() { this.pullClassAndCourseData() },
