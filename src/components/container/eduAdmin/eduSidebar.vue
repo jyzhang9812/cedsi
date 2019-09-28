@@ -4,23 +4,16 @@
       <ul class="menu">
         <li v-for="item in aside" class="bg-hover" :key="item.name">
           <div class="item-name" @click="dropDownListListener(item)">
-            <i><img :alt="item.name" :src="item.iconSrc" class="aside-icon"></i>
+            <i class='fa fa-lg' style='color: #fff' :class="item.icon" aria-hidden="true"></i>
             <span>{{item.name}}</span>
-            <span
-              class="menuPosition"
-              :class="{'glyphicon glyphicon-menu-down':item.close,
-                'glyphicon glyphicon-menu-up':!item.close}"
-              v-show="item.children.length !== 0">
-              </span>
+            <span class="menuPosition" :class="{'glyphicon glyphicon-menu-down':item.close,
+                'glyphicon glyphicon-menu-up':!item.close}" v-show="item.children.length !== 0">
+            </span>
           </div>
           <div :class="{'collapse': item.close}">
             <ul class="menu nav">
-              <router-link v-for="child in item.children"
-              active-class="u-link--Active"
-              tag="li"
-                  class="children"
-                 :to="child.route"
-                  :key="child.name">
+              <router-link v-for="child in item.children" active-class="u-link--Active" tag="li" class="children"
+                :to="child.route" :key="child.name">
                 {{child.name}}
               </router-link>
             </ul>
@@ -44,49 +37,49 @@
         aside: [
           {
             name: "工作台",
-            iconSrc: this.$store.state.url+"aside/staging.png",
+            icon: 'fa-desktop',
             children: [],
             close: true,
             route: "/eduAdmin/"
           },
           {
             name: "教务管理",
-            iconSrc:  this.$store.state.url+"eduAdmin/icon-02.png",
+            icon: 'fa-graduation-cap',
             children: [
-               {name: "班级管理", route: "/eduAdmin/classManagement"},
-               {name: "学生管理", route: "/eduAdmin/stuManagement"},
-               {name: "教师管理", route: "/eduAdmin/teacherManagement"},
+              { name: "班级管理", route: "/eduAdmin/classManagement" },
+              { name: "学生管理", route: "/eduAdmin/stuManagement" },
+              { name: "教师管理", route: "/eduAdmin/teacherManagement" },
             ],
             close: true
           },
           {
             name: "教学管理",
-            iconSrc:  this.$store.state.url+"aside/teachingManagement.png",
+            icon: 'fa-book',
             children: [
-               {name: "作业点评", route: "/eduAdmin/teaching"},
+              { name: "作业点评", route: "/eduAdmin/teaching" },
             ],
             close: true
           },
           {
             name: "活动管理",
-            iconSrc:  this.$store.state.url+"aside/activityManagement.png",
+            icon: 'fa-flag',
             children: [
-               {name: "发布活动", route: "/eduAdmin/activity"},
+              { name: "发布活动", route: "/eduAdmin/activity" },
             ],
             close: true
           },
           {
             name: "统计分析",
-            iconSrc:  this.$store.state.url+"aside/statisticalAnalyses.png",
+            icon: 'fa-bar-chart',
             children: [
-               {name: "学情分析", route: "/eduAdmin/statistics"}
+              { name: "学情分析", route: "/eduAdmin/statistics" }
             ],
             close: true
           }
         ],
         height: 0,
         style: '',
-        width:0
+        width: 0
       }
     },
     methods: {
@@ -106,7 +99,6 @@
 </script>
 
 <style scoped>
-
   #eduSidebar {
     margin: 0 !important;
     width: 100%;
@@ -132,6 +124,7 @@
     min-width: 170px;
     min-height: 620px;
   }
+
   .aside-icon {
     width: 18px;
     height: 18px;
@@ -156,7 +149,8 @@
   #eduSidebar .children:hover {
     background-color: #2C5285;
   }
-  .u-link--Active{
+
+  .u-link--Active {
     background-color: #2C5285;
   }
 
@@ -167,5 +161,4 @@
     flex-grow: 1;
     min-width: 800px;
   }
-
 </style>

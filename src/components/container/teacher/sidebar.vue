@@ -5,7 +5,7 @@
         <ul class="menu">
           <li v-for="(item,index) in aside" class="bg-hover" :key="index">
             <div class="item-name" @click="dropDownListListener(item)">
-              <i><img :alt="item.name" :src="item.iconSrc" class="aside-icon"></i>
+              <i class='fa fa-lg' style='color: #fff' :class="item.icon" aria-hidden="true"></i>
               <span>{{item.name}}</span>
               <span class="menuPosition" :class="{'glyphicon glyphicon-menu-down':item.close,
                 'glyphicon glyphicon-menu-up':!item.close}" v-show="item.children.length !== 0">
@@ -36,8 +36,8 @@
       return {
         aside: [
           {
-            name: "教学管理",
-            iconSrc: this.$store.state.url + "aside/teachingManagement.png",
+            name: "课程管理",
+            icon: 'fa-university',
             children: [{
               name: "课程规划",
               route: "/console/coursePlan"
@@ -54,7 +54,7 @@
           },
           {
             name: "作业管理",
-            iconSrc: this.$store.state.url + "aside/homework.png",
+            icon: 'fa-book',
             children: [
               {
                 name: "布置作业",
@@ -69,21 +69,21 @@
           },
           {
             name: "活动管理",
-            iconSrc: this.$store.state.url + "aside/activityManagement.png",
+            icon: 'fa-flag',
             route: "/console/activity",
             children: [],
             close: true
           },
           {
             name: "学生提问",
-            iconSrc: this.$store.state.url + "aside/questions.png",
+            icon: 'fa-quora',
             route: "/console/question",
             children: [],
             close: true
           },
           {
             name: "统计分析",
-            iconSrc: this.$store.state.url + "aside/statisticalAnalyses.png",
+            icon: 'fa-bar-chart',
             children: [{
               name: "学情分析",
               route: "/console/statistics"
@@ -92,7 +92,7 @@
           },
           {
             name: "个人中心",
-            iconSrc: this.$store.state.url + "aside/personalCenter.png",
+            icon: 'fa-user',
             children: [{
               name: "消息通知",
               route: "/console/message"

@@ -293,6 +293,11 @@ const addOrganization = resolve => {
     resolve(require('../components/container/Admin/organizationManagement/addOrganization.vue'));
   });
 };
+const activityManagement = resolve => {
+  require.ensure(['../components/container/Admin/activityManagement/activity.vue'], () => {
+    resolve(require('../components/container/Admin/activityManagement/activity.vue'));
+  });
+};
 
 Vue.use(Router);
 //增加了导航钩子，如果没有token则不能进入页面
@@ -797,6 +802,15 @@ export default new Router({
               next('/signin')
             }
           }, component: addOrganization
+        },
+        {
+          path: '/Admin/activityManagement', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: activityManagement
         },
       ]
     }

@@ -4,21 +4,15 @@
       <ul class="menu">
         <li v-for="item in aside" class="bg-hover" :key="item.name">
           <div class="item-name" @click="dropDownListListener(item)">
-            <i><img :alt="item.name" :src="item.iconSrc" class="aside-icon"></i>
+            <i class='fa fa-lg' style='color: #fff' :class="item.icon" aria-hidden="true"></i>
             <span>{{item.name}}</span>
-            <span
-              class="menuPosition"
-              :class="{'glyphicon glyphicon-menu-down':item.close,
-                'glyphicon glyphicon-menu-up':!item.close}"
-              v-show="item.children.length !== 0">
-              </span>
+            <span class="menuPosition" :class="{'glyphicon glyphicon-menu-down':item.close,
+                'glyphicon glyphicon-menu-up':!item.close}" v-show="item.children.length !== 0">
+            </span>
           </div>
           <div :class="{'collapse': item.close}">
             <ul class="menu nav">
-              <li v-for="child in item.children"
-                  class="children"
-                  @click="$router.push(child.route)"
-                  :key="child.name">
+              <li v-for="child in item.children" class="children" @click="$router.push(child.route)" :key="child.name">
                 {{child.name}}
               </li>
             </ul>
@@ -41,29 +35,36 @@
         aside: [
           {
             name: "课程管理",
-            iconSrc: this.$store.state.url+"aside/activityManagement.png",
+            icon:'fa-book',
             children: [],
             close: true,
             route: "/Admin/"
           },
           {
             name: "视频管理",
-            iconSrc: this.$store.state.url+"aside/teachingManagement.png",
+            icon: 'fa-film',
             children: [],
             close: true,
             route: "/Admin/videoManagement"
           },
           {
             name: "机构管理",
-            iconSrc: this.$store.state.url+"aside/activityManagement.png",
+            icon: 'fa-institution',
             children: [],
             close: true,
             route: "/Admin/organizationManagement"
           },
+          {
+            name: "活动管理",
+            icon: 'fa-flag',
+            children: [],
+            close: true,
+            route: "/Admin/activityManagement"
+          },
         ],
         height: 0,
         style: '',
-        width:0
+        width: 0
       }
     },
     methods: {
@@ -83,7 +84,6 @@
 </script>
 
 <style scoped>
-
   .row {
     margin: 0 !important;
     width: 100%;
@@ -136,9 +136,9 @@
     flex-grow: 1;
     min-width: 800px;
   }
+
   .aside-icon {
     width: 18px;
     height: 18px;
   }
-
 </style>
