@@ -57,7 +57,7 @@
         fileName: '',
         headsculpture: '',
         name: '',
-        price: null,
+        price: 0,
         // chapter: null,
         ispay: 0,
         description: '',

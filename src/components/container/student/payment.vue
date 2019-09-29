@@ -63,6 +63,7 @@
 import QRCode from "qrcode";
 import { mapState } from "vuex";
 import globalAxios from "axios";
+import random from "string-random";
 export default {
   data() {
     return {
@@ -77,28 +78,53 @@ export default {
   methods: {
     closeModal() {
       var payment={};
-      payment.orderId = "1213561";
+      payment.orderId = random(6) + Date.now();
       payment.productId = "222222";
       payment.productName = "hhhhh";
       payment.userId= "43d4b60bc84cafdac72db222548f4200509e3a3ef855a1f30789795e56655fc8";
       payment.fee="1";
       globalAxios
         .post(
-            "http://370dc7aa.ngrok.io/pay",
+            "http://wx.cedsie.com:12345/pay",
             payment,
         )
         .then(
           response => {
-              console.log(response.data)
-              this.qrCode(response.data)
+              console.log(response.data);
+              this.qrCode(response.data, payment.orderId);
           },
+          error=>{
+            console.error(error);
+          }
+        )
+    },
+    qrCode(url, orderId) {
+      var that = this;
+      var url = url;
+      QRCode.toCanvas(canvas, url, function(error) {
+        if (error) console.error(error);
+        var timer = setInterval(function() {
+          that.query(timer, orderId)
+        }, 2000)
+      });
+    },
+    query(timer, orderId) {
+      globalAxios
+        .get(
+            "http://wx.cedsie.com:12345/query?orderId=" + orderId
+        )
+        .then(
+          response => {
+              console.log(response.data)
+              if (response.data == "SUCCESS") {
+                clearInterval(timer)
+                this.payResult();
+              }
+         },
           error=>{
 
           }
         )
-    //   this.qrCode();
-    //   setTimeout("$('#myPay').modal('hide')", 10000); //5s延时自动关闭
-    //   setTimeout(this.payReasult(), 5000);
     },
     qrCode(url) {
       var url = url;
