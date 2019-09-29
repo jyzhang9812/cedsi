@@ -1,8 +1,8 @@
 <template>
   <div class="row" id="admin-sidebar">
     <div class="aside">
-      <ul class="menu">
-        <li v-for="item in aside" class="bg-hover" :key="item.name">
+      <ul class="menu nav">
+        <li v-for="item in aside" :class="item.close==false?'bg-hover active':'bg-hover'" :key="item.name" @click="nav()">
           <div class="item-name" @click="dropDownListListener(item)">
             <i class='fa fa-lg' style='color: #fff' :class="item.icon" aria-hidden="true"></i>
             <span>{{item.name}}</span>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { fail } from 'assert';
   export default {
     name: "asider",
     data() {
@@ -74,11 +75,24 @@
         } else {
           item.close = !item.close;
         }
+      },
+      //导航active样式
+      nav(){
+        var currentRoute=this.$route.fullPath
+        for(var i=0;i<this.aside.length;i++){
+          if(this.aside[i].route==currentRoute){
+            this.aside[i].close=false;
+          }
+          else
+            this.aside[i].close=true;
+        }
       }
     },
     created: function () {
-      this.width = document.documentElement.clientWidth,
-        this.screenWidth = 'min-width:' + (this.width - 320) + 'px;'
+      var currentRoute=this.$route.fullPath
+      this.width = document.documentElement.clientWidth
+      this.screenWidth = 'min-width:' + (this.width - 320) + 'px;'
+      this.nav(currentRoute)
     }
   }
 </script>
@@ -113,6 +127,13 @@
     height: 50px;
     line-height: 50px;
     padding-left: 28px;
+  }
+
+  #admin-sidebar .bg-hover{
+    cursor: pointer;
+  }
+  #admin-sidebar .active{
+    background-color: #2C5285;
   }
 
   #admin-sidebar .item-name:hover {
