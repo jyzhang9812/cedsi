@@ -13,25 +13,25 @@
                     </p>
                 </div>
                 <div class="iconleft" v-on:click="zuohua(0)" v-show='calleft[0]!=0'>
-                    <img class="el-icon-arrow" :src=leftImg />
+                    <i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i>
                 </div>
                 <ul :style="{'left':calleft[0] + 'px'}">
-                    <li class="course_card" v-for="(item,index) in superurl" :key="index" @mouseover="show(index)"
+                    <li class="course_card" v-for="(item,index) in slidePic" :key="index" @mouseover="show(index)"
                         @mouseleave="hidden(index)">
                         <div class="inside">
-                            <img class="img" :src="item.url">
+                            <img class="img" :src="item.cover">
                             <div class="details" v-show="index==i">
                                 <div class="detail_item">
-                                    <h4><strong>活动名{{item.course_name}}</strong></h4>
-                                    <button class="btn" @click="gotoActivity">查看详情</button>
+                                    <h4><strong>{{item.title}}</strong></h4>
+                                    <button class="btn" @click="gotoActivity(index)">查看详情</button>
                                 </div>
-                                <p style="margin-left: 10px;">活动介绍啥的asdfghjklreitohitbbdwdwicw</p>
+                                <p style="margin-left: 10px;">{{item.subtitle}}</p>
                             </div>
                         </div>
                     </li>
                 </ul>
                 <div class="iconright" v-on:click="youhua(0)" v-show='!calleft[0]>0'>
-                    <img class="el-icon-arrow" :src=rightImg />
+                    <i class="fa fa-chevron-right fa-2x" aria-hidden="true"></i>
                 </div>
             </div>
         </div>
@@ -39,14 +39,14 @@
         <div class="threeImg">
             <div class='Containt' v-for="(item,index) in arrComponent" :key="index">
                 <div class="iconleft" v-on:click="zuohua(index+1)" v-show='calleft[index+1]!=0'>
-                    <img class="el-icon-arrow" :src=leftImg />
+                    <i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i>
                 </div>
                 <div class="recommend_title">
                     <h3>{{item.title}}</h3>
                 </div>
                 <component v-bind:is="item.componentName" :calleft="calleft[index+1]"></component>
                 <div class="iconright" v-on:click="youhua(index+1)" v-show='!calleft[index+1]>0'>
-                    <img class="el-icon-arrow" :src=rightImg />
+                    <i class="fa fa-chevron-right fa-2x" aria-hidden="true"></i>
                 </div>
             </div>
         </div>
@@ -55,23 +55,20 @@
 
 
 <script>
-    import pagination from '../pagination.vue'
     import userCard from './userCard.vue'
     import communityCard from './communityCard.vue'
     import allCourseCard from './allCourseCard.vue'
+    import { mapState } from 'vuex'
 
     export default {
         name: 'presentation',
         components: {
-            pagination,
             userCard,
             communityCard,
             allCourseCard
         },
         data() {
             return {
-                leftImg: '../../../' + this.$store.state.url + 'dashboard/left.png',
-                rightImg: '../../../' + this.$store.state.url + 'dashboard/right.png',
                 arrComponent: [
                     {
                         componentName: 'allCourseCard',
@@ -85,32 +82,6 @@
                         componentName: 'userCard',
                         title: '优秀作者'
                     },],
-                superurl: [
-                    {
-                        url: 'https://www.tynker.com/image/dashboard/student/learn/tutorials/nasa-design-a-mission-patch.png?width=600&height=400&mode=cover&format=jpg&quality=75&cache=1m&v=1',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/hour-of-code/2017/mod-minecraft.png?width=600&height=400&mode=cover&format=jpg&quality=75&cache=1m&v=1',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/hour-of-code/2018/crystal-clash/crystal-clash.png?width=600&height=400&mode=cover&format=jpg&quality=75&cache=1m&v=1',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/hour-of-code/2016/spin-draw/spin-draw-1.png?width=600&height=400&mode=cover&format=jpg&quality=75&cache=1m&v=1',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/ide/imgs/templates/new.png?width=600&height=400&mode=cover&format=jpg&quality=75&cache=1m&v=1',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/hour-of-code/2017/dragon-blast/dragon-blast-1.png?width=600&height=400&mode=cover&format=jpg&quality=85&cache=1m&v=1',
-                        img: '',
-                    },
-                ],
                 calleft: [0, 0, 0, 0],
                 i: -1,
                 curId: 0,
@@ -120,8 +91,8 @@
             }
         },
         methods: {
-            gotoActivity() {
-                this.$router.push({ path: '/dashboard/showPage/activedetailCard' })
+            gotoActivity(index) {
+                this.$router.push({ path: '/activitydetailCard', query: { index: index } })
             },
             tab(index) {
                 this.curId = index;
@@ -155,9 +126,14 @@
                 }
             },
         },
-        // created() {
-        //     this.change('video_res', 2);
-        // }
+        created: function () {
+            this.$store.dispatch('getActivity')
+        },
+        computed: {
+            ...mapState({
+                slidePic: state => state.slidePic,
+            }),
+        },
     }
 </script>
 
@@ -206,8 +182,9 @@
         justify-content: space-between;
     }
 
-    .iconleft {
+    .iconleft{
         position: absolute;
+        text-align: center;
         width: 50px;
         height: 50px;
         top: 120px;
@@ -221,6 +198,7 @@
     .iconright {
         display: inline-block;
         position: absolute;
+        text-align: center;
         right: 0;
         top: 120px;
         border-radius: 50%;
@@ -232,7 +210,9 @@
         opacity: 0.5;
         justify-content: center;
     }
-
+    .iconleft i,.iconright i{
+        margin: 10px auto;
+    }
     .recommend_title i {
         width: 50px;
         height: 55px;
@@ -250,6 +230,7 @@
         -ms-transform: scale(1.05);
         -o-transform: scale(1.05);
         transform: scale(1.05);
+        cursor: pointer;
     }
 
     #showPage p {

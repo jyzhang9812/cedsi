@@ -1,34 +1,34 @@
 <template>
   <div id="videos">
-    <span>课程视频管理</span>
+    <div class="course-nav">
+      <button v-for="(course,index) in courseList" :key="index"
+        :class="course.isActive==true?'course-active-btn course-btn':'course-inactive-btn course-btn'"
+        @click="changeCourse(index)">{{course.name}}</button>
+    </div>
     <div class="outside">
       <table class="table table-hover">
         <thead>
-        <tr>
-          <th v-for="(th, index) in tableTitle" :key="index" class="title">{{th}}</th>
-        </tr>
+          <tr>
+            <th v-for="(th, index) in tableTitle" :key="index" class="title">{{th}}</th>
+          </tr>
         </thead>
         <tbody>
-        <tr v-for="(line, seq) in currentList" :key="seq" class="content">
-          <td :style="{'width': tableWidth[0] + 'px'}">{{seq + 1}}</td>
-          <td v-for="(item, index) in line"
-              :key="index"
-              :style="{'width': tableWidth[index + 1] + 'px'}">
-            {{item}}
-          </td>
-          <td>
-            <span class="operation" @click="popModal('view')">预览</span>
-            <span class="operation" @click="popModal('choose')">选择题目</span>
-            <span class="operation" @click="popModal('insert')">插入题目</span>
-          </td>
-        </tr>
+          <tr v-for="(line, seq) in currentList" :key="seq" class="content">
+            <td :style="{'width': tableWidth[0] + 'px'}">{{seq + 1}}</td>
+            <td v-for="(item, index) in line" :key="index" :style="{'width': tableWidth[index + 1] + 'px'}">
+              {{item}}
+            </td>
+            <td>
+              <span class="operation" @click="popModal('view')">预览</span>
+              <span class="operation" @click="popModal('choose')">选择题目</span>
+              <span class="operation" @click="popModal('insert')">插入题目</span>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
     <div>
-      <pagination :num="videoData.length"
-                  @getNew="changeTablePages"
-                  :limit="limit">
+      <pagination :num="videoData.length" @getNew="changeTablePages" :limit="limit">
       </pagination>
     </div>
   </div>
@@ -39,9 +39,23 @@
 
   export default {
     name: "videos",
-    components: {Pagination},
+    components: { Pagination },
     data() {
       return {
+        courseList: [
+          {
+            name: 'java',
+            isActive: true
+          },
+          {
+            name: 'android',
+            isActive: false
+          },
+          {
+            name: 'python',
+            isActive: false
+          },
+        ],
         limit: 10,
         videoData: [
           [
@@ -98,6 +112,13 @@
           // 插入题目
         }
       },
+      changeCourse(index) {
+        console.log(index);
+        for (var i = 0; i < this.courseList.length; i++) {
+          this.courseList[i].isActive = false;
+        }
+        this.courseList[index].isActive = true;
+      },
       changeTablePages(value) {
         this.currentList = this.videoData.slice(value, value + this.limit);
       }
@@ -130,13 +151,56 @@
     vertical-align: middle !important;
   }
 
-  #videos .outside {
+  /* #videos .outside {
     margin-top: 20px;
-  }
+  } */
 
   #videos .operation {
     color: #409eff;
     margin: 0 3px;
     cursor: pointer;
+  }
+
+  .course-nav {
+    width: 100%;
+    text-align: center;
+  }
+
+  .course-btn {
+    font-size: 14px;
+    margin-right: 10px;
+    height: 40px;
+    line-height: 35px;
+    border-radius: 30px;
+    color: #fff;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .course-btn:focus {
+    outline: none;
+  }
+
+  .course-inactive-btn {
+    background-color: #eee;
+    border: 1px solid #eee;
+    color: #666;
+  }
+
+  .course-inactive-btn:hover {
+    background-color: rgba(238, 238, 238, 0.575);
+    border: 1px solid rgba(238, 238, 238, 0.575);
+    color: #666;
+  }
+
+  .course-active-btn {
+    background-color: #409eff;
+    border: 1px solid #409eff;
+  }
+
+  .course-active-btn:hover {
+    background-color: #40a0ffcc;
+    border: 1px solid #40a0ffcc;
   }
 </style>

@@ -177,7 +177,7 @@
       </ol>
     </div>
     <div class="first-floor">
-      <label for="class-name"></label>
+      <!-- <label for="class-name"></label>
       <input
         type="text"
         placeholder="请输入班级名称"
@@ -185,7 +185,7 @@
         id="class-name"
         v-model="inputData.className"
       />
-      <button class="btn btn-search" @click="conditionSearch">搜索</button>
+      <button class="btn btn-search" @click="conditionSearch">搜索</button> -->
       <!-- <button class="btn btn-clear" @click="clearChoices">清空筛选</button> -->
       <button
         class="btn btn-clear"
@@ -216,13 +216,13 @@
                 data-toggle="modal"
                 data-target="#addClass"
                 @click="updateClass(seq)"
-              >编辑</span>&nbsp;&nbsp;
-              <span
+              >编辑</span>&nbsp;&nbsp;<br>
+              <!-- <span
                 class="red"
                 data-toggle="modal"
                 data-target="#alterModal"
                 @click="deleteClass(seq)"
-              >删除</span>
+              >删除</span> -->
               <span class="blue" @click="addStudent(seq)">导入学生</span>
             </td>
           </tr>
@@ -495,7 +495,6 @@ export default {
         // newClass.course = JSON.stringify(this.addClassData.course.option);
         newClass.courseId = this.addClassData.course.option.id;
         newClass.courseName = this.addClassData.course.option.name;
-      
       console.log(newClass);
       globalAxios
         .post(
@@ -610,6 +609,7 @@ export default {
             classes.teacherName = classList[i].TEACHER_NAME;
             classes.teacherId = classList[i].TEACHER_ID;
             classes.courseName = classList[i].COURSE_NAME;
+            classes.courseId = classList[i].COURSE_ID;
             classes.courseMemberCount = classList[i].CLASS_MEMBER_COUNT;
             classArr.push(classes);
           }

@@ -18,6 +18,9 @@ const mutations = {
     [TYPES.updateLoading](state, num) {
         state.vueElementLoading = num
     },
+    [TYPES.changeActivity](state, arr) {
+        state.slidePic = arr
+    },
 
     //student
     [TYPES.getUserInfo](state, UserInfo) {
@@ -58,6 +61,13 @@ const mutations = {
     },
     [TYPES.changeMsgCurrentList](state, value) {
         state.msgCurrentList = state.msgList.slice(value, value + state.limit);
+    },
+
+    [TYPES.changeAllList](state, List) {
+        state.allCourseList = List
+    },
+    [TYPES.changeAllCurrentList](state, value) {
+        state.allCourseCurrentList = state.allCourseList.slice(value, value + state.limit);
     },
 
     //Admin

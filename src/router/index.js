@@ -84,6 +84,11 @@ const payment = resolve => {
     resolve(require('../components/container/student/payment.vue'));
   });
 };
+const payOK = resolve => {
+  require.ensure(['../components/container/student/payOK.vue'], () => {
+    resolve(require('../components/container/student/payOK.vue'));
+  });
+};
 //import ErrorPage from '../components/container/auth/errorPage.vue'
 const ErrorPage = resolve => {
   require.ensure(['../components/container/auth/errorPage.vue'], () => {
@@ -288,6 +293,11 @@ const addOrganization = resolve => {
     resolve(require('../components/container/Admin/organizationManagement/addOrganization.vue'));
   });
 };
+const activityManagement = resolve => {
+  require.ensure(['../components/container/Admin/activityManagement/activity.vue'], () => {
+    resolve(require('../components/container/Admin/activityManagement/activity.vue'));
+  });
+};
 
 Vue.use(Router);
 //增加了导航钩子，如果没有token则不能进入页面
@@ -394,17 +404,6 @@ export default new Router({
             }
           }, component: question
         },
-        {
-          path: '/dashboard/showPage/activedetailCard',
-          beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          },
-          component: activitydetailCard
-        },
       ]
     },
     {
@@ -417,6 +416,28 @@ export default new Router({
         }
       },
       component: payment
+    },
+    {
+      path: '/payOK',
+      beforeEnter(to, from, next) {
+        if (window.localStorage.getItem("idToken")) {
+          next()
+        } else {
+          next('/signin')
+        }
+      },
+      component: payOK
+    },
+    {
+      path: '/activitydetailCard',
+      beforeEnter(to, from, next) {
+        if (window.localStorage.getItem("idToken")) {
+          next()
+        } else {
+          next('/signin')
+        }
+      },
+      component: activitydetailCard
     },
     {
       path: '/dashboard/coursemap', beforeEnter(to, from, next) {
@@ -781,6 +802,15 @@ export default new Router({
               next('/signin')
             }
           }, component: addOrganization
+        },
+        {
+          path: '/Admin/activityManagement', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: activityManagement
         },
       ]
     }

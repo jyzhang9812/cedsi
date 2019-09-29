@@ -1,6 +1,10 @@
 <template>
   <div id="coursePlan">
-    <span>精选作品</span>
+    <div class="course-nav">
+      <button v-for="(course,index) in courseList" :key="index"
+        :class="course.isActive==true?'course-active-btn course-btn':'course-inactive-btn course-btn'"
+        @click="changeCourse(index)">{{course.name}}</button>
+    </div>
     <div class="tab-bar">
       <span v-for="(title, index) in tabBarTitle" :key="index" @click="tabBarChange(title)">{{title}} </span>
     </div>
@@ -44,9 +48,9 @@
       </table>
     </div>
     <div class="course-plan">
-      <p>  </p>
+      <p> </p>
       <div>还没有课程规划</div>
-      <p>  </p>
+      <p> </p>
     </div>
   </div>
 </template>
@@ -56,27 +60,41 @@
     name: 'coursePlan',
     data() {
       return {
+        courseList: [
+          {
+            name: 'java',
+            isActive: true
+          },
+          {
+            name: 'android',
+            isActive: false
+          },
+          {
+            name: 'python',
+            isActive: false
+          },
+        ],
         tabBarTitle: ["班级信息", "课程信息", "课程规划"],
         tabBarStyle: { 'width': "", 'margin-left': "" },
         currentTabBarTitle: "班级信息",
         tableTitle: {
-          class: ["序号", "班级名称", "上课教师", "课程名称", "历史课程", "创建时间", "操作"],
-          course: ["序号", "课程名称", "课程介绍", "上课教师", "操作"]
+          class: ["序号", "班级名称", "上课教师", "总人数", "创建时间", "操作"],
+          course: ["序号", "课程名称", "课程介绍", "操作"]
         },
         currentList: {
           class: [
-            ["赛迪思1班", "马云", "英语", "无机化学", "2017-08-08"],
-            ["赛迪思2班", "刘强东", "历史", "超威数学, 政治, 语文", "2018-09-01"],
-            ["赛迪思3班", "马化腾", "语文", "概率论", "2017-09-02"],
-            ["赛迪思4班", "王思聪", "JAVA", "操作系统, web程序设计", "2012-03-08"],
-            ["赛迪思5班", "王晓瀑", "计算机", "离散数学", "2017-10-20"]
+            ["赛迪思1班", "马云", "36", "2017-08-08"],
+            ["赛迪思2班", "刘强东", "33", "2018-09-01"],
+            ["赛迪思3班", "马化腾", "35", "2017-09-02"],
+            ["赛迪思4班", "王思聪", "34", "2012-03-08"],
+            ["赛迪思5班", "王晓瀑", "40", "2017-10-20"]
           ],
           course: [
-            ["英语", "为了响应国家建设双一流大学的号召, 马云同志率先在我校以身作则建立起这样的创新型班级.", "马云"],
-            ["历史", "为了响应国家建设双一流大学的号召, 刘强东同志率先在我校以身作则建立起这样的创新型班级.", "刘强东"],
-            ["语文", "为了响应国家建设双一流大学的号召, 马化腾同志率先在我校以身作则建立起这样的创新型班级.", "马华腾"],
-            ["JAVA", "为了响应国家建设双一流大学的号召, 王思聪同志率先在我校以身作则建立起这样的创新型班级.", "王思聪"],
-            ["计算机", "为了响应国家建设双一流大学的号召, 王晓瀑同志率先在我校以身作则建立起这样的创新型班级.", "王晓瀑"]
+            ["英语", "为了响应国家建设双一流大学的号召, 马云同志率先在我校以身作则建立起这样的创新型班级."],
+            ["历史", "为了响应国家建设双一流大学的号召, 刘强东同志率先在我校以身作则建立起这样的创新型班级."],
+            ["语文", "为了响应国家建设双一流大学的号召, 马化腾同志率先在我校以身作则建立起这样的创新型班级."],
+            ["JAVA", "为了响应国家建设双一流大学的号召, 王思聪同志率先在我校以身作则建立起这样的创新型班级."],
+            ["计算机", "为了响应国家建设双一流大学的号召, 王晓瀑同志率先在我校以身作则建立起这样的创新型班级."]
           ]
         }
       }
@@ -89,6 +107,13 @@
         let subTabBarTitle = this.tabBarTitle.slice(0, index);
         let titlesLength = subTabBarTitle.join("").length;
         this.tabBarStyle["margin-left"] = (titlesLength * 14 + index * 30) + 'px';
+      },
+      changeCourse(index) {
+        console.log(index);
+        for (var i = 0; i < this.courseList.length; i++) {
+          this.courseList[i].isActive = false;
+        }
+        this.courseList[index].isActive = true;
       },
     },
     mounted() {
@@ -105,7 +130,7 @@
   }
 
   #coursePlan .tab-bar {
-    margin-top: 20px;
+    /* margin-top: 20px; */
     font-size: 14px;
     color: #303133;
     display: flex;
@@ -170,5 +195,48 @@
   #coursePlan .red {
     cursor: pointer;
     color: #FF6947;
+  }
+
+  .course-nav {
+    width: 100%;
+    text-align: center;
+  }
+
+  .course-btn {
+    font-size: 14px;
+    margin-right: 10px;
+    height: 40px;
+    line-height: 35px;
+    border-radius: 30px;
+    color: #fff;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .course-btn:focus {
+    outline: none;
+  }
+
+  .course-inactive-btn {
+    background-color: #eee;
+    border: 1px solid #eee;
+    color: #666;
+  }
+
+  .course-inactive-btn:hover {
+    background-color: rgba(238, 238, 238, 0.575);
+    border: 1px solid rgba(238, 238, 238, 0.575);
+    color: #666;
+  }
+
+  .course-active-btn {
+    background-color: #409eff;
+    border: 1px solid #409eff;
+  }
+
+  .course-active-btn:hover {
+    background-color: #40a0ffcc;
+    border: 1px solid #40a0ffcc;
   }
 </style>
