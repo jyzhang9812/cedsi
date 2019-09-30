@@ -47,6 +47,35 @@ const actions = {
                 }
             );
     },
+    //获取具体活动
+    searchActivity({ commit, state }, id) {
+        return globalAxios
+            ({
+                method: "GET",
+                url: "/activity/" + id,
+            }).then(
+                response => {
+                    console.log(response);
+                    let array = {}
+                    array.id = response.data.ID;
+                    array.cover = response.data.COVER;
+                    array.title = response.data.TITLE;
+                    array.subtitle = response.data.SUBTITLE;
+                    array.content = response.data.CONTENT;
+                    array.avatar = response.data.AVATAR;
+                    array.teacher = response.data.TEACHER_NAME;
+                    array.release_time = response.data.RELEASE_TIME
+                    array.type = response.data.ACTIVITY_TYPE;
+                    array.time = response.data.ACTIVITY_TIME;
+                    array.price = response.data.ACTIVITY_PRICE;
+                    array.place = response.data.ACTIVITY_PLACE;
+                    state.payInfo = array;
+                },
+                error => {
+                    router.push({ path: '/404' })
+                    console.log(error);
+                });
+    },
 
     //登录注册
     login({ commit, dispatch, state }, authData) {
@@ -207,7 +236,7 @@ const actions = {
             }
         ).then(response => {
             var arr = [];
-            // console.log(response);
+            console.log(response);
             for (var i = 0; i < response.data.length; i++) {
                 arr.push(response.data[i])
             }
@@ -251,15 +280,18 @@ const actions = {
                             point.status = "未解锁";
                             point.flag = false;
                         }
+                        point.time = chaptersArr[i].CP_UPLOAD_TIME;
                         point.description = chaptersArr[i].CP_DESCRIPTION;
                         point.number = chaptersArr[i].CP_NUMBER;
                         point.name = chaptersArr[i].CP_NAME;
                         point.videoSrc = chaptersArr[i].CP_RESOURCE.VIDEO;
+                        point.lectureSrc = chaptersArr[i].CP_RESOURCE.LECTURE;
+                        point.templateSrc = chaptersArr[i].CP_RESOURCE.TEMPLATE;
                         point.chapterId = chaptersArr[i].CP_ID;
                         List.list.push(point);
                     }
                     List.name = response.data.data.courseName,
-                    console.log(List)
+                        console.log(List)
                     commit(TYPES.changeCouseDetail, List)
                     commit(TYPES.updateLoading, false)
                 },
@@ -409,6 +441,35 @@ const actions = {
                 console.log(error);
             })
 
+    },
+    //查询课程
+    payCourse({ commit, state }, id) {
+        return globalAxios.get('/courses/' + id,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': state.idToken
+                }
+            }
+        ).then(response => {
+            var arr = {}
+            console.log(response);
+            arr = response.data
+            var array = {}
+            array.id = arr.ID;
+            array.cover = arr.COVER;
+            array.name = arr.COURSE_NAME;
+            array.founder = arr.FOUNDER;
+            array.intro = arr.INTRO;
+            array.time = arr.CREATE_TIME
+            array.price = arr.PRICE;
+            state.payInfo = array
+            commit(TYPES.updateLoading, false)
+        },
+            error => {
+                commit(TYPES.updateLoading, false)
+                console.log(error);
+            })
     },
 
 

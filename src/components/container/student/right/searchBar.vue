@@ -5,32 +5,38 @@
             <i class="fa fa-search fa-lg" aria-hidden="true"></i>
         </div>
         <div>
-            <button class="button">
+            <a class="button" :href='scratch'>
                 开始创作
-            </button>
+            </a>
         </div>
     </div>
 </template>
 
 <script>
+    import { mapState } from 'vuex'
     export default {
         name: 'searchBar',
-        components:{
+        components: {
         },
         data() {
             return {
             }
         },
-        methods:{
-            searchData(){
+        methods: {
+            searchData() {
                 return this.$store.state.currentIndex;
             }
         },
+        computed: {
+            ...mapState({
+                scratch: state => state.scratch,
+            }),
+        }
     }   
 </script>
 
 <style>
-    .searchBar{
+    .searchBar {
         background-color: #00bcd4;
         color: #fff;
         display: flex;
@@ -40,7 +46,8 @@
         width: 100%;
         height: 100px;
     }
-    .searchBoxContainer{
+
+    .searchBoxContainer {
         width: 500px;
         height: 40px;
         border-radius: 6px;
@@ -49,14 +56,17 @@
         margin: 0 30px;
         display: flex;
     }
-    .searchBoxContainer i{
+
+    .searchBoxContainer i {
         text-align: center;
         margin: 3% auto;
     }
-    ::placeholder{
+
+    ::placeholder {
         color: #e7e7e7;
     }
-    .searchBox{
+
+    .searchBox {
         border: none;
         width: 470px;
         height: 40px;
@@ -65,17 +75,20 @@
         background: #17788e;
         color: #fff;
     }
-    .searchBox:focus{
+
+    .searchBox:focus {
         background: #fff;
         color: #777;
     }
-    .searchImg{
+
+    .searchImg {
         margin: 8px;
         width: 25px;
         height: 25px;
         cursor: pointer;
     }
-    .button{
+
+    .button {
         display: inline-block;
         vertical-align: middle;
         margin: 0 30px;
@@ -84,7 +97,7 @@
         -webkit-appearance: none;
         border: 1px solid transparent;
         border-radius: 5px;
-        transition: background-color .25s ease-out,color .25s ease-out;
+        transition: background-color .25s ease-out, color .25s ease-out;
         font-size: 1.5rem;
         line-height: 1;
         text-align: center;
