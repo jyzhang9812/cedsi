@@ -129,6 +129,9 @@
     width: 18px;
     height: 18px;
   }
+  .bg-hover {
+    cursor: pointer;
+  }
 
   #eduSidebar .item-name {
     height: 50px;
@@ -144,6 +147,7 @@
     height: 50px;
     line-height: 50px;
     padding-left: 49px;
+    cursor: pointer;
   }
 
   #eduSidebar .children:hover {

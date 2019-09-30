@@ -164,6 +164,9 @@
     background-color: #3766A6;
     width: 220px;
   }
+  .bg-hover{
+    cursor: pointer;
+  }
 
   .aside-icon {
     width: 18px;
