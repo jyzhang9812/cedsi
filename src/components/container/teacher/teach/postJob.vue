@@ -31,7 +31,7 @@
               <td>
                 <span class="blue" @click="editWork(line)">编辑</span>&nbsp;&nbsp;
                 <span class="blue" @click="postJob(line)">发布</span>&nbsp;&nbsp;
-                <span class="red" @click="popModal('delete')">删除</span>
+                <!-- <span class="red" @click="popModal('delete')">删除</span> -->
               </td>
             </tr>
           </tbody>
@@ -79,13 +79,14 @@
   import Pagination from "../utils/pagination";
   import DatePicker from "../utils/datePicker";
   import selectInput from "../utils/selectInput";
-  import instance from "../../../../axios-auth.js"
+  import instance from "../../../../axios-auth.js";
 
   export default {
     name: 'postJob',
     data() {
       return {
         limit: 10,
+        operation: "post",
         addShown: false,
         currentWorkId: '',
         tableTitle: [
@@ -141,6 +142,7 @@
         if (id === "classes2") {
           this.getChaptersOfClass(this.searchForCourseId(item))
             .then(chapters => {
+              this.inputData.chapter2.option = "";
               console.log(chapters);
               this.inputData.chapter2.list = chapters.map(item => {
                 return item.CP_NAME;
@@ -148,7 +150,6 @@
               this.inputData.chapter2.id = chapters.map(item => {
                 return item.CP_ID;
               });
-              this.inputData.chapter2.option = "";
             })
             .catch(err => { console.log(err) });
         }
@@ -176,25 +177,29 @@
       editWork(item) {
         let work = this.searchForWorkId(item);
         this.newHomeWork();
+        this.changeOption2(work.CLASS_NAME, "classes2");
         this.inputData.homework = {
           CONTENT: work.CONTENT,
           DEADLINE: work.DEADLINE,
           HW_NAME: work.HW_NAME
         };
-        this.changeOption2(work.CLASS_NAME, "classes2");
         this.inputData.classes2.option = work.CLASS_NAME;
         this.inputData.chapter2.option = work.CP_NAME;
+        console.log(work);
+        this.operation = "put";
+        this.currentWorkId = work.HOMEWORK_ID;
       },
       /**
        * 删除作业的绑定函数
       */
-      deleteWork() {
-
-      },
+      deleteWork() { },
       /**
        * 新建作业与取消编辑的绑定函数
        */
-      newHomeWork() { this.addShown = !this.addShown },
+      newHomeWork() {
+        this.addShown = !this.addShown
+        this.operation = "post";
+      },
       /**
        * 更改日期, 是 datePicker 组件绑定的事件处理函数
        * 
@@ -219,8 +224,9 @@
           DEADLINE: homework.DEADLINE,
           HW_NAME: homework.HW_NAME
         };
+        if (this.operation === "PUT") { postData.HW_ID = this.currentWorkId }
         console.log(postData);
-        instance.post("teacher/homework", postData, config)
+        instance[this.operation]("teacher/homework", postData, config)
           .then(res => {
             console.log(res);
             if (res.status === 200) {
@@ -328,11 +334,7 @@
         instance.post(`teacher/homework/${workId}`, { homework_id: workId }, config)
           .then(res => {
             console.log(res);
-            if (res.status === 200) {
-              alert("发布成功!");
-            } else {
-              alert("发布失败!");
-            }
+            alert(res.status === 200 ? "发布成功!" : "发布失败!");
           })
           .catch(err => { console.log(err) });
       },

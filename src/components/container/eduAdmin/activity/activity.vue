@@ -11,7 +11,7 @@
       <p>活动管理</p>
       <div class="filter">
         <div class="option">
-          <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
+          <!-- <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
           <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list"
             tips="请选择活动类型" id="activityType" @option="changeOption">
           </selectInput>
@@ -19,7 +19,7 @@
             @option="changeOption">
           </selectInput>
           <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
-          <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
+          <button type="button" class="btn-my" @click="clearChoices">清空筛选</button> -->
           <button type="button" class="btn-my" @click="addActivity">新增活动</button>
         </div>
       </div>
@@ -28,28 +28,23 @@
           <thead>
             <tr>
               <th>序号</th>
-              <th>活动标题</th>
-              <th>发布时间</th>
+              <th>活动名称</th>
+              <th>活动地点</th>
+              <th>活动时间</th>
               <th>负责人</th>
-              <th>活动类型</th>
-              <th>所属学校</th>
-              <th>回复/查看</th>
-              <th>状态</th>
               <th>操作</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(list, index) in currentList" :key="index" >
+            <tr v-for="(list, index) in currentList" :key="index">
               <td>{{index + 1}}</td>
-              <td class="blue">{{list.title}}</td>
-              <td>{{list.date}}</td>
-              <td>{{list.author}}</td>
-              <td>{{list.activityType}}</td>
-              <td>{{list.school}}</td>
-              <td>{{list.reply}}/{{list.view}}</td>
-              <td>{{list.status}}</td>
-              <td><span class="blue" >编辑</span>
-              <span class="blue" @click="checkStu()">查看学生</span>
+              <td class="blue">{{list.name}}</td>
+              <td>{{list.place}}</td>
+              <td>{{list.time}}</td>
+              <td>{{list.principal}}</td>
+              <td>
+                <span class="blue">编辑</span>
+                <span class="blue" @click="checkStu()">查看学生</span>
               </td>
             </tr>
           </tbody>
@@ -75,56 +70,30 @@
         limit: 10,
         currentList: [],
         tableData: [],
-        editorContent: '',
-        inputData: {
-          keywords: "",
-          activityType: {
-            option: "",
-            list: ["通知公告", "班级活动", "辅导答疑", "布置作业"]
-          },
-          school: {
-            option: "",
-            list: ["赛迪思", "雁塔路小学", "翠华路小学", "回民街小学"]
-          }
-        },
         activityList: [{
-            title: "test1",
-            date: "2019-01-01 12:00",
-            author: "编程测试",
-            activityType: "通知公告",
-            school: "赛迪思",
-            reply: "1",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test2",
-            date: "2019-01-06 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "雁塔路小学",
-            reply: "2",
-            view: "6",
-            status: "正常"
-          }
-        ]
+          name: "一号",
+          place: "石家庄",
+          time: "编程测试",
+          principal: "李老师"
+        },
+        {
+          name: "test2",
+          place: "北京",
+          time: "布置作业",
+          principal: "张老师"
+        }]
       }
     },
-    components: {
-      pagination,
-      selectInput,
-      deletePrompt
-    },
+    components: { pagination, selectInput, deletePrompt },
     methods: {
-      addActivity(){
-        this.$router.push({
-        path: "/eduAdmin/activity/addActivity"
-      });
+      addActivity() {
+        this.$router.push({ path: "/eduAdmin/activity/addActivity" });
       },
-      checkStu(){
+      checkStu() {
         this.$router.push({
-        path: "/eduAdmin/activity/checkStudent"
-      });
+          name: "/eduAdmin/activity/checkStudent",
+          params: ""
+        });
       },
       getNew(value) {
         this.currentList = this.tableData.slice(value, value + this.limit);
@@ -189,35 +158,6 @@
     mounted() {
       this.tableData = this.activityList;
       this.getNew(0);
-      // let editor = new E(this.$refs.editor);
-      // editor.customConfig.uploadImgShowBase64 = true;
-      // editor.customConfig.onchange = (html) => {
-      //   this.editorContent = html
-      // };
-      // editor.customConfig.menus = [
-      //     'head', // 标题
-      //     'bold', // 粗体
-      //     'fontSize', // 字号
-      //     'fontName', // 字体
-      //     'italic', // 斜体
-      //     'underline', // 下划线
-      //     'strikeThrough', // 删除线
-      //     'foreColor', // 文字颜色
-      //     'backColor', // 背景颜色
-      //     'link', // 插入链接
-      //     'list', // 列表
-      //     'justify', // 对齐方式
-      //     'quote', // 引用
-      //     'emoticon', // 表情
-      //     'image', // 插入图片
-      //     'table', // 表格
-      //     'video', // 插入视频
-      //     'code', // 插入代码
-      //     'undo', // 撤销
-      //     'redo' // 重复
-      //   ],
-      //   editor.create();
-      // editor.txt.html('<p>请输入内容</p>');
     }
   }
 

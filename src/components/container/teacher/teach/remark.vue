@@ -32,8 +32,8 @@
             <td>
               <span class="blue" @click="viewWork(line)">查看作品</span>&nbsp;&nbsp;
               <span class="blue" @click="popModal('remark', line)">点评</span>&nbsp;&nbsp;
-              <span class="blue" @click="popModal('turndown', line)">驳回</span>&nbsp;&nbsp;
-              <span class="red" @click="popModal('delete', line)">删除</span>
+              <!-- <span class="blue" @click="popModal('turndown', line)">驳回</span>&nbsp;&nbsp; -->
+              <!-- <span class="red" @click="popModal('delete', line)">删除</span> -->
             </td>
           </tr>
         </tbody>
