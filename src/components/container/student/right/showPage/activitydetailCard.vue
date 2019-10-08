@@ -45,26 +45,26 @@
   export default {
     data() {
       return {
-        index: 0,
-        card: {},
         activitybgUrl: 'https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/static/activitybg.png',
         activitydetialUrl: 'https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/static/activitydetial.png',
       };
     },
     methods: {
       payment() {
-        this.$router.push({ path: '/payment', query: { title: this.card.title, price: this.card.price, cover: this.card.cover } })
+        if(this.card.price==0){
+          //发送当前用户信息，返回success之后跳转界面
+        }
+        else{
+          this.$router.push({ path: '/payment', query: { id: this.card.id ,type:0} })
+        }
       }
     },
     created: function () {
-      this.index = this.$route.query.index
-      this.$store.dispatch('getActivity').then(() => {
-        this.card = this.slidePic[this.index]
-      })
+      this.$store.dispatch('searchActivity',this.$route.query.id)
     },
     computed: {
       ...mapState({
-        slidePic: state => state.slidePic,
+        card: state => state.payInfo,
       }),
     },
   };

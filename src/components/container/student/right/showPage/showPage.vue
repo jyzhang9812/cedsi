@@ -7,7 +7,7 @@
                 <div class="recommend_title">
                     <h3 style="color: #fff">精品活动</h3>
                     <p>
-                        <button class="button">开始创作</button>
+                        <a class="button" :href='scratch'>开始创作</a>
                         <i class="fa fa-trophy fa-2x" style="color: #ffbf35" aria-hidden="true"></i>
                         <i class="fa fa-cog fa-2x" style="color: #fff" aria-hidden="true"></i>
                     </p>
@@ -92,7 +92,7 @@
         },
         methods: {
             gotoActivity(index) {
-                this.$router.push({ path: '/activitydetailCard', query: { index: index } })
+                this.$router.push({ path: '/activitydetailCard', query: { id: this.slidePic[index].id ,type:0} })
             },
             tab(index) {
                 this.curId = index;
@@ -132,6 +132,7 @@
         computed: {
             ...mapState({
                 slidePic: state => state.slidePic,
+                scratch: state => state.scratch,
             }),
         },
     }

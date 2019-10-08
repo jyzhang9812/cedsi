@@ -170,7 +170,7 @@
                 })
             },
             jmpPay(index) {
-                this.$router.push({path:'/payment',query: { title: this.currentList[index].COURSE_NAME, price: this.currentList[index].PRICE, cover: this.currentList[index].COVER} })
+                this.$router.push({path:'/payment',query: { id: this.currentList[index].ID,type:1} })
             },
             handle() {
                 console.log("Video paused!, playing in 2 sec...");

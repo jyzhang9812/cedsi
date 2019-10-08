@@ -12,11 +12,7 @@
               <div class="box-title">
                 <p>{{courseName}}| 第{{courseNum}}节课 | {{chapterName}}</p>
               </div>
-              <button
-                class="study-btn"
-                data-toggle="modal"
-                data-target="#myVideo"
-              >开始学习</button>
+              <button class="study-btn" data-toggle="modal" data-target="#myVideo">开始学习</button>
             </div>
             <div class="right-box">
               <p class="course-intro">课程介绍</p>
@@ -26,7 +22,7 @@
                 <br />1.点击视频右下方【我要做作业】
                 <br />2.点击去发布，填写作品名称，选择封面后即可提交
               </p>
-              <a class="work-btn" href="http://52.83.135.166:8601/">我要做作业</a>
+              <a class="work-btn" :href="scratch" @click='saveCourseDetail(index)'>我要做作业</a>
               <p class="preview">预览讲义</p>
             </div>
           </div>
@@ -74,79 +70,86 @@
 </template>
 
 <script>
-import Media from "@dongido/vue-viaudio";
-import globalAxios from "axios";
-import { mapState } from 'vuex'
-export default {
-  data() {
-    return {
-      mapUrl: this.$store.state.url + "scratch/bg.f0d850a.jpg",
-      courseIntro: "",
-      courseNum: "",
-      videosrc: "",
-      chapterName: "",
-      i: 0,
-      videoend: false,
-      chapterId: "",
-    };
-  },
-  methods: {
-    gotoStudy(index) {
-      this.i = index;
-      this.chapterName = this.pointList[index].name;
-      this.courseIntro = this.pointList[index].description;
-      this.courseNum = this.pointList[index].number;
-      this.videosrc = this.pointList[index].videoSrc;
-      this.chapterId = this.pointList[index].chapterId;
+  import Media from "@dongido/vue-viaudio";
+  import globalAxios from "axios";
+  import { mapState } from 'vuex'
+  export default {
+    data() {
+      return {
+        mapUrl: this.$store.state.url + "scratch/bg.f0d850a.jpg",
+        courseIntro: "",
+        scratch: '',
+        courseNum: "",
+        videosrc: "",
+        chapterName: "",
+        i: 0,
+        videoend: false,
+        chapterId: "",
+      };
     },
-    deletevideo() {
-      this.videosrc = "";
-    },
-    gotoCourseList() {
-      this.$router.push({ path: "/dashboard/class" });
-    },
-    videoEnd() {
-      if (this.i == this.$store.state.finishChaptersLength - 1) {
-        var token = window.localStorage.getItem("idToken");
-        globalAxios
-          .post(
-            "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses/" +
-            this.courseId +
-            "/chapters/" +
-            this.chapterId,
-            {},
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: token
+    methods: {
+      gotoStudy(index) {
+        this.i = index;
+        this.chapterName = this.pointList[index].name;
+        this.courseIntro = this.pointList[index].description;
+        this.courseNum = this.pointList[index].number;
+        this.videosrc = this.pointList[index].videoSrc;
+        this.template = this.pointList[index].templateSrc;
+        this.chapterId = this.pointList[index].chapterId;
+        let token = window.localStorage.getItem("idToken")
+        this.scratch = this.baseScratch + '?chapterId=' + this.chapterId + '&&courseId=' + this.courseId + 
+        '&&chapterName='+this.chapterName+'&&token='+token+'&&url='+this.template
+      },
+      deletevideo() {
+        this.videosrc = "";
+      },
+      gotoCourseList() {
+        this.$router.push({ path: "/dashboard/class" });
+      },
+      videoEnd() {
+        if (this.i == this.$store.state.finishChaptersLength - 1) {
+          var token = window.localStorage.getItem("idToken");
+          globalAxios
+            .post(
+              "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses/" +
+              this.courseId +
+              "/chapters/" +
+              this.chapterId,
+              {},
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: token
+                }
               }
-            }
-          )
-          .then(
-            response => {
-              console.log(response);
-              this.pointList[this.i + 1].flag = true;
-              this.pointList[this.i + 1].bgImg = "../../static/images/scratch/coordinateed.6a1e9a5.png";
-              this.pointList[this.i + 1].status = "已完成";
-              console.log(this.pointList[this.i + 1]);
-            },
-            error => { }
-          );
+            )
+            .then(
+              response => {
+                console.log(response);
+                this.pointList[this.i + 1].flag = true;
+                this.pointList[this.i + 1].bgImg = "../../static/images/scratch/coordinateed.6a1e9a5.png";
+                this.pointList[this.i + 1].status = "已完成";
+                console.log(this.pointList[this.i + 1]);
+              },
+              error => { }
+            );
+        }
       }
-    }
-  },
-  created: function() {
-    this.courseId = this.$route.query.id;
-    this.screenHeight = "min-height:" + (this.height - 56) + "px;";
-    this.$store.commit("updateLoading", true);
-    this.$store.dispatch("getCourseDetail", this.$route.query.id);
-  },
-  computed: {
+    },
+    created: function () {
+      this.courseId = this.$route.query.id;
+      this.screenHeight = "min-height:" + (this.height - 56) + "px;";
+      this.$store.commit("updateLoading", true);
+      this.$store.dispatch("getCourseDetail", this.$route.query.id);
+    },
+    computed: {
       ...mapState({
-    courseName: state => state.courseName,
-    pointList: state => state.pointList,
-  }),
-}}
+        courseName: state => state.courseName,
+        pointList: state => state.pointList,
+        baseScratch: state => state.scratch,
+      }),
+    }
+  }
 </script>
 
 <style scoped>

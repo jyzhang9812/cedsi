@@ -6,7 +6,7 @@
       <div class="modal-dialog mypay">
         <div class="modal-content mypay-height">
           <div class="modal-header mypay-title">
-            <h4 class="modal-title" id="myModalLabel">微信支付{{price}}</h4>
+            <h4 class="modal-title" id="myModalLabel">微信支付{{payinfo.price}}</h4>
           </div>
           <div class="modal-body mypay-qrcode">
             <div id="query">
@@ -27,11 +27,11 @@
         <span>订单：{{orderNum}}</span>
       </div>
       <div class="card-content">
-        <img :src="cover" class="card-img" />
-        <div class="order-title">{{title}}</div>
+        <img :src="payinfo.cover" class="card-img" />
+        <div class="order-title">{{payinfo.name}}</div>
         <div class="order-price">
           实付金额:
-          <span>{{price}}</span>
+          <span>{{payinfo.price}}</span>
         </div>
       </div>
       <div class="pay-method">
@@ -42,7 +42,7 @@
       </div>
       <div class="summary">
         应付金额:
-        <span>{{price}}</span>
+        <span>{{payinfo.price}}</span>
         <button class="pay" data-toggle="modal" data-target="#myPay" @click="closeModal">立即支付</button>
       </div>
     </div>
@@ -56,9 +56,7 @@
   export default {
     data() {
       return {
-        cover: "",
-        price: 0,
-        title: "",
+        id: '',
         orderNum: "66666666666",
         qrcodeImage: this.$store.state.url + "payment/qrcode.png",
         wechatImage: this.$store.state.url + "payment/WePayLogo.png"
@@ -120,10 +118,17 @@
       // }
     },
     created: function () {
-      this.title = this.$route.query.title;
-      this.price = this.$route.query.price;
-      this.cover = this.$route.query.cover;
-    }
+      if (this.$route.query.type == 1) {
+        this.$store.dispatch('payCourse', this.$route.query.id)
+      } else {
+        this.$store.dispatch('')
+      }
+    },
+    computed: {
+      ...mapState({
+        payinfo: state => state.payInfo,
+      }),
+    },
   };
 </script>
 

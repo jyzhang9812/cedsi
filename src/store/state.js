@@ -2,20 +2,22 @@ const state = {
     //公用
     limit: 6,
     url: '../../../../static/images/',
-    url2:'../../../static/images',
+    url2: '../../../static/images',
     idToken: null,
     expirationDate: null,
     userId: null,
-    user: null,
+    user: {},
     vueElementLoading: false,//loading组件是否打开
-    slidePic:[],
+    slidePic: [],
+    payInfo:{},
+    scratch: 'https://s3.cn-northwest-1.amazonaws.com.cn/sds.cedsie.com/scratch/index.html',
 
     //学生
     userInfo: [],
     content: [],
     myClass: [],
     status: null,
-    finishChaptersLength:0,
+    finishChaptersLength: 0,
     pointList: [
         {
             width: "8%",
@@ -243,8 +245,8 @@ const state = {
     workCurrentList: [],
     msgList: [],
     msgCurrentList: [],
-    allCourseList:[],
-    allCourseCurrentList:[],
+    allCourseList: [],
+    allCourseCurrentList: [],
 
     //管理员
     adminCourseList: [],
@@ -254,14 +256,14 @@ const state = {
         chapter: {
             option: "",
             list: [{
-                id:'',
-                name:''
+                id: '',
+                name: ''
             }]
         }
     },
-    chapterData:[],
-    chapterCurrentList:[],
-    chapterLength:0,
+    chapterData: [],
+    chapterCurrentList: [],
+    chapterLength: 0,
 
 
     //超级管理员

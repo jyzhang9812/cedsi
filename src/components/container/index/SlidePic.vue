@@ -4,23 +4,15 @@
             <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="10000" data-warp="true"
                 data-pause="true">
                 <ol class="carousel-indicators">
-                    <li data-target="#myCarousel" v-for="n in 3" data-slide-to="{n}" class="{n==1?'active':''}"></li>
+                    <li data-target="#myCarousel" v-for="n in piclength" data-slide-to="{n}" class="{n==1?'active':''}"></li>
                 </ol>
                 <div class="carousel-inner">
-                    <div class="item" v-for="(item,index) in slidePic" :class="[index==1?'active':'']">
+                    <div class="item" @click="gotoActivity(index)" v-for="(item,index) in slidePic" :class="[index==1?'active':'']">
                         <img :src="item.cover">
                         <div class=" carousel-caption">
-                            <div class="zf-column col-md-5 ">
+                            <div class="zf-column col-md-6 ">
                                 <h1>{{item.title}}</h1>
                                 <h2>{{item.subtitle}}</h2>
-                                <div class="zf-row">
-                                    <div class="zf-column col-md-6">
-                                        <div class="explore">
-                                            <button @click="gotoActivity(index)" class="button"
-                                                style="margin-bottom: 0.5rem;">点击报名</button>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -43,15 +35,19 @@
         name: 'SlidePic',
         data() {
             return {
+                piclength:0,
             }
         },
-        methods:{
+        methods: {
             gotoActivity(index) {
-                this.$router.push({ path: '/activitydetailCard',query:{index:index}})
+                console.log(this.slidePic[index])
+                this.$router.push({ path: '/activitydetailCard', query: { id: this.slidePic[index].id } })
             },
         },
         created: function () {
-            this.$store.dispatch('getActivity')
+            this.$store.dispatch('getActivity').then(()=>{
+                this.piclength = this.slidePic.length
+            })
         },
         computed: {
             ...mapState({
@@ -129,7 +125,7 @@
     }
 
     @media screen and (min-width: 75em) {
-        .col-md-5 {
+        .col-md-6 {
             margin-left: 2rem;
             float: left;
             margin-top: 100px;
@@ -137,7 +133,7 @@
     }
 
     @media screen and (min-width: 64em) {
-        .col-md-5 {
+        .col-md-6 {
             max-width: none;
             font-size: 1.1rem;
             text-align: left;
@@ -153,7 +149,7 @@
     }
 
     @media (min-width: 40em) {
-        .col-md-5 h1 {
+        .col-md-6 h1 {
             font-size: 3.0rem;
             font-family: Roboto Slab, Open Sans, Helvetica, Arial, sans-serif;
             font-weight: 400;
@@ -167,7 +163,7 @@
         }
     }
 
-    .col-md-5 h2 {
+    .col-md-6 h2 {
         font-family: Open Sans, Helvetica, Arial, sans-serif;
         font-size: 20px;
         line-height: 1.5;
@@ -191,18 +187,6 @@
             width: 100%;
             margin-left: 50px;
         }
-    }
-
-    .button {
-        background-color: #ff8d1a;
-        color: #fefefe;
-        font-size: 1.5rem;
-        width: 100px;
-        font-weight: 600;
-        text-transform: uppercase;
-        text-align: center;
-        padding: .85em 1em;
-        border-radius: 5px;
     }
 
     .pay {
