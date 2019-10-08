@@ -298,7 +298,11 @@ const activityManagement = resolve => {
     resolve(require('../components/container/Admin/activityManagement/activity.vue'));
   });
 };
-
+const activityManagementAdd = resolve => {
+  require.ensure(['../components/container/Admin/activityManagement/addActivity.vue'], () => {
+    resolve(require('../components/container/Admin/activityManagement/addActivity.vue'));
+  });
+};
 Vue.use(Router);
 //增加了导航钩子，如果没有token则不能进入页面
 export default new Router({
@@ -811,6 +815,15 @@ export default new Router({
               next('/signin')
             }
           }, component: activityManagement
+        },
+        {
+          path: '/Admin/activityManagement/addActivity', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: activityManagementAdd
         },
       ]
     }
