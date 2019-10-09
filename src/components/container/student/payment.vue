@@ -104,6 +104,14 @@
             response => {
               console.log(response.data)
               if (response.data == "SUCCESS") {
+                if (this.$route.query.type == 1) {
+                var allid = {
+                  id: this.$route.query.id ,
+                  orderId: orderId
+                }
+                console.log(allid)
+                this.$store.dispatch('postCourseId', allid)
+                } 
                 clearInterval(timer)
                 this.$router.push({ path: '/payOK' });
               }

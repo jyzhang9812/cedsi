@@ -1,5 +1,5 @@
 <template>
-  <div id="app":style="appheight">
+  <div id="app" :style="appheight">
     <app-header/>
     <vue-element-loading :active="vueElementLoading" :is-full-screen="true"
     spinner="bar-fade-scale" color="#FF6700" />

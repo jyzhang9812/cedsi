@@ -11,15 +11,6 @@
       <p>活动管理</p>
       <div class="filter">
         <div class="option">
-          <!-- <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
-          <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list"
-            tips="请选择活动类型" id="activityType" @option="changeOption">
-          </selectInput>
-          <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
-            @option="changeOption">
-          </selectInput>
-          <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
-          <button type="button" class="btn-my" @click="clearChoices">清空筛选</button> -->
           <button type="button" class="btn-my" @click="addActivity">新增活动</button>
         </div>
       </div>
@@ -59,8 +50,6 @@
   import pagination from "../../teacher/utils/pagination.vue";
   import selectInput from "../../teacher/utils/selectInput";
   import deletePrompt from "../../teacher/utils/deletePrompt";
-  import E from 'wangeditor';
-  import AWS from 'aws-sdk';
   import instance from '../../../../axios-auth.js';
   export default {
     name: 'activity',
@@ -89,78 +78,37 @@
       addActivity() {
         this.$router.push({ path: "/eduAdmin/activity/addActivity" });
       },
-      checkStu() {
-        this.$router.push({
-          name: "/eduAdmin/activity/checkStudent",
-          params: ""
-        });
-      },
+      checkStu() { },
       getNew(value) {
-        this.currentList = this.tableData.slice(value, value + this.limit);
+        this.currentList = this.tableData
+          .map(item => {
+            return {
+              name: item.ACTIVITY_NAME,
+              place: item.ACTIVITY_PLACE,
+              time: item.ACTIVITY_TIME,
+              principal: item.PRINCIPAL_NAME
+            };
+          })
+          .slice(value, value + this.limit);
       },
-      changeOption(item, id) {
-        Object.keys(this.inputData).forEach((res) => {
-          if (res === id) {
-            this.inputData[res].option = item;
-          }
-        });
-      },
-      clearChoices() {
-        this.optionsClear();
-      },
-      optionsClear() {
-        Object.keys(this.inputData).forEach((res) => {
-          if (this.inputData[res].hasOwnProperty("option")) {
-            this.inputData[res].option = "";
-          } else {
-            this.inputData[res] = "";
-          }
-        });
-      },
-      titleOrAuthorFilter(titleOrAuthor, tableList) {
-        if (titleOrAuthor === "") return tableList;
-        let restTableList = tableList.slice(0);
-        for (let i = 0, j = restTableList.length; i < j; i++) {
-          if ((!new RegExp(titleOrAuthor).test(restTableList[i]["title"])) &&
-            (!new RegExp(titleOrAuthor).test(restTableList[i]["author"]))) {
-            restTableList.splice(i, 1);
-            j -= 1;
-            i -= 1;
-          }
-        }
-        return restTableList;
-      },
-      selectInputFilter(inputData, tableList) {
-        let restTableList = tableList.slice(0);
-        for (let i = 0, j = restTableList.length; i < j; i++) {
-          for (let res of Object.keys(inputData)) {
-            let condition1 = inputData[res].hasOwnProperty("option") &&
-              inputData[res].option !== "";
-            let condition2 = restTableList[i].hasOwnProperty(res) &&
-              restTableList[i][res] !== inputData[res].option;
-            if (condition1 && condition2) {
-              restTableList.splice(i, 1);
-              i -= 1;
-              j -= 1;
-              break;
-            }
-          }
-        }
-        return restTableList;
-      },
-      conditionSearch() {
-        let temp = this.titleOrAuthorFilter(this.inputData.keywords, this.activityList);
-        temp = this.selectInputFilter(this.inputData, temp);
-        this.tableData = temp;
-        this.getNew(0);
-      },
+      pullOriginalTableData() {
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        instance.get('/eduadmin/activity', config)
+          .then(res => {
+            this.tableData = res.data || [];
+            this.getNew(0);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     },
     mounted() {
+      this.pullOriginalTableData();
       this.tableData = this.activityList;
       this.getNew(0);
     }
   }
-
 </script>
 
 <style scoped>

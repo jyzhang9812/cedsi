@@ -8,7 +8,7 @@
                 </div>
                 <div class="formdetail">
                     <label class="formlabel" for="gender">性别</label>
-                    <span style='margin-right: 50px' v-for="(item,index) in radiolist">
+                    <span style='margin-right: 50px' v-for="(item,index) in radiolist" :key=index>
                         <input type="radio" :value='item.value' :checked="item.isCheck" v-model="user.gender"
                             @change="changeInput(index)">
                         {{item.name}}

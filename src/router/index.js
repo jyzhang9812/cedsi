@@ -153,11 +153,6 @@ const space = resolve => {
     resolve(require('../components/container/teacher/space/space.vue'));
   });
 };
-const staging = resolve => {
-  require.ensure(['../components/container/teacher/staging/staging.vue'], () => {
-    resolve(require('../components/container/teacher/staging/staging.vue'));
-  });
-};
 const asider = resolve => {
   require.ensure(['../components/container/teacher/sidebar.vue'], () => {
     resolve(require('../components/container/teacher/sidebar.vue'));
@@ -457,15 +452,6 @@ export default new Router({
       },
       component: asider,
       children: [
-        {
-          path: '/console/staging', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: staging
-        },
         {
           path: '/console/space', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
