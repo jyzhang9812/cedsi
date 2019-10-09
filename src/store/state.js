@@ -10,7 +10,7 @@ const state = {
     vueElementLoading: false,//loading组件是否打开
     slidePic: [],
     payInfo:{},
-    scratch: 'https://s3.cn-northwest-1.amazonaws.com.cn/sds.cedsie.com/scratch/index.html',
+    scratch: 'https://s3.cn-northwest-1.amazonaws.com.cn/ced.cedsie.com/build/index.html',
 
     //学生
     userInfo: [],
