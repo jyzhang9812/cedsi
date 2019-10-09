@@ -148,7 +148,7 @@
           })
       },
       cancel() {
-        this.$route.replace("/eduAdmin/activity/");
+        this.$router.replace({ path: "/eduAdmin/activity/" });
       },
       uploadToBucket(config, file) {
         AWS.config = new AWS.Config({
