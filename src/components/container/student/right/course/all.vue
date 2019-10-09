@@ -70,7 +70,7 @@
                 <!-- <router-link :to="{name:'coursemap',params:{id:item.ID}}" class="box"> -->
                 <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
                     <img class="img" :style="style" :src="item.COVER">
-                    <div :style="style1" style='display: flex;' v-show="index!=i">
+                    <div :style="style1" style='display: flex;' :v-show="item.PRICE!=0">
                         <div class="lock_circle">
                             <i class="fa fa-lock fa-5x" style='position:relative;top:10px' aria-hidden="true"></i>
                         </div>
@@ -197,13 +197,13 @@
             this.style1 = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;margin-top:-' + (document.documentElement.clientWidth * 0.17) + 'px;'
 
             //模态框遮罩层手动开闭
-            $(document).on("show.bs.modal", ".modal", function () {
-                $(this).css("overflow-y", "scroll");
-                $("#courseModal").append("<div class='modal-backdrop fade in' id='courseBackdrop'> </div>");
-            })
-            $(document).on("hide.bs.modal", ".modal", function () {
-                $('#courseBackdrop').remove();
-            })
+            // $(document).on("show.bs.modal", ".modal", function () {
+            //     $(this).css("overflow-y", "scroll");
+            //     $("#courseModal").append("<div class='modal-backdrop fade in' id='courseBackdrop'> </div>");
+            // })
+            // $(document).on("hide.bs.modal", ".modal", function () {
+            //     $('#courseBackdrop').remove();
+            // })
 
             this.$store.commit('updateLoading', true)
             this.$store.dispatch('getAllCourse')

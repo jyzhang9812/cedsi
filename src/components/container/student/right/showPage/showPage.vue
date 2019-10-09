@@ -74,10 +74,10 @@
                         componentName: 'allCourseCard',
                         title: '全部课程'
                     },
-                    {
-                        componentName: 'communityCard',
-                        title: '社区'
-                    },
+                    // {
+                    //     componentName: 'communityCard',
+                    //     title: '社区'
+                    // },
                     {
                         componentName: 'userCard',
                         title: '优秀作者'

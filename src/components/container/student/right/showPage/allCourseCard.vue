@@ -26,28 +26,7 @@
         },
         data() {
             return {
-                all_url: [
-                    {
-                        url: 'https://www.tynker.com/image/course-card/vertical/minecraft-starter.png',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/course-card/vertical/turings-tower.png',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/course-card/vertical/cannon-crasher-physics-game.png',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/course-card/vertical/the-drone-menace-arcade-game.png',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/course-card/vertical/gravity-sling-advanced-projectile-physics.png',
-                        img: '',
-                    },
-                ],
+                all_url: [],
                 mycalleft: 0,
                 i: -1,
                 curId: 0,
@@ -72,6 +51,8 @@
         created() {
             this.mycalleft = this.calleft
             console.log(this.calleft)
+            this.$store.commit('updateLoading', true)
+            this.$store.dispatch('getAllCourse')
         },
         
         //这里用watch方法来监听父组件传过来的值，来实现实时更新
