@@ -9,8 +9,8 @@
             tips="请选择活动类型" id="activityType" @option="changeOption">
           </selectInput>
           <!-- <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
-            @option="changeOption"> -->
-          </selectInput>
+            @option="changeOption">
+          </selectInput> -->
           <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
           <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
           <button type="button" class="btn-my" @click="addActivity">新增活动</button>
