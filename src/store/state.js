@@ -245,6 +245,8 @@ const state = {
     workCurrentList: [],
     msgList: [],
     msgCurrentList: [],
+    orderList: [],
+    orderCurrentList: [],
     allCourseList: [],
     allCourseCurrentList: [],
 

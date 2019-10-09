@@ -32,7 +32,7 @@ export default {
         }
     }
 }
-</script>
+</script>                                                                  
 <style scoped>
     #pay-OK{
         background-color: #fafbfc;

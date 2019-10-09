@@ -416,6 +416,25 @@ const actions = {
             }
         );
     },
+    //将购买的课程添加至我的课程
+    postCourseId({ commit, state }, allId){
+        globalAxios({
+            method: "post",
+            url: '/student/courses/'+allId.id,
+            data: { orderId: allId.orderId },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': state.idToken
+            }
+        })
+            .then(response => {
+                console.log(response)
+                commit(TYPES.updateLoading, false)
+            }, error => {
+                commit(TYPES.updateLoading, false)
+                console.log(error);
+            })
+    },
 
     //获取全部课程
     getAllCourse({ commit, state }) {
@@ -428,9 +447,18 @@ const actions = {
             }
         ).then(response => {
             var arr = [];
+            let courseList = state.courseList;
             console.log(response);
             for (var i = 0; i < response.data.length; i++) {
                 arr.push(response.data[i])
+            }
+            for(let i =0;i<arr.length;i++){
+                for(let j =0;j<courseList.length;j++){
+                    if(arr[i].ID==courseList[j].ID) {
+                        arr[i].PRICE = 0;
+                        break;
+                    }
+                }
             }
             commit(TYPES.changeAllList, arr)
             commit(TYPES.changeAllCurrentList, 0)
@@ -470,6 +498,31 @@ const actions = {
                 commit(TYPES.updateLoading, false)
                 console.log(error);
             })
+    },
+    //获取订单信息
+    getOrder({ commit, state }) {
+        return globalAxios.get('/student/order',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': state.idToken
+                }
+            }
+        ).then(response => {
+            var arr = [];
+            console.log(response);
+            for (var i = 0; i < response.data.length; i++) {
+                arr.push(response.data[i])
+            }
+            commit(TYPES.changeOrder, arr)
+            commit(TYPES.changeOrderCurrentList, 0)
+            commit(TYPES.updateLoading, false)
+        },
+            error => {
+                commit(TYPES.updateLoading, false)
+                console.log(error);
+            })
+
     },
 
 

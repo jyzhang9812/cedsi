@@ -61,7 +61,7 @@
         </div>
 
         <div class="menu">
-            <button @click="tab(index)" v-for="(item,index) in items" class="tag"
+            <button @click="tab(index)" v-for="(item,index) in items" class="tag" :key="index"
                 :class="{active : index===curId}">{{item.item}}</button>
         </div>
         <div class="row">
@@ -70,7 +70,7 @@
                 <!-- <router-link :to="{name:'coursemap',params:{id:item.ID}}" class="box"> -->
                 <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
                     <img class="img" :style="style" :src="item.COVER">
-                    <div :style="style1" style='display: flex;' :v-show="item.PRICE!=0">
+                    <div :style="style1" style='display: flex;' v-show="item.PRICE!=0">
                         <div class="lock_circle">
                             <i class="fa fa-lock fa-5x" style='position:relative;top:10px' aria-hidden="true"></i>
                         </div>
@@ -84,7 +84,7 @@
                     <h4>{{item.COURSE_NAME}}</h4>
                     <div class="right">
                         <button :class="(index==i)?'btnh btn_green':'btn'">试听</button>
-                        <button :class="(index==i)?'btnh':'btn'" @click='jmpPay(index)'>解锁课程</button>
+                        <button :class="(index==i)?'btnh':'btn'" @click='jmpPay(index)'>学习课程</button>
                     </div>
                 </div>
                 <!-- </router-link> -->
@@ -170,7 +170,11 @@
                 })
             },
             jmpPay(index) {
+                if(this.currentList[index].PRICE!=0){
                 this.$router.push({path:'/payment',query: { id: this.currentList[index].ID,type:1} })
+                }else{
+                this.$router.push({path:'/dashboard/coursemap',query: { id: this.currentList[index].ID} })
+                }
             },
             handle() {
                 console.log("Video paused!, playing in 2 sec...");
@@ -206,7 +210,9 @@
             // })
 
             this.$store.commit('updateLoading', true)
-            this.$store.dispatch('getAllCourse')
+            this.$store.dispatch('getCourse').then(()=>{
+                this.$store.dispatch('getAllCourse')
+            })
         },
         computed: {
             ...mapState({
