@@ -8,9 +8,9 @@
           <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list"
             tips="请选择活动类型" id="activityType" @option="changeOption">
           </selectInput>
-          <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
+          <!-- <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
             @option="changeOption">
-          </selectInput>
+          </selectInput> -->
           <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
           <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
           <button type="button" class="btn-my" @click="addActivity">新增活动</button>
@@ -23,27 +23,23 @@
               <th>序号</th>
               <th>活动标题</th>
               <th>发布时间</th>
-              <th>负责人</th>
               <th>活动类型</th>
-              <th>所属学校</th>
-              <th>回复/查看</th>
-              <th>状态</th>
-              <th>操作</th>
+              <th>活动地点</th>
+              <th>价格</th>
+            
             </tr>
           </thead>
           <tbody>
             <tr v-for="(list, index) in currentList" :key="index" >
               <td>{{index + 1}}</td>
-              <td class="blue">{{list.title}}</td>
-              <td>{{list.date}}</td>
-              <td>{{list.author}}</td>
+              <td width='380px' class="blue">{{list.title}}</td>
+              <td>{{list.releaseTime}}</td>
               <td>{{list.activityType}}</td>
-              <td>{{list.school}}</td>
-              <td>{{list.reply}}/{{list.view}}</td>
-              <td>{{list.status}}</td>
-              <td><span class="blue" >编辑</span>
-              <span class="blue" @click="checkStu()">查看学生</span>
-              </td>
+              <td>{{list.place}}</td>
+              <td>{{list.price}}</td>
+              
+          
+    
             </tr>
           </tbody>
         </table>
@@ -81,25 +77,14 @@
           }
         },
         activityList: [{
-            title: "test1",
-            date: "2019-01-01 12:00",
-            author: "编程测试",
-            activityType: "通知公告",
-            school: "赛迪思",
-            reply: "1",
-            view: "6",
-            status: "正常"
+            title: "玩转算法系列--图论精讲 面试升职必备（Java版）",
+            releaseTime: "2019-03-04",
+            activityType: "课程",
+            place: "陕西师范大学新勇活动中心",
+           price: "0.01",
+           
           },
-          {
-            title: "test2",
-            date: "2019-01-06 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "雁塔路小学",
-            reply: "2",
-            view: "6",
-            status: "正常"
-          }
+        
         ]
       }
     },
@@ -111,14 +96,10 @@
     methods: {
       addActivity(){
         this.$router.push({
-        path: "/eduAdmin/activity/addActivity"
+        path: "/Admin/activityManagement/addActivity"
       });
       },
-      checkStu(){
-        this.$router.push({
-        path: "/eduAdmin/activity/checkStudent"
-      });
-      },
+
       getNew(value) {
         this.currentList = this.tableData.slice(value, value + this.limit);
       },

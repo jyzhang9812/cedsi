@@ -153,11 +153,6 @@ const space = resolve => {
     resolve(require('../components/container/teacher/space/space.vue'));
   });
 };
-const staging = resolve => {
-  require.ensure(['../components/container/teacher/staging/staging.vue'], () => {
-    resolve(require('../components/container/teacher/staging/staging.vue'));
-  });
-};
 const asider = resolve => {
   require.ensure(['../components/container/teacher/sidebar.vue'], () => {
     resolve(require('../components/container/teacher/sidebar.vue'));
@@ -222,11 +217,6 @@ const eduStaging = resolve => {
 const teacherManagement = resolve => {
   require.ensure(['../components/container/eduAdmin/office/teacherManagement.vue'], () => {
     resolve(require('../components/container/eduAdmin/office/teacherManagement.vue'));
-  });
-};
-const checkStudent = resolve => {
-  require.ensure(['../components/container/eduAdmin/activity/checkStudent.vue'], () => {
-    resolve(require('../components/container/eduAdmin/activity/checkStudent.vue'));
   });
 };
 const addActivity = resolve => {
@@ -298,7 +288,11 @@ const activityManagement = resolve => {
     resolve(require('../components/container/Admin/activityManagement/activity.vue'));
   });
 };
-
+const activityManagementAdd = resolve => {
+  require.ensure(['../components/container/Admin/activityManagement/addActivity.vue'], () => {
+    resolve(require('../components/container/Admin/activityManagement/addActivity.vue'));
+  });
+};
 Vue.use(Router);
 //增加了导航钩子，如果没有token则不能进入页面
 export default new Router({
@@ -458,15 +452,6 @@ export default new Router({
       },
       component: asider,
       children: [
-        {
-          path: '/console/staging', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: staging
-        },
         {
           path: '/console/space', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
@@ -631,15 +616,6 @@ export default new Router({
               next('/signin')
             }
           }, component: addActivity
-        },
-        {
-          path: '/eduAdmin/activity/checkStudent', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: checkStudent
         },
         {
           path: '/eduAdmin/classManagement', beforeEnter(to, from, next) {
@@ -811,6 +787,15 @@ export default new Router({
               next('/signin')
             }
           }, component: activityManagement
+        },
+        {
+          path: '/Admin/activityManagement/addActivity', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: activityManagementAdd
         },
       ]
     }

@@ -1,26 +1,41 @@
-<!--
- * @Email: rumosky@163.com
- * @Author: rumosky
- * @Github: https://github.com/rumosky
- * @Date: 2019-08-14 16:09:22
- * @Description: 教务角色发布活动页面
- -->
 <template>
   <div id="eduActivity">
     <div class="body">
       <p>活动管理</p>
       <div class="filter">
         <div class="option">
-          <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
-          <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list"
-            tips="请选择活动类型" id="activityType" @option="changeOption">
-          </selectInput>
-          <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
-            @option="changeOption">
-          </selectInput>
-          <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
-          <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
           <button type="button" class="btn-my" @click="addActivity">新增活动</button>
+        </div>
+      </div>
+      <div class="modal fade" id="checkStudent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" ref="checkStudent">
+        <div class="modal-dialog tablewidth">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">查看学生({{studentNum}}人)</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th v-for="(title,index) in studentTitle" class="titles" :key="index">{{title}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(student, seq) in studentData" :key="seq" class="content">
+                    <td>{{seq+1}}</td>
+                    <td>{{student.name}}</td>
+                    <td>{{student.studentId}}</td>
+                    <td>{{student.gender}}</td>
+                    <td>{{student.grade}}</td>
+                    <td>{{student.age}}</td>
+                    <td>{{student.mobilePhone}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
       <div class="panels">
@@ -28,28 +43,23 @@
           <thead>
             <tr>
               <th>序号</th>
-              <th>活动标题</th>
-              <th>发布时间</th>
+              <th>活动名称</th>
+              <th>活动地点</th>
+              <th>活动时间</th>
               <th>负责人</th>
-              <th>活动类型</th>
-              <th>所属学校</th>
-              <th>回复/查看</th>
-              <th>状态</th>
               <th>操作</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(list, index) in currentList" :key="index" >
+            <tr v-for="(list, index) in currentList" :key="index">
               <td>{{index + 1}}</td>
-              <td class="blue">{{list.title}}</td>
-              <td>{{list.date}}</td>
-              <td>{{list.author}}</td>
-              <td>{{list.activityType}}</td>
-              <td>{{list.school}}</td>
-              <td>{{list.reply}}/{{list.view}}</td>
-              <td>{{list.status}}</td>
-              <td><span class="blue" >编辑</span>
-              <span class="blue" @click="checkStu()">查看学生</span>
+              <td class="blue">{{list.name}}</td>
+              <td>{{list.place}}</td>
+              <td>{{list.time}}</td>
+              <td>{{list.principal}}</td>
+              <td>
+                <!-- <span class="blue">编辑</span> -->
+                <span class="blue" data-toggle="modal" data-target="#checkStudent" @click="checkStu(list)">查看学生</span>
               </td>
             </tr>
           </tbody>
@@ -64,8 +74,6 @@
   import pagination from "../../teacher/utils/pagination.vue";
   import selectInput from "../../teacher/utils/selectInput";
   import deletePrompt from "../../teacher/utils/deletePrompt";
-  import E from 'wangeditor';
-  import AWS from 'aws-sdk';
   import instance from '../../../../axios-auth.js';
   export default {
     name: 'activity',
@@ -75,152 +83,68 @@
         limit: 10,
         currentList: [],
         tableData: [],
-        editorContent: '',
-        inputData: {
-          keywords: "",
-          activityType: {
-            option: "",
-            list: ["通知公告", "班级活动", "辅导答疑", "布置作业"]
-          },
-          school: {
-            option: "",
-            list: ["赛迪思", "雁塔路小学", "翠华路小学", "回民街小学"]
-          }
-        },
-        activityList: [{
-            title: "test1",
-            date: "2019-01-01 12:00",
-            author: "编程测试",
-            activityType: "通知公告",
-            school: "赛迪思",
-            reply: "1",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test2",
-            date: "2019-01-06 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "雁塔路小学",
-            reply: "2",
-            view: "6",
-            status: "正常"
-          }
-        ]
+        activityList: [],
+        studentTitle: [
+          "序号", "学生姓名", "学号", "性别",
+          "年级", "年龄", "手机号"
+        ],
+        studentData: []
       }
     },
-    components: {
-      pagination,
-      selectInput,
-      deletePrompt
-    },
+    components: { pagination, selectInput, deletePrompt },
     methods: {
-      addActivity(){
-        this.$router.push({
-        path: "/eduAdmin/activity/addActivity"
-      });
+      addActivity() {
+        this.$router.push({ path: "/eduAdmin/activity/addActivity" });
       },
-      checkStu(){
-        this.$router.push({
-        path: "/eduAdmin/activity/checkStudent"
-      });
+      checkStu(item) {
+        this.pullParticipatingStudents(item.id)
+          .then(res => {
+            this.studentData = res.data.map(item => {
+              return {
+                name: item.STUDENT_NAME,
+                studentId: item.STUDENT_ID,
+                gender: item.GENDER,
+                grade: item.GRADE,
+                age: item.AGE,
+                mobilePhone: item.MOBILE_PHONE
+              }
+            });
+          }).catch(err => { console.log(err) });
       },
       getNew(value) {
-        this.currentList = this.tableData.slice(value, value + this.limit);
+        this.currentList = this.tableData
+          .map(item => {
+            return {
+              name: item.ACTIVITY_NAME,
+              place: item.ACTIVITY_PLACE,
+              time: item.ACTIVITY_TIME,
+              principal: item.PRINCIPAL_NAME,
+              id: item.ACTIVITY_ID
+            };
+          }).slice(value, value + this.limit);
       },
-      changeOption(item, id) {
-        Object.keys(this.inputData).forEach((res) => {
-          if (res === id) {
-            this.inputData[res].option = item;
-          }
-        });
+      pullOriginalTableData() {
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        instance.get('/eduadmin/activity', config)
+          .then(res => {
+            this.tableData = res.data || [];
+            this.getNew(0);
+          }).catch(err => { console.log(err) });
       },
-      clearChoices() {
-        this.optionsClear();
-      },
-      optionsClear() {
-        Object.keys(this.inputData).forEach((res) => {
-          if (this.inputData[res].hasOwnProperty("option")) {
-            this.inputData[res].option = "";
-          } else {
-            this.inputData[res] = "";
-          }
-        });
-      },
-      titleOrAuthorFilter(titleOrAuthor, tableList) {
-        if (titleOrAuthor === "") return tableList;
-        let restTableList = tableList.slice(0);
-        for (let i = 0, j = restTableList.length; i < j; i++) {
-          if ((!new RegExp(titleOrAuthor).test(restTableList[i]["title"])) &&
-            (!new RegExp(titleOrAuthor).test(restTableList[i]["author"]))) {
-            restTableList.splice(i, 1);
-            j -= 1;
-            i -= 1;
-          }
-        }
-        return restTableList;
-      },
-      selectInputFilter(inputData, tableList) {
-        let restTableList = tableList.slice(0);
-        for (let i = 0, j = restTableList.length; i < j; i++) {
-          for (let res of Object.keys(inputData)) {
-            let condition1 = inputData[res].hasOwnProperty("option") &&
-              inputData[res].option !== "";
-            let condition2 = restTableList[i].hasOwnProperty(res) &&
-              restTableList[i][res] !== inputData[res].option;
-            if (condition1 && condition2) {
-              restTableList.splice(i, 1);
-              i -= 1;
-              j -= 1;
-              break;
-            }
-          }
-        }
-        return restTableList;
-      },
-      conditionSearch() {
-        let temp = this.titleOrAuthorFilter(this.inputData.keywords, this.activityList);
-        temp = this.selectInputFilter(this.inputData, temp);
-        this.tableData = temp;
-        this.getNew(0);
-      },
+      pullParticipatingStudents(id) {
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        return instance.get(`/eduadmin/activity/${id}/student`, config);
+      }
+    },
+    computed: {
+      studentNum() { return this.studentData.length }
     },
     mounted() {
+      this.pullOriginalTableData();
       this.tableData = this.activityList;
       this.getNew(0);
-      // let editor = new E(this.$refs.editor);
-      // editor.customConfig.uploadImgShowBase64 = true;
-      // editor.customConfig.onchange = (html) => {
-      //   this.editorContent = html
-      // };
-      // editor.customConfig.menus = [
-      //     'head', // 标题
-      //     'bold', // 粗体
-      //     'fontSize', // 字号
-      //     'fontName', // 字体
-      //     'italic', // 斜体
-      //     'underline', // 下划线
-      //     'strikeThrough', // 删除线
-      //     'foreColor', // 文字颜色
-      //     'backColor', // 背景颜色
-      //     'link', // 插入链接
-      //     'list', // 列表
-      //     'justify', // 对齐方式
-      //     'quote', // 引用
-      //     'emoticon', // 表情
-      //     'image', // 插入图片
-      //     'table', // 表格
-      //     'video', // 插入视频
-      //     'code', // 插入代码
-      //     'undo', // 撤销
-      //     'redo' // 重复
-      //   ],
-      //   editor.create();
-      // editor.txt.html('<p>请输入内容</p>');
     }
   }
-
 </script>
 
 <style scoped>
@@ -283,8 +207,9 @@
     text-align: center;
   }
 
-  #eduActivity table {
-    border: #eeeeee;
+  #eduActivity .tablewidth {
+    width: 90%;
+    margin: 0 auto;
   }
 
   #eduActivity .btn-my {
@@ -361,5 +286,48 @@
     justify-content: flex-start;
     margin-top: 20px;
     margin-left: 356px;
+  }
+
+  #eduActivity .modal-dialog {
+    top: 100px;
+    position: relative;
+  }
+
+  #eduActivity .modal-header {
+    background-color: #409eff;
+    color: #fff;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+
+  #eduActivity .tablewidth {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  #eduActivity .content td {
+    line-height: 30px;
+  }
+
+  #eduActivity .content {
+    margin: 0 auto;
+    width: 55%;
+    height: 100%;
+  }
+
+  #eduActivity table {
+    border: #eeeeee;
+  }
+
+  #eduActivity table tr {
+    text-align: center !important;
+  }
+
+  #eduActivity table td {
+    vertical-align: middle !important;
+  }
+
+  #eduActivity .titles {
+    text-align: center;
   }
 </style>

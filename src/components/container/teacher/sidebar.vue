@@ -35,23 +35,23 @@
     data() {
       return {
         aside: [
-          {
-            name: "课程管理",
-            icon: 'fa-university',
-            children: [{
-              name: "课程规划",
-              route: "/console/coursePlan"
-            },
-            {
-              name: "视频管理",
-              route: "/console/video"
-            },
-            {
-              name: "辅导资料",
-              route: "/console/material"
-            }],
-            close: true
-          },
+          // {
+          //   name: "课程管理",
+          //   icon: 'fa-university',
+          //   children: [{
+          //     name: "课程规划",
+          //     route: "/console/coursePlan"
+          //   },
+          //   {
+          //     name: "视频管理",
+          //     route: "/console/video"
+          //   },
+          //   {
+          //     name: "辅导资料",
+          //     route: "/console/material"
+          //   }],
+          //   close: true
+          // },
           {
             name: "作业管理",
             icon: 'fa-book',
@@ -67,44 +67,46 @@
             ],
             close: true
           },
-          {
-            name: "活动管理",
-            icon: 'fa-flag',
-            route: "/console/activity",
-            children: [],
-            close: true
-          },
-          {
-            name: "学生提问",
-            icon: 'fa-quora',
-            route: "/console/question",
-            children: [],
-            close: true
-          },
-          {
-            name: "统计分析",
-            icon: 'fa-bar-chart',
-            children: [{
-              name: "学情分析",
-              route: "/console/statistics"
-            }],
-            close: true
-          },
+          // {
+          //   name: "活动管理",
+          //   icon: 'fa-flag',
+          //   route: "/console/activity",
+          //   children: [],
+          //   close: true
+          // },
+          // {
+          //   name: "学生提问",
+          //   icon: 'fa-quora',
+          //   route: "/console/question",
+          //   children: [],
+          //   close: true
+          // },
+          // {
+          //   name: "统计分析",
+          //   icon: 'fa-bar-chart',
+          //   children: [{
+          //     name: "学情分析",
+          //     route: "/console/statistics"
+          //   }],
+          //   close: true
+          // },
           {
             name: "个人中心",
             icon: 'fa-user',
-            children: [{
-              name: "消息通知",
-              route: "/console/message"
-            },
-            {
-              name: "个人资料",
-              route: "/console/space"
-            },
-            {
-              name: "修改密码",
-              route: "/console/password"
-            }],
+            children: [
+              {
+                name: "消息通知",
+                route: "/console/message"
+              },
+              // {
+              //   name: "个人资料",
+              //   route: "/console/space"
+              // },
+              // {
+              //   name: "修改密码",
+              //   route: "/console/password"
+              // }
+            ],
             close: true,
           }],
         height: 0,
@@ -164,7 +166,8 @@
     background-color: #3766A6;
     width: 220px;
   }
-  .bg-hover{
+
+  .bg-hover {
     cursor: pointer;
   }
 

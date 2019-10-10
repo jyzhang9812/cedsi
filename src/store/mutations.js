@@ -62,6 +62,13 @@ const mutations = {
     [TYPES.changeMsgCurrentList](state, value) {
         state.msgCurrentList = state.msgList.slice(value, value + state.limit);
     },
+    [TYPES.changeOrder](state, List) {
+        state.orderList = List
+    },
+    [TYPES.changeOrderCurrentList](state, value) {
+        state.orderCurrentList = state.orderList.slice(value, value + state.limit);
+    },
+
 
     [TYPES.changeAllList](state, List) {
         state.allCourseList = List

@@ -98,7 +98,7 @@
         this.chapterId = this.pointList[index].chapterId;
         let token = window.localStorage.getItem("idToken")
         this.scratch = this.baseScratch + '?chapterId=' + this.chapterId + '&&courseId=' + this.courseId + 
-        '&&chapterName='+this.chapterName+'&&token='+token+'&&url='+this.template
+        '&&chapterName='+this.chapterName+'&&token='+token+'&&userName='+this.userName;
       },
       deletevideo() {
         this.videosrc = "";
@@ -141,6 +141,7 @@
       this.screenHeight = "min-height:" + (this.height - 56) + "px;";
       this.$store.commit("updateLoading", true);
       this.$store.dispatch("getCourseDetail", this.$route.query.id);
+      this.userName = window.localStorage.getItem("user");
     },
     computed: {
       ...mapState({

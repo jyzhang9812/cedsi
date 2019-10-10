@@ -1,13 +1,13 @@
 <template>
     <ul :style="{'left':mycalleft + 'px'}">
-        <li class="all_course" v-for="(item,index) in all_url" :key="index" @mouseover="show(index)"
-            @mouseleave="hidden(index)">
+        <li class="all_course" v-for="(item,index) in currentList" :key="index" @mouseover="show(index)"
+            @mouseleave="hidden(index)" @click="jmpPay(index)">
             <div class="inside">
-                <img class="img" :src="item.url">
+                <img class="img" :src="item.COVER">
                 <div class="details" v-show="index==i">
                     <div class="detail_item" style="display: block">
-                        <h5><strong>课程名{{item.course_name}}</strong></h5>
-                        <p>课程介绍啥的asdfghjklreitohitbbdwdwicwesrdfygujreytiosreyfios54efgyi</p>
+                        <h5><strong>{{item.COURSE_NAME}}</strong></h5>
+                        <p>{{item.INTRO}}</p>
                     </div>
                 </div>
             </div>
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
     export default {
         name: 'allCourseCard',
         props: {
@@ -26,34 +27,9 @@
         },
         data() {
             return {
-                all_url: [
-                    {
-                        url: 'https://www.tynker.com/image/course-card/vertical/minecraft-starter.png',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/course-card/vertical/turings-tower.png',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/course-card/vertical/cannon-crasher-physics-game.png',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/course-card/vertical/the-drone-menace-arcade-game.png',
-                        img: '',
-                    },
-                    {
-                        url: 'https://www.tynker.com/image/course-card/vertical/gravity-sling-advanced-projectile-physics.png',
-                        img: '',
-                    },
-                ],
                 mycalleft: 0,
                 i: -1,
                 curId: 0,
-                limit: 12,
-                currentList: [],
-                tableData: [],
             }
         },
         methods: {
@@ -68,12 +44,27 @@
                 this.i = -1;
                 this.isShow = false;
             },
+            jmpPay(index) {
+                if(this.currentList[index].PRICE!=0){
+                this.$router.push({path:'/payment',query: { id: this.currentList[index].ID,type:1} })
+                }else{
+                this.$router.push({path:'/dashboard/coursemap',query: { id: this.currentList[index].ID} })
+                }
+            },
         },
         created() {
             this.mycalleft = this.calleft
             console.log(this.calleft)
+            this.$store.commit('updateLoading', true)
+            this.$store.dispatch('getCourse').then(()=>{
+                this.$store.dispatch('getAllCourse')
+            })
         },
-        
+        computed: {
+            ...mapState({
+                currentList: state => state.allCourseCurrentList
+            }),
+        },
         //这里用watch方法来监听父组件传过来的值，来实现实时更新
         watch: {
             calleft(val) {    //message即为父组件的值，val参数为值
@@ -179,9 +170,9 @@
     }
 
     .all_course .details {
-        width: 315px;
-        margin-left: 18px;
-        margin-top: -115px;
+        width: 350px;
+        position: relative;
+        bottom: 0;
     }
 
     .all_course:first-child {

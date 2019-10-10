@@ -59,36 +59,36 @@
             img: 'fa-2x fa-lightbulb-o',
             path: "/dashboard/course"
           },
-          {
-            name: "社区",
-            img: 'fa-users',
-            path: "/dashboard/community"
-          },
+          // {
+          //   name: "社区",
+          //   img: 'fa-users',
+          //   path: "/dashboard/community"
+          // },
           {
             name: "我的作业",
             img: 'fa-puzzle-piece',
             path: "/dashboard/homework"
           },
-          {
-            name: "创作中心",
-            img: 'fa-flask',
-            path: "/dashboard/create"
-          },
+          // {
+          //   name: "创作中心",
+          //   img: 'fa-flask',
+          //   path: "/dashboard/create"
+          // },
           {
             name: "我的消息",
             img: 'fa-comments',
             path: "/dashboard/message"
           },
-          {
-            name: "我的问题",
-            img: 'fa-quora',
-            path: "/dashboard/question"
-          },
-          {
-            name: "辅导资料",
-            img: 'fa-book',
-            path: "/dashboard/presentation"
-          },
+          // {
+          //   name: "我的问题",
+          //   img: 'fa-quora',
+          //   path: "/dashboard/question"
+          // },
+          // {
+          //   name: "辅导资料",
+          //   img: 'fa-book',
+          //   path: "/dashboard/presentation"
+          // },
         ],
         i: 0,
         height: 0,
