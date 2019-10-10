@@ -1,6 +1,9 @@
 <template>
     <div id="new" class="limiter">
-        <div class="container-table100">
+        <div v-if='txt==true'>
+            <h4>还没有加入任何班级哦~</h4>
+        </div>
+        <div class="container-table100" v-if='txt==false'>
             <div style="margin-bottom: 10px;">
                 <button class="nameOfClass" v-for='(item,index) in myClass' @click='changeClass(index)'
                     :class="{active : index===curId}">{{item.name}}</button>
@@ -51,6 +54,7 @@
                     }
                 },
                 curId: 0,
+                txt:false,
             }
         },
         methods: {
@@ -62,7 +66,11 @@
         created: function () {
             this.$store.commit('updateLoading', true)
             this.$store.dispatch('getClass').then(() => {
-                this.nowClass = this.myClass[this.curId]
+                if(this.myClass==null){
+                    this.txt = true;
+                }
+                else 
+                    this.nowClass = this.myClass[this.curId];
             })
         },
         computed: {

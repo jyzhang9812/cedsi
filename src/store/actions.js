@@ -88,7 +88,7 @@ const actions = {
                     token = response.data.token
                     state.expirationDate = response.data.exp;
                     state.roleId = response.data.role;
-                    state.user = authData.username
+                    state.user = authData.username;
                     state.status = response.data.status
                     // console.log(state.expirationDate)
                     if (token === undefined) {
@@ -100,10 +100,11 @@ const actions = {
                     else {
                         commit(TYPES.authUser, {
                             token: token,
-                            userId: null
+                            userId: response.data.userId
                         })
                         localStorage.setItem('idToken', token)
                         localStorage.setItem('user', state.user)
+                        localStorage.setItem('userId', response.data.userId)
                         localStorage.setItem('roleId', state.roleId)
                         localStorage.setItem('expirationDate', state.expirationDate)
                     }
@@ -392,7 +393,7 @@ const actions = {
         ).then(response => {
             // console.log(response);
             var myClasses = []
-            if (response.data) {
+            if (response.data != null) {
                 for (let i = 0; i < response.data.length; i++) {
                     var myClass = {}
                     var arr = []
@@ -417,11 +418,11 @@ const actions = {
         );
     },
     //将购买的课程添加至我的课程
-    postCourseId({ commit, state }, allId){
+    postCourseId({ commit, state }, allId) {
         globalAxios({
             method: "post",
-            url: '/student/courses/'+allId.id,
-            data: { orderId: allId.orderId },
+            url: '/student/courses/' + allId.id,
+            data: { orderId: allId.orderId , cover: allId.cover},
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': state.idToken
@@ -452,10 +453,10 @@ const actions = {
             for (var i = 0; i < response.data.length; i++) {
                 arr.push(response.data[i])
             }
-            if(courseList!=null){
-                for(let i =0;i<arr.length;i++){
-                    for(let j =0;j<courseList.length;j++){
-                        if(arr[i].ID==courseList[j].ID) {
+            if (courseList.length != 0) {
+                for (let i = 0; i < arr.length; i++) {
+                    for (let j = 0; j < courseList.length; j++) {
+                        if (arr[i].ID == courseList[j].ID) {
                             arr[i].PRICE = 0;
                             break;
                         }
