@@ -452,11 +452,13 @@ const actions = {
             for (var i = 0; i < response.data.length; i++) {
                 arr.push(response.data[i])
             }
-            for(let i =0;i<arr.length;i++){
-                for(let j =0;j<courseList.length;j++){
-                    if(arr[i].ID==courseList[j].ID) {
-                        arr[i].PRICE = 0;
-                        break;
+            if(courseList!=null){
+                for(let i =0;i<arr.length;i++){
+                    for(let j =0;j<courseList.length;j++){
+                        if(arr[i].ID==courseList[j].ID) {
+                            arr[i].PRICE = 0;
+                            break;
+                        }
                     }
                 }
             }

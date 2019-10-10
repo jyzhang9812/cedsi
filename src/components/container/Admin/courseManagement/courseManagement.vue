@@ -45,6 +45,7 @@
         </div>
         <div class="course-title">
           <h3 class="course-name">{{course.name}}</h3>
+          <h5 class="course-price">￥{{course.price}}</h5>
           <button class="course-detials btn" data-toggle="modal" data-target="#detials"
             @click="courseDetials(index)">详情</button>
         </div>
@@ -88,7 +89,8 @@
               introduction: item.INTRO,
               img:item.COVER,
               num: 100,
-              id:item.ID
+              id:item.ID,
+              price:item.PRICE
             });
           });
         })
@@ -204,8 +206,13 @@
 
   #courseManagement .course-name {
     display: inline-block;
-    width: 80%;
+    width: 67%;
     line-height: 20px;
+  }
+  .course-price{
+    display: inline-block;
+    color: red;
+    margin-right: 10px;
   }
 
   #courseManagement .course-detials {

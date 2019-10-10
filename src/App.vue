@@ -46,6 +46,7 @@
 <style>
   body, html, #app {
     margin: 0;
+    min-height: 100%;
     /* font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; */
     font-family: 'TianZhen19e6a6ae661ff1';
   }
