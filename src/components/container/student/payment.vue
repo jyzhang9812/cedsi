@@ -134,6 +134,7 @@
     },
     created: function () {
       this.orderId = random(6) + Date.now();
+      this.$store.commit('updateLoading', true)
       if (this.$route.query.type == 1) {
         this.$store.dispatch('payCourse', this.$route.query.id)
       } else {
