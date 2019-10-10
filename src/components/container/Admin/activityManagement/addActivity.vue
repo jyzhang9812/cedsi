@@ -100,7 +100,7 @@
     </div>
     <div class="upload-footer">
       <button class="btn upload-btn" @click="submit">确定</button>
-      <button class="btn upload-btn">取消</button>
+      <button class="btn upload-btn" @click="cancel">取消</button>
     </div>
   </div>
 </template>
@@ -188,7 +188,10 @@ export default {
     },
     submit() {
       console.log(this.editor.txt.text());
-    }
+    },
+    cancel() {
+        this.$router.replace({ path: "/Admin/activityManagement/" });
+      },
   },
   mounted() {
     this.editor = new E(this.$refs.editor);
