@@ -54,7 +54,7 @@
                     }
                 },
                 curId: 0,
-                txt:false,
+                txt:true,
             }
         },
         methods: {
@@ -66,8 +66,8 @@
         created: function () {
             this.$store.commit('updateLoading', true)
             this.$store.dispatch('getClass').then(() => {
-                if(this.myClass==null){
-                    this.txt = true;
+                if(this.myClass.length!=0){
+                    this.txt = false;
                 }
                 else 
                     this.nowClass = this.myClass[this.curId];

@@ -228,7 +228,7 @@ const actions = {
     },
     //获取用户课程
     getCourse({ commit, state }) {
-        return globalAxios.get('/student/courses',
+        globalAxios.get('/student/courses',
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -238,8 +238,10 @@ const actions = {
         ).then(response => {
             var arr = [];
             console.log(response);
-            for (var i = 0; i < response.data.length; i++) {
-                arr.push(response.data[i])
+            if (response.data != null) {
+                for (var i = 0; i < response.data.length; i++) {
+                    arr.push(response.data[i])
+                }
             }
             commit(TYPES.changeCourseList, arr)
             commit(TYPES.changeCourseCurrentList, 0)
@@ -249,6 +251,7 @@ const actions = {
                 commit(TYPES.updateLoading, false)
                 console.log(error);
             })
+        return true;
     },
     //课程视频及信息
     getCourseDetail({ commit, dispatch, state }, id) {
@@ -422,7 +425,7 @@ const actions = {
         globalAxios({
             method: "post",
             url: '/student/courses/' + allId.id,
-            data: { orderId: allId.orderId , cover: allId.cover},
+            data: { orderId: allId.orderId, cover: allId.cover },
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': state.idToken
