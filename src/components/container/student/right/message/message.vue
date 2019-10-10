@@ -6,7 +6,10 @@
                 :class="{active : index===curId}">{{item.item}}</button>
         </div>
         <div class="main">
-            <div class="cardbox" v-for="(item,index) in currentList">
+            <div v-if='txt==true'>
+                <h4>该分类下暂无消息</h4>
+            </div>
+            <div class="cardbox" v-if='txt==false' v-for="(item,index) in currentList">
                 <div class="card_content">
                     {{item.MESSAGE_CONTENT}}{{item.MESSAGE_TYPE}}
                 </div>
@@ -241,6 +244,7 @@
         },
         data() {
             return {
+                txt: true,
                 curId: 0,
                 //当前页码
                 currentPage: 0,
@@ -259,10 +263,13 @@
                 this.curId = index;
                 this.$store.dispatch('getMsg', this.curId).then(() => {
                     this.currentList = this.$store.state.msgCurrentList
-                    if (this.currentList.length!=0) {
+                    if (this.currentList.length != 0) {
+                        this.txt = false;
                         for (let i = 0; i <= this.currentList.length; i++) {
                             this.currentList[i].DISPATCH_DATE = this.timestampToTime(this.currentList[i].DISPATCH_DATE)
                         }
+                    } else {
+                        this.txt = true;
                     }
                 })
             },
@@ -288,7 +295,8 @@
         created: function () {
             this.$store.dispatch('getMsg', this.curId).then(() => {
                 this.currentList = this.$store.state.msgCurrentList
-                if (this.currentList.length!=0) {
+                if (this.currentList.length != 0) {
+                    this.txt = false;
                     for (let i = 0; i <= this.currentList.length; i++) {
                         this.currentList[i].DISPATCH_DATE = this.timestampToTime(this.currentList[i].DISPATCH_DATE)
                     }

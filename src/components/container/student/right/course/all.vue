@@ -226,7 +226,7 @@
 
 
 <style scoped>
-    #allCourse .layout {
+    #allCourse{
         margin: 0;
     }
 
