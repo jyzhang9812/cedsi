@@ -1,10 +1,3 @@
-<!--
- * @Email: rumosky@163.com
- * @Author: rumosky
- * @Github: https://github.com/rumosky
- * @Date: 2019-08-14 16:09:22
- * @Description: 教务角色发布活动页面
- -->
 <template>
   <div id="eduActivity">
     <div class="body">
@@ -12,6 +5,37 @@
       <div class="filter">
         <div class="option">
           <button type="button" class="btn-my" @click="addActivity">新增活动</button>
+        </div>
+      </div>
+      <div class="modal fade" id="checkStudent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" ref="checkStudent">
+        <div class="modal-dialog tablewidth">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">查看学生({{studentNum}}人)</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th v-for="(title,index) in studentTitle" class="titles" :key="index">{{title}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(student, seq) in studentData" :key="seq" class="content">
+                    <td>{{seq+1}}</td>
+                    <td>{{student.name}}</td>
+                    <td>{{student.studentId}}</td>
+                    <td>{{student.gender}}</td>
+                    <td>{{student.grade}}</td>
+                    <td>{{student.age}}</td>
+                    <td>{{student.mobilePhone}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
       <div class="panels">
@@ -34,8 +58,8 @@
               <td>{{list.time}}</td>
               <td>{{list.principal}}</td>
               <td>
-                <span class="blue">编辑</span>
-                <span class="blue" @click="checkStu()">查看学生</span>
+                <!-- <span class="blue">编辑</span> -->
+                <span class="blue" data-toggle="modal" data-target="#checkStudent" @click="checkStu(list)">查看学生</span>
               </td>
             </tr>
           </tbody>
@@ -59,18 +83,12 @@
         limit: 10,
         currentList: [],
         tableData: [],
-        activityList: [{
-          name: "一号",
-          place: "石家庄",
-          time: "编程测试",
-          principal: "李老师"
-        },
-        {
-          name: "test2",
-          place: "北京",
-          time: "布置作业",
-          principal: "张老师"
-        }]
+        activityList: [],
+        studentTitle: [
+          "序号", "学生姓名", "学号", "性别",
+          "年级", "年龄", "手机号"
+        ],
+        studentData: []
       }
     },
     components: { pagination, selectInput, deletePrompt },
@@ -78,7 +96,21 @@
       addActivity() {
         this.$router.push({ path: "/eduAdmin/activity/addActivity" });
       },
-      checkStu() { },
+      checkStu(item) {
+        this.pullParticipatingStudents(item.id)
+          .then(res => {
+            this.studentData = res.data.map(item => {
+              return {
+                name: item.STUDENT_NAME,
+                studentId: item.STUDENT_ID,
+                gender: item.GENDER,
+                grade: item.GRADE,
+                age: item.AGE,
+                mobilePhone: item.MOBILE_PHONE
+              }
+            });
+          }).catch(err => { console.log(err) });
+      },
       getNew(value) {
         this.currentList = this.tableData
           .map(item => {
@@ -86,10 +118,10 @@
               name: item.ACTIVITY_NAME,
               place: item.ACTIVITY_PLACE,
               time: item.ACTIVITY_TIME,
-              principal: item.PRINCIPAL_NAME
+              principal: item.PRINCIPAL_NAME,
+              id: item.ACTIVITY_ID
             };
-          })
-          .slice(value, value + this.limit);
+          }).slice(value, value + this.limit);
       },
       pullOriginalTableData() {
         let config = { headers: { Authorization: localStorage.getItem('idToken') } };
@@ -97,11 +129,15 @@
           .then(res => {
             this.tableData = res.data || [];
             this.getNew(0);
-          })
-          .catch(err => {
-            console.log(err);
-          });
+          }).catch(err => { console.log(err) });
+      },
+      pullParticipatingStudents(id) {
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        return instance.get(`/eduadmin/activity/${id}/student`, config);
       }
+    },
+    computed: {
+      studentNum() { return this.studentData.length }
     },
     mounted() {
       this.pullOriginalTableData();
@@ -171,8 +207,9 @@
     text-align: center;
   }
 
-  #eduActivity table {
-    border: #eeeeee;
+  #eduActivity .tablewidth {
+    width: 90%;
+    margin: 0 auto;
   }
 
   #eduActivity .btn-my {
@@ -249,5 +286,48 @@
     justify-content: flex-start;
     margin-top: 20px;
     margin-left: 356px;
+  }
+
+  #eduActivity .modal-dialog {
+    top: 100px;
+    position: relative;
+  }
+
+  #eduActivity .modal-header {
+    background-color: #409eff;
+    color: #fff;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+
+  #eduActivity .tablewidth {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  #eduActivity .content td {
+    line-height: 30px;
+  }
+
+  #eduActivity .content {
+    margin: 0 auto;
+    width: 55%;
+    height: 100%;
+  }
+
+  #eduActivity table {
+    border: #eeeeee;
+  }
+
+  #eduActivity table tr {
+    text-align: center !important;
+  }
+
+  #eduActivity table td {
+    vertical-align: middle !important;
+  }
+
+  #eduActivity .titles {
+    text-align: center;
   }
 </style>

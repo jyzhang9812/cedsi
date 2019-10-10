@@ -6,7 +6,7 @@
     </div>
     <div class="upload">
       <span class="upload-title">是否付费:</span>
-      <span style='margin:30px 0 0 50px' v-for="(item,index) in radiolist">
+      <span style='margin:30px 0 0 50px' v-for="(item,index) in radiolist" :key="index">
         <input type="radio" :value='item.value' :checked="item.isCheck" @change="changeInput(index)">
         {{item.name}}
       </span>
@@ -14,7 +14,6 @@
     <div v-if='radiolist[2,1].isCheck==true' class="upload">
       <span class="upload-title">付费金额:</span>
       <input class="upload-input" v-model='price' placeholder="请输入付费金额" />
-      </span>
     </div>
     <!-- <div v-if='radiolist[2,1].isCheck==true' class="upload">
       <span class="upload-title">付费章节:</span>
@@ -96,6 +95,7 @@
         }
       },
       submit1(event) {
+        var that=this
         let postImgToS3 = function (config, file) {
           AWS.config = new AWS.Config({
             accessKeyId: config.AccessKeyId,
@@ -122,8 +122,7 @@
             } else {
               console.log(data);
               if (data.hasOwnProperty('ETag')) {
-                alert("上传成功!");
-                this.$router.replace({ path: '/Admin/courseManagement/' });
+                that.$router.push({ path: '/Admin/' });
               } else {
                 alert("上传失败!");
               }

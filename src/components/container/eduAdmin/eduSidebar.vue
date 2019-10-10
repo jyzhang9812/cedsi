@@ -53,14 +53,6 @@
             close: true
           },
           {
-            name: "教学管理",
-            icon: 'fa-book',
-            children: [
-              { name: "作业点评", route: "/eduAdmin/teaching" },
-            ],
-            close: true
-          },
-          {
             name: "活动管理",
             icon: 'fa-flag',
             children: [
