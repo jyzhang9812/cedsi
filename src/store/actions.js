@@ -228,7 +228,7 @@ const actions = {
     },
     //获取用户课程
     getCourse({ commit, state }) {
-        globalAxios.get('/student/courses',
+        return globalAxios.get('/student/courses',
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -251,7 +251,6 @@ const actions = {
                 commit(TYPES.updateLoading, false)
                 console.log(error);
             })
-        return true;
     },
     //课程视频及信息
     getCourseDetail({ commit, dispatch, state }, id) {
@@ -371,8 +370,10 @@ const actions = {
             response => {
                 // console.log(response);
                 var arr = [];
-                for (var i = 0; i < response.data.length; i++) {
-                    arr.push(response.data[i])
+                if (response.data != null) {
+                    for (var i = 0; i < response.data.length; i++) {
+                        arr.push(response.data[i])
+                    }
                 }
                 commit(TYPES.changeMsgList, arr)
                 commit(TYPES.changeMsgCurrentList, 0)

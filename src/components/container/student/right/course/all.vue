@@ -84,7 +84,7 @@
                     <h4>{{item.COURSE_NAME}}</h4>
                     <div class="right">
                         <button :class="(index==i)?'btnh btn_green':'btn'">试听</button>
-                        <button :class="(index==i)?'btnh':'btn'" @click='jmpPay(index)'>学习课程</button>
+                        <button :class="(index==i)?'btnh':'btn'" @click='jmpPay(index)'>{{item.PRICE!=0?'购买':'学习'}}课程</button>
                     </div>
                 </div>
                 <!-- </router-link> -->

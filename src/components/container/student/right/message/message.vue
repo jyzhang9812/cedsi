@@ -259,7 +259,7 @@
                 this.curId = index;
                 this.$store.dispatch('getMsg', this.curId).then(() => {
                     this.currentList = this.$store.state.msgCurrentList
-                    if (this.currentList) {
+                    if (this.currentList.length!=0) {
                         for (let i = 0; i <= this.currentList.length; i++) {
                             this.currentList[i].DISPATCH_DATE = this.timestampToTime(this.currentList[i].DISPATCH_DATE)
                         }
@@ -288,7 +288,7 @@
         created: function () {
             this.$store.dispatch('getMsg', this.curId).then(() => {
                 this.currentList = this.$store.state.msgCurrentList
-                if (this.currentList) {
+                if (this.currentList.length!=0) {
                     for (let i = 0; i <= this.currentList.length; i++) {
                         this.currentList[i].DISPATCH_DATE = this.timestampToTime(this.currentList[i].DISPATCH_DATE)
                     }
