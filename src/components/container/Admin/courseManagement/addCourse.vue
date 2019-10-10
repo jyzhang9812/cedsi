@@ -139,7 +139,7 @@
         this.postFormData({
           name: this.name,
           ispay: this.ispay,
-          price: this.price,
+          price: this.price*100,
           // chapter: this.chapter,
           introduction: this.description,
           type: this.file.type.split('/')[1]

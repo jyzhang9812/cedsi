@@ -12,7 +12,7 @@
         <div class="order-title">{{item.PRODUCT_NAME}}</div>
         <div class="order-price">
           实付金额:
-          <span>{{item.FEE}}</span>
+          <span>{{item.FEE/100}}</span>
         </div>
       </div>
     </div>

@@ -1,12 +1,16 @@
 <template>
   <div id="payment">
     <!-- 模态框（Modal） -->
-    <div class="modal fade" id="myPay" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog"
+    <div class="modal fade" id="myPay" data-keyboard="false" data-backdrop="true" tabindex="-1" role="dialog"
       aria-labelledby="myToggleModalLabel" aria-hidden="true">
       <div class="modal-dialog mypay">
         <div class="modal-content mypay-height">
           <div class="modal-header mypay-title">
-            <h4 class="modal-title" id="myModalLabel">微信支付{{payinfo.price}}</h4>
+            <h4 class="modal-title" id="myModalLabel">微信支付¥{{payinfo.price/100}}</h4>
+            <button type="button" class="close" style="position: absolute;top:20px;right: 20px;" data-dismiss="modal"
+              aria-hidden="true">
+              &times;
+            </button>
           </div>
           <div class="modal-body mypay-qrcode">
             <div id="query">
@@ -24,14 +28,14 @@
     </div>
     <div class="payment-card">
       <div class="card-title">
-        <span>订单：{{orderNum}}</span>
+        <span>订单：{{this.orderId}}</span>
       </div>
       <div class="card-content">
         <img :src="payinfo.cover" class="card-img" />
         <div class="order-title">{{payinfo.name}}</div>
         <div class="order-price">
           实付金额:
-          <span>{{payinfo.price}}</span>
+          <span>¥{{payinfo.price/100}}</span>
         </div>
       </div>
       <div class="pay-method">
@@ -42,7 +46,7 @@
       </div>
       <div class="summary">
         应付金额:
-        <span>{{payinfo.price}}</span>
+        <span>¥{{payinfo.price/100}}</span>
         <button class="pay" data-toggle="modal" data-target="#myPay" @click="closeModal">立即支付</button>
       </div>
     </div>
@@ -57,7 +61,7 @@
     data() {
       return {
         id: '',
-        orderNum: "66666666666",
+        orderId: '',
         qrcodeImage: this.$store.state.url + "payment/qrcode.png",
         wechatImage: this.$store.state.url + "payment/WePayLogo.png"
       };
@@ -65,14 +69,14 @@
     methods: {
       closeModal() {
         var payment = {};
-        payment.orderId = random(6) + Date.now();
+        payment.orderId = this.orderId;
         payment.productId = "222222";
         payment.productName = "hhhhh";
         payment.userId = "43d4b60bc84cafdac72db222548f4200509e3a3ef855a1f30789795e56655fc8";
         payment.fee = "1";
         globalAxios
           .post(
-            "http://wx.cedsie.com:12345/pay",
+            "https://wx.cedsie.com:12345/pay",
             payment,
           )
           .then(
@@ -98,20 +102,21 @@
       query(timer, orderId) {
         globalAxios
           .get(
-            "http://wx.cedsie.com:12345/query?orderId=" + orderId
+            "https://wx.cedsie.com:12345/query?orderId=" + orderId
           )
           .then(
             response => {
               console.log(response.data)
               if (response.data == "SUCCESS") {
+                $('#myPay').modal('hide');
                 if (this.$route.query.type == 1) {
-                var allid = {
-                  id: this.$route.query.id ,
-                  orderId: orderId
+                  var allid = {
+                    id: this.$route.query.id,
+                    orderId: orderId
+                  }
+                  console.log(allid)
+                  this.$store.dispatch('postCourseId', allid)
                 }
-                console.log(allid)
-                this.$store.dispatch('postCourseId', allid)
-                } 
                 clearInterval(timer)
                 this.$router.push({ path: '/payOK' });
               }
@@ -126,6 +131,7 @@
       // }
     },
     created: function () {
+      this.orderId = random(6) + Date.now();
       if (this.$route.query.type == 1) {
         this.$store.dispatch('payCourse', this.$route.query.id)
       } else {
