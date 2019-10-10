@@ -392,7 +392,7 @@ const actions = {
         ).then(response => {
             // console.log(response);
             var myClasses = []
-            if (response.data) {
+            if (response.data!=null) {
                 for (let i = 0; i < response.data.length; i++) {
                     var myClass = {}
                     var arr = []

@@ -1,6 +1,9 @@
 <template>
   <div class="container-fluid layout" id="coursecard">
-    <div class="row">
+    <div v-if='txt==true'>
+      <h4>还没有学习任何课程哦~</h4>
+    </div>
+    <div class="row" v-if='txt==false'>
       <div class="col-md-4" v-for="(item,index) in currentList" :key="index">
         <router-link :to="{name:'coursemap',query:{id:item.ID}}" class="box">
           <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
@@ -51,6 +54,7 @@
     },
     data() {
       return {
+        txt:false,
         currentPage: 0,
         btn: "btn",
         btnh: "btnhover",
@@ -80,7 +84,11 @@
       this.style = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;'
       this.style1 = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;margin-top:-' + (document.documentElement.clientWidth * 0.17) + 'px;'
       this.$store.commit('updateLoading', true)
-      this.$store.dispatch('getCourse')
+      this.$store.dispatch('getCourse').then(()=>{
+        if(this.tableData==null){
+          this.txt = true
+        }
+      })
     },
     computed: {
       ...mapState({
@@ -188,7 +196,8 @@
     position: relative;
     border-radius: 20px;
   }
-  #coursecard .detail_item i{
+
+  #coursecard .detail_item i {
     margin: 3px 15px 0 10px;
   }
 
