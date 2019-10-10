@@ -48,6 +48,7 @@
           <h5 class="course-price">￥{{course.price}}</h5>
           <button class="course-detials btn" data-toggle="modal" data-target="#detials"
             @click="courseDetials(index)">详情</button>
+          <button class="course-detials btn btn-red" :disabled="!course.status" @click="coursePublish(index)">发布</button>
         </div>
       </div>
     </div>
@@ -76,6 +77,30 @@
       },
       gotoChapter(index) {
         this.$router.push({ path: '/Admin/chapterManagement/' + this.courseList[index].id })
+      },
+      coursePublish(index){
+        var token = window.localStorage.getItem("idToken");
+      this.courseId = this.courseList[index].id;
+      instance
+        .put(
+          "/admin/course/" +
+            this.courseId ,{},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            }
+          }
+        )
+        .then(
+          response => {
+            console.log(response);
+            this.courseList[index].status=false;
+          },
+          error => {
+            console.log(error);
+          }
+        );
       }
     },
     mounted() {
@@ -90,7 +115,8 @@
               img:item.COVER,
               num: 100,
               id:item.ID,
-              price:item.PRICE
+              price:item.PRICE,
+              status:item.COURSE_STATUS=="NOT_PUBLISH"
             });
           });
         })
@@ -134,6 +160,9 @@
 
   #courseManagement .textBox:hover {
     border-color: #409eff;
+  }
+  .btn-red{
+    background-color: red !important;
   }
 
   #courseManagement .btn {
@@ -206,7 +235,7 @@
 
   #courseManagement .course-name {
     display: inline-block;
-    width: 67%;
+    width: 54%;
     line-height: 20px;
   }
   .course-price{
