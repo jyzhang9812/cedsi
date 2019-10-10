@@ -6,9 +6,10 @@
     <div class="payreceipt-card" v-if='txt==false' v-for="(item,index) in currentList" :key="index">
       <div class="card-title">
         <span>订单：{{item.ORDER_ID}}</span>
+        <span>交易时间：{{item.COMMIT_TIME}}</span>
       </div>
       <div class="card-content">
-        <img :src="item.cover" class="card-img" />
+        <img :src="item.COVER" class="card-img" />
         <div class="order-title">{{item.PRODUCT_NAME}}</div>
         <div class="order-price">
           实付金额:
@@ -40,13 +41,29 @@
         var currentPage = value / this.limit;
         this.currentPage = currentPage;
         this.$store.commit("changeOrderCurrentList", this.currentPage * this.limit);
-      }
+      },
+      timestampToTime(timestamp) {
+        timestamp = String(timestamp);
+        timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
+        var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + "-";
+        var M = (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-";
+        var D = (date.getDate() <10 ? "0"+ date.getDate() :date.getDate())+ " ";
+        var h = (date.getHours() <10 ? "0"+ date.getHours() :date.getHours() )+':';
+        var m = (date.getMinutes() <10 ? "0"+date.getMinutes() :date.getMinutes() )+ ":";
+        var s = date.getSeconds() <10 ? "0"+date.getSeconds() :date.getSeconds();
+        return Y + M + D + h + m + s;
+      },
     },
     created: function () {
       this.$store.commit("updateLoading", true);
       this.$store.dispatch("getOrder").then(() => {
-        if (this.tableData == null) {
+        if (this.tableData.length == 0) {
           this.txt = true;
+        }else{
+          for (let i = 0; i <= this.currentList.length; i++) {
+            this.currentList[i].COMMIT_TIME = this.timestampToTime(this.currentList[i].COMMIT_TIME)
+          }
         }
       });
     },
@@ -81,6 +98,8 @@
     padding: 40px 0;
     font-size: 16px;
     color: #07111b;
+    display: flex;
+    justify-content: space-between;
   }
 
   #payreceipt .card-content {

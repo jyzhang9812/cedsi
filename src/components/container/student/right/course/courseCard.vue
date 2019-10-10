@@ -85,7 +85,7 @@
       this.style1 = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;margin-top:-' + (document.documentElement.clientWidth * 0.17) + 'px;'
       this.$store.commit('updateLoading', true)
       this.$store.dispatch('getCourse').then(()=>{
-        if(this.tableData==null){
+        if(this.tableData.length == 0){
           this.txt = true
         }
       })

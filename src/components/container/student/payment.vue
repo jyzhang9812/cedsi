@@ -70,10 +70,10 @@
       closeModal() {
         var payment = {};
         payment.orderId = this.orderId;
-        payment.productId = "222222";
-        payment.productName = "hhhhh";
-        payment.userId = "43d4b60bc84cafdac72db222548f4200509e3a3ef855a1f30789795e56655fc8";
-        payment.fee = "1";
+        payment.productId = this.$route.query.id;
+        payment.productName = this.payinfo.name;
+        payment.userId = localStorage.getItem('userId');
+        payment.fee = /*this.payinfo.price*/1;
         globalAxios
           .post(
             "https://wx.cedsie.com:12345/pay",
@@ -112,7 +112,9 @@
                 if (this.$route.query.type == 1) {
                   var allid = {
                     id: this.$route.query.id,
-                    orderId: orderId
+                    orderId: orderId,
+                    cover: this.payinfo.cover
+
                   }
                   console.log(allid)
                   this.$store.dispatch('postCourseId', allid)
