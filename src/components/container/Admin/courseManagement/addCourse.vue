@@ -14,7 +14,6 @@
     <div v-if='radiolist[2,1].isCheck==true' class="upload">
       <span class="upload-title">付费金额:</span>
       <input class="upload-input" v-model='price' placeholder="请输入付费金额" />
-      </span>
     </div>
     <!-- <div v-if='radiolist[2,1].isCheck==true' class="upload">
       <span class="upload-title">付费章节:</span>
