@@ -1,23 +1,23 @@
 <template>
     <div id="rollPic" class="container-fluid">
         <!-- 模态框（Modal） -->
-        <div class="modal fade" id="myHomework" data-backdrop='false' tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade"  v-if='tableData!=0' id="myHomework" data-backdrop='false' tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body head">
                         <div class="left">
-                            <iframe v-if='tableData!=0' :src="currentList[num].url"></iframe>
+                            <iframe :src="currentList[num].url"></iframe>
                         </div>
                         <div class="right">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                 &times;
                             </button>
                             <h3>作者</h3>
-                            <p v-if='tableData!=0'>{{currentList[num].name}}</p>
+                            <p>{{currentList[num].name}}</p>
                             <!-- <h3>作品描述</h3>
-                            <p>dwqenwrehgnruy</p>
-                            <h3>操作说明</h3>
                             <p>dwqenwrehgnruy</p> -->
+                            <h3>操作说明</h3>
+                            <p>{{currentList[num].guide}}</p>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -120,6 +120,15 @@
             tab(index) {
                 this.curId = index
                 this.$store.dispatch('getWork', this.$store.state.courseList[index].ID)
+                .then(() => {
+                        if (this.tableData.length == 0) {
+                                // this.txt = true;
+                            } else {
+                            for (let i = 0; i <= this.currentList.length; i++) {
+                                this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
+                            }
+                        }
+                    })
                 // .then(() => {
                 //     if (this.tableData.length == 0) {
                 //         this.txt = true
@@ -169,7 +178,7 @@
                                 // this.txt = true;
                             } else {
                             for (let i = 0; i <= this.currentList.length; i++) {
-                                this.currentList[i].COMMIT_TIME = this.timestampToTime(this.currentList[i].COMMIT_TIME)
+                                this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
                             }
                         }
                     })

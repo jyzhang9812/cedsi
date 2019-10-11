@@ -311,7 +311,7 @@ const actions = {
     },
     //获取作业
     getWork({ commit, state }, courseId) {
-        globalAxios.get('/student/courses/' + courseId + '/homework',
+        return globalAxios.get('/student/courses/' + courseId + '/homework',
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -332,6 +332,7 @@ const actions = {
                 array.url = arr[i].HW_URL;
                 array.name = arr[i].HW_NAME;
                 array.img_url = arr[i].HW_COVER;
+                array.guide = arr[i].HW_GUIDE;
                 if(arr[i].TEACHER_REMARK==='null'){
                     array.teacher_remark = arr[i].TEACHER_REMARK;
                 }else{
