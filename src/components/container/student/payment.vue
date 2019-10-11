@@ -138,7 +138,7 @@
       if (this.$route.query.type == 1) {
         this.$store.dispatch('payCourse', this.$route.query.id)
       } else {
-        this.$store.dispatch('')
+        this.$store.dispatch('searchActivity', this.$route.query.id)
       }
     },
     computed: {

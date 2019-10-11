@@ -70,8 +70,10 @@ const actions = {
                     array.price = response.data.ACTIVITY_PRICE;
                     array.place = response.data.ACTIVITY_PLACE;
                     state.payInfo = array;
+                    commit(TYPES.updateLoading, false)
                 },
                 error => {
+                    commit(TYPES.updateLoading, false)
                     router.push({ path: '/404' })
                     console.log(error);
                 });
