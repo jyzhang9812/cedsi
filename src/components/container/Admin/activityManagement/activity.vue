@@ -73,14 +73,12 @@
         //   }
         // },
         activityList: [{
-            title: "玩转算法系列--图论精讲 面试升职必备（Java版）",
-            releaseTime: "2019-03-04",
-            activityType: "课程",
-            place: "陕西师范大学新勇活动中心",
-            price: "0.01",
-
-          },
-
+            title: "",
+            releaseTime: "",
+            activityType: "",
+            place: "",
+            price: "",
+          }
         ]
       }
     },
