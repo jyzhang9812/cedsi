@@ -1,10 +1,10 @@
 <template>
   <div id="activity-detial">
     <div class="activity-section1" :style="{backgroundImage:'url('+activitybgUrl+')'}">
-      <h1 class="activity-title">{{card.title}}</h1>
+      <h1 class="activity-title">{{card.name}}</h1>
       <h2 class="activity-brief">{{card.subtitle}}</h2>
       <div class="fixed-box" :style="{backgroundImage:'url(../../'+$store.state.url+'activity/fixedbg.png'}">
-        <div class="activity-price">￥{{card.price}}</div>
+        <div class="activity-price">￥{{card.price/100}}</div>
         <button class="join-btn" @click="payment">我要报名</button>
       </div>
     </div>
@@ -52,6 +52,7 @@
     methods: {
       payment() {
         if(this.card.price==0){
+          this.$store.dispatch('postUserInfo', this.$route.query.id)
           //发送当前用户信息，返回success之后跳转界面
         }
         else{

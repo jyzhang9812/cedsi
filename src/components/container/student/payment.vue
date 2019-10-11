@@ -114,10 +114,11 @@
                     id: this.$route.query.id,
                     orderId: orderId,
                     cover: this.payinfo.cover
-
                   }
                   console.log(allid)
                   this.$store.dispatch('postCourseId', allid)
+                }else{
+                  this.$store.dispatch('postUserInfo', this.$route.query.id)
                 }
                 clearInterval(timer)
                 this.$router.push({ path: '/payOK' });
