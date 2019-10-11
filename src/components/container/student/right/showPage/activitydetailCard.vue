@@ -54,10 +54,10 @@
         if(this.card.price==0){
           this.$store.dispatch('postUserInfo', this.$route.query.id).then((res)=>{
             if(res==1){
-              alert('报名成功 ~！')
+              toastr.success('报名成功 ~!');
               this.$router.push({ path: '/payOK' })
             }else{
-              alert('哎呀。。。报名失败了，请重试')
+              toastr.error('哎呀...报名失败了，请重试');
             }
           })
           //发送当前用户信息，返回success之后跳转界面

@@ -321,7 +321,7 @@ const actions = {
         ).then(response => {
             var arr = []
             var content = []
-            // console.log(response);
+            console.log(response);
             // if (curId == 0) {
             for (var i = 0; i < response.data.homework.length; i++) {
                 arr.push(response.data.homework[i])
@@ -332,8 +332,16 @@ const actions = {
                 array.url = './static/build/player.html?fileUrl=' + arr[i].HW_URL;
                 array.name = arr[i].HW_NAME;
                 array.img_url = arr[i].HW_COVER;
-                array.teacher_remark = arr[i].TEACHER_REMARK;
-                array.rank = arr[i].HW_RANK;
+                if(arr[i].TEACHER_REMARK=='null'){
+                    array.teacher_remark = arr[i].TEACHER_REMARK;
+                }else{
+                    array.teacher_remark='暂无评价';
+                }
+                if(arr[i].HW_RANK=='null'){
+                    array.rank = arr[i].HW_RANK;
+                }else{
+                    array.rank = 0;
+                }
                 array.time = arr[i].SUBMIT_TIME;
                 content.push(array);
             }
