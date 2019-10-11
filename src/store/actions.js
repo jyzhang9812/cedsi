@@ -449,7 +449,7 @@ const actions = {
     postUserInfo({ commit, state }, id) {
         globalAxios({
             method: "post",
-            url: '/student/activity/' + id,
+            url: '/student/activity/' + id + '/cedsi ',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': state.idToken
