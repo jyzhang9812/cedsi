@@ -589,26 +589,27 @@ const actions = {
                 console.log(response);
                 var videoArr = [];
                 var videoData = [];
-                videoArr = response.data.data;
-                if (videoArr == null) {
-                    return null
-                } else {
-                    for (var i = 0; i < videoArr.length; i++) {
-                        var video = {};
-                        video.chapterId = videoArr[i].CP_ID;
-                        video.videoId = videoArr[i].RS_ID;
-                        video.chapterName = videoArr[i].CP_NAME;
-                        video.videoName = videoArr[i].RS_NAME;
-                        video.introduction = videoArr[i].RS_COMMENT;
-                        video.date = videoArr[i].RS_CREATE_TIME
-                        video.uploadAdmin = videoArr[i].RS_FOUNDER;
-                        video.chapterNum = videoArr[i].CP_NUMBER;
-                        video.videoUrl = videoArr[i].RS_URL;
-                        videoData.push(video);
+                if (response.data != null) {
+                    if (videoArr == null) {
+                        return null
+                    } else {
+                        for (var i = 0; i < videoArr.length; i++) {
+                            var video = {};
+                            video.chapterId = videoArr[i].CP_ID;
+                            video.videoId = videoArr[i].RS_ID;
+                            video.chapterName = videoArr[i].CP_NAME;
+                            video.videoName = videoArr[i].RS_NAME;
+                            video.introduction = videoArr[i].RS_COMMENT;
+                            video.date = videoArr[i].RS_CREATE_TIME
+                            video.uploadAdmin = videoArr[i].RS_FOUNDER;
+                            video.chapterNum = videoArr[i].CP_NUMBER;
+                            video.videoUrl = videoArr[i].RS_URL;
+                            videoData.push(video);
+                        }
+                        commit(TYPES.changeVideo, videoData);
+                        commit(TYPES.changeVideoCurrentList, 0)
+                        console.log(videoData);
                     }
-                    commit(TYPES.changeVideo, videoData);
-                    commit(TYPES.changeVideoCurrentList, 0)
-                    console.log(videoData);
                 }
             },
             error => {
@@ -661,23 +662,29 @@ const actions = {
                 console.log(response.data);
                 var chapterArr = [];
                 var chapterData = [];
-                chapterArr = response.data.data;
-                state.chapterLength = chapterArr.length
-                for (var i = 0; i < state.chapterLength; i++) {
-                    var chapter = {};
-                    chapter.chapterId = chapterArr[i].CP_ID;
-                    chapter.chapterName = chapterArr[i].CP_NAME;
-                    chapter.date = chapterArr[i].CP_UPLOAD_TIME;
-                    chapter.introduction = chapterArr[i].CP_DESCRIPTION;
-                    chapter.date = chapterArr[i].CP_UPLOAD_TIME;
-                    chapter.uploadAdmin = chapterArr[i].CP_FOUNDER;
-                    chapter.chapterNum = chapterArr[i].CP_NUMBER;
-                    chapter.id = chapterArr[i].CP_ID;
-                    chapterData.push(chapter);
+                if (response.data != null) {
+                    chapterArr = response.data.data;
+                    if (chapterArr == null) {
+                        return null
+                    } else {
+                        state.chapterLength = chapterArr.length
+                        for (var i = 0; i < state.chapterLength; i++) {
+                            var chapter = {};
+                            chapter.chapterId = chapterArr[i].CP_ID;
+                            chapter.chapterName = chapterArr[i].CP_NAME;
+                            chapter.date = chapterArr[i].CP_UPLOAD_TIME;
+                            chapter.introduction = chapterArr[i].CP_DESCRIPTION;
+                            chapter.date = chapterArr[i].CP_UPLOAD_TIME;
+                            chapter.uploadAdmin = chapterArr[i].CP_FOUNDER;
+                            chapter.chapterNum = chapterArr[i].CP_NUMBER;
+                            chapter.id = chapterArr[i].CP_ID;
+                            chapterData.push(chapter);
+                        }
+                        state.chapterData = chapterData;
+                        commit(TYPES.changeChapterList, chapterData)
+                        commit(TYPES.changeChapterCurrentList, 0)
+                    }
                 }
-                state.chapterData = chapterData;
-                commit(TYPES.changeChapterList, chapterData)
-                commit(TYPES.changeChapterCurrentList, 0)
             },
             error => {
                 console.log(error);
