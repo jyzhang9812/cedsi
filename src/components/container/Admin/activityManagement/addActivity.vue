@@ -267,9 +267,6 @@ export default {
   height: 40px !important;
   width: 300px !important;
 }
-#add-activity #datePicker {
-  width: 200px !important;
-}
 #add-activity .upload-textarea {
   border: 1px solid #409eff;
   border-radius: 5px;

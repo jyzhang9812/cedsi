@@ -59,7 +59,7 @@ const actions = {
                     let array = {}
                     array.id = response.data.ID;
                     array.cover = response.data.COVER;
-                    array.title = response.data.TITLE;
+                    array.name = response.data.TITLE;
                     array.subtitle = response.data.SUBTITLE;
                     array.content = response.data.CONTENT;
                     array.avatar = response.data.AVATAR;
@@ -255,8 +255,8 @@ const actions = {
             })
     },
     //课程视频及信息
-    getCourseDetail({ commit, dispatch, state }, id) {
-        globalAxios.get('/student/courses/' + id + '/chapters', {
+    getCourseDetail({ commit, state }, id) {
+        return globalAxios.get('/student/courses/' + id + '/chapters', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': state.idToken
@@ -266,7 +266,10 @@ const actions = {
                 response => {
                     console.log(response)
                     var chaptersArr = response.data.data.chapter_message.chapters;
-                    var finishChaptersArr = response.data.data.chapter_message.finish_chapters;
+                    var finishChaptersArr = [];
+                    if(response.data.data.chapter_message.finish_chapters){
+                        finishChaptersArr = response.data.data.chapter_message.finish_chapters;
+                    }
                     state.finishChaptersLength = finishChaptersArr.length;
                     var List = {
                         name: '',
@@ -429,6 +432,24 @@ const actions = {
             method: "post",
             url: '/student/courses/' + allId.id,
             data: { orderId: allId.orderId, cover: allId.cover },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': state.idToken
+            }
+        })
+            .then(response => {
+                console.log(response)
+                commit(TYPES.updateLoading, false)
+            }, error => {
+                commit(TYPES.updateLoading, false)
+                console.log(error);
+            })
+    },
+    //向购买的活动发送用户信息
+    postUserInfo({ commit, state }, id) {
+        globalAxios({
+            method: "post",
+            url: '/student/activity/' + id,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': state.idToken
