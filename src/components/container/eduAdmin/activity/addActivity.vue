@@ -190,7 +190,7 @@
       },
       getPrincipalTeachers() {
         let config = { headers: { Authorization: localStorage.getItem('idToken') } };
-        return instance.get("/eduadmin/activity/teacher", config)
+        instance.get("/eduadmin/activity/teacher", config)
           .then(res => {
             if (res.data.length) {
               this.inputData.activity.list = res.data.map(item => {

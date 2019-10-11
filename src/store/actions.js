@@ -449,7 +449,7 @@ const actions = {
     postUserInfo({ commit, state }, id) {
         globalAxios({
             method: "post",
-            url: '/student/activity/' + id,
+            url: '/student/activity/' + id + '/cedsi ',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': state.idToken
@@ -458,9 +458,11 @@ const actions = {
             .then(response => {
                 console.log(response)
                 commit(TYPES.updateLoading, false)
+                return 1;
             }, error => {
                 commit(TYPES.updateLoading, false)
                 console.log(error);
+                return 0;
             })
     },
 
