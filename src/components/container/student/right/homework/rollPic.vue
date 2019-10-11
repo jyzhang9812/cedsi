@@ -49,10 +49,10 @@
                     <img class="img" :style="style" :src="item.img_url" />
                     <div class='details' v-show="index==i">
                         <div class="detail_item">
-                            <i class="fa fa-star fa-lg" aria-hidden="true" style="color: #ffbf35"
+                            <!-- <i class="fa fa-star fa-lg" aria-hidden="true" style="color: #ffbf35"
                                 v-for='j in parseInt(item.rank)'></i>
                             <i class="fa fa-star-o fa-lg" aria-hidden="true" style="color: #ffbf35"
-                                v-for='j in 5-parseInt(item.rank)'></i>
+                                v-for='j in 5-parseInt(item.rank)'></i> -->
                             <span>{{item.teacher_remark}}</span>
                         </div>
                     </div>
