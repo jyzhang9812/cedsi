@@ -163,10 +163,10 @@
           );
       },
       goback() {
-        this.$router.push({ path: "/Admin/" })
+        this.$router.push({ path: "/Admin/videoManagement" })
       },
       gotoVideo() {
-        this.$router.push({ path: "/Admin/" })
+        this.$router.push({ path: "/Admin/videoManagement" })
       }
     },
     created() {
