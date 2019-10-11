@@ -267,7 +267,7 @@ const actions = {
                     console.log(response)
                     var chaptersArr = response.data.data.chapter_message.chapters;
                     var finishChaptersArr = [];
-                    if(response.data.data.chapter_message.finish_chapters){
+                    if (response.data.data.chapter_message.finish_chapters) {
                         finishChaptersArr = response.data.data.chapter_message.finish_chapters;
                     }
                     state.finishChaptersLength = finishChaptersArr.length;
@@ -611,26 +611,24 @@ const actions = {
                 var videoArr = [];
                 var videoData = [];
                 if (response.data != null) {
-                    if (videoArr == null) {
-                        return null
-                    } else {
-                        for (var i = 0; i < videoArr.length; i++) {
-                            var video = {};
-                            video.chapterId = videoArr[i].CP_ID;
-                            video.videoId = videoArr[i].RS_ID;
-                            video.chapterName = videoArr[i].CP_NAME;
-                            video.videoName = videoArr[i].RS_NAME;
-                            video.introduction = videoArr[i].RS_COMMENT;
-                            video.date = videoArr[i].RS_CREATE_TIME
-                            video.uploadAdmin = videoArr[i].RS_FOUNDER;
-                            video.chapterNum = videoArr[i].CP_NUMBER;
-                            video.videoUrl = videoArr[i].RS_URL;
-                            videoData.push(video);
-                        }
-                        commit(TYPES.changeVideo, videoData);
-                        commit(TYPES.changeVideoCurrentList, 0)
-                        console.log(videoData);
+                    videoArr = response.data.data
+                    for (var i = 0; i < videoArr.length; i++) {
+                        var video = {};
+                        video.chapterId = videoArr[i].CP_ID;
+                        video.videoId = videoArr[i].RS_ID;
+                        video.chapterName = videoArr[i].CP_NAME;
+                        video.videoName = videoArr[i].RS_NAME;
+                        video.introduction = videoArr[i].RS_COMMENT;
+                        video.date = videoArr[i].RS_CREATE_TIME
+                        video.uploadAdmin = videoArr[i].RS_FOUNDER;
+                        video.chapterNum = videoArr[i].CP_NUMBER;
+                        video.videoUrl = videoArr[i].RS_URL;
+                        videoData.push(video);
                     }
+                    commit(TYPES.changeVideo, videoData);
+                    commit(TYPES.changeVideoCurrentList, 0)
+                    console.log(videoData);
+
                 }
             },
             error => {
