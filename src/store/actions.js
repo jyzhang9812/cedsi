@@ -332,12 +332,12 @@ const actions = {
                 array.url = './static/build/player.html?fileUrl=' + arr[i].HW_URL;
                 array.name = arr[i].HW_NAME;
                 array.img_url = arr[i].HW_COVER;
-                if(arr[i].TEACHER_REMARK==='null'){
+                if(arr[i].TEACHER_REMARK==="null"){
                     array.teacher_remark = arr[i].TEACHER_REMARK;
                 }else{
                     array.teacher_remark='暂无评价';
                 }
-                if(arr[i].HW_RANK==='null'){
+                if(arr[i].HW_RANK=="null"){
                     array.rank = arr[i].HW_RANK;
                 }else{
                     array.rank = 0;

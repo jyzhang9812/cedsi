@@ -30,7 +30,7 @@
             <button @click="tab(index)" v-for="(item,index) in items" class="tag"
                 :class="{active : index==curId}">{{item.COURSE_NAME}}</button>
         </div>
-        <div id="selectMenu">
+        <!-- <div id="selectMenu">
             <div>
                 <button @click="selectTab(index)" v-for="(item,index) in selectItems" class="tag"
                     :class="{active : index==selectId}">{{item}}</button>
@@ -41,10 +41,13 @@
                 <i class="fa fa-2x fa-long-arrow-down" :style="isUpload?'color:#ccc':'color:#00bcd4'"
                     aria-hidden="true"></i>
             </div>
-        </div>
+        </div> -->
         <div class="row" style="margin-top: 10px">
-            <div class="col-md-4" v-for="(item,index) in currentList" :key="index" @mouseover="show(index)"
-                @mouseleave="hidden(index)" @click='show(index)'>
+            <div v-if='txt==true'>
+                <h4>还没有做作业哦~</h4>
+            </div>
+            <div class="col-md-4" v-if='txt==false' v-for="(item,index) in currentList" :key="index"
+                @mouseover="show(index)" @mouseleave="hidden(index)" @click='show(index)'>
                 <div class="inside" data-toggle="modal" data-target="#myHomework" data-index="index">
                     <img class="img" :style="style" :src="item.img_url" />
                     <div class='details' v-show="index==i">
@@ -91,6 +94,7 @@
         },
         data() {
             return {
+                txt: false,
                 curId: 0,
                 num: -1,
                 btn: 'btn',
@@ -115,7 +119,11 @@
             },
             tab(index) {
                 this.curId = index
-                this.$store.dispatch('getWork', this.$store.state.courseList[index].ID)
+                this.$store.dispatch('getWork', this.$store.state.courseList[index].ID).then(() => {
+                    if (this.tableData.length == 0) {
+                        this.txt = true
+                    }
+                })
             },
             selectTab(index) {
                 this.selectId = index
@@ -140,7 +148,11 @@
             this.style1 = 'height:' + (document.documentElement.clientWidth * 0.17) + 'px;margin-top:-' + (document.documentElement.clientWidth * 0.17) + 'px;'
             this.$store.commit('updateLoading', true)
             this.$store.dispatch('getCourse').then(() => {
-                this.$store.dispatch('getWork', this.$store.state.courseList[0].ID)
+                this.$store.dispatch('getWork', this.$store.state.courseList[0].ID).then(() => {
+                    if (this.tableData.length == 0) {
+                        this.txt = true
+                    }
+                })
             })
         },
         computed: {
