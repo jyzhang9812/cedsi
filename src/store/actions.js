@@ -458,9 +458,11 @@ const actions = {
             .then(response => {
                 console.log(response)
                 commit(TYPES.updateLoading, false)
+                return 1;
             }, error => {
                 commit(TYPES.updateLoading, false)
                 console.log(error);
+                return 0;
             })
     },
 
