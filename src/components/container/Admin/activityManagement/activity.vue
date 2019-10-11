@@ -4,15 +4,15 @@
       <p>活动管理</p>
       <div class="filter">
         <div class="option">
-          <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
+          <!-- <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
           <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list"
             tips="请选择活动类型" id="activityType" @option="changeOption">
           </selectInput>
-          <!-- <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
+          <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
             @option="changeOption">
           </selectInput> -->
-          <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
-          <button type="button" class="btn-my" @click="clearChoices">清空筛选</button>
+          <!-- <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
+          <button type="button" class="btn-my" @click="clearChoices">清空筛选</button> -->
           <button type="button" class="btn-my" @click="addActivity">新增活动</button>
         </div>
       </div>
@@ -26,20 +26,16 @@
               <th>活动类型</th>
               <th>活动地点</th>
               <th>价格</th>
-            
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(list, index) in currentList" :key="index" >
+            <tr v-for="(list, index) in currentList" :key="index">
               <td>{{index + 1}}</td>
-              <td width='380px' class="blue">{{list.title}}</td>
-              <td>{{list.releaseTime}}</td>
-              <td>{{list.activityType}}</td>
-              <td>{{list.place}}</td>
-              <td>{{list.price}}</td>
-              
-          
-    
+              <td width='380px' class="blue">{{list.TITLE}}</td>
+              <td>{{list.ACTIVITY_TIME}}</td>
+              <td>{{list.ACTIVITY_TYPE}}</td>
+              <td>{{list.ACTIVITY_PLACE}}</td>
+              <td>{{list.ACTIVITY_PRICE}}</td>
             </tr>
           </tbody>
         </table>
@@ -65,26 +61,26 @@
         currentList: [],
         tableData: [],
         editorContent: '',
-        inputData: {
-          keywords: "",
-          activityType: {
-            option: "",
-            list: ["通知公告", "班级活动", "辅导答疑", "布置作业"]
-          },
-          school: {
-            option: "",
-            list: ["赛迪思", "雁塔路小学", "翠华路小学", "回民街小学"]
-          }
-        },
+        // inputData: {
+        //   keywords: "",
+        //   activityType: {
+        //     option: "",
+        //     list: ["通知公告", "班级活动", "辅导答疑", "布置作业"]
+        //   },
+        //   school: {
+        //     option: "",
+        //     list: ["赛迪思", "雁塔路小学", "翠华路小学", "回民街小学"]
+        //   }
+        // },
         activityList: [{
             title: "玩转算法系列--图论精讲 面试升职必备（Java版）",
             releaseTime: "2019-03-04",
             activityType: "课程",
             place: "陕西师范大学新勇活动中心",
-           price: "0.01",
-           
+            price: "0.01",
+
           },
-        
+
         ]
       }
     },
@@ -94,104 +90,84 @@
       deletePrompt
     },
     methods: {
-      addActivity(){
+      addActivity() {
         this.$router.push({
-        path: "/Admin/activityManagement/addActivity"
-      });
+          path: "/Admin/activityManagement/addActivity"
+        });
       },
-
       getNew(value) {
         this.currentList = this.tableData.slice(value, value + this.limit);
       },
-      changeOption(item, id) {
-        Object.keys(this.inputData).forEach((res) => {
-          if (res === id) {
-            this.inputData[res].option = item;
-          }
-        });
-      },
-      clearChoices() {
-        this.optionsClear();
-      },
-      optionsClear() {
-        Object.keys(this.inputData).forEach((res) => {
-          if (this.inputData[res].hasOwnProperty("option")) {
-            this.inputData[res].option = "";
-          } else {
-            this.inputData[res] = "";
-          }
-        });
-      },
-      titleOrAuthorFilter(titleOrAuthor, tableList) {
-        if (titleOrAuthor === "") return tableList;
-        let restTableList = tableList.slice(0);
-        for (let i = 0, j = restTableList.length; i < j; i++) {
-          if ((!new RegExp(titleOrAuthor).test(restTableList[i]["title"])) &&
-            (!new RegExp(titleOrAuthor).test(restTableList[i]["author"]))) {
-            restTableList.splice(i, 1);
-            j -= 1;
-            i -= 1;
-          }
-        }
-        return restTableList;
-      },
-      selectInputFilter(inputData, tableList) {
-        let restTableList = tableList.slice(0);
-        for (let i = 0, j = restTableList.length; i < j; i++) {
-          for (let res of Object.keys(inputData)) {
-            let condition1 = inputData[res].hasOwnProperty("option") &&
-              inputData[res].option !== "";
-            let condition2 = restTableList[i].hasOwnProperty(res) &&
-              restTableList[i][res] !== inputData[res].option;
-            if (condition1 && condition2) {
-              restTableList.splice(i, 1);
-              i -= 1;
-              j -= 1;
-              break;
-            }
-          }
-        }
-        return restTableList;
-      },
-      conditionSearch() {
-        let temp = this.titleOrAuthorFilter(this.inputData.keywords, this.activityList);
-        temp = this.selectInputFilter(this.inputData, temp);
-        this.tableData = temp;
-        this.getNew(0);
-      },
+      pullOriginalTableData() {
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        instance.get('/activity', config)
+          .then(res => {
+            this.tableData = res.data || [];
+            this.getNew(0);
+          }).catch(err => { console.log(err) });
+      }
+      // changeOption(item, id) {
+      //   Object.keys(this.inputData).forEach((res) => {
+      //     if (res === id) {
+      //       this.inputData[res].option = item;
+      //     }
+      //   });
+      // },
+      // clearChoices() {
+      //   this.optionsClear();
+      // },
+      // optionsClear() {
+      //   Object.keys(this.inputData).forEach((res) => {
+      //     if (this.inputData[res].hasOwnProperty("option")) {
+      //       this.inputData[res].option = "";
+      //     } else {
+      //       this.inputData[res] = "";
+      //     }
+      //   });
+      // },
+      // titleOrAuthorFilter(titleOrAuthor, tableList) {
+      //   if (titleOrAuthor === "") return tableList;
+      //   let restTableList = tableList.slice(0);
+      //   for (let i = 0, j = restTableList.length; i < j; i++) {
+      //     if ((!new RegExp(titleOrAuthor).test(restTableList[i]["title"])) &&
+      //       (!new RegExp(titleOrAuthor).test(restTableList[i]["author"]))) {
+      //       restTableList.splice(i, 1);
+      //       j -= 1;
+      //       i -= 1;
+      //     }
+      //   }
+      //   return restTableList;
+      // },
+      // selectInputFilter(inputData, tableList) {
+      //   let restTableList = tableList.slice(0);
+      //   for (let i = 0, j = restTableList.length; i < j; i++) {
+      //     for (let res of Object.keys(inputData)) {
+      //       let condition1 = inputData[res].hasOwnProperty("option") &&
+      //         inputData[res].option !== "";
+      //       let condition2 = restTableList[i].hasOwnProperty(res) &&
+      //         restTableList[i][res] !== inputData[res].option;
+      //       if (condition1 && condition2) {
+      //         restTableList.splice(i, 1);
+      //         i -= 1;
+      //         j -= 1;
+      //         break;
+      //       }
+      //     }
+      //   }
+      //   return restTableList;
+      // },
+      // conditionSearch() {
+      //   let temp = this.titleOrAuthorFilter(this.inputData.keywords, this.activityList);
+      //   temp = this.selectInputFilter(this.inputData, temp);
+      //   this.tableData = temp;
+      //   this.getNew(0);
+      // },
     },
     mounted() {
+      this.pullOriginalTableData();
       this.tableData = this.activityList;
       this.getNew(0);
-      // let editor = new E(this.$refs.editor);
-      // editor.customConfig.uploadImgShowBase64 = true;
-      // editor.customConfig.onchange = (html) => {
-      //   this.editorContent = html
-      // };
-      // editor.customConfig.menus = [
-      //     'head', // 标题
-      //     'bold', // 粗体
-      //     'fontSize', // 字号
-      //     'fontName', // 字体
-      //     'italic', // 斜体
-      //     'underline', // 下划线
-      //     'strikeThrough', // 删除线
-      //     'foreColor', // 文字颜色
-      //     'backColor', // 背景颜色
-      //     'link', // 插入链接
-      //     'list', // 列表
-      //     'justify', // 对齐方式
-      //     'quote', // 引用
-      //     'emoticon', // 表情
-      //     'image', // 插入图片
-      //     'table', // 表格
-      //     'video', // 插入视频
-      //     'code', // 插入代码
-      //     'undo', // 撤销
-      //     'redo' // 重复
-      //   ],
-      //   editor.create();
-      // editor.txt.html('<p>请输入内容</p>');
+
     }
   }
 
@@ -336,4 +312,5 @@
     margin-top: 20px;
     margin-left: 356px;
   }
+
 </style>
