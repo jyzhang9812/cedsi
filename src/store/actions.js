@@ -311,7 +311,7 @@ const actions = {
     },
     //获取作业
     getWork({ commit, state }, courseId) {
-        globalAxios.get('/student/courses/' + courseId + '/homework',
+        return globalAxios.get('/student/courses/' + courseId + '/homework',
             {
                 headers: {
                     'Content-Type': 'application/json',

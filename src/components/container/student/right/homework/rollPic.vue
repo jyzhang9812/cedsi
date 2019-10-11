@@ -122,6 +122,8 @@
                 this.$store.dispatch('getWork', this.$store.state.courseList[index].ID).then(() => {
                     if (this.tableData.length == 0) {
                         this.txt = true
+                    }else{
+                        this.txt = false
                     }
                 })
             },
