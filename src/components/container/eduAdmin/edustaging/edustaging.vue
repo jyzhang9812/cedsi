@@ -13,16 +13,18 @@
           </div>
         </div>
       </div>
-      <div class="selectschool">
+      <!-- <div class="selectschool">
         <span>请选择学校：</span>
         <input class="check" type="checkbox" id="isall" @click="checkall"/>全选
         <div class="schoolname" v-for="(schoolname,index) in school" :key="schoolname.schoolname" >
           <input class="check" type="checkbox" :checked="schoolname.ischecked" @click='getchecked(index)'>
           {{schoolname.schoolname}}
         </div>
-      </div>
+      </div> -->
       <h4 class="title">学校信息详情</h4>
-      <ve-histogram :data="chartData"></ve-histogram>
+      <div class="chart">
+        <ve-histogram :data="chartData" style="width:700px; margin:0 auto;"></ve-histogram>
+      </div>
     </div>
   </div>
 </template>
@@ -33,11 +35,11 @@ export default {
   data() {
     return {
       lists: [
-        {
-          img: this.$store.state.url + "eduAdmin/school.png",
-          num: 1,
-          title: "开课学校数量"
-        },
+        // {
+        //   img: this.$store.state.url + "eduAdmin/school.png",
+        //   num: 1,
+        //   title: "开课学校数量"
+        // },
         {
           img: this.$store.state.url + "eduAdmin/teach.png",
           num: 1,
@@ -77,9 +79,9 @@ export default {
         }
       ],
       chartData: {
-        columns: ["学校名称", "开课学校数量", "学生数量", "老师数量"],
+        columns: ["学校名称", "学生数量", "老师数量"],
         rows: [
-          { 学校名称: "aaa", 开课学校数量: 1, 学生数量: 3, 老师数量: 2 }
+          { 学校名称: "赛迪思", 学生数量: 3, 老师数量: 2 }
         ]
       },
       checkedschool:[]
@@ -130,13 +132,12 @@ export default {
   font-weight: bolder;
 }
 #edustaging .card {
-  width: 100%;
+  margin: 20px auto;
+  width: 80%;
   height: 142px;
-  margin-top: 20px;
-  margin-bottom: 20px;
 }
 #edustaging .childcard {
-  width: 23%;
+  width: 30%;
   float: left;
   height: 142px;
   box-shadow: 0 0 10px #ccc;
