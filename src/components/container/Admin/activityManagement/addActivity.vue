@@ -288,184 +288,151 @@
 </script>
 
 <style>
-  #add-activity {
-    width: 98%;
-    margin: 0 auto;
-    padding-top: 30px;
-  }
+#add-activity {
+  width: 98%;
+  margin: 0 auto;
+  padding-top: 30px;
+}
+#add-activity .upload {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 20px;
+}
+#add-activity .upload-title {
+  color: #606266;
+  display: block;
+  text-align: right;
+  width: 100px;
+  height: 40px;
+  float: left;
+  line-height: 40px;
+}
+#add-activity .upload-input {
+  width: 300px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #409eff;
+  margin-left: 10px;
+  padding-left: 10px;
+}
+#add-activity .upload-input:hover {
+  border: 1px solid #66b1ff;
+}
+#add-activity .upload-input:focus {
+  outline: none;
+}
+#add-activity .activity-time {
+  margin-left: 10px !important;
+  height: 40px !important;
+  width: 300px !important;
+}
+#add-activity .upload-textarea {
+  border: 1px solid #409eff;
+  border-radius: 5px;
+  margin-left: 10px;
+  padding: 10px;
+}
+#add-activity .upload-height {
+  height: 190px;
+}
+#add-activity .upload-textarea:hover {
+  border: 1px solid #66b1ff;
+}
+#add-activity .upload-textarea:focus {
+  outline: none;
+}
+#add-activity .outside {
+  width: 300px !important;
+  height: 40px !important;
+  margin-left: 10px !important;
+}
+#add-activity .inputBox,
+#add-activity .inputbox {
+  height: 35px !important;
+  font-size: 14px !important;
+  width: 230px !important;
+}
 
-  #add-activity .upload {
-    width: 100%;
-    height: 50px;
-    margin-bottom: 20px;
-  }
-
-  #add-activity .upload-title {
-    color: #606266;
-    display: block;
-    text-align: right;
-    width: 100px;
-    height: 40px;
-    float: left;
-    line-height: 40px;
-  }
-
-  #add-activity .upload-input {
-    width: 300px;
-    height: 40px;
-    border-radius: 5px;
-    border: 1px solid #409eff;
-    margin-left: 10px;
-    padding-left: 10px;
-  }
-
-  #add-activity .upload-input:hover {
-    border: 1px solid #66b1ff;
-  }
-
-  #add-activity .upload-input:focus {
-    outline: none;
-  }
-
-  #add-activity .activity-time {
-    margin-left: 10px !important;
-    height: 40px !important;
-    width: 300px !important;
-  }
-
-  #add-activity #datePicker {
-    width: 200px !important;
-  }
-
-  #add-activity .upload-textarea {
-    border: 1px solid #409eff;
-    border-radius: 5px;
-    margin-left: 10px;
-    padding: 10px;
-  }
-
-  #add-activity .upload-height {
-    height: 190px;
-  }
-
-  #add-activity .upload-textarea:hover {
-    border: 1px solid #66b1ff;
-  }
-
-  #add-activity .upload-textarea:focus {
-    outline: none;
-  }
-
-  #add-activity .outside {
-    width: 300px !important;
-    height: 40px !important;
-    margin-left: 10px !important;
-  }
-
-  #add-activity .inputBox,
-  #add-activity .inputbox {
-    height: 35px !important;
-    font-size: 14px !important;
-    width: 230px !important;
-  }
-
-  #add-activity .dropdown-menu {
-    left: 100px !important;
-  }
-
-  #add-activity .upload-footer {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  #add-activity .upload-btn {
-    background-color: #409eff;
-    color: #fff;
-    margin-left: 10px;
-  }
-
-  #add-activity .upload-btn:hover {
-    color: #fff;
-  }
-
-  #add-activity .upload-btn:focus {
-    outline: none;
-    color: #fff;
-  }
-
-  /**/
-  #add-activity .address-input select {
-    margin-left: 10px;
-    font-size: 14px;
-  }
-
-  #add-activity .upload-cover-btn {
-    margin-left: 10px;
-    width: 80px;
-    height: 35px;
-    display: inline-block;
-    background-color: #409eff;
-    color: #fff;
-    border-radius: 5px;
-    line-height: 35px;
-    text-align: center;
-  }
-
-  #add-activity input[type="file"] {
-    width: 80px;
-    height: 35px;
-    position: relative;
-    top: -35px;
-  }
-
-  #add-activity .upload-cover-img {
-    display: inline-block;
-    border: 1px dashed #dcdfe6;
-    width: 290px;
-    height: 150px;
-    margin-left: 10px;
-    border-radius: 5px;
-    background-color: #f5f7fa;
-  }
-
-  #add-activity .cover-image {
-    width: 100%;
-    height: 100%;
-  }
-
-  #add-activity .upload-height {
-    height: 190px;
-  }
-
-  #add-activity .editor {
-    width: 800px;
-    position: relative;
-  }
-
-  #add-activity .w-e-toolbar {
-    position: relative;
-    left: 10px;
-  }
-
-  #add-activity .w-e-text-container {
-    position: relative;
-    left: 110px;
-    width: 700px;
-  }
-
-  #add-activity .w-e-text {
-    position: relative;
-    top: -10px;
-    background-color: #fff;
-  }
-
-  #add-activity .upload-height2 {
-    height: 350px;
-  }
-
-  #add-activity .upload-width {
-    width: 200px;
-  }
-
+#add-activity .dropdown-menu {
+  left: 100px !important;
+}
+#add-activity .upload-footer {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+#add-activity .upload-btn {
+  background-color: #409eff;
+  color: #fff;
+  margin-left: 10px;
+}
+#add-activity .upload-btn:hover {
+  color: #fff;
+}
+#add-activity .upload-btn:focus {
+  outline: none;
+  color: #fff;
+}
+/**/
+#add-activity .address-input select {
+  margin-left: 10px;
+  font-size: 14px;
+}
+#add-activity .upload-cover-btn {
+  margin-left: 10px;
+  width: 80px;
+  height: 35px;
+  display: inline-block;
+  background-color: #409eff;
+  color: #fff;
+  border-radius: 5px;
+  line-height: 35px;
+  text-align: center;
+}
+#add-activity input[type="file"] {
+  width: 80px;
+  height: 35px;
+  position: relative;
+  top: -35px;
+}
+#add-activity .upload-cover-img {
+  display: inline-block;
+  border: 1px dashed #dcdfe6;
+  width: 290px;
+  height: 150px;
+  margin-left: 10px;
+  border-radius: 5px;
+  background-color: #f5f7fa;
+}
+#add-activity .cover-image {
+  width: 100%;
+  height: 100%;
+}
+#add-activity .upload-height {
+  height: 190px;
+}
+#add-activity .editor {
+  width: 800px;
+  position: relative;
+}
+#add-activity .w-e-toolbar {
+  position: relative;
+  left: 10px;
+}
+#add-activity .w-e-text-container {
+  position: relative;
+  left: 110px;
+  width: 700px;
+}
+#add-activity .w-e-text {
+  position: relative;
+  top: -10px;
+  background-color: #fff;
+}
+#add-activity .upload-height2 {
+  height: 350px;
+}
+#add-activity .upload-width {
+  width: 200px;
+}
 </style>

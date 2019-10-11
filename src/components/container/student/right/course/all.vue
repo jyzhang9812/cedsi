@@ -65,8 +65,7 @@
                 :class="{active : index===curId}">{{item.item}}</button>
         </div>
         <div class="row">
-            <div class="col-md-4" v-for="(item,index) in currentList" :key="index" data-toggle="modal"
-                data-target="#myVideo" @click='changeCourseNum(index)'>
+            <div class="col-md-4" v-for="(item,index) in currentList" :key="index">
                 <!-- <router-link :to="{name:'coursemap',params:{id:item.ID}}" class="box"> -->
                 <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
                     <img class="img" :style="style" :src="item.COVER">
@@ -83,7 +82,8 @@
                 <div class="outside">
                     <h4>{{item.COURSE_NAME}}</h4>
                     <div class="right">
-                        <button :class="(index==i)?'btnh btn_green':'btn'">试听</button>
+                        <button :class="(index==i)?'btnh btn_green':'btn'" data-toggle="modal"
+                        data-target="#myVideo" @click='changeCourseNum(index)'>试听</button>
                         <button :class="(index==i)?'btnh':'btn'" @click='jmpPay(index)'>{{item.PRICE!=0?'购买':'学习'}}课程</button>
                     </div>
                 </div>
@@ -167,6 +167,7 @@
                 this.courseNum = index;
                 this.$store.dispatch('getCourseDetail',this.currentList[index].ID).then(()=>{
                     this.videosrc = this.$store.state.pointList[0].videoSrc
+                    console.log(this.videosrc)
                 })
             },
             jmpPay(index) {

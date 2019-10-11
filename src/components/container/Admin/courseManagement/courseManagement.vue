@@ -39,16 +39,16 @@
       <button class="btn btn-clear" @click="addCourse">新增课程</button>
     </div>
     <div class="second-floor row">
-      <div class="col-md-4" v-for="(course,index) in courseList" :key="course.name">
+      <div class="col-md-4 floor-height" v-for="(course,index) in courseList" :key="course.name">
         <div class="course-card" @click="gotoChapter(index)">
           <img :src="course.img" class="course-image" />
         </div>
-        <div class="course-title">
-          <h3 class="course-name">{{course.name}}</h3>
-          <h5 class="course-price">￥{{course.price}}</h5>
-          <button class="course-detials btn" data-toggle="modal" data-target="#detials"
+        <div class="course-title row">
+          <h3 class="course-name col-md-5">{{course.name}}</h3>
+          <h5 class="course-price col-md-2">￥{{course.price}}</h5>
+          <button class="course-detials btn col-md-2" data-toggle="modal" data-target="#detials"
             @click="courseDetials(index)">详情</button>
-          <button class="course-detials btn btn-red" :disabled="!course.status" @click="coursePublish(index)">发布</button>
+          <button class="course-detials btn btn-red col-md-2" :disabled="!course.status" @click="coursePublish(index)">发布</button>
         </div>
       </div>
     </div>
@@ -142,6 +142,9 @@
   #courseManagement .first-floor {
     margin-top: 20px;
   }
+  .floor-height{
+    height: 350px;
+  }
 
   #courseManagement .textBox {
     width: 180px;
@@ -234,19 +237,18 @@
   }
 
   #courseManagement .course-name {
-    display: inline-block;
-    width: 54%;
     line-height: 20px;
   }
   .course-price{
+    margin-top: 20px;
     display: inline-block;
     color: red;
     margin-right: 10px;
   }
 
   #courseManagement .course-detials {
+    margin: 15px 5px 5px 0;
     background-color: #2fc27e;
-    margin-bottom: 5px;
   }
 
   #courseManagement .course-detials:hover {

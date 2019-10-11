@@ -59,7 +59,7 @@ const actions = {
                     let array = {}
                     array.id = response.data.ID;
                     array.cover = response.data.COVER;
-                    array.title = response.data.TITLE;
+                    array.name = response.data.TITLE;
                     array.subtitle = response.data.SUBTITLE;
                     array.content = response.data.CONTENT;
                     array.avatar = response.data.AVATAR;
@@ -70,8 +70,10 @@ const actions = {
                     array.price = response.data.ACTIVITY_PRICE;
                     array.place = response.data.ACTIVITY_PLACE;
                     state.payInfo = array;
+                    commit(TYPES.updateLoading, false)
                 },
                 error => {
+                    commit(TYPES.updateLoading, false)
                     router.push({ path: '/404' })
                     console.log(error);
                 });
@@ -253,8 +255,8 @@ const actions = {
             })
     },
     //课程视频及信息
-    getCourseDetail({ commit, dispatch, state }, id) {
-        globalAxios.get('/student/courses/' + id + '/chapters', {
+    getCourseDetail({ commit, state }, id) {
+        return globalAxios.get('/student/courses/' + id + '/chapters', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': state.idToken
@@ -264,7 +266,10 @@ const actions = {
                 response => {
                     console.log(response)
                     var chaptersArr = response.data.data.chapter_message.chapters;
-                    var finishChaptersArr = response.data.data.chapter_message.finish_chapters;
+                    var finishChaptersArr = [];
+                    if(response.data.data.chapter_message.finish_chapters){
+                        finishChaptersArr = response.data.data.chapter_message.finish_chapters;
+                    }
                     state.finishChaptersLength = finishChaptersArr.length;
                     var List = {
                         name: '',
@@ -440,6 +445,24 @@ const actions = {
                 console.log(error);
             })
     },
+    //向购买的活动发送用户信息
+    postUserInfo({ commit, state }, id) {
+        globalAxios({
+            method: "post",
+            url: '/student/activity/' + id,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': state.idToken
+            }
+        })
+            .then(response => {
+                console.log(response)
+                commit(TYPES.updateLoading, false)
+            }, error => {
+                commit(TYPES.updateLoading, false)
+                console.log(error);
+            })
+    },
 
     //获取全部课程
     getAllCourse({ commit, state }) {
@@ -587,26 +610,27 @@ const actions = {
                 console.log(response);
                 var videoArr = [];
                 var videoData = [];
-                videoArr = response.data.data;
-                if (videoArr == null) {
-                    return null
-                } else {
-                    for (var i = 0; i < videoArr.length; i++) {
-                        var video = {};
-                        video.chapterId = videoArr[i].CP_ID;
-                        video.videoId = videoArr[i].RS_ID;
-                        video.chapterName = videoArr[i].CP_NAME;
-                        video.videoName = videoArr[i].RS_NAME;
-                        video.introduction = videoArr[i].RS_COMMENT;
-                        video.date = videoArr[i].RS_CREATE_TIME
-                        video.uploadAdmin = videoArr[i].RS_FOUNDER;
-                        video.chapterNum = videoArr[i].CP_NUMBER;
-                        video.videoUrl = videoArr[i].RS_URL;
-                        videoData.push(video);
+                if (response.data != null) {
+                    if (videoArr == null) {
+                        return null
+                    } else {
+                        for (var i = 0; i < videoArr.length; i++) {
+                            var video = {};
+                            video.chapterId = videoArr[i].CP_ID;
+                            video.videoId = videoArr[i].RS_ID;
+                            video.chapterName = videoArr[i].CP_NAME;
+                            video.videoName = videoArr[i].RS_NAME;
+                            video.introduction = videoArr[i].RS_COMMENT;
+                            video.date = videoArr[i].RS_CREATE_TIME
+                            video.uploadAdmin = videoArr[i].RS_FOUNDER;
+                            video.chapterNum = videoArr[i].CP_NUMBER;
+                            video.videoUrl = videoArr[i].RS_URL;
+                            videoData.push(video);
+                        }
+                        commit(TYPES.changeVideo, videoData);
+                        commit(TYPES.changeVideoCurrentList, 0)
+                        console.log(videoData);
                     }
-                    commit(TYPES.changeVideo, videoData);
-                    commit(TYPES.changeVideoCurrentList, 0)
-                    console.log(videoData);
                 }
             },
             error => {
@@ -659,23 +683,29 @@ const actions = {
                 console.log(response.data);
                 var chapterArr = [];
                 var chapterData = [];
-                chapterArr = response.data.data;
-                state.chapterLength = chapterArr.length
-                for (var i = 0; i < state.chapterLength; i++) {
-                    var chapter = {};
-                    chapter.chapterId = chapterArr[i].CP_ID;
-                    chapter.chapterName = chapterArr[i].CP_NAME;
-                    chapter.date = chapterArr[i].CP_UPLOAD_TIME;
-                    chapter.introduction = chapterArr[i].CP_DESCRIPTION;
-                    chapter.date = chapterArr[i].CP_UPLOAD_TIME;
-                    chapter.uploadAdmin = chapterArr[i].CP_FOUNDER;
-                    chapter.chapterNum = chapterArr[i].CP_NUMBER;
-                    chapter.id = chapterArr[i].CP_ID;
-                    chapterData.push(chapter);
+                if (response.data != null) {
+                    chapterArr = response.data.data;
+                    if (chapterArr == null) {
+                        return null
+                    } else {
+                        state.chapterLength = chapterArr.length
+                        for (var i = 0; i < state.chapterLength; i++) {
+                            var chapter = {};
+                            chapter.chapterId = chapterArr[i].CP_ID;
+                            chapter.chapterName = chapterArr[i].CP_NAME;
+                            chapter.date = chapterArr[i].CP_UPLOAD_TIME;
+                            chapter.introduction = chapterArr[i].CP_DESCRIPTION;
+                            chapter.date = chapterArr[i].CP_UPLOAD_TIME;
+                            chapter.uploadAdmin = chapterArr[i].CP_FOUNDER;
+                            chapter.chapterNum = chapterArr[i].CP_NUMBER;
+                            chapter.id = chapterArr[i].CP_ID;
+                            chapterData.push(chapter);
+                        }
+                        state.chapterData = chapterData;
+                        commit(TYPES.changeChapterList, chapterData)
+                        commit(TYPES.changeChapterCurrentList, 0)
+                    }
                 }
-                state.chapterData = chapterData;
-                commit(TYPES.changeChapterList, chapterData)
-                commit(TYPES.changeChapterCurrentList, 0)
             },
             error => {
                 console.log(error);
