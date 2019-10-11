@@ -311,7 +311,7 @@ const actions = {
     },
     //获取作业
     getWork({ commit, state }, courseId) {
-        return globalAxios.get('/student/courses/' + courseId + '/homework',
+        globalAxios.get('/student/courses/' + courseId + '/homework',
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -329,15 +329,15 @@ const actions = {
             for (var i = 0; i < arr.length; i++) {
                 var array = {}
                 array.id = arr[i].HW_ID;
-                array.url = './static/build/player.html?fileUrl=' + arr[i].HW_URL;
+                array.url = arr[i].HW_URL;
                 array.name = arr[i].HW_NAME;
                 array.img_url = arr[i].HW_COVER;
-                if(arr[i].TEACHER_REMARK==="null"){
+                if(arr[i].TEACHER_REMARK==='null'){
                     array.teacher_remark = arr[i].TEACHER_REMARK;
                 }else{
                     array.teacher_remark='暂无评价';
                 }
-                if(arr[i].HW_RANK=="null"){
+                if(arr[i].HW_RANK==='null'){
                     array.rank = arr[i].HW_RANK;
                 }else{
                     array.rank = 0;
