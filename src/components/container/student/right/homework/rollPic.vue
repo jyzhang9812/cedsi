@@ -6,14 +6,14 @@
                 <div class="modal-content">
                     <div class="modal-body head">
                         <div class="left">
-                            <iframe v-if='num>=0' :src="currentList[num].url"></iframe>
+                            <iframe v-if='tableData!=0' :src="currentList[num].url"></iframe>
                         </div>
                         <div class="right">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                 &times;
                             </button>
                             <h3>作者</h3>
-                            <p v-if='num>=0'>{{currentList[num].name}}</p>
+                            <p v-if='tableData!=0'>{{currentList[num].name}}</p>
                             <!-- <h3>作品描述</h3>
                             <p>dwqenwrehgnruy</p>
                             <h3>操作说明</h3>
@@ -96,7 +96,7 @@
             return {
                 // txt: false,
                 curId: 0,
-                num: -1,
+                num: 0,
                 btn: 'btn',
                 btnh: 'btnhover',
                 zuopin: '../' + this.$store.state.url + 'dashboard/zuopin.png',
