@@ -96,6 +96,7 @@
           response => {
             console.log(response);
             this.courseList[index].status=false;
+            alert("发布成功")
           },
           error => {
             console.log(error);
