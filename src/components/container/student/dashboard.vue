@@ -120,7 +120,7 @@
 
 <style scoped>
   #student .container-fluid {
-    height: 100%;
+    min-height: 100%;
   }
 
   #student .row {
