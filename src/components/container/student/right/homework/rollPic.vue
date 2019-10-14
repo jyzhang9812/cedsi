@@ -1,23 +1,23 @@
 <template>
     <div id="rollPic" class="container-fluid">
         <!-- 模态框（Modal） -->
-        <div class="modal fade" id="myHomework" data-backdrop='false' tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade"  v-if='tableData!=0' id="myHomework" data-backdrop='false' tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body head">
                         <div class="left">
-                            <iframe v-if='num>=0' :src="currentList[num].url"></iframe>
+                            <iframe :src="currentList[num].url"></iframe>
                         </div>
                         <div class="right">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                 &times;
                             </button>
                             <h3>作者</h3>
-                            <p>dwqenwrehgnruy</p>
-                            <h3>作品描述</h3>
-                            <p>dwqenwrehgnruy</p>
+                            <p>{{currentList[num].name}}</p>
+                            <!-- <h3>作品描述</h3>
+                            <p>dwqenwrehgnruy</p> -->
                             <h3>操作说明</h3>
-                            <p>dwqenwrehgnruy</p>
+                            <p>{{currentList[num].guide}}</p>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -30,7 +30,7 @@
             <button @click="tab(index)" v-for="(item,index) in items" class="tag"
                 :class="{active : index==curId}">{{item.COURSE_NAME}}</button>
         </div>
-        <div id="selectMenu">
+        <!-- <div id="selectMenu">
             <div>
                 <button @click="selectTab(index)" v-for="(item,index) in selectItems" class="tag"
                     :class="{active : index==selectId}">{{item}}</button>
@@ -41,18 +41,21 @@
                 <i class="fa fa-2x fa-long-arrow-down" :style="isUpload?'color:#ccc':'color:#00bcd4'"
                     aria-hidden="true"></i>
             </div>
-        </div>
+        </div> -->
         <div class="row" style="margin-top: 10px">
+            <!-- <div v-if='txt==true'>
+                <h4>还没有做作业哦~</h4>
+            </div> -->
             <div class="col-md-4" v-for="(item,index) in currentList" :key="index" @mouseover="show(index)"
                 @mouseleave="hidden(index)" @click='show(index)'>
                 <div class="inside" data-toggle="modal" data-target="#myHomework" data-index="index">
                     <img class="img" :style="style" :src="item.img_url" />
                     <div class='details' v-show="index==i">
                         <div class="detail_item">
-                            <i class="fa fa-star fa-lg" aria-hidden="true" style="color: #ffbf35"
+                            <!-- <i class="fa fa-star fa-lg" aria-hidden="true" style="color: #ffbf35"
                                 v-for='j in parseInt(item.rank)'></i>
                             <i class="fa fa-star-o fa-lg" aria-hidden="true" style="color: #ffbf35"
-                                v-for='j in 5-parseInt(item.rank)'></i>
+                                v-for='j in 5-parseInt(item.rank)'></i> -->
                             <span>{{item.teacher_remark}}</span>
                         </div>
                     </div>
@@ -91,8 +94,9 @@
         },
         data() {
             return {
+                // txt: false,
                 curId: 0,
-                num: -1,
+                num: 0,
                 btn: 'btn',
                 btnh: 'btnhover',
                 zuopin: '../' + this.$store.state.url + 'dashboard/zuopin.png',
@@ -116,6 +120,22 @@
             tab(index) {
                 this.curId = index
                 this.$store.dispatch('getWork', this.$store.state.courseList[index].ID)
+                .then(() => {
+                        if (this.tableData.length == 0) {
+                                // this.txt = true;
+                            } else {
+                            for (let i = 0; i <= this.currentList.length; i++) {
+                                this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
+                            }
+                        }
+                    })
+                // .then(() => {
+                //     if (this.tableData.length == 0) {
+                //         this.txt = true
+                //     }else{
+                //         this.txt = false
+                //     }
+                // })
             },
             selectTab(index) {
                 this.selectId = index
@@ -133,6 +153,18 @@
             del(index) {
 
             },
+            timestampToTime(timestamp) {
+                timestamp = String(timestamp);
+                timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
+                var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                var Y = date.getFullYear() + "-";
+                var M = (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-";
+                var D = (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
+                var h = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ':';
+                var m = (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":";
+                var s = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+                return Y + M + D + h + m + s;
+            },
         },
         created: function () {
             //let that = this.$router;
@@ -141,6 +173,15 @@
             this.$store.commit('updateLoading', true)
             this.$store.dispatch('getCourse').then(() => {
                 this.$store.dispatch('getWork', this.$store.state.courseList[0].ID)
+                    .then(() => {
+                        if (this.tableData.length == 0) {
+                                // this.txt = true;
+                            } else {
+                            for (let i = 0; i <= this.currentList.length; i++) {
+                                this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
+                            }
+                        }
+                    })
             })
         },
         computed: {

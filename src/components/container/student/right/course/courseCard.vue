@@ -77,7 +77,7 @@
       getNew(value) {
         var currentPage = value / this.limit;
         this.currentPage = currentPage;
-        this.$store.commit("changeMsgCurrentList", this.currentPage * this.limit)
+        this.$store.commit("changeCourseCurrentList", this.currentPage * this.limit)
       },
     },
     created: function () {

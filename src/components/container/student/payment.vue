@@ -121,6 +121,7 @@
                   this.$store.dispatch('postUserInfo', this.$route.query.id)
                 }
                 clearInterval(timer)
+                toastr.success('报名成功 ~!');
                 this.$router.push({ path: '/payOK' });
               }
             },
