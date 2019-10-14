@@ -73,7 +73,7 @@
         payment.productId = this.$route.query.id;
         payment.productName = this.payinfo.name;
         payment.userId = localStorage.getItem('userId');
-        payment.fee = /*this.payinfo.price*/1;
+        payment.fee = this.payinfo.price;
         globalAxios
           .post(
             "https://wx.cedsie.com:12345/pay",
