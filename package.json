@@ -27,6 +27,7 @@
     "vue": "^2.5.2",
     "vue-element-loading": "^1.1.5",
     "vue-localstorage": "^0.6.2",
+    "vue-message": "^1.4.3",
     "vue-quill-editor": "^3.0.6",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
