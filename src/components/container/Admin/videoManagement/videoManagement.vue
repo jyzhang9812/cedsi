@@ -24,7 +24,7 @@
             <Media
               :autoplay="false"
               :kind="'video'"
-              :controls="false"
+              :controls="true"
               :src="videosrc"
               style="height: 400px;width: 698px;"
               @pause="handle()"
