@@ -6,8 +6,14 @@
     </div>
     <div class="upload upload-height">
       <span class="upload-title">视频描述:</span>
-      <textarea class="upload-textarea" rows="8" cols="70" placeholder="请输入视频描述" v-model="videoIntro" />
-      </div>
+      <textarea
+        class="upload-textarea"
+        rows="8"
+        cols="70"
+        placeholder="请输入视频描述"
+        v-model="videoIntro"
+      />
+    </div>
     <div class="upload">
       <span class="upload-title" style="margin-right:10px">请选择章节:</span>
       <select-input
@@ -29,13 +35,18 @@
       </div>
       <button class="btn btn-primary btn-upload-file" @click="submit($event)">上传文件</button>
     </div>
-        <div class="upload">
+    <div class="upload">
       <span class="upload-title">上传进度:</span>
       <div class="progress upload-process">
-  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" :style="{width:progressWidth}">
-    {{progressWidth}}
-  </div>
-</div>
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-valuenow="60"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          :style="{width:progressWidth}"
+        >{{progressWidth}}</div>
+      </div>
     </div>
     <div class="upload upload-height">
       <span class="upload-title">文件名称:</span>
@@ -49,138 +60,146 @@
 </template>
 
 <script>
-  import SelectInput from "../utils/selectInput";
-  import AWS from "aws-sdk";
-  import globalAxios from "axios";
+import SelectInput from "../utils/selectInput";
+import AWS from "aws-sdk";
+import globalAxios from "axios";
 
-  export default {
-    name: "uploadVideo",
-    data() {
-      return {
-        file: null,
-        fileName: "",
-        videoName: "",
-        videoIntro: "",
-        type: "",
-        fileName: "暂未上传",
-        progressWidth: "0%",
-        isComplete: true
-      };
+export default {
+  name: "uploadVideo",
+  data() {
+    return {
+      file: null,
+      fileName: "",
+      videoName: "",
+      videoIntro: "",
+      type: "",
+      fileName: "暂未上传",
+      progressWidth: "0%",
+      isComplete: true
+    };
+  },
+  methods: {
+    changeOption(item, id) {
+      Object.keys(this.inputData).forEach(res => {
+        if (res === id) {
+          this.inputData[res].option = item;
+        }
+      });
     },
-    methods: {
-      changeOption(item, id) {
-        Object.keys(this.inputData).forEach(res => {
-          if (res === id) {
-            this.inputData[res].option = item;
-          }
-        });
-      },
-      getFile(event) {
-        this.file = event.target.files[0];
-        console.log(this.file);
-        this.fileName = this.file.name;
-        this.type = this.file.type.split("/")[1];
-        this.size = this.file.size;
-      },
-      submit(event) {
-        var token = window.localStorage.getItem("idToken");
-        globalAxios
-          .post(
-            "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
+    getFile(event) {
+      this.file = event.target.files[0];
+      console.log(this.file);
+      this.fileName = this.file.name;
+      this.type = this.file.type.split("/")[1];
+      this.size = this.file.size;
+    },
+    submit(event) {
+      var token = window.localStorage.getItem("idToken");
+      globalAxios
+        .post(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
             this.courseId +
             "/video",
-            {
-              name: this.videoName,
-              comment: this.videoIntro,
-              chapterId: this.inputData.chapter.option.id,
-              type: this.type,
-              size: this.size + ""
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: token
-              }
+          {
+            name: this.videoName,
+            comment: this.videoIntro,
+            chapterId: this.inputData.chapter.option.id,
+            type: this.type,
+            size: this.size + ""
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
             }
-          )
-          .then(
-            response => {
-              var that = this
-              console.log(response);
-              //this.$router.push({path:"/Admin/"})
-              //console.log(this.inputData.chapter.list);
-              AWS.config = new AWS.Config({
-                accessKeyId: response.data.AccessKeyId,
-                secretAccessKey: response.data.SecretAccessKey,
-                sessionToken: response.data.SessionToken,
-                region: "cn-northwest-1"
-              });
-              var s3 = new AWS.S3();
-              let formData = new FormData();
+          }
+        )
+        .then(
+          response => {
+            var that = this;
+            console.log(response);
+            //this.$router.push({path:"/Admin/"})
+            //console.log(this.inputData.chapter.list);
+            AWS.config = new AWS.Config({
+              accessKeyId: response.data.AccessKeyId,
+              secretAccessKey: response.data.SecretAccessKey,
+              sessionToken: response.data.SessionToken,
+              region: "cn-northwest-1"
+            });
+            var s3 = new AWS.S3();
+            let formData = new FormData();
 
-              formData.append("caption", this.caption);
-              formData.append("hour", this.hour);
-              formData.append("particulars", this.particulars);
-              formData.append("content", this.file);
-              var config = {
-                onUploadProgress: progressEvent => {
-                  var complete = (progressEvent.loaded / progressEvent.total * 100 | 0) + '%'
-                  this.progress = complete
-                }
+            formData.append("caption", this.caption);
+            formData.append("hour", this.hour);
+            formData.append("particulars", this.particulars);
+            formData.append("content", this.file);
+            var config = {
+              onUploadProgress: progressEvent => {
+                var complete =
+                  (((progressEvent.loaded / progressEvent.total) * 100) | 0) +
+                  "%";
+                this.progress = complete;
               }
-              console.log(window.localStorage.getItem("user"));
-              const reader = new FileReader();
-              var content = reader.readAsArrayBuffer(this.file);
-              var params = {
-                ACL: "public-read",
-                Bucket: "cedsi",
-                Body: formData.get("content"),
-                Key: "course/video/" + response.data.id + "." + this.type,
-                ContentType: this.type,
-                Metadata: {
-                  uploader: window.localStorage.getItem("user")
-                }
-                //Key: "course/" + config.id + "." + file.type.split('/')[1],
-              };
-              s3.putObject(params, function (err, data) {
-                if (err) {
-                  console.log(err, err.stack);
-                } else {
-                  console.log(data);
-                }
-              }).on('httpUploadProgress', function (e) {
-                var process = Number(e.loaded * 100 / e.total)
-                that.progressWidth = parseInt(process) + "%"
-                if (process == 100) {
-                  that.isComplete = false
-                }
-              });
-            },
-            error => {
-              // this.$router.push({path:'/404'})
-              console.log(error);
-            }
-          );
-      },
-      goback() {
-        this.$router.push({ path: "/Admin/videoManagement" })
-      },
-      gotoVideo() {
-        this.$router.push({ path: "/Admin/videoManagement" })
-      }
+            };
+            console.log(window.localStorage.getItem("user"));
+            const reader = new FileReader();
+            var content = reader.readAsArrayBuffer(this.file);
+            var params = {
+              ACL: "public-read",
+              Bucket: "cedsi",
+              Body: formData.get("content"),
+              Key: "course/video/" + response.data.id + "." + this.type,
+              ContentType: this.type,
+              Metadata: {
+                uploader: window.localStorage.getItem("user")
+              }
+              //Key: "course/" + config.id + "." + file.type.split('/')[1],
+            };
+            s3.putObject(params, function(err, data) {
+              if (err) {
+                console.log(err, err.stack);
+              } else {
+                console.log(data);
+              }
+            }).on("httpUploadProgress", function(e) {
+              var process = Number((e.loaded * 100) / e.total);
+              that.progressWidth = parseInt(process) + "%";
+              if (process == 100) {
+                that.isComplete = false;
+              }
+            });
+          },
+          error => {
+            // this.$router.push({path:'/404'})
+            console.log(error);
+          }
+        );
     },
-    created() {
-      var courseId = this.$route.params.courseId;
-      this.courseId=courseId
-      this.$store.dispatch('getCourseChapter', courseId)
+    goback() {
+      this.$router.push({ path: "/Admin/videoManagement" });
     },
-    computed: {
-      inputData() {
-        return this.$store.state.inputData
-      }
-    },
-    components: { SelectInput }
-  };
+    gotoVideo() {
+      var that=this
+      this.$msg({ text: "添加成功", background: "#587c0c" });
+      setTimeout(function() {
+        that.$router.push({
+          path: "/Admin/videoManagement"
+        });
+      }, 1000);
+    }
+  },
+  created() {
+    var courseId = this.$route.params.courseId;
+    this.courseId = courseId;
+    this.$store.dispatch("getCourseChapter", courseId);
+  },
+  computed: {
+    inputData() {
+      return this.$store.state.inputData;
+    }
+  },
+  components: { SelectInput }
+};
 </script>
 
 <style scoped>
@@ -282,16 +301,16 @@
   top: -35px;
   display: inline-block;
 }
-#upload-video .upload-process{
+#upload-video .upload-process {
   width: 30%;
   margin-left: 10px;
   display: inline-block;
   position: relative;
-  top:10px;
+  top: 10px;
 }
-#upload-video .btn-upload-file{
+#upload-video .btn-upload-file {
   position: relative;
-  top:-35px;
+  top: -35px;
   margin-left: 10px;
   background-color: #2fc27e;
   border: none;
@@ -299,7 +318,7 @@
   height: 35px;
   font-size: 14px;
 }
-#upload-video .btn-upload-file:hover{
+#upload-video .btn-upload-file:hover {
   background-color: #2fc27ddc;
 }
 </style>

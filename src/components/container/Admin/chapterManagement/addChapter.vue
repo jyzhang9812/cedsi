@@ -42,10 +42,13 @@ export default {
   methods: {
     timestampToTime(timestamp) {
       timestamp = String(timestamp);
-      timestamp = timestamp.length == 10 ? timestamp*1000 : timestamp * 1
+      timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
       var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
       var Y = date.getFullYear() + "-";
-      var M =(date.getMonth() + 1 < 10? "0" + (date.getMonth() + 1): date.getMonth() + 1) + "-";
+      var M =
+        (date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1)
+          : date.getMonth() + 1) + "-";
       var D = date.getDate() + " ";
       var h = date.getHours() + ":";
       var m = date.getMinutes() + ":";
@@ -53,12 +56,13 @@ export default {
       return Y + M + D + h + m + s;
     },
     submit() {
+      var that = this
       var token = window.localStorage.getItem("idToken");
       var newChapter = {};
       newChapter.chapterName = this.chapterName;
       newChapter.chapterDesc = this.chapterDesc;
       newChapter.chapterNum = this.chapterNum;
-      console.log(this.chapterId)
+      console.log(this.chapterId);
       //console.log(this.chapterName,this.chapterDesc,this.courseId)
       if (this.chapterId != -1) {
         //如果是编辑
@@ -105,9 +109,12 @@ export default {
           .then(
             response => {
               console.log(response);
-              this.$router.push({
-                path: "/Admin/chapterManagement/" + this.courseId
-              });
+              this.$msg({ text: "添加成功", background: "#587c0c" });
+              setTimeout(function() {
+                that.$router.push({
+                  path: "/Admin/chapterManagement/" + that.courseId
+                });
+              }, 1000);
             },
             error => {
               // this.$router.push({path:'/404'})
@@ -120,9 +127,11 @@ export default {
   mounted() {
     this.courseId = this.$route.params.courseId;
     this.chapterNum = this.$route.query.chapterNum;
-    if (this.$route.query.chapterId == null) //增加
-      this.chapterId=-1
-    else {    //如果是修改避免刷新章节内容为空
+    if (this.$route.query.chapterId == null)
+      //增加
+      this.chapterId = -1;
+    else {
+      //如果是修改避免刷新章节内容为空
       this.$store.dispatch("getChapterDetial", this.courseId).then(() => {
         this.chapterData = this.$store.state.chapterData;
         console.log(this.$store.state.chapterData);
@@ -130,8 +139,12 @@ export default {
         if (this.chapterData) {
           console.log(this.$route.query.chapterNum);
           this.chapterId = this.$route.query.chapterId;
-          this.chapterName = this.chapterList[this.chapterNum - 1].chapterName,
-          this.chapterDesc = this.chapterList[this.chapterNum - 1].introduction;
+          (this.chapterName = this.chapterList[
+            this.chapterNum - 1
+          ].chapterName),
+            (this.chapterDesc = this.chapterList[
+              this.chapterNum - 1
+            ].introduction);
         }
       });
     }
