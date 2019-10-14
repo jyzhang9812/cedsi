@@ -64,6 +64,7 @@
 <script>
 import AWS from "aws-sdk";
 import instance from "../../../../axios-auth.js";
+import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
 
 export default {
   name: "uploadVideo",
@@ -142,7 +143,7 @@ export default {
           } else {
             console.log(data);
             if (data.hasOwnProperty("ETag")) {
-              that.$msg({ text: "添加成功", background: "#587c0c" });
+              that.$toast.success({title:"课程管理",message:'操作成功'})
               setTimeout(function() {
                 that.$router.push({ path: "/Admin/" });
               }, 1000);
