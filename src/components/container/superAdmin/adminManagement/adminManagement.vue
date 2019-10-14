@@ -141,6 +141,7 @@
 <script>
 import pagination from "../../teacher/utils/pagination.vue";
 import globalAxios from "axios";
+import crypto from 'crypto';
 export default {
   name: "adminManagement",
   components: { pagination },
@@ -223,7 +224,9 @@ export default {
     },
     //提交
     submit() {
-      var data = { username: this.adminUserName, password: this.adminPassword ,page:this.currentPage};
+      var password = this.adminPassword;
+      password=crypto.createHash('SHA256').update(password).digest('hex');
+      var data = { username: this.adminUserName, password: password ,page:this.currentPage};
       this.$store.dispatch("addAdmin",data)
     },
     //换页
