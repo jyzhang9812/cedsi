@@ -11,7 +11,7 @@
                                 <div class="col-1"><i class="fa fa-large fa-map-marker"></i></div>
                                 <div class="col-10">
                                     <h5 class="font-weight-bold mb-0">地址:</h5>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                    <p>西安曲江新区翠华南路1688号曲江创客大街1505号</p>
                                 </div>
                             </div>
                         </li>
@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="col-10">
                                     <h5 class="font-weight-bold mb-0">电话:</h5>
-                                    <p><a href="#">+XX (0) XX XX-XXXX-XXXX</a></p>
+                                    <p><a href="#">+86 XX-XXXX-XXXX</a></p>
                                 </div>
                             </div>
                         </li>

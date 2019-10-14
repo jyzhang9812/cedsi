@@ -30,8 +30,9 @@
             <td>{{seq + 1}}</td>
             <td v-for="(value, key, index) in line" :key="index"> {{value}} </td>
             <td>
-              <span class="blue" @click="viewWork(line)">查看作品</span>&nbsp;&nbsp;
-              <span class="blue" @click="popModal('remark', line)">点评</span>&nbsp;&nbsp;
+                <button class="edit" data-toggle="modal" data-target="#myHomework"
+                data-index="index">查看作品</button>&nbsp;&nbsp;
+              <!-- <span class="blue" @click="popModal('remark', line)">点评</span>&nbsp;&nbsp; -->
               <!-- <span class="blue" @click="popModal('turndown', line)">驳回</span>&nbsp;&nbsp; -->
               <!-- <span class="red" @click="popModal('delete', line)">删除</span> -->
             </td>
@@ -132,7 +133,7 @@
         this.tableData.slice(value, value + this.limit).forEach(item => {
           currentList.push({
             STUDENT_NAME: item.STUDENT_NAME,
-            SUBMIT_TIME: item.SUBMIT_TIME,
+            SUBMIT_TIME: this.timestampToTime(item.SUBMIT_TIME),
             HW_NAME: item.HW_NAME,
             CLASS_NAME: this.inputData.classes.option,
             COURSE_NAME: item.COURSE_NAME,
@@ -299,7 +300,20 @@
             this.changeComment('no');
           })
           .catch(err => { console.log(err) });
-      }
+      },
+      //时间戳转换
+      timestampToTime(timestamp) {
+        timestamp = String(timestamp);
+        timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
+        var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + "-";
+        var M = (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-";
+        var D = (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
+        var h = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ':';
+        var m = (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":";
+        var s = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+        return Y + M + D + h + m + s;
+      },
     },
     computed: {
       blueCommentStyle() { return "background-color: #409EFF; color: #FFF;" },
