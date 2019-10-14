@@ -636,11 +636,10 @@ const actions = {
                         video.videoUrl = videoArr[i].RS_URL;
                         videoData.push(video);
                     }
-                    commit(TYPES.changeVideo, videoData);
-                    commit(TYPES.changeVideoCurrentList, 0)
-                    console.log(videoData);
-
                 }
+                commit(TYPES.changeVideo, videoData);
+                commit(TYPES.changeVideoCurrentList, 0)
+                console.log(videoData);
             },
             error => {
                 // this.$router.push({path:'/404'})
@@ -710,11 +709,11 @@ const actions = {
                             chapter.id = chapterArr[i].CP_ID;
                             chapterData.push(chapter);
                         }
-                        state.chapterData = chapterData;
-                        commit(TYPES.changeChapterList, chapterData)
-                        commit(TYPES.changeChapterCurrentList, 0)
                     }
                 }
+                state.chapterData = chapterData;
+                commit(TYPES.changeChapterList, chapterData)
+                commit(TYPES.changeChapterCurrentList, 0)
             },
             error => {
                 console.log(error);
