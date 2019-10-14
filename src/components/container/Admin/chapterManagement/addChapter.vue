@@ -28,6 +28,7 @@
 <script>
 import globalAxios from "axios";
 import { mapState } from "vuex";
+import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
 export default {
   name: "addChapter",
   data() {
@@ -109,7 +110,7 @@ export default {
           .then(
             response => {
               console.log(response);
-              this.$msg({ text: "添加成功", background: "#587c0c" });
+              this.$toast.success({title:"章节管理",message:'操作成功'})
               setTimeout(function() {
                 that.$router.push({
                   path: "/Admin/chapterManagement/" + that.courseId
@@ -235,6 +236,9 @@ export default {
 #addChapter .upload-btn:focus {
   outline: none;
   color: #fff;
+}
+ .toast-icon img{
+   width: 90px !important;
 }
 </style>
 

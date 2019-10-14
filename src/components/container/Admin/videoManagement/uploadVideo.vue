@@ -63,6 +63,7 @@
 import SelectInput from "../utils/selectInput";
 import AWS from "aws-sdk";
 import globalAxios from "axios";
+import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
 
 export default {
   name: "uploadVideo",
@@ -180,7 +181,7 @@ export default {
     },
     gotoVideo() {
       var that=this
-      this.$msg({ text: "添加成功", background: "#587c0c" });
+      this.$toast.success({title:"视频管理",message:'操作成功'})
       setTimeout(function() {
         that.$router.push({
           path: "/Admin/videoManagement"
