@@ -111,9 +111,9 @@
                 if (this.calleft[index] < -1020) {
                     this.calleft[index] = 0
                 }
-                for (var i = 0; i < 4; i++) {
-                    console.log(this.calleft[i])
-                }
+                // for (var i = 0; i < 4; i++) {
+                //     console.log(this.calleft[i])
+                // }
             },
             //点击按钮右移
             youhua(index) {
@@ -121,9 +121,9 @@
                 if (this.calleft[index] > 0) {
                     this.calleft[index] = -1020
                 }
-                for (var i = 0; i < 4; i++) {
-                    console.log(this.calleft[i])
-                }
+                // for (var i = 0; i < 4; i++) {
+                //     console.log(this.calleft[i])
+                // }
             },
         },
         created: function () {

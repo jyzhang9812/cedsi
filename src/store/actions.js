@@ -329,16 +329,16 @@ const actions = {
             for (var i = 0; i < arr.length; i++) {
                 var array = {}
                 array.id = arr[i].HW_ID;
-                array.url = arr[i].HW_URL;
+                array.url = 'https://s3.cn-northwest-1.amazonaws.com.cn/ced.cedsie.com/cedScratch/player.html?projectUrl='+ arr[i].HW_URL;
                 array.name = arr[i].HW_NAME;
                 array.img_url = arr[i].HW_COVER;
                 array.guide = arr[i].HW_GUIDE;
-                if(arr[i].TEACHER_REMARK==='null'){
+                if(arr[i].TEACHER_REMARK!='null'){
                     array.teacher_remark = arr[i].TEACHER_REMARK;
                 }else{
                     array.teacher_remark='暂无评价';
                 }
-                if(arr[i].HW_RANK==='null'){
+                if(arr[i].HW_RANK!='null'){
                     array.rank = arr[i].HW_RANK;
                 }else{
                     array.rank = 0;

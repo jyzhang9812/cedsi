@@ -13,7 +13,7 @@
             </div>
         </li>
         <li class="all_course">
-            <a>查看更多</a>
+            <router-link :to="{path: '/dashboard/course'}">查看更多</router-link>
         </li>
     </ul>
 </template>
@@ -67,8 +67,9 @@
         },
         //这里用watch方法来监听父组件传过来的值，来实现实时更新
         watch: {
-            calleft(val) {    //message即为父组件的值，val参数为值
-                this.mycalleft = val    //将父组件的值赋给childrenMessage 子组件的值
+            calleft(val) {  
+                console.log(val)  //message即为父组件的值，val参数为值
+                this.mycalleft = val *1.2  //将父组件的值赋给childrenMessage 子组件的值
             }
         }
     }

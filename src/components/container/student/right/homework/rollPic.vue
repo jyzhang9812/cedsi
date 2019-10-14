@@ -12,7 +12,7 @@
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                 &times;
                             </button>
-                            <h3>作者</h3>
+                            <h3>作品名</h3>
                             <p>{{currentList[num].name}}</p>
                             <!-- <h3>作品描述</h3>
                             <p>dwqenwrehgnruy</p> -->
@@ -43,19 +43,19 @@
             </div>
         </div> -->
         <div class="row" style="margin-top: 10px">
-            <!-- <div v-if='txt==true'>
+            <div v-if='txt==true'>
                 <h4>还没有做作业哦~</h4>
-            </div> -->
-            <div class="col-md-4" v-for="(item,index) in currentList" :key="index" @mouseover="show(index)"
+            </div>
+            <div class="col-md-4" v-if='txt==false' v-for="(item,index) in currentList" :key="index" @mouseover="show(index)"
                 @mouseleave="hidden(index)" @click='show(index)'>
                 <div class="inside" data-toggle="modal" data-target="#myHomework" data-index="index">
                     <img class="img" :style="style" :src="item.img_url" />
                     <div class='details' v-show="index==i">
                         <div class="detail_item">
-                            <!-- <i class="fa fa-star fa-lg" aria-hidden="true" style="color: #ffbf35"
+                            <i class="fa fa-star fa-lg" aria-hidden="true" style="color: #ffbf35"
                                 v-for='j in parseInt(item.rank)'></i>
                             <i class="fa fa-star-o fa-lg" aria-hidden="true" style="color: #ffbf35"
-                                v-for='j in 5-parseInt(item.rank)'></i> -->
+                                v-for='j in 5-parseInt(item.rank)'></i>
                             <span>{{item.teacher_remark}}</span>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
         },
         data() {
             return {
-                // txt: false,
+                txt: false,
                 curId: 0,
                 num: 0,
                 btn: 'btn',
@@ -122,20 +122,21 @@
                 this.$store.dispatch('getWork', this.$store.state.courseList[index].ID)
                 .then(() => {
                         if (this.tableData.length == 0) {
-                                // this.txt = true;
+                                this.txt = true;
                             } else {
+                            this.txt = false;
                             for (let i = 0; i <= this.currentList.length; i++) {
                                 this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
                             }
                         }
                     })
-                // .then(() => {
-                //     if (this.tableData.length == 0) {
-                //         this.txt = true
-                //     }else{
-                //         this.txt = false
-                //     }
-                // })
+                .then(() => {
+                    if (this.tableData.length == 0) {
+                        this.txt = true
+                    }else{
+                        this.txt = false
+                    }
+                })
             },
             selectTab(index) {
                 this.selectId = index
@@ -175,7 +176,7 @@
                 this.$store.dispatch('getWork', this.$store.state.courseList[0].ID)
                     .then(() => {
                         if (this.tableData.length == 0) {
-                                // this.txt = true;
+                                this.txt = true;
                             } else {
                             for (let i = 0; i <= this.currentList.length; i++) {
                                 this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
