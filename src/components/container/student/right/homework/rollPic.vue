@@ -1,7 +1,8 @@
 <template>
     <div id="rollPic" class="container-fluid">
         <!-- 模态框（Modal） -->
-        <div class="modal fade"  v-if='tableData!=0' id="myHomework" data-backdrop='false' tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" v-if='tableData!=0' id="myHomework" data-backdrop='false' tabindex="-1" role="dialog"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body head">
@@ -21,7 +22,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <p>老师点评：</p>
+                        <p>老师点评：{{currentList[num].teacher_remark}}</p>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal -->
@@ -46,8 +47,8 @@
             <div v-if='txt==true'>
                 <h4>还没有做作业哦~</h4>
             </div>
-            <div class="col-md-4" v-if='txt==false' v-for="(item,index) in currentList" :key="index" @mouseover="show(index)"
-                @mouseleave="hidden(index)" @click='show(index)'>
+            <div class="col-md-4" v-if='txt==false' v-for="(item,index) in currentList" :key="index"
+                @mouseover="show(index)" @mouseleave="hidden(index)" @click='show(index)'>
                 <div class="inside" data-toggle="modal" data-target="#myHomework" data-index="index">
                     <img class="img" :style="style" :src="item.img_url" />
                     <div class='details' v-show="index==i">
@@ -120,23 +121,23 @@
             tab(index) {
                 this.curId = index
                 this.$store.dispatch('getWork', this.$store.state.courseList[index].ID)
-                .then(() => {
+                    .then(() => {
                         if (this.tableData.length == 0) {
-                                this.txt = true;
-                            } else {
+                            this.txt = true;
+                        } else {
                             this.txt = false;
                             for (let i = 0; i <= this.currentList.length; i++) {
                                 this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
                             }
                         }
                     })
-                .then(() => {
-                    if (this.tableData.length == 0) {
-                        this.txt = true
-                    }else{
-                        this.txt = false
-                    }
-                })
+                    .then(() => {
+                        if (this.tableData.length == 0) {
+                            this.txt = true
+                        } else {
+                            this.txt = false
+                        }
+                    })
             },
             selectTab(index) {
                 this.selectId = index
@@ -176,8 +177,8 @@
                 this.$store.dispatch('getWork', this.$store.state.courseList[0].ID)
                     .then(() => {
                         if (this.tableData.length == 0) {
-                                this.txt = true;
-                            } else {
+                            this.txt = true;
+                        } else {
                             for (let i = 0; i <= this.currentList.length; i++) {
                                 this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
                             }
@@ -432,9 +433,11 @@
 
     #myHomework iframe {
         width: 100%;
-        height: 500px;
+        height: 441px;
+        margin: -25px 0 0 0;
         background-color: #fff;
-        border-radius: 10px;
+        border: none;
+        border-radius: inherit;
     }
 
     #myHomework .head {
@@ -445,6 +448,10 @@
     #myHomework .left {
         width: 65%;
         height: auto;
+        margin: 20px auto;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 2px solid #ccc;
     }
 
     #myHomework .right {
