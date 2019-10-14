@@ -82,7 +82,7 @@ export default {
         { name: "免费", value: 1, isCheck: false },
         { name: "付费", value: 2, isCheck: false }
       ],
-      isPrice:false
+      isPrice:true
     };
   },
   watch: {
@@ -100,8 +100,10 @@ export default {
       this.radiolist.map((v, i) => {
         if (i == index) {
           v.isCheck = true;
+          this.price=0
         } else {
           v.isCheck = false;
+          this.price=0
         }
       });
     },
