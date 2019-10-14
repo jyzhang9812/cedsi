@@ -2,7 +2,7 @@
   <div id="addCourse">
     <div class="upload">
       <span class="upload-title">课程名称:</span>
-      <input class="upload-input" v-model="name" placeholder="请输入课程名称" />
+      <input class="upload-input right" v-model="name" placeholder="请输入课程名称" />
     </div>
     <div class="upload">
       <span class="upload-title">是否付费:</span>
@@ -18,7 +18,7 @@
     </div>
     <div v-if="radiolist[2,1].isCheck==true" class="upload">
       <span class="upload-title">付费金额:</span>
-      <input class="upload-input" v-model="price" placeholder="请输入付费金额" />
+      <input :class="isPrice==true?'upload-input right':'upload-input err'" v-model="price" placeholder="请输入付费金额" />
     </div>
     <!-- <div v-if='radiolist[2,1].isCheck==true' class="upload">
       <span class="upload-title">付费章节:</span>
@@ -55,7 +55,7 @@
       </div>
     </div>
     <div class="upload-footer">
-      <button class="btn upload-btn" @click="submit1($event)">确定</button>
+      <button class="btn upload-btn" @click="submit1($event)" :disabled="!isPrice">确定</button>
       <button class="btn upload-btn" @click="calcelUpload">取消</button>
     </div>
   </div>
@@ -81,8 +81,19 @@ export default {
       radiolist: [
         { name: "免费", value: 1, isCheck: false },
         { name: "付费", value: 2, isCheck: false }
-      ]
+      ],
+      isPrice:false
     };
+  },
+  watch: {
+    price(val, oldVal) {
+      var regPos = /^\d+(\.\d+)?$/; 
+      if (regPos.test(val)) {
+        this.isPrice = true;
+      } else {
+        this.isPrice = false;
+      }
+    }
   },
   methods: {
     changeInput(index) {
@@ -213,7 +224,6 @@ export default {
   width: 300px;
   height: 40px;
   border-radius: 5px;
-  border: 1px solid #409eff;
   margin-left: 10px;
   padding-left: 10px;
 }
@@ -296,5 +306,11 @@ export default {
 #addCourse .cover-image {
   width: 100%;
   height: 100%;
+}
+.right{
+  border: 1px solid #409eff;
+}
+.err{
+  border: 1px solid red;
 }
 </style>
