@@ -277,7 +277,7 @@ const actions = {
                     }
                     for (var i = 0; i < chaptersArr.length; i++) {
                         var point = {}
-                        if (i < finishChaptersArr.length) {
+                        if (i <= finishChaptersArr.length) {
                             point.bgImg =
                                 "../../static/images/scratch/coordinateed.6a1e9a5.png";
                             point.status = "已完成";
@@ -329,18 +329,18 @@ const actions = {
             for (var i = 0; i < arr.length; i++) {
                 var array = {}
                 array.id = arr[i].HW_ID;
-                array.url = 'https://s3.cn-northwest-1.amazonaws.com.cn/ced.cedsie.com/cedScratch/player.html?projectUrl='+ arr[i].HW_URL;
+                array.url = 'https://s3.cn-northwest-1.amazonaws.com.cn/ced.cedsie.com/cedScratch/player.html?projectUrl=' + arr[i].HW_URL;
                 array.name = arr[i].HW_NAME;
                 array.img_url = arr[i].HW_COVER;
                 array.guide = arr[i].HW_GUIDE;
-                if(arr[i].TEACHER_REMARK!='null'){
+                if (arr[i].TEACHER_REMARK != 'null') {
                     array.teacher_remark = arr[i].TEACHER_REMARK;
-                }else{
-                    array.teacher_remark='暂无评价';
+                } else {
+                    array.teacher_remark = '暂无评价';
                 }
-                if(arr[i].HW_RANK!='null'){
+                if (arr[i].HW_RANK != 'null') {
                     array.rank = arr[i].HW_RANK;
-                }else{
+                } else {
                     array.rank = 0;
                 }
                 array.time = arr[i].SUBMIT_TIME;
