@@ -93,7 +93,7 @@
         </thead>
         <tbody>
           <tr v-for="(organization, seq) in currentList" :key="seq" class="content">
-            <td>{{seq+1}}</td>
+            <td>{{organization.num}}</td>
             <td>{{organization.id}}</td>
             <td>{{organization.name}}</td>
             <td>{{organization.headmaster}}</td>
@@ -280,7 +280,7 @@ export default {
         )
         .then(
           response => {
-            console.log(response);
+            this.$toast.success({ title: "机构管理", message: "操作成功" });
           },
           error => {}
         );
@@ -313,6 +313,7 @@ export default {
             org.intro = orgList[i].INTRODUCTION;
             org.location = orgList[i].ORG_LOCATION;
             org.id = orgList[i].ORG_ID;
+            org.num = orgList[i].ORG_NUMBER;
             org.license = orgList[i].BUSINESS_LICENSE;
             orgArr.push(org);
           }

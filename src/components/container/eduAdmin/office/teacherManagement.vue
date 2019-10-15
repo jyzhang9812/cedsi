@@ -49,33 +49,33 @@
               </div>
               <span :class="isPassword==true?'inputtips':'inputerr'">不超过20个字符</span>
               <div class="add">
-                  <span class="keypoint">*</span>
-                  <label class="addtitle">性别</label>
-                  <div class="sexradio">
-                    <input
-                      type="radio"
-                      name="sex"
-                      value="1"
-                      checked="checked"
-                      class="sexradio1"
-                      v-model="teacherSex"
-                    />
-                    <span class="sexname">男</span>
-                    <input
-                      type="radio"
-                      name="sex"
-                      value="0"
-                      class="sexradio1"
-                      v-model="teacherSex"
-                    />
-                    <span class="sexname">女</span>
-                  </div>
+                <span class="keypoint">*</span>
+                <label class="addtitle">性别</label>
+                <div class="sexradio">
+                  <input
+                    type="radio"
+                    name="sex"
+                    value="1"
+                    checked="checked"
+                    class="sexradio1"
+                    v-model="teacherSex"
+                  />
+                  <span class="sexname">男</span>
+                  <input type="radio" name="sex" value="0" class="sexradio1" v-model="teacherSex" />
+                  <span class="sexname">女</span>
                 </div>
-                <span class="inputerr"></span>
+              </div>
+              <span class="inputerr"></span>
               <div class="add">
                 <span class="keypointwhite">*</span>
                 <span class="addtitle">简介</span>
-                <textarea class="teacher-textarea" rows="8" cols="70" placeholder="请输入简介" v-model="teacherIntro" />
+                <textarea
+                  class="teacher-textarea"
+                  rows="8"
+                  cols="70"
+                  placeholder="请输入简介"
+                  v-model="teacherIntro"
+                />
               </div>
             </div>
           </div>
@@ -136,7 +136,7 @@
         id="class-name"
         v-model="inputData.teacherName"
       />
-      <button class="btn btn-search">搜索</button> -->
+      <button class="btn btn-search">搜索</button>-->
       <button
         class="btn btn-clear"
         data-toggle="modal"
@@ -178,7 +178,7 @@
 import pagination from "../../teacher/utils/pagination.vue";
 import SelectInput from "../utils/selectInput";
 import globalAxios from "axios";
-import crypto from 'crypto';
+import crypto from "crypto";
 export default {
   name: "classmanagement",
   components: { SelectInput, pagination },
@@ -189,14 +189,7 @@ export default {
       inputData: {
         teacherName: ""
       },
-      tableTitle: [
-        "序号",
-        "账号",
-        "姓名",
-        "性别",
-        "简介",
-        "操作"
-      ],
+      tableTitle: ["序号", "账号", "姓名", "性别", "简介", "操作"],
       tableData: [],
       //新增教师
       teacherName: "",
@@ -211,7 +204,7 @@ export default {
       alterMes: "",
       index: -1,
       teacherSex: [],
-      currentPage:0
+      currentPage: 0
     };
   },
   watch: {
@@ -239,34 +232,35 @@ export default {
   },
   methods: {
     deleteTeacher(seq) {
-      this.index = this.currentPage*this.limit+seq;
+      this.index = this.currentPage * this.limit + seq;
       this.alterMes = "确认删除吗？";
     },
     submitDelete() {
-      console.log(this.tableData[this.index].teacherId)
-      var teacherId=this.tableData[this.index].teacherId
+      console.log(this.tableData[this.index].teacherId);
+      var teacherId = this.tableData[this.index].teacherId;
       var token = window.localStorage.getItem("idToken");
-       globalAxios
-      .delete(
-        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/teacher?teacherId=" + teacherId,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token
+      globalAxios
+        .delete(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/teacher?teacherId=" +
+            teacherId,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            }
           }
-        }
-      )
-      .then(
-        response => {
-          console.log(response)
-          this.tableData.splice(this.index, 1);
-          this.changeTablePages(this.currentPage * this.limit);
-        },
-        error => {
-          // this.$router.push({path:'/404'})
-          console.log(error);
-        }
-      );
+        )
+        .then(
+          response => {
+            console.log(response);
+            this.tableData.splice(this.index, 1);
+            this.changeTablePages(this.currentPage * this.limit);
+          },
+          error => {
+            // this.$router.push({path:'/404'})
+            console.log(error);
+          }
+        );
     },
     addTeacher() {
       this.teacherName = "";
@@ -279,80 +273,83 @@ export default {
       this.currentList = this.tableData.slice(value, value + this.limit);
     },
     //确定增加教师
-    submit(){
-      var that=this
-      var teacher={}
-      teacher.teacherName=this.teacherName
-      teacher.teacherId=this.teacherJobNum
-      teacher.password=crypto.createHash('SHA256').update(this.teacherPassword).digest('hex');
-      teacher.gender=this.teacherSex
-      teacher.introduction=this.teacherIntro
-      console.log(teacher)
-       var token = window.localStorage.getItem("idToken");
-       globalAxios
-      .post(
-        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/teacher",
-        teacher,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token
+    submit() {
+      var that = this;
+      var teacher = {};
+      teacher.teacherName = this.teacherName;
+      teacher.teacherId = this.teacherJobNum;
+      teacher.password = crypto
+        .createHash("SHA256")
+        .update(this.teacherPassword)
+        .digest("hex");
+      teacher.gender = this.teacherSex;
+      teacher.introduction = this.teacherIntro;
+      console.log(teacher);
+      var token = window.localStorage.getItem("idToken");
+      globalAxios
+        .post(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/teacher",
+          teacher,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            }
           }
-        }
-      )
-      .then(
-        response => {
-          that.getTeacherList()
-        },
-        error => {
-          // this.$router.push({path:'/404'})
-          console.log(error);
-        }
-      );
+        )
+        .then(
+          response => {
+            that.getTeacherList();
+          },
+          error => {
+            // this.$router.push({path:'/404'})
+            console.log(error);
+          }
+        );
     },
-    getTeacherList(){
-    //获取教师列表
-    var token = window.localStorage.getItem("idToken");
-    globalAxios
-      .get(
-        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/teacher",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token
+    getTeacherList() {
+      //获取教师列表
+      var token = window.localStorage.getItem("idToken");
+      globalAxios
+        .get(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/teacher",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            }
           }
-        }
-      )
-      .then(
-        response => {
-          console.log(response);
-          var teacherList = response.data;
-          console.log(teacherList);
-          var teacherArr = [];
-          for (var i = 0; i < teacherList.length; i++) {
-            var teacher = {};
-            teacher.teacherId = teacherList[i].TEACHER_ID
-            teacher.teacherName = teacherList[i].TEACHER_NAME;
-            if(teacherList[i].GENDER == "1")
-              teacher.gender = "男"
-            else
-              teacher.gender = "女"
-            teacher.teacherJobNum = teacherList[i].JOB_NUMBER;
-            teacher.introduction = teacherList[i].INTRO;
-            teacherArr.push(teacher);
+        )
+        .then(
+          response => {
+            //console.log(response);
+            var teacherArr = [];
+            if (response.data != null) {
+              var teacherList = response.data;
+              console.log(teacherList);
+              for (var i = 0; i < teacherList.length; i++) {
+                var teacher = {};
+                teacher.teacherId = teacherList[i].TEACHER_ID;
+                teacher.teacherName = teacherList[i].TEACHER_NAME;
+                if (teacherList[i].GENDER == "1") teacher.gender = "男";
+                else teacher.gender = "女";
+                teacher.teacherJobNum = teacherList[i].JOB_NUMBER;
+                teacher.introduction = teacherList[i].INTRO;
+                teacherArr.push(teacher);
+              }
+            }
+            this.tableData = teacherArr;
+            this.changeTablePages(0);
+          },
+          error => {
+            // this.$router.push({path:'/404'})
+            console.log(error);
           }
-          this.tableData = teacherArr;
-          this.changeTablePages(0);
-        },
-        error => {
-          // this.$router.push({path:'/404'})
-          console.log(error);
-        }
-      );
+        );
     }
   },
   mounted() {
-    this.getTeacherList()
+    this.getTeacherList();
   }
 };
 </script>
@@ -408,7 +405,6 @@ export default {
 #teacherManagement .textBox:hover {
   border-color: #409eff;
 }
-
 
 #teacherManagement .btn {
   background: #409eff;
@@ -584,11 +580,11 @@ export default {
   display: inline-block;
   margin-right: 10px;
 }
-#teacherManagement .teacher-textarea{
+#teacherManagement .teacher-textarea {
   width: 260px;
   height: 100px;
   margin-left: 20px;
-  border:1px solid #409eff;
+  border: 1px solid #409eff;
   border-radius: 5px;
   padding-left: 20px;
 }

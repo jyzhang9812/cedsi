@@ -15,13 +15,23 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">批量导入学生</h4>
           </div>
-          <div class="modal-body">
-            <input type="file" @change="importExcel($event.target)" />
+          <div class="modal-body row">
+            <div class="upload-cover-btn">
+              选择文件
+              <input type="file" class @change="importExcel($event.target)" style="opacity: 0" />
+            </div>
+            <button class="btn btn-primary btn-upload-file" @click="download()">下载模板</button>
+            <div class="upload upload-height">
+              <span class="upload-title">文件名称:</span>
+              <input class="upload-input" :value="fileName" disabled />
+            </div>
+            <!-- <input type="file" class="col-md-6 " @change="importExcel($event.target)" />
+            <button type="button" class="col-md-6 " @click="download()">下载模板</button>-->
           </div>
 
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary">确定</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="submit()">确定</button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -29,7 +39,7 @@
       <!-- /.modal -->
     </div>
     <!-- 添加学生模态框（Modal） -->
-    <div
+    <!-- <div
       class="modal fade"
       id="addStudent"
       tabindex="-1"
@@ -79,8 +89,8 @@
                     <span class="sexname">女</span>
                   </div>
                 </div>
-                <span class="inputerr"></span>
-                <!-- <div class="addcon">
+    <span class="inputerr"></span>-->
+    <!-- <div class="addcon">
                   <span class="keypoint-white">*</span>
                   <label class="addtitle">所属学校</label>
                   <select-input
@@ -91,8 +101,8 @@
                     @option="changeOption"
                     :drop-down-list="inputData.school.list"
                   ></select-input>
-                </div>-->
-                <div class="addcon">
+    </div>-->
+    <!-- <div class="addcon">
                   <span class="keypoint">*</span>
                   <label class="addtitle">账号</label>
                   <input
@@ -161,13 +171,13 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" @click="submit()" data-dismiss="modal">保存</button>
           </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
+    </div>-->
+    <!-- /.modal-content -->
+    <!-- </div> -->
+    <!-- /.modal -->
+    <!-- </div> -->
     <!-- 添加学生模态框（Modal） -->
-    <div
+    <!-- <div
       class="modal fade"
       id="detials"
       tabindex="-1"
@@ -199,13 +209,13 @@
               <div class="col-md-6">备注：{{studentInfo.tips}}</div>
             </div>
           </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
+    </div>-->
+    <!-- /.modal-content -->
+    <!-- </div> -->
+    <!-- /.modal -->
+    <!-- </div> -->
     <!-- 排班模态框（Modal） -->
-    <div
+    <!-- <div
       class="modal fade"
       id="arrangeClass"
       tabindex="-1"
@@ -219,15 +229,15 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">排班</h4>
           </div>
-          <div class="modal-body">
-            <!-- 选项卡菜单-->
-            <ul id="myTab" class="nav nav-pills" role="tablist">
+    <div class="modal-body">-->
+    <!-- 选项卡菜单-->
+    <!-- <ul id="myTab" class="nav nav-pills" role="tablist">
               <li v-for="(classes,index) in classList" :key="index" :class="index==0?'active':''">
                 <a :href="'#'+classes.name" role="tab" data-toggle="pill">{{classes.name}}</a>
               </li>
-            </ul>
-            <!-- 选项卡面板 -->
-            <div id="myTabContent" class="tab-content">
+    </ul>-->
+    <!-- 选项卡面板 -->
+    <!-- <div id="myTabContent" class="tab-content">
               <div
                 :class="index==0?'tab-pane fade in active':'tab-pane fade in'"
                 v-for="(classes,index) in classList"
@@ -257,13 +267,13 @@
               </div>
             </div>
           </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
+    </div>-->
+    <!-- /.modal-content -->
+    <!-- </div> -->
+    <!-- /.modal -->
+    <!-- </div> -->
     <!-- 提示模态框（Modal） -->
-    <div
+    <!-- <div
       class="modal fade"
       id="alterModal"
       tabindex="-1"
@@ -287,11 +297,11 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
           </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
+    </div>-->
+    <!-- /.modal-content -->
+    <!-- </div> -->
+    <!-- /.modal -->
+    <!-- </div> -->
     <div class="classroute">
       <ol class="breadcrumb">
         <li>教务管理</li>
@@ -310,7 +320,7 @@
           :drop-down-list="inputData.classes.list"
         ></select-input>
       </div>
-    </div> -->
+    </div>-->
     <div class="second-floor">
       <!-- <label for="tel-name"></label>
       <input type="text" placeholder="请输入年级" class="textBox" v-model="inputData.telOrName" />
@@ -323,13 +333,8 @@
         data-toggle="modal"
         data-target="#addStudent"
         @click="addStudent()"
-      >新增学生</button> -->
-      <button
-        class="btn btn-clear"
-        data-toggle="modal"
-        data-target="#addStudents"
-        @click="addStudent()"
-      >批量导入</button>
+      >新增学生</button>-->
+      <button class="btn btn-clear" data-toggle="modal" data-target="#addStudents">批量导入</button>
     </div>
     <div class="forth-floor">
       <table class="table table-hover">
@@ -342,7 +347,9 @@
           <tr v-for="(student, seq) in currentList" class="content" :key="seq">
             <td>{{seq + 1}}</td>
             <td>{{student.id}}</td>
-            <td><img :src="student.avatar" class="student-avatar"></td>
+            <td>
+              <img :src="student.avatar" class="student-avatar" />
+            </td>
             <td>{{student.name}}</td>
             <td>{{student.gender}}</td>
             <td>{{student.phone}}</td>
@@ -365,7 +372,7 @@
                 data-target="#alterModal"
                 @click="addAlterMes()"
               >停课</span>
-            </td> -->
+            </td>-->
           </tr>
         </tbody>
       </table>
@@ -380,127 +387,128 @@ import DatePicker from "../utils/datePicker";
 import SelectInput from "../../Admin/utils/selectInput";
 import globalAxios from "axios";
 import XLSX from "xlsx";
-
+import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 
 export default {
   name: "stuManagement",
   data() {
     return {
+      fileName:"",
       limit: 10,
       currentList: [],
-      inputData: {
-        telOrName: "",
-        classes: {
-          option: "",
-          list: [
-            {
-              name:"1班",
-              id:"01"
-            },
-            {
-              name:"2班",
-              id:"02"
-            },
-          ]
-        }
-      },
-      tableTitle: [
-        "序号",
-        "学号",
-        "头像",
-        "姓名",
-        "性别",
-        "手机号",
-        "年级",
-      ],
-      tableData: [],
-      studentInfo: {
-        name: "",
-        telephone: "",
-        sex: "",
-        age: "",
-        parentName: "",
-        parentWechat: "",
-        school: "",
-        grade: "",
-        className: "",
-        money: "",
-        tips: ""
-      },
-      classList: [
-        {
-          name: "Scratch1",
-          classCon: [{ classname: "赛迪思1", startDate: "2019-02-27 00:00" }]
-        },
-        {
-          name: "Scratch2",
-          classCon: [
-            { classname: "赛迪思2", startDate: "2019-02-27 00:00" },
-            { classname: "赛迪思3", startDate: "2019-02-27 00:00" },
-            { classname: "赛迪思4", startDate: "2019-02-27 00:00" },
-            { classname: "赛迪思5", startDate: "2019-02-27 00:00" },
-            { classname: "赛迪思6", startDate: "2019-02-27 00:00" },
-            { classname: "赛迪思7", startDate: "2019-02-27 00:00" }
-          ]
-        }
-      ],
-      classTableTitle: ["班级名称", "开课时间", "操作"],
+      tableTitle: ["序号", "学号", "头像", "姓名", "性别", "手机号", "年级"],
+      tableData: []
+      // inputData: {
+      //   telOrName: "",
+      //   classes: {
+      //     option: "",
+      //     list: [
+      //       {
+      //         name: "1班",
+      //         id: "01"
+      //       },
+      //       {
+      //         name: "2班",
+      //         id: "02"
+      //       }
+      //     ]
+      //   }
+      // },
+      // studentInfo: {
+      //   name: "",
+      //   telephone: "",
+      //   sex: "",
+      //   age: "",
+      //   parentName: "",
+      //   parentWechat: "",
+      //   school: "",
+      //   grade: "",
+      //   className: "",
+      //   money: "",
+      //   tips: ""
+      // },
+      // classList: [
+      //   {
+      //     name: "Scratch1",
+      //     classCon: [{ classname: "赛迪思1", startDate: "2019-02-27 00:00" }]
+      //   },
+      //   {
+      //     name: "Scratch2",
+      //     classCon: [
+      //       { classname: "赛迪思2", startDate: "2019-02-27 00:00" },
+      //       { classname: "赛迪思3", startDate: "2019-02-27 00:00" },
+      //       { classname: "赛迪思4", startDate: "2019-02-27 00:00" },
+      //       { classname: "赛迪思5", startDate: "2019-02-27 00:00" },
+      //       { classname: "赛迪思6", startDate: "2019-02-27 00:00" },
+      //       { classname: "赛迪思7", startDate: "2019-02-27 00:00" }
+      //     ]
+      //   }
+      // ],
+      // classTableTitle: ["班级名称", "开课时间", "操作"],
       //新增学生
-      studentName: "",
-      isName: true,
-      studentAccount: "",
-      isAccount: true,
-      studentPassword: "",
-      isPassword: true,
-      studentTel: "",
-      isTel: true,
-      studentClass: "",
-      studentAge: "",
-      parentName: "",
-      parentWechat: "",
-      studentGrade: "",
-      checkSex: [],
-      updateIndex: -1, //是编辑还是添加
+      // studentName: "",
+      // isName: true,
+      // studentAccount: "",
+      // isAccount: true,
+      // studentPassword: "",
+      // isPassword: true,
+      // studentTel: "",
+      // isTel: true,
+      // studentClass: "",
+      // studentAge: "",
+      // parentName: "",
+      // parentWechat: "",
+      // studentGrade: "",
+      // checkSex: [],
+      // updateIndex: -1, //是编辑还是添加
       //提示框
-      alterimg: this.$store.state.url + "eduAdmin/alter.png",
-      alterMes: ""
+      // alterimg: this.$store.state.url + "eduAdmin/alter.png",
+      // alterMes: ""
     };
   },
-  watch: {
-    studentName(val, oldVal) {
-      if (val.length <= 10 && val.length > 0) {
-        this.isName = false;
-      } else {
-        this.isName = true;
-      }
-    },
-    studentAccount(val, oldVal) {
-      if (val.length <= 15 && val.length > 0) {
-        this.isAccount = false;
-      } else {
-        this.isAccount = true;
-      }
-    },
-    studentPassword(val, oldVal) {
-      if (val.length <= 20 && val.length > 0) {
-        this.isPassword = false;
-      } else {
-        this.isPassword = true;
-      }
-    },
-    studentTel(val, oldVal) {
-      var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
-      if (val.length == 11 && reg.test(val)) {
-        this.isTel = false;
-      } else {
-        this.isTel = true;
-      }
-    }
-  },
+  // watch: {
+  //   studentName(val, oldVal) {
+  //     if (val.length <= 10 && val.length > 0) {
+  //       this.isName = false;
+  //     } else {
+  //       this.isName = true;
+  //     }
+  //   },
+  //   studentAccount(val, oldVal) {
+  //     if (val.length <= 15 && val.length > 0) {
+  //       this.isAccount = false;
+  //     } else {
+  //       this.isAccount = true;
+  //     }
+  //   },
+  //   studentPassword(val, oldVal) {
+  //     if (val.length <= 20 && val.length > 0) {
+  //       this.isPassword = false;
+  //     } else {
+  //       this.isPassword = true;
+  //     }
+  //   },
+  //   studentTel(val, oldVal) {
+  //     var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
+  //     if (val.length == 11 && reg.test(val)) {
+  //       this.isTel = false;
+  //     } else {
+  //       this.isTel = true;
+  //     }
+  //   }
+  // },
   methods: {
+    //下载模板
+    download() {
+      window.open(
+        "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/%E5%AD%A6%E7%94%9F%E5%BD%95%E5%85%A5%E8%A1%A8.xlsx"
+      );
+    },
     //批量导入学生
-     importExcel(file) {
+    importExcel(file) {
       var file = file.files[0]; // 使用传统的input方法需要加上这一步
+      this.file = file;
+      this.fileName = file.name;
       const types = file.name.split(".")[1];
       const fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(
         item => item === types
@@ -509,6 +517,9 @@ export default {
         alert("格式错误！请重新选择");
         return;
       }
+    },
+    submit() {
+      var file = this.file
       this.file2Xce(file).then(tabJson => {
         if (tabJson && tabJson.length > 0) {
           this.xlsxJson = tabJson[0].sheet;
@@ -516,7 +527,7 @@ export default {
           var token = window.localStorage.getItem("idToken");
           globalAxios({
             url:
-              "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/133/students",
+              "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/student",
             method: "post",
             headers: {
               "Content-Type": "application/json",
@@ -526,6 +537,8 @@ export default {
           }).then(
             response => {
               console.log(response);
+              this.$toast.success({ title: "学生管理", message: "操作成功" });
+              this.getStudents();
             },
             error => {
               console.log(error);
@@ -555,84 +568,79 @@ export default {
         reader.readAsBinaryString(file); // 传统input方法
       });
     },
-    clearChoices() {
-      this.optionsInit();
-    },
-    changeOption(item, id) {
-      Object.keys(this.inputData).forEach(res => {
-        if (res === id) {
-          this.inputData[res].option = item;
-        }
-      });
-    },
+    // clearChoices() {
+    //   this.optionsInit();
+    // },
+    // changeOption(item, id) {
+    //   Object.keys(this.inputData).forEach(res => {
+    //     if (res === id) {
+    //       this.inputData[res].option = item;
+    //     }
+    //   });
+    // },
     //详情
-    detials(seq) {
-      this.studentInfo.sex = "男";
-      this.studentInfo.name = this.tableData[seq].name;
-      this.studentInfo.telephone = this.tableData[seq].telephone;
-      this.studentInfo.age = "14";
-      this.studentInfo.className = this.tableData[seq].className;
-      this.studentInfo.grade = this.tableData[seq].grade;
-      this.studentInfo.parentName = "hhh";
-      this.studentInfo.parentWechat = "xxx";
-      this.studentInfo.money = "100";
-      this.studentInfo.tips = this.tableData[seq].remark;
-      this.studentInfo.school = this.tableData[seq].school;
-    },
+    // detials(seq) {
+    //   this.studentInfo.sex = "男";
+    //   this.studentInfo.name = this.tableData[seq].name;
+    //   this.studentInfo.telephone = this.tableData[seq].telephone;
+    //   this.studentInfo.age = "14";
+    //   this.studentInfo.className = this.tableData[seq].className;
+    //   this.studentInfo.grade = this.tableData[seq].grade;
+    //   this.studentInfo.parentName = "hhh";
+    //   this.studentInfo.parentWechat = "xxx";
+    //   this.studentInfo.money = "100";
+    //   this.studentInfo.tips = this.tableData[seq].remark;
+    //   this.studentInfo.school = this.tableData[seq].school;
+    // },
     //编辑学生
-    updateStudent(seq) {
-      this.updateIndex = seq;
-      this.studentName = this.tableData[seq].name;
-      this.studentAccount = this.tableData[seq].account;
-      this.studentPassword = "xxx";
-      this.studentTel = this.tableData[seq].telephone;
-      this.studentClass = this.tableData[seq].className;
-      this.studentAge = "14";
-      this.parentName = "hhh";
-      this.parentWechat = "xxx";
-      this.studentGrade = this.tableData[seq].grade;
-      //console.log(this.checkSex)
-    },
+    // updateStudent(seq) {
+    //   this.updateIndex = seq;
+    //   this.studentName = this.tableData[seq].name;
+    //   this.studentAccount = this.tableData[seq].account;
+    //   this.studentPassword = "xxx";
+    //   this.studentTel = this.tableData[seq].telephone;
+    //   this.studentClass = this.tableData[seq].className;
+    //   this.studentAge = "14";
+    //   this.parentName = "hhh";
+    //   this.parentWechat = "xxx";
+    //   this.studentGrade = this.tableData[seq].grade;
+    //console.log(this.checkSex)
+    // },
     //添加学生
-    addStudent() {
-      this.studentName = "";
-      this.studentAccount = "";
-      this.studentPassword = "";
-      this.studentTel = "";
-      this.studentClass = "";
-      this.studentAge = "";
-      this.parentName = "";
-      this.parentWechat = "";
-      this.studentGrade = "";
-    },
+    // addStudent() {
+    //   this.studentName = "";
+    //   this.studentAccount = "";
+    //   this.studentPassword = "";
+    //   this.studentTel = "";
+    //   this.studentClass = "";
+    //   this.studentAge = "";
+    //   this.parentName = "";
+    //   this.parentWechat = "";
+    //   this.studentGrade = "";
+    // },
     //编辑或添加的保存
-    submit() {
-      console.log(this.updateIndex);
-      if (this.updateIndex > 0) {
-        this.tableData[this.updateIndex].name = this.studentName;
-        this.tableData[this.updateIndex].account = this.studentAccount;
-        this.tableData[this.updateIndex].telephone = this.studentTel;
-        this.tableData[this.updateIndex].className = this.studentClass;
-        this.tableData[this.updateIndex].grade = this.studentGrade;
-      }
-    },
+    // submit() {
+    //   console.log(this.updateIndex);
+    //   if (this.updateIndex > 0) {
+    //     this.tableData[this.updateIndex].name = this.studentName;
+    //     this.tableData[this.updateIndex].account = this.studentAccount;
+    //     this.tableData[this.updateIndex].telephone = this.studentTel;
+    //     this.tableData[this.updateIndex].className = this.studentClass;
+    //     this.tableData[this.updateIndex].grade = this.studentGrade;
+    //   }
+    // },
     //警告内容
-    addAlterMes() {
-      this.alterMes = "停课后该学生将无法正常观看视频";
-    },
+    // addAlterMes() {
+    //   this.alterMes = "停课后该学生将无法正常观看视频";
+    // },
     changeTablePages(value) {
       this.currentList = this.tableData.slice(value, value + this.limit);
-    }
-  },
-  mounted() {
-    //this.tableData = this.originalTableData;
-    
-  },
-  created(){
-var token = window.localStorage.getItem("idToken");
+    },
+    getStudents() {
+      var token = window.localStorage.getItem("idToken");
       globalAxios
         .get(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/student", 
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/student",
           {
             headers: {
               "Content-Type": "application/json",
@@ -644,27 +652,32 @@ var token = window.localStorage.getItem("idToken");
           response => {
             console.log(response);
             //所有学生
-            var allStudent=response.data.data
-            var allStudentList=[]
-            for(var i=0;i<allStudent.length;i++){
-              var student={}
-              student.id=allStudent[i].STUDENT_ID
-              student.name=allStudent[i].STUDENT_NAME
-              student.avatar=allStudent[i].AVATAR
-              if(allStudent[i].GENDER=="0")
-                student.gender="女"
-              else
-                student.gender="男"
-              student.phone=allStudent[i].MOBILE_PHONE
-              student.grade=allStudent[i].GRADE
-              allStudentList.push(student)
+            var allStudent = response.data.data;
+            var allStudentList = [];
+            for (var i = 0; i < allStudent.length; i++) {
+              var student = {};
+              student.id = allStudent[i].STUDENT_ID;
+              student.name = allStudent[i].STUDENT_NAME;
+              student.avatar = allStudent[i].AVATAR;
+              if (allStudent[i].GENDER == "0") student.gender = "女";
+              else student.gender = "男";
+              student.phone = allStudent[i].MOBILE_PHONE;
+              student.grade = allStudent[i].GRADE;
+              allStudentList.push(student);
             }
-            this.tableData=allStudentList
-            console.log(this.tableData)
+            this.tableData = allStudentList;
+            console.log(this.tableData);
             this.changeTablePages(0);
           },
           error => {}
         );
+    }
+  },
+  mounted() {
+    //this.tableData = this.originalTableData;
+  },
+  created() {
+    this.getStudents();
   },
   components: { SelectInput, DatePicker, pagination }
 };
@@ -726,7 +739,6 @@ var token = window.localStorage.getItem("idToken");
   border-color: #c0c4cc;
 }
 
-
 #stuManagement .btn {
   background: #409eff;
   color: #fff;
@@ -773,7 +785,7 @@ var token = window.localStorage.getItem("idToken");
 #stuManagement table td {
   vertical-align: middle !important;
 }
-.student-avatar{
+.student-avatar {
   width: 40px;
   height: 40px;
 }
@@ -923,5 +935,58 @@ var token = window.localStorage.getItem("idToken");
   width: 25px;
   height: 25px;
   margin-right: 10px;
+}
+/*批量到入学生*/
+#stuManagement .upload-cover-btn {
+  margin-left: 10px;
+  width: 80px;
+  height: 35px;
+  display: inline-block;
+  background-color: #409eff;
+  color: #fff;
+  border-radius: 5px;
+  line-height: 35px;
+  text-align: center;
+}
+#stuManagement input[type="file"] {
+  width: 80px;
+  height: 35px;
+  position: relative;
+  top: -35px;
+  display: inline-block;
+}
+#stuManagement .btn-upload-file {
+  position: relative;
+  top: -35px;
+  margin-left: 10px;
+  background-color: #2fc27e;
+  border: none;
+  width: 80px;
+  height: 35px;
+}
+#stuManagement .btn-upload-file:hover {
+  background-color: #2fc27ddc;
+}
+.upload {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 20px;
+}
+.upload-title {
+  color: #606266;
+  display: block;
+  text-align: right;
+  width: 80px;
+  height: 40px;
+  float: left;
+  line-height: 40px;
+}
+.upload-input {
+  width: 300px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #409eff;
+  margin-left: 10px;
+  padding-left: 10px;
 }
 </style>

@@ -135,7 +135,7 @@
       </div>
       <!-- /.modal -->
     </div>
-     <!-- 提示模态框（Modal） -->
+    <!-- 提示模态框（Modal） -->
     <div
       class="modal fade"
       id="alterModal"
@@ -185,7 +185,7 @@
         id="class-name"
         v-model="inputData.className"
       />
-      <button class="btn btn-search" @click="conditionSearch">搜索</button> -->
+      <button class="btn btn-search" @click="conditionSearch">搜索</button>-->
       <!-- <button class="btn btn-clear" @click="clearChoices">清空筛选</button> -->
       <button
         class="btn btn-clear"
@@ -210,19 +210,25 @@
             <td>{{classes.courseMemberCount}}</td>
             <td style="width:150px">
               <!-- <span class="blue" data-toggle="modal" data-target="#courseScheduling">排课</span>&nbsp;&nbsp; -->
-              <span class="blue" data-toggle="modal" data-target="#checkStudent" @click="checkStudent(seq)">查看学生</span>&nbsp;&nbsp;
+              <span
+                class="blue"
+                data-toggle="modal"
+                data-target="#checkStudent"
+                @click="checkStudent(seq)"
+              >查看学生</span>&nbsp;&nbsp;
               <span
                 class="blue"
                 data-toggle="modal"
                 data-target="#addClass"
                 @click="updateClass(seq)"
-              >编辑</span>&nbsp;&nbsp;<br>
+              >编辑</span>&nbsp;&nbsp;
+              <br />
               <!-- <span
                 class="red"
                 data-toggle="modal"
                 data-target="#alterModal"
                 @click="deleteClass(seq)"
-              >删除</span> -->
+              >删除</span>-->
               <span class="blue" @click="addStudent(seq)">导入学生</span>
             </td>
           </tr>
@@ -269,7 +275,7 @@ export default {
         "性别",
         "年级",
         "年龄",
-        "手机号",
+        "手机号"
       ],
       studentData: [],
       //添加新班级
@@ -286,7 +292,7 @@ export default {
       //提示框
       alterimg: this.$store.state.url + "eduAdmin/alter.png",
       alterMes: "",
-      studentNum:0
+      studentNum: 0
     };
   },
   watch: {
@@ -300,49 +306,53 @@ export default {
   },
   methods: {
     //查看学生
-    checkStudent(seq){
-      this.index=this.currentPage*this.limit+seq;
+    checkStudent(seq) {
+      this.index = this.currentPage * this.limit + seq;
       var token = window.localStorage.getItem("idToken");
-      var classId=this.tableData[this.index].classId;
+      var classId = this.tableData[this.index].classId;
       globalAxios
-      .get(
-        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/"+classId+"/students",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token
+        .get(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/" +
+            classId +
+            "/students",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            }
           }
-        }
-      )
-      .then(
-        response => {
-          console.log(response)
-          var studentList=response.data.Items
-          var studentData=[]
-          this.studentNum=response.data.Count
-          for(var i=0;i<studentList.length;i++){
-            var student={}
-            student.name=studentList[i].STUDENT_NAME;
-            student.age=studentList[i].AGE;
-            student.gender=studentList[i].GENDER;
-            student.studentId=studentList[i].STUDENT_ID;
-            student.mobilePhone=studentList[i].MOBILE_PHONE;
-            student.grade=studentList[i].GRADE;
-            studentData.push(student);
+        )
+        .then(
+          response => {
+            console.log(response);
+            var studentData = [];
+            if (response.data != null) {
+              var studentList = response.data.Items;
+              this.studentNum = response.data.Count;
+              for (var i = 0; i < studentList.length; i++) {
+                var student = {};
+                student.name = studentList[i].STUDENT_NAME;
+                student.age = studentList[i].AGE;
+                student.gender = studentList[i].GENDER;
+                student.studentId = studentList[i].STUDENT_ID;
+                student.mobilePhone = studentList[i].MOBILE_PHONE;
+                student.grade = studentList[i].GRADE;
+                studentData.push(student);
+              }
+            }
+            this.studentData = studentData;
+          },
+          error => {
+            console.log(error);
           }
-          this.studentData=studentData;
-        },
-        error => {
-          console.log(error);
-        }
-      );
+        );
     },
     //导入学生
-    addStudent(seq){
-      this.index=this.currentPage*this.limit+seq;
-      var classId=this.tableData[this.index].classId; 
+    addStudent(seq) {
+      this.index = this.currentPage * this.limit + seq;
+      var classId = this.tableData[this.index].classId;
       this.$router.push({
-        path: "/eduAdmin/classManagement/" + classId + "/addStudent",
+        path: "/eduAdmin/classManagement/" + classId + "/addStudent"
       });
     },
     // importExcel(file) {
@@ -428,7 +438,7 @@ export default {
     },
     //编辑班级
     updateClass(seq) {
-      this.modalTitle="编辑"
+      this.modalTitle = "编辑";
       this.isChange = true;
       this.index = this.currentPage * this.limit + seq;
       this.addClassName = this.tableData[this.index].className;
@@ -443,7 +453,7 @@ export default {
     },
     //添加班级
     addClass() {
-      this.modalTitle="添加"
+      this.modalTitle = "添加";
       this.isChange = false;
       this.index = -1;
       this.addClassName = "";
@@ -458,36 +468,44 @@ export default {
       console.log(this.index);
       //编辑提交
       if (this.index >= 0) {
-        var updateClass={}
-        updateClass.courseId=this.addClassData.course.option.id;
-        updateClass.courseName=this.addClassData.course.option.name;
-        updateClass.teacherId=this.addClassData.teacher.option.id;
-        updateClass.classId=this.tableData[this.index].classId
-        console.log(updateClass)
+        var updateClass = {};
+        updateClass.courseId = this.addClassData.course.option.id;
+        updateClass.courseName = this.addClassData.course.option.name;
+        updateClass.teacherId = this.addClassData.teacher.option.id;
+        updateClass.classId = this.tableData[this.index].classId;
+        console.log(updateClass);
         globalAxios
-        .post(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/"+updateClass.classId+"/course",
-          updateClass,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token
+          .post(
+            "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/" +
+              updateClass.classId +
+              "/course",
+            updateClass,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: token
+              }
             }
-          }
-        )
-        .then(
-          response => {
-            console.log(response);
-            this.tableData[this.index].teacherName = this.addClassData.teacher.option.name;
-            this.tableData[this.index].teacherId = this.addClassData.teacher.option.id;
-            this.tableData[this.index].courseName = this.addClassData.course.option.name;
-            this.tableData[this.index].courseId = this.addClassData.course.option.id;
-          },
-          error => {
-
-          }
-        )
-       } 
+          )
+          .then(
+            response => {
+              console.log(response);
+              this.tableData[
+                this.index
+              ].teacherName = this.addClassData.teacher.option.name;
+              this.tableData[
+                this.index
+              ].teacherId = this.addClassData.teacher.option.id;
+              this.tableData[
+                this.index
+              ].courseName = this.addClassData.course.option.name;
+              this.tableData[
+                this.index
+              ].courseId = this.addClassData.course.option.id;
+            },
+            error => {}
+          );
+      }
       //修改提交
       else {
         newClass.className = this.addClassName;
@@ -495,59 +513,60 @@ export default {
         // newClass.course = JSON.stringify(this.addClassData.course.option);
         newClass.courseId = this.addClassData.course.option.id;
         newClass.courseName = this.addClassData.course.option.name;
-      console.log(newClass);
-      globalAxios
-        .post(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class",
-          newClass,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token
+        console.log(newClass);
+        globalAxios
+          .post(
+            "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class",
+            newClass,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: token
+              }
             }
-          }
-        )
-        .then(
-          response => {
-            console.log(response);
-            globalAxios
-              .get(
-                "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class",
-                {
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: token
+          )
+          .then(
+            response => {
+              console.log(response);
+              globalAxios
+                .get(
+                  "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class",
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: token
+                    }
                   }
-                }
-              )
-              .then(
-                response => {
-                  console.log(response);
-                  var classList = response.data;
-                  var classArr = [];
-                  for (var i = 0; i < classList.length; i++) {
-                    var classes = {};
-                    classes.classId = classList[i].CLASS_ID;
-                    classes.className = classList[i].CLASS_NAME;
-                    classes.teacherName = classList[i].TEACHER_NAME;
-                    classes.courseId = classList[i].COURSE_ID;
-                    classes.courseName = classList[i].COURSE_NAME;
-                    classes.courseMemberCount = classList[i].CLASS_MEMBER_COUNT;
-                    classArr.push(classes);
+                )
+                .then(
+                  response => {
+                    console.log(response);
+                    var classList = response.data;
+                    var classArr = [];
+                    for (var i = 0; i < classList.length; i++) {
+                      var classes = {};
+                      classes.classId = classList[i].CLASS_ID;
+                      classes.className = classList[i].CLASS_NAME;
+                      classes.teacherName = classList[i].TEACHER_NAME;
+                      classes.courseId = classList[i].COURSE_ID;
+                      classes.courseName = classList[i].COURSE_NAME;
+                      classes.courseMemberCount =
+                        classList[i].CLASS_MEMBER_COUNT;
+                      classArr.push(classes);
+                    }
+                    this.tableData = classArr;
+                    this.changeTablePages(0);
+                  },
+                  error => {
+                    // this.$router.push({path:'/404'})
+                    console.log(error);
                   }
-                  this.tableData = classArr;
-                  this.changeTablePages(0);
-                },
-                error => {
-                  // this.$router.push({path:'/404'})
-                  console.log(error);
-                }
-              );
-          },
-          error => {
-            console.log(error);
-          }
-        );
+                );
+            },
+            error => {
+              console.log(error);
+            }
+          );
       }
     },
     changeTablePages(value) {
@@ -580,7 +599,7 @@ export default {
     deleteClass(seq) {
       this.index = seq;
       this.alterMes = "确认删除吗？";
-    },
+    }
   },
   mounted() {
     //获取班级列表
@@ -599,19 +618,21 @@ export default {
       .then(
         response => {
           console.log(response);
-          var classList = response.data;
-          console.log(classList);
           var classArr = [];
-          for (var i = 0; i < classList.length; i++) {
-            var classes = {};
-            classes.classId = classList[i].CLASS_ID
-            classes.className = classList[i].CLASS_NAME;
-            classes.teacherName = classList[i].TEACHER_NAME;
-            classes.teacherId = classList[i].TEACHER_ID;
-            classes.courseName = classList[i].COURSE_NAME;
-            classes.courseId = classList[i].COURSE_ID;
-            classes.courseMemberCount = classList[i].CLASS_MEMBER_COUNT;
-            classArr.push(classes);
+          if (response.data != null) {
+            var classList = response.data;
+            console.log(classList);
+            for (var i = 0; i < classList.length; i++) {
+              var classes = {};
+              classes.classId = classList[i].CLASS_ID;
+              classes.className = classList[i].CLASS_NAME;
+              classes.teacherName = classList[i].TEACHER_NAME;
+              classes.teacherId = classList[i].TEACHER_ID;
+              classes.courseName = classList[i].COURSE_NAME;
+              classes.courseId = classList[i].COURSE_ID;
+              classes.courseMemberCount = classList[i].CLASS_MEMBER_COUNT;
+              classArr.push(classes);
+            }
           }
           this.tableData = classArr;
           this.changeTablePages(0);

@@ -88,10 +88,13 @@ export default {
           )
           .then(
             response => {
-              console.log(response);
-              this.$router.push({
-                path: "/Admin/chapterManagement/" + this.courseId
-              });
+              //console.log(response);
+              this.$toast.success({ title: "章节管理", message: "操作成功" });
+              setTimeout(function() {
+                that.$router.push({
+                  path: "/Admin/chapterManagement/" + that.courseId
+                });
+              }, 1000);
             },
             error => {
               // this.$router.push({path:'/404'})
