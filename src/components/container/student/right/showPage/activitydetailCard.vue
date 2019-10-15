@@ -42,6 +42,8 @@
 </template>
 <script>
   import { mapState } from 'vuex'
+  import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
+
   export default {
     data() {
       return {
@@ -54,10 +56,10 @@
         if(this.card.price==0){
           this.$store.dispatch('postUserInfo', this.$route.query.id).then((res)=>{
             if(res==1){
-              toastr.success('报名成功 ~!');
+              this.$toast.success({message:'报名成功 ~!'})
               this.$router.push({ path: '/payOK' })
             }else{
-              toastr.error('哎呀...报名失败了，请重试');
+              this.$toast.success({message:'哎呀...报名失败了，请重试'})
             }
           })
           //发送当前用户信息，返回success之后跳转界面

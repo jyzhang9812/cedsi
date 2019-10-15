@@ -57,6 +57,8 @@
   import { mapState } from "vuex";
   import globalAxios from "axios";
   import random from "string-random";
+  import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
+
   export default {
     data() {
       return {
@@ -121,7 +123,7 @@
                   this.$store.dispatch('postUserInfo', this.$route.query.id)
                 }
                 clearInterval(timer)
-                toastr.success('报名成功 ~!');
+                this.$toast.success({message:'报名成功 ~!'})
                 this.$router.push({ path: '/payOK' });
               }
             },
