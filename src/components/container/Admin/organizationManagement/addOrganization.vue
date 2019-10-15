@@ -5,7 +5,7 @@
       <input class="upload-input" placeholder="请输入机构名称" v-model="organizationName" />
     </div>
     <div class="upload">
-      <span class="upload-title" style="margin-right:10px" >机构地区:</span>
+      <span class="upload-title" style="margin-right:10px">机构地区:</span>
       <v-distpicker
         class="address-input"
         @province="onChangeProvince"
@@ -85,6 +85,7 @@ import VDistpicker from "v-distpicker";
 import SelectInput from "../utils/selectInput";
 import AWS from "aws-sdk";
 import globalAxios from "axios";
+import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 export default {
   name: "addorganization",
   components: { VDistpicker, SelectInput },
@@ -103,13 +104,13 @@ export default {
           option: "",
           list: [
             {
-              name:"学校",
-              id:"0"
-          },
-                      {
-              name:"企业",
-              id:"1"
-          },
+              name: "学校",
+              id: "0"
+            },
+            {
+              name: "企业",
+              id: "1"
+            }
           ]
         }
       },
@@ -164,27 +165,31 @@ export default {
     //   this.size = this.file.size;
     // },
     submit() {
+      var that = this
       var token = window.localStorage.getItem("idToken");
       // var neworganization = {};
       // neworganization.organizationName = this.organizationName;
       // neworganization.organizationDesc = this.organizationDesc;
       // neworganization.courseId = this.courseId;
-      this.organizationAddress =this.organization.province +this.organization.city +this.organization.area;
+      this.organizationAddress =
+        this.organization.province +
+        this.organization.city +
+        this.organization.area;
       this.code = this.organization.areaCode;
       var newOrg = {};
       newOrg.organizationName = this.organizationName;
       newOrg.organizationPrin = this.organizationPrin;
       newOrg.organizationAddress = this.organizationAddress;
       newOrg.organizationIntro = this.organizationIntro;
-      newOrg.code=this.code;
+      newOrg.code = this.code;
       newOrg.organizationType = this.inputData.org.option.name;
-      newOrg.type=this.licenseType;
-      console.log(newOrg);
-      console.log(this.organization);
-       globalAxios
+      newOrg.type = this.licenseType;
+      //console.log(newOrg);
+      //console.log(this.organization);
+      globalAxios
         .post(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/org" ,
-            newOrg,
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/org",
+          newOrg,
           {
             headers: {
               "Content-Type": "application/json",
@@ -194,12 +199,15 @@ export default {
         )
         .then(
           response => {
-            console.log(response);
-            this.$router.push({path:"/Admin/organizationManagement"})
+            //console.log(response);
+              this.$toast.success({ title: "机构管理", message: "操作成功" });
+              setTimeout(function() {
+                this.$router.push({ path: "/Admin/organizationManagement" });
+              }, 1000);
             AWS.config = new AWS.Config({
               accessKeyId: response.data.AccessKeyId,
               secretAccessKey: response.data.SecretAccessKey,
-              sessionToken:response.data.SessionToken,
+              sessionToken: response.data.SessionToken,
               region: "cn-northwest-1"
             });
             var s3 = new AWS.S3();
@@ -237,7 +245,7 @@ export default {
 </script>
 
 <style scoped>
-#addOrganization{
+#addOrganization {
   width: 98%;
   margin: 0 auto;
   padding-top: 30px;

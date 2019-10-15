@@ -32,10 +32,10 @@
         console.log(this.height)
       if (this.height > 620) {
         this.appheight = 'min-height:' + this.height + 'px;';
-        this.screenHeight = 'min-height:' + (this.height - 56) + 'px;';
+        this.screenHeight = 'min-height:1000px;';
       } else {
         this.appheight = 'min-height:650px;';
-        this.screenHeight = 'min-height:' + (this.height - 56) + 'px;';
+        this.screenHeight = 'min-height: 1000px;';
       }
       this.$store.dispatch('tryAutoLogin');
     },

@@ -20,7 +20,7 @@
     </div>
     <div class="upload-footer">
       <button class="btn upload-btn" @click="submit">确定</button>
-      <button class="btn upload-btn">取消</button>
+      <button class="btn upload-btn" @click="goback()">取消</button>
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@
 <script>
 import globalAxios from "axios";
 import { mapState } from "vuex";
-import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
+import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 export default {
   name: "addChapter",
   data() {
@@ -41,6 +41,11 @@ export default {
     };
   },
   methods: {
+    goback() {
+      this.$router.push({
+        path: "/Admin/chapterManagement/" + this.courseId
+      });
+    },
     timestampToTime(timestamp) {
       timestamp = String(timestamp);
       timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
@@ -57,7 +62,7 @@ export default {
       return Y + M + D + h + m + s;
     },
     submit() {
-      var that = this
+      var that = this;
       var token = window.localStorage.getItem("idToken");
       var newChapter = {};
       newChapter.chapterName = this.chapterName;
@@ -83,10 +88,13 @@ export default {
           )
           .then(
             response => {
-              console.log(response);
-              this.$router.push({
-                path: "/Admin/chapterManagement/" + this.courseId
-              });
+              //console.log(response);
+              this.$toast.success({ title: "章节管理", message: "操作成功" });
+              setTimeout(function() {
+                that.$router.push({
+                  path: "/Admin/chapterManagement/" + that.courseId
+                });
+              }, 1000);
             },
             error => {
               // this.$router.push({path:'/404'})
@@ -110,7 +118,7 @@ export default {
           .then(
             response => {
               console.log(response);
-              this.$toast.success({title:"章节管理",message:'操作成功'})
+              this.$toast.success({ title: "章节管理", message: "操作成功" });
               setTimeout(function() {
                 that.$router.push({
                   path: "/Admin/chapterManagement/" + that.courseId
@@ -237,8 +245,8 @@ export default {
   outline: none;
   color: #fff;
 }
- .toast-icon img{
-   width: 90px !important;
+.toast-icon img {
+  width: 90px !important;
 }
 </style>
 
