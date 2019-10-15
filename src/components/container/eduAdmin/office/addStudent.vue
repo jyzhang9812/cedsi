@@ -14,12 +14,14 @@
         </thead>
         <tbody>
           <tr v-for="(student, seq) in tableData" :key="seq" class="content">
-            <td><input type="checkbox" v-model="checkedId" :value="student"></td>
+            <td>
+              <input type="checkbox" v-model="checkedId" :value="student" />
+            </td>
             <td>{{student.studentId}}</td>
             <td>{{student.studentName}}</td>
             <td>{{student.gender}}</td>
             <td>{{student.age}}</td>
-            <td>{{student.grade}}</td>           
+            <td>{{student.grade}}</td>
           </tr>
         </tbody>
       </table>
@@ -36,15 +38,16 @@
 import pagination from "../../teacher/utils/pagination.vue";
 import SelectInput from "../../Admin/utils/selectInput.vue";
 import globalAxios from "axios";
+import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 
 export default {
   name: "adminManagement",
-  components: { pagination,SelectInput },
+  components: { pagination, SelectInput },
   data() {
     return {
       addClassName: "",
       isName: true,
-       addClassData: {
+      addClassData: {
         addClassName: "",
         teacher: {
           option: "",
@@ -60,34 +63,25 @@ export default {
       inputData: {
         studentanizationUserName: ""
       },
-      tableTitle: [
-        "选择",
-        "学号",
-        "姓名",
-        "性别",
-        "年龄",
-        "年级"
-      ],
-      tableData: [],//页面表格内容
+      tableTitle: ["选择", "学号", "姓名", "性别", "年龄", "年级"],
+      tableData: [], //页面表格内容
       //当前页码
       currentPage: 0,
       index: 0,
-      checkedId:[],
-      checkedStudent:[],
-      isChecked:true,
+      checkedId: [],
+      checkedStudent: [],
+      isChecked: true
     };
   },
-   watch: {
-     checkedId(val, oldVal) {
-      this.checkedStudent=val
-      if(val.length==0)
-        this.isChecked=true
-      else
-        this.isChecked=false
-    },
+  watch: {
+    checkedId(val, oldVal) {
+      this.checkedStudent = val;
+      if (val.length == 0) this.isChecked = true;
+      else this.isChecked = false;
+    }
   },
   methods: {
-   cancel() {
+    cancel() {
       this.$router.push({
         path: "/eduAdmin/classManagement"
       });
@@ -104,42 +98,50 @@ export default {
       this.currentList = this.tableData.slice(value, value + this.limit);
       //console.log(this.currentList)
     },
-    submit(){
-      var postStudent={}
-      postStudent.studentData=this.checkedId
-      console.log(postStudent)
+    submit() {
+      var that = this
+      var postStudent = {};
+      postStudent.studentData = this.checkedId;
+      console.log(postStudent);
       var token = window.localStorage.getItem("idToken");
-    globalAxios
-      .post(
-        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/"+this.classId+"/students",
-        postStudent,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token
+      globalAxios
+        .post(
+          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/" +
+            this.classId +
+            "/students",
+          postStudent,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token
+            }
           }
-        }
-      )
-      .then(
-        response => {
-          console.log(response)
-        },
-        error => {
-          console.log(error);
-        }
-      );
+        )
+        .then(
+          response => {
+            console.log(response);
+            this.$toast.success({ title: "章节管理", message: "操作成功" });
+            setTimeout(function() {
+              that.$router.push({ path: "/eduAdmin/stuManagement/" });
+            }, 1000);
+          },
+          error => {
+            console.log(error);
+          }
+        );
     }
   },
   mounted() {
     this.changeTablePages(0);
   },
-  created(){
+  created() {
     this.classId = this.$route.params.classId;
-    console.log(this.classId)
+    console.log(this.classId);
     var token = window.localStorage.getItem("idToken");
     globalAxios
       .get(
-        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/"+this.classId,
+        "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/" +
+          this.classId,
         {
           headers: {
             "Content-Type": "application/json",
@@ -149,7 +151,7 @@ export default {
       )
       .then(
         response => {
-          console.log(response)
+          console.log(response);
           var studentList = [];
           var studentArr = [];
           studentList = response.data.data;
@@ -159,14 +161,12 @@ export default {
             student.studentId = studentList[i].STUDENT_ID;
             student.grade = studentList[i].GRADE;
             student.age = studentList[i].AGE;
-            student.avatar=studentList[i].AVATAR;
-            student.mobile=studentList[i].MOBILE_PHONE
-            student.orgId=studentList[i].ORG_ID
-            student.userId=studentList[i].USER_ID
-            if(studentList[i].GENDER=="0")
-              student.gender="女";
-            else
-              student.gender="男";
+            student.avatar = studentList[i].AVATAR;
+            student.mobile = studentList[i].MOBILE_PHONE;
+            student.orgId = studentList[i].ORG_ID;
+            student.userId = studentList[i].USER_ID;
+            if (studentList[i].GENDER == "0") student.gender = "女";
+            else student.gender = "男";
             studentArr.push(student);
           }
           this.tableData = studentArr;
@@ -402,14 +402,14 @@ export default {
   height: 25px;
   margin-right: 10px;
 }
-#addStudent .upload-footer{
-    width: 100%;
-    text-align: center
+#addStudent .upload-footer {
+  width: 100%;
+  text-align: center;
 }
-#addStudent .upload-btn{
-    background-color: #409eff;
-    color: #fff;
-    margin-left: 10px;
+#addStudent .upload-btn {
+  background-color: #409eff;
+  color: #fff;
+  margin-left: 10px;
 }
 #addStudent .modal-select-input {
   display: inline-block;
