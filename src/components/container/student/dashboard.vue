@@ -105,7 +105,7 @@
     },
     created: function () {
       this.height = document.documentElement.clientHeight
-      this.style = 'min-height:' + this.height + 'px;'
+      this.style = 'min-height:1000px;'
       console.log(this.height)
       this.$store.commit('updateLoading', true)
       this.$store.dispatch('getUser')

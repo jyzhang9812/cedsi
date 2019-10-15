@@ -292,9 +292,13 @@ const actions = {
                         point.description = chaptersArr[i].CP_DESCRIPTION;
                         point.number = chaptersArr[i].CP_NUMBER;
                         point.name = chaptersArr[i].CP_NAME;
-                        point.videoSrc = chaptersArr[i].CP_RESOURCE.VIDEO;
-                        point.lectureSrc = chaptersArr[i].CP_RESOURCE.LECTURE;
-                        point.templateSrc = chaptersArr[i].CP_RESOURCE.TEMPLATE;
+                        if(chaptersArr[i].CP_RESOURCE && chaptersArr[i].CP_RESOURCE.VIDEO && chaptersArr[i].CP_RESOURCE.LECTURE && chaptersArr[i].CP_RESOURCE.TEMPLATE){
+                            point.videoSrc = chaptersArr[i].CP_RESOURCE.VIDEO;
+                            point.lectureSrc = chaptersArr[i].CP_RESOURCE.LECTURE;
+                            point.templateSrc = chaptersArr[i].CP_RESOURCE.TEMPLATE;
+                        }else{
+                            point.videoSrc = "";
+                        }
                         point.chapterId = chaptersArr[i].CP_ID;
                         List.list.push(point);
                     }
