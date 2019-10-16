@@ -2,7 +2,7 @@
   <div class="row" id="admin-sidebar">
     <div class="aside">
       <ul class="menu nav">
-        <li v-for="item in aside" :class="item.close==false?'bg-hover active':'bg-hover'" :key="item.name" @click="nav()">
+        <li v-for="item in aside" :class="item.close==false?'bg-hover active':'bg-hover'" :key="item.name">
           <div class="item-name" @click="dropDownListListener(item)">
             <i class='fa fa-lg' style='color: #fff' :class="item.icon" aria-hidden="true"></i>
             <span>{{item.name}}</span>
@@ -77,22 +77,22 @@ import { fail } from 'assert';
         }
       },
       //导航active样式
-      nav(){
-        var currentRoute=this.$route.fullPath
-        for(var i=0;i<this.aside.length;i++){
-          if(this.aside[i].route==currentRoute){
-            this.aside[i].close=false;
-          }
-          else
-            this.aside[i].close=true;
-        }
-      }
+      // nav(){
+      //   var currentRoute=this.$route.fullPath
+      //   for(var i=0;i<this.aside.length;i++){
+      //     if(this.aside[i].route==currentRoute){
+      //       this.aside[i].close=false;
+      //     }
+      //     else
+      //       this.aside[i].close=true;
+      //   }
+      // }
     },
     created: function () {
       var currentRoute=this.$route.fullPath
       this.width = document.documentElement.clientWidth
       this.screenWidth = 'min-width:' + (this.width - 320) + 'px;'
-      this.nav(currentRoute)
+      //this.nav(currentRoute)
     }
   }
 </script>

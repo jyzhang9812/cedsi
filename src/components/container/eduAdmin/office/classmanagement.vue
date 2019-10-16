@@ -207,7 +207,6 @@
             <td>{{classes.className}}</td>
             <td>{{classes.teacherName}}</td>
             <td>{{classes.courseName}}</td>
-            <td>{{classes.courseMemberCount}}</td>
             <td style="width:150px">
               <!-- <span class="blue" data-toggle="modal" data-target="#courseScheduling">排课</span>&nbsp;&nbsp; -->
               <span
@@ -266,7 +265,7 @@ export default {
           list: []
         }
       },
-      tableTitle: ["序号", "班级名称", "教师", "课程", "学生人数", "操作"],
+      tableTitle: ["序号", "班级名称", "教师", "课程", "操作"],
       tableData: [],
       studentTitle: [
         "序号",

@@ -122,7 +122,7 @@ export default {
             console.log(response);
             this.$toast.success({ title: "章节管理", message: "操作成功" });
             setTimeout(function() {
-              that.$router.push({ path: "/eduAdmin/stuManagement/" });
+              that.$router.push({ path: "/eduAdmin/classManagement/" });
             }, 1000);
           },
           error => {
