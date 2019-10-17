@@ -116,7 +116,7 @@
               img:item.COVER,
               num: 100,
               id:item.ID,
-              price:item.PRICE,
+              price:item.PRICE/100,
               status:item.COURSE_STATUS=="NOT_PUBLISH"
             });
           });
