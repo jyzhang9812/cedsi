@@ -146,6 +146,8 @@
           .catch(err => {
             console.log(err);
           })
+          this.$router.replace({ path: "/eduAdmin/activity/" });
+          $(window).scrollTop(0);
       },
       cancel() {
         this.$router.replace({ path: "/eduAdmin/activity/" });
