@@ -23,7 +23,6 @@
               <th>序号</th>
               <th>活动标题</th>
               <th>发布时间</th>
-              <th>活动类型</th>
               <th>活动地点</th>
               <th>价格</th>
             </tr>
@@ -33,7 +32,6 @@
               <td>{{index + 1}}</td>
               <td width='380px' class="blue">{{list.TITLE}}</td>
               <td>{{list.ACTIVITY_TIME}}</td>
-              <td>{{list.ACTIVITY_TYPE}}</td>
               <td>{{list.ACTIVITY_PLACE}}</td>
               <td>{{list.ACTIVITY_PRICE}}</td>
             </tr>

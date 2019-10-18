@@ -14,10 +14,14 @@
       </date-picker>
     </div>
     <div class="upload">
+      <span class="upload-title">活动价格:</span>
+      <input class="upload-input" placeholder="请输入活动价格" v-model="activityPrice" />
+    </div>
+    <!-- <div class="upload">
       <span class="upload-title">活动负责人:</span>
       <select-input class="upload-select" id="activity" tips="请选择活动负责人" :option="inputData.activity.option.name"
         @option="changeOption" :drop-down-list="inputData.activity.list"></select-input>
-    </div>
+    </div> -->
     <div class="upload">
       <span class="upload-title">上传活动封面:</span>
       <div class="upload-cover-btn">
@@ -31,16 +35,16 @@
         <img id="headimage" :src="coverImage" class="cover-image" alt v-show="coverImage!==''" />
       </div>
     </div>
-    <div class="upload upload-height2">
+    <!-- <div class="upload upload-height2">
       <span class="upload-title" style="display:block">活动描述:</span>
       <div class="item">
         <div ref="editor" class="editor"></div>
       </div>
-    </div>
+    </div> -->
     <div class="upload">
-      <span class="upload-title">上传活动图片:</span>
-      <div class="upload-cover-btn upload-width">
-        上传图片 (最多上传三张)
+      <span class="upload-title">上传内容图片:</span>
+      <div class="upload-cover-btn">
+        上传图片
         <input type="file" @change="getActivityImg($event)" style="opacity: 0" multiple="multiple" />
       </div>
     </div>
@@ -49,12 +53,12 @@
       <div class="upload-cover-img">
         <img id="headimage" :src="coverImages[0]" class="cover-image" alt v-show="coverImages[0]!==''" />
       </div>
-      <div class="upload-cover-img">
+      <!-- <div class="upload-cover-img">
         <img id="headimage" :src="coverImages[1]" class="cover-image" alt v-show="coverImages[1]!==''" />
       </div>
       <div class="upload-cover-img">
         <img id="headimage" :src="coverImages[2]" class="cover-image" alt v-show="coverImages[2]!==''" />
-      </div>
+      </div> -->
     </div>
     <div class="upload-footer">
       <button class="btn upload-btn" @click="submit">确定</button>
