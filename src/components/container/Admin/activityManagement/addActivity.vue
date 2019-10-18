@@ -17,11 +17,6 @@
       <span class="upload-title">活动价格:</span>
       <input class="upload-input" placeholder="请输入活动价格" v-model="activityPrice" />
     </div>
-    <!-- <div class="upload">
-      <span class="upload-title">活动负责人:</span>
-      <select-input class="upload-select" id="activity" tips="请选择活动负责人" :option="inputData.activity.option.name"
-        @option="changeOption" :drop-down-list="inputData.activity.list"></select-input>
-    </div> -->
     <div class="upload">
       <span class="upload-title">上传活动封面:</span>
       <div class="upload-cover-btn">
@@ -35,12 +30,6 @@
         <img id="headimage" :src="coverImage" class="cover-image" alt v-show="coverImage!==''" />
       </div>
     </div>
-    <!-- <div class="upload upload-height2">
-      <span class="upload-title" style="display:block">活动描述:</span>
-      <div class="item">
-        <div ref="editor" class="editor"></div>
-      </div>
-    </div> -->
     <div class="upload">
       <span class="upload-title">上传内容图片:</span>
       <div class="upload-cover-btn">
@@ -53,12 +42,6 @@
       <div class="upload-cover-img">
         <img id="headimage" :src="coverImages[0]" class="cover-image" alt v-show="coverImages[0]!==''" />
       </div>
-      <!-- <div class="upload-cover-img">
-        <img id="headimage" :src="coverImages[1]" class="cover-image" alt v-show="coverImages[1]!==''" />
-      </div>
-      <div class="upload-cover-img">
-        <img id="headimage" :src="coverImages[2]" class="cover-image" alt v-show="coverImages[2]!==''" />
-      </div> -->
     </div>
     <div class="upload-footer">
       <button class="btn upload-btn" @click="submit">确定</button>
@@ -73,7 +56,6 @@
   import AWS from "aws-sdk";
   import globalAxios from "axios";
   import instance from "../../../../axios-auth.js";
-  import E from "wangeditor";
 
   export default {
     name: "addactivity",
@@ -91,7 +73,7 @@
           }
         },
         activityName: "",
-        activityPrin: "",
+        activityPrice: "",
         coverImage: "",
         fileName: "",
         activityAddress: "",
@@ -159,7 +141,6 @@
         return Promise.all(missions);
       },
       submit() {
-        console.log(this.editor.txt.text());
         let types = [this.licenseFile.type.split('/')[1] || 'null'];
         for (let i = 0; i < 3; i += 1) {
           let file = this.coverFiles[i];
@@ -176,6 +157,8 @@
           .catch(err => {
             console.log(err);
           })
+          this.$router.replace({ path: "/Admin/activityManagement/" });
+          $(window).scrollTop(0);
       },
       uploadToBucket(config, file) {
         AWS.config = new AWS.Config({
@@ -202,46 +185,17 @@
         });
       },
       insertActivity(types) {
-        let config = {
-          headers: {
-            Authorization: localStorage.getItem('idToken')
-          }
-        };
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
         let data = {
-          "CONTENT": this.editor.txt.text(),
           "ACTIVITY_TIME": this.startDate,
           "ACTIVITY_PLACE": this.activityAddress,
-          "ACTIVITY_NAME": this.activityName,
+          "ACTIVITY_TITLE": this.activityName,
+          "ACTIVITY_PRICE": this.activityPrice,
           "COVER_TYPE": types[0],
-          "IMG1_TYPE": types[1],
-          "IMG2_TYPE": types[2],
-          "IMG3_TYPE": types[3],
-          "PRINCIPAL_ID": this.inputData.activity.option.id
+          "IMG_TYPE": types[1],
         }
         console.log(data);
-        return instance.post("/activity", data, config);
-      },
-      getPrincipalTeachers() {
-        let config = {
-          headers: {
-            Authorization: localStorage.getItem('idToken')
-          }
-        };
-        instance.get("/eduadmin/activity/teacher", config)
-          .then(res => {
-            console.log(res);
-            if (res.data.length) {
-              this.inputData.activity.list = res.data.map(item => {
-                return {
-                  name: item.TEACHER_NAME,
-                  id: item.TEACHER_ID
-                }
-              });
-            }
-          })
-          .catch(err => {
-            console.log(err)
-          });
+        return instance.post("/admin/activity", data, config);
       }
     },
     computed: {
@@ -255,37 +209,7 @@
       }
     },
     mounted() {
-      this.editor = new E(this.$refs.editor);
-      let editor = this.editor;
-      editor.customConfig.uploadImgShowBase64 = true;
-      editor.customConfig.onchange = html => {
-        this.editorContent = html;
-      };
-      (editor.customConfig.menus = [
-        "head", // 标题
-        "bold", // 粗体
-        "fontSize", // 字号
-        "fontName", // 字体
-        "italic", // 斜体
-        "underline", // 下划线
-        "strikeThrough", // 删除线
-        "foreColor", // 文字颜色
-        "backColor", // 背景颜色
-        "link", // 插入链接
-        "list", // 列表
-        "justify", // 对齐方式
-        "quote", // 引用
-        "emoticon", // 表情
-        "image", // 插入图片
-        "table", // 表格
-        "video", // 插入视频
-        "code", // 插入代码
-        "undo", // 撤销
-        "redo" // 重复
-      ]),
-      editor.create();
-      editor.txt.html("<p></p>");
-      this.getPrincipalTeachers();
+
     }
   };
 

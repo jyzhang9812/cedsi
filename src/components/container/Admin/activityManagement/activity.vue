@@ -30,7 +30,7 @@
           <tbody>
             <tr v-for="(list, index) in currentList" :key="index">
               <td>{{index + 1}}</td>
-              <td width='380px' class="blue">{{list.TITLE}}</td>
+              <td width='380px' class="blue">{{list.ACTIVITY_TITLE}}</td>
               <td>{{list.ACTIVITY_TIME}}</td>
               <td>{{list.ACTIVITY_PLACE}}</td>
               <td>{{list.ACTIVITY_PRICE}}</td>
@@ -47,7 +47,6 @@
   import pagination from "../../teacher/utils/pagination.vue";
   import selectInput from "../../teacher/utils/selectInput";
   import deletePrompt from "../../teacher/utils/deletePrompt";
-  import E from 'wangeditor';
   import AWS from 'aws-sdk';
   import instance from '../../../../axios-auth.js';
   export default {
