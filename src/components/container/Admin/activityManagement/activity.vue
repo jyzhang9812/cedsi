@@ -49,6 +49,8 @@
   import deletePrompt from "../../teacher/utils/deletePrompt";
   import AWS from 'aws-sdk';
   import instance from '../../../../axios-auth.js';
+  import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
+
   export default {
     name: 'activity',
     data() {
@@ -99,6 +101,7 @@
           .then(res => {
             this.tableData = res.data || [];
             this.getNew(0);
+            this.$toast.success({ title: "活动管理", message: "刷新成功" });
           }).catch(err => { console.log(err) });
       }
       // changeOption(item, id) {
