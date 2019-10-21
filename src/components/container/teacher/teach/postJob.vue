@@ -257,10 +257,9 @@
           .then((res) => {
             console.log(res.data);
             this.originalInputData = res.data;
-            this.inputData.classes1.list = res.data.map((item) => {
+            this.inputData.classes2.list = res.data.map(item => {
               return item.CLASS_NAME;
             });
-            this.inputData.classes2.list = this.inputData.classes1.list;
           })
           .catch((err) => { console.log(err) });
       },
@@ -359,6 +358,7 @@
           this.originalTableData = res.data || [];
           this.tableData = res.data || [];
           this.changeTablePages(0);
+          this.inputData.classes1.list = Array.from(new Set(res.data.map(item => item.CLASS_NAME)));
         })
         .catch(err => { console.log(err) });
     },

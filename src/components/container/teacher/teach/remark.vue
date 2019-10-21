@@ -28,10 +28,15 @@
         <tbody>
           <tr v-for="(line, seq) in currentList" :key="seq" class="content">
             <td>{{seq + 1}}</td>
-            <td v-for="(value, key, index) in line" :key="index"> {{value}} </td>
+            <td>{{line.STUDENT_NAME}}</td>
+            <td>{{line.SUBMIT_TIME}}</td>
+            <td>{{line.HW_NAME}}</td>
+            <td>{{line.CLASS_NAME}}</td>
+            <td>{{line.COURSE_NAME}}</td>
+            <td>{{line.CP_NAME}}</td>
             <td>
-                <button class="edit" data-toggle="modal" data-target="#myHomework"
-                data-index="index">查看作品</button>&nbsp;&nbsp;
+              <button class="edit" data-toggle="modal" data-target="#remarkHomework" data-index="index"
+                @click="viewWork(line)">查看作品</button>&nbsp;&nbsp;
               <!-- <span class="blue" @click="popModal('remark', line)">点评</span>&nbsp;&nbsp; -->
               <!-- <span class="blue" @click="popModal('turndown', line)">驳回</span>&nbsp;&nbsp; -->
               <!-- <span class="red" @click="popModal('delete', line)">删除</span> -->
@@ -39,6 +44,30 @@
           </tr>
         </tbody>
       </table>
+      <div class="modal fade" id="remarkHomework" data-backdrop='false' tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body head">
+              <div class="left">
+                <iframe :src="currentWork.HW_URL"></iframe>
+              </div>
+              <div class="right">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                  &times;
+                </button>
+                <h3>作品名</h3>
+                <p>{{currentWork.HW_NAME === "null" ? "" : currentWork.HW_NAME}}</p>
+                <h3>操作说明</h3>
+                <p>{{currentWork.HW_GUIDE === "null" ? "" : currentWork.HW_GUIDE}}</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <p>老师点评</p>
+              <p>{{currentWork.TEACHER_REMARK === "null" ? "" : currentWork.TEACHER_REMARK}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <delete-prompt :id="bindingIds.delete" @deleteWork="deleteWork"></delete-prompt>
       <turn-down-work :id="bindingIds.turndown" @turnDownWorkResult="turnDownWork"></turn-down-work>
       <input-modal :id="bindingIds.remark" @remarkResult="remarkWork"></input-modal>
@@ -51,11 +80,11 @@
 </template>
 
 <script>
-  import DatePicker from "../utils/datePicker"
+  import DatePicker from "../utils/datePicker";
   import SelectInput from "../utils/selectInput";
   import Pagination from "../utils/pagination";
   import DeletePrompt from "../utils/deletePrompt";
-  import instance from "../../../../axios-auth.js"
+  import instance from "../../../../axios-auth.js";
   import InputModal from "../utils/inputModal";
   import TurnDownWork from "../utils/turnDownWork";
 
@@ -64,7 +93,12 @@
     data() {
       return {
         limit: 10,
-        currentWorkId: "",
+        currentWork: {
+          HW_GUIDE: "",
+          HW_NAME: "",
+          HW_URL: "",
+          HW_ID: ""
+        },
         comment: { commentStatus: 0, hasComment: "", noComment: "" },
         originalInputData: [],
         inputData: {
@@ -129,18 +163,13 @@
        * @param {Number} value
        */
       changeTablePages(value) {
-        let currentList = [];
-        this.tableData.slice(value, value + this.limit).forEach(item => {
-          currentList.push({
-            STUDENT_NAME: item.STUDENT_NAME,
-            SUBMIT_TIME: this.timestampToTime(item.SUBMIT_TIME),
-            HW_NAME: item.HW_NAME,
-            CLASS_NAME: this.inputData.classes.option,
-            COURSE_NAME: item.COURSE_NAME,
-            CP_NAME: item.CP_NAME
+        this.currentList = this.tableData
+          .slice(value, value + this.limit)
+          .map(item => {
+            item.SUBMIT_TIME = this.timestampToTime(item.SUBMIT_TIME);
+            item.HW_URL = 'https://s3.cn-northwest-1.amazonaws.com.cn/ced.cedsie.com/cedScratch/player.html?projectUrl=' + item.HW_URL;
+            return item;
           });
-        });
-        this.currentList = currentList;
       },
       /**
        * 点评过滤器
@@ -153,7 +182,7 @@
         let restTableList = tableList.slice(0),
           status = commentCode === 1;
         for (let i = 0, j = restTableList.length; i < j; i++) {
-          if (!!restTableList[i].TEACHER_REMARK !== status) {
+          if ((restTableList[i].TEACHER_REMARK === "null") === status) {
             restTableList.splice(i, 1);
             j -= 1;
             i -= 1;
@@ -208,19 +237,9 @@
        * 
        * @param {Object} item
        */
-      viewWork(item) { },
-      /**
-       * 寻找某一条作业的 ID
-       *
-       * @param {Object} line
-       * @return {String}
-      */
-      searchForWorkId(line) {
-        return this.originalTableData
-          .find(item => {
-            return item.STUDENT_NAME + item.SUBMIT_TIME ===
-              line.STUDENT_NAME + line.SUBMIT_TIME;
-          }).HW_ID;
+      viewWork(item) {
+        console.log(item);
+        this.currentWork = item;
       },
       /**
        * 通过班级名称和课程名称寻找 CLASS_ID
@@ -247,9 +266,9 @@
           teacherRemark: remarkResult.comment,
           homeworkRank: remarkResult.stars,
           selectedWork: remarkResult.selectedWork,
-          homeworkId: this.currentWorkId
+          homeworkId: this.currentWork.HW_ID
         };
-        instance.put(`teacher/stuhomework/${this.currentWorkId}`, putData, config)
+        instance.put(`teacher/stuhomework/${putData.homeworkId}`, putData, config)
           .then(res => { console.log(res) })
           .catch(err => { console.log(err) });
       },
@@ -261,8 +280,7 @@
       popModal(type, line) {
         $('#' + this.bindingIds[type]).modal('show');
         console.log(line);
-        this.currentWorkId = this.searchForWorkId(line);
-        console.log(this.currentWorkId);
+        this.currentWork = line;
       },
       /**
        * 拉取选择框的选项数据
@@ -277,7 +295,7 @@
             this.originalInputData = res.data;
             this.inputData.classes.list = res.data.map(item => {
               return item.CLASS_NAME;
-            })
+            });
             this.changeOption(className, 'classes');
           })
           .catch((err) => { console.log(err) });
@@ -457,5 +475,56 @@
 
   #remark .select-input {
     margin-right: 0;
+  }
+
+  #remark .modal-dialog {
+    width: 60%;
+    height: auto;
+    background: (255, 255, 255, .5)
+  }
+
+  #remark iframe {
+    width: 100%;
+    height: 441px;
+    margin: -25px 0 0 0;
+    background-color: #fff;
+    border: none;
+    border-radius: inherit;
+  }
+
+  #remark .head {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #remark .left {
+    width: 65%;
+    height: auto;
+    margin: 20px auto;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 2px solid #ccc;
+  }
+
+  #remark .right {
+    width: 30%;
+    height: 441px;
+    overflow-x: scroll;
+    margin-left: 5%;
+  }
+
+  #remark .right .close {
+    position: relative;
+    top: 0;
+    right: 0;
+  }
+
+  #remark .right p {
+    color: #777;
+    font-size: 16px;
+  }
+
+  #remark .right h3 {
+    color: #50b8ee;
   }
 </style>
