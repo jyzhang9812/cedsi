@@ -1,3 +1,10 @@
+<!--
+ * @Email: rumosky@163.com
+ * @Author: rumosky
+ * @Gitee: https://gitee.com/rumosky_admin
+ * @Date: 2019-10-22 19:27:43
+ * @Description: 管理员角色活动管理页面
+ -->
 <template>
   <div id="eduActivity">
     <div class="body">
