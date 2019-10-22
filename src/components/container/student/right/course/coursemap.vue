@@ -19,7 +19,7 @@
               <p class="intro-detials">{{courseIntro}}</p>
               <p class="course-warn">
                 不要忘记交作业呀！
-                <br />1.点击视频右下方【我要做作业】，填写名称和描述，上传封面，即可提交
+                <br />1.点击下方【我要做作业】，填写名称和描述，上传作业文件、封面，即可提交
                 <br />2.点击我的首页【开始创作】，进入scratch页面
               </p>
               <router-link class="work-btn" data-dismiss="modal" :to="{name:'addHomework',query:{chapterId:chapterId,courseId:this.courseId}}">我要做作业</router-link>

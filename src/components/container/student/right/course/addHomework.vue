@@ -2,12 +2,16 @@
     <div id="addCourse">
         <div class="upload">
             <span class="upload-title">作业名称:</span>
-            <input class="upload-input right" v-model="name" placeholder="请输入课程名称" />
+            <input class="upload-input right" v-model="name" placeholder="请输入作业名称" />
         </div>
         <div class="upload upload-height">
             <span class="upload-title">作业描述:</span>
-            <textarea class="upload-textarea" rows="8" cols="70" v-model="description" placeholder="请输入课程描述" />
+            <textarea class="upload-textarea" rows="8" cols="70" v-model="description" placeholder="请输入作业描述" />
             </div>
+        <div class="upload upload-height">
+            <span class="upload-title">操作方法:</span>
+            <textarea class="upload-textarea" rows="8" cols="70" v-model="guide" placeholder="请输入操作方法" />
+        </div>
         <div class="upload">
             <span class="upload-title">请选择作业:</span>
             <div class="upload-cover-btn">
@@ -16,25 +20,25 @@
             </div>
             <span>{{this.fileName}}</span>
         </div>
-        <div class="upload">
-                <span class="upload-title">请选择封面:</span>
-                <div class="upload-cover-btn">
-                    上传
-                    <input type="file" class @change="getFile($event,0)" style="opacity: 0" />
-                </div>
+        <!-- <div class="upload">
+            <span class="upload-title">请选择封面:</span>
+            <div class="upload-cover-btn">
+                上传
+                <input type="file" class @change="getFile($event,0)" style="opacity: 0" />
             </div>
-            <div class="upload upload-height">
-                <span class="upload-title">预览:</span>
-                <div class="upload-cover-img">
-                    <img
-                    id="headimage"
-                    :src="headsculpture"
-                    class="cover-image"
-                    alt
-                    v-show="headsculpture!==''"
-                    />
-                </div>
+        </div>
+        <div class="upload upload-height">
+            <span class="upload-title">预览:</span>
+            <div class="upload-cover-img">
+                <img
+                id="headimage"
+                :src="headsculpture"
+                class="cover-image"
+                alt
+                v-show="headsculpture!==''"
+                />
             </div>
+        </div> -->
         <div class="upload-footer">
             <button class="btn upload-btn" @click="submit1($event)">确定</button>
             <button class="btn upload-btn" @click="calcelUpload">取消</button>
@@ -53,13 +57,15 @@
             return {
                 file: null,
                 fileName: "",
-                coverName:'',
+                coverName: '',
                 cover: null,
                 headsculpture: "",
                 name: "",
                 description: "",
+                guide:'',
                 courseId: '',
                 chapterId: '',
+                files: [],
             };
         },
         methods: {
@@ -67,28 +73,22 @@
                 this.headsculpture = "";
                 this.file = null;
                 this.fileName = "";
-                this.coverName = "";
-                this.cover = null;
+                // this.coverName = "";
+                // this.cover = null;
                 this.name = "";
                 this.description = "";
                 this.$router.replace({ path: "/dashboard/addHomework?chapterId=" + this.chapterId + "&courseId=" + this.courseId });
             },
-            getFile(event, index) {
-                if (index == 1) {
-                    this.file = event.target.files[0];
-                    console.log(this.file);
-                    this.fileName = this.file.name;
-                } else {
-                    this.cover = event.target.files[0];
-                    console.log(this.cover);
-                    this.coverName = this.cover.name;
-                    var reader = new FileReader();
-                    var that = this;
-                    reader.readAsDataURL(this.cover);
-                    reader.onload = function (e) {
-                        that.headsculpture = this.result;
-                    };
-                }
+            getFile(event) {
+                this.file = event.target.files[0];
+                console.log(this.file);
+                this.fileName = this.file.name;
+                var reader = new FileReader();
+                var that = this;
+                reader.readAsDataURL(this.file);
+                reader.onload = function (e) {
+                    that.headsculpture = this.result;
+                };
             },
             submit1(event) {
                 var that = this;
@@ -120,7 +120,7 @@
                             if (data.hasOwnProperty("ETag")) {
                                 that.$toast.success({ message: '上传成功' })
                                 setTimeout(function () {
-                                    that.$router.push({ path: "/dashboard" });
+                                    that.$router.push({ path: "/dashboard/showPage" });
                                 }, 1000);
                             } else {
                                 alert("上传失败!");
@@ -130,9 +130,13 @@
                 };
                 this.postFormData(
                     {
-                        name: this.name,
-                        introduction: this.description,
-                        type: this.file.type.split("/")[1]
+                        chapterId: this.chapterId,
+                        courseId: this.courseId,
+                        chapterName: this.chapterName,
+                        homeworkName: this.name,
+                        homeworkDesc: this.description,
+                        homeworkGuide: this.guide,
+                        imageType: this.file.type.split("/")[1],
                     },
                     postImgToS3
                 );
@@ -140,7 +144,7 @@
             postFormData(formData, postImgToS3) {
                 let file = this.file;
                 instance
-                    .post("", formData, {
+                    .post('/student/courses/' + this.chapterId + '/homework', formData, {
                         headers: { Authorization: localStorage.getItem("idToken") }
                     })
                     .then(res => {
@@ -151,6 +155,94 @@
                         console.log(err);
                     });
             }
+            // getFile(event, index) {
+            //     if (index == 1) {
+            //         this.file = event.target.files[0];
+            //         console.log(this.file);
+            //         this.fileName = this.file.name;
+            //     } else {
+            //         this.cover = event.target.files[0];
+            //         console.log(this.cover);
+            //         this.coverName = this.cover.name;
+            //         var reader = new FileReader();
+            //         var that = this;
+            //         reader.readAsDataURL(this.cover);
+            //         reader.onload = function (e) {
+            //             that.headsculpture = this.result;
+            //         };
+            //     }
+            // },
+            // uploadAll(config) {
+            //     let missions = [];
+            //     let files = [this.cover].concat[this.file];
+            //     let rawId = config.id;
+            //     for (let i = 1; i < 3; i += 1) {
+            //         config.id = `${rawId}${i}`;
+            //         missions.push(this.uploadToBucket(config, files[i - 1]));
+            //     }
+            //     return Promise.all(missions);
+            // },
+            // uploadToBucket(config, file) {
+            //     AWS.config = new AWS.Config({
+            //         accessKeyId: config.AccessKeyId,
+            //         secretAccessKey: config.SecretAccessKey,
+            //         sessionToken: config.SessionToken,
+            //         region: 'cn-northwest-1'
+            //     });
+            //     let s3 = new AWS.S3();
+            //     let params = {
+            //         ACL: 'public-read',
+            //         Bucket: "cedsi",
+            //         Body: file,
+            //         Key: "course/" + config.id + "." + file.type.split("/")[1],
+            //         ContentType: file.type,
+            //         Metadata: { 'uploader': window.localStorage.getItem('user') }
+            //     };
+            //     return new Promise((resolve, reject) => {
+            //         s3.putObject(params, (err, data) => {
+            //             err ? reject(err) : resolve(data);
+            //             console.log(err)
+            //         });
+            //     });
+            // },
+            // submit1(event) {
+            //     let types = [this.cover.type.split('/')[1] || 'null'];
+            //     types.push([this.file.type.split('/')[1]]);
+            //     this.insertHomework(types)
+            //         .then(res => {
+            //             console.log(res);
+            //             return this.uploadAll(res.data.data);
+            //         })
+            //         .then(res => {
+            //             console.log(res);
+            //         })
+            //         .catch(err => {
+            //             console.log(err);
+            //         })
+            //     this.$router.replace({ path: "/dashboard/showPage" });
+            //     $(window).scrollTop(0);
+            //     // this.postFormData(
+            //     //     {
+            //     //         name: this.name,
+            //     //         introduction: this.description,
+            //     //         type: this.file.type.split("/")[1]
+            //     //     },
+            //     //     postImgToS3
+            //     // );
+            // },
+            // insertHomework(types) {
+            //     let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+            //     let data = {
+            //         "COURSE_ID": this.courseId,
+            //         "CHAPTER_ID": this.chapterId,
+            //         "NAME": this.name,
+            //         "DESCRIPTION": this.description,
+            //         "COVER_TYPE": types[0],
+            //         "FILE_TYPE": types[1],
+            //     }
+            //     console.log(data);
+            //     return instance.post('/student/courses/'+ this.chapterId +'/homework', data, config);
+            // },
         },
         created: function () {
             this.courseId = this.$route.query.courseId

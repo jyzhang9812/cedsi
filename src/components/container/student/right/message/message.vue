@@ -1,6 +1,31 @@
 <template>
     <div id='msg' class="container">
         <searchBar></searchBar>
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" v-if='tableData!=0' id="myMessage" data-backdrop='false' tabindex="-1" role="dialog"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            {{currentList[num].DISPATCH_DATE}}
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        {{currentList[num].MESSAGE_CONTENT}}
+                        <a href=''></a>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">
+                            确定
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
         <div class="menu">
             <button @click="tab(index)" v-for="(item,index) in items" class="tag"
                 :class="{active : index===curId}">{{item.item}}</button>
@@ -9,9 +34,10 @@
             <div v-if='txt==true'>
                 <h4>该分类下暂无消息</h4>
             </div>
-            <div class="cardbox" v-if='txt==false' v-for="(item,index) in currentList">
+            <div class="cardbox" v-if='txt==false' v-for="(item,index) in currentList" data-toggle="modal"
+                data-target="#myMessage" v-on:click='num = index'>
                 <div class="card_content">
-                    {{item.MESSAGE_CONTENT}}{{item.MESSAGE_TYPE}}
+                    {{item.MESSAGE_CONTENT}}
                 </div>
                 <div class="card_footer">
                     <span>
@@ -245,10 +271,15 @@
         data() {
             return {
                 txt: true,
+                //当前分类
                 curId: 0,
+                //当前点击的卡片
+                num: 0,
                 //当前页码
                 currentPage: 0,
-                currentList: [],
+                currentList: [
+                    {DISPATCH_DATE:'',}
+                ],
                 items: [
                     { item: '系统消息' },
                     { item: '通知公告' },
@@ -298,7 +329,7 @@
                 if (this.currentList.length != 0) {
                     this.txt = false;
                     for (let i = 0; i <= this.currentList.length; i++) {
-                        this.currentList[i].DISPATCH_DATE = this.timestampToTime(this.currentList[i].DISPATCH_DATE)
+                        currentList[i].DISPATCH_DATE = this.timestampToTime(currentList[i].DISPATCH_DATE)
                     }
                 }
             })
