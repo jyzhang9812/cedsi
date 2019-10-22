@@ -4,15 +4,6 @@
       <p>活动管理</p>
       <div class="filter">
         <div class="option">
-          <!-- <input type="text" class="form-control" id="keywords" placeholder="请输入标题关键词或作者" v-model="inputData.keywords">
-          <selectInput :option="inputData.activityType.option" :dropDownList="inputData.activityType.list"
-            tips="请选择活动类型" id="activityType" @option="changeOption">
-          </selectInput>
-          <selectInput :option="inputData.school.option" :dropDownList="inputData.school.list" tips="请选择学校" id="school"
-            @option="changeOption">
-          </selectInput> -->
-          <!-- <button type="button" class="btn-my" @click="conditionSearch">搜索</button>
-          <button type="button" class="btn-my" @click="clearChoices">清空筛选</button> -->
           <button type="button" class="btn-my" @click="addActivity">新增活动</button>
         </div>
       </div>
