@@ -1,3 +1,10 @@
+<!--
+ * @Email: rumosky@163.com
+ * @Author: rumosky
+ * @Gitee: https://gitee.com/rumosky_admin
+ * @Date: 2019-10-22 19:27:43
+ * @Description: 管理员角色发布活动页面
+ -->
 <template>
   <div id="add-activity">
     <div class="upload">
@@ -110,7 +117,7 @@ export default {
         that.coverImageDisplay = this.result;
       };
     },
-    getActivityImg(event) {
+    getActivityImg(event) {   
       this.activityContentImage = event.target.files[0];
       console.log(this.activityContentImage);
       this.activityContentImageType =
