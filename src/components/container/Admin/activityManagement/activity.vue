@@ -55,6 +55,7 @@
     name: 'activity',
     data() {
       return {
+        alert: '',
         content: '',
         limit: 10,
         currentList: [],
@@ -101,7 +102,9 @@
           .then(res => {
             this.tableData = res.data || [];
             this.getNew(0);
-            this.$toast.success({ title: "活动管理", message: "刷新成功" });
+            if(this.alert){
+            this.$toast.success({ title: "活动管理", message: "添加成功" });
+            }
           }).catch(err => { console.log(err) });
       }
       // changeOption(item, id) {
@@ -161,6 +164,11 @@
       //   this.getNew(0);
       // },
     },
+     created() {
+    if (this.$route.query.alert) {
+      this.alert = this.$route.query.alert;
+    }
+  },
     mounted() {
       this.pullOriginalTableData();
       this.tableData = this.activityList;

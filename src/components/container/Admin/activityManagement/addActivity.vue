@@ -145,7 +145,7 @@ export default {
         })
         .then(res => {
           console.log(res);
-          this.$router.replace({ path: "/Admin/activityManagement/" });
+          this.$router.replace({ path: "/Admin/activityManagement/",query:{alert:"1"} });
         })
         .catch(err => {
           console.log(err);
