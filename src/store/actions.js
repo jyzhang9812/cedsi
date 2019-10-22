@@ -25,18 +25,13 @@ const actions = {
                     for (var i = 0; i < arr.length; i++) {
                         var array = {}
                         array.id = arr[i].ID;
-                        array.cover = arr[i].COVER;
-                        array.title = arr[i].TITLE;
-                        array.subtitle = arr[i].SUBTITLE;
-                        array.content = arr[i].CONTENT;
+                        array.cover = arr[i].ACTIVITY_COVER;
+                        array.title = arr[i].ACTIVITY_TITLE;
+                        array.content = arr[i].ACTIVITY_CONTENT_IMG;
                         array.avatar = arr[i].AVATAR;
-                        array.teacher = arr[i].TEACHER_NAME;
-                        array.release_time = arr[i].RELEASE_TIME
-                        array.type = arr[i].ACTIVITY_TYPE;
                         array.time = arr[i].ACTIVITY_TIME;
                         array.price = arr[i].ACTIVITY_PRICE;
                         array.place = arr[i].ACTIVITY_PLACE;
-                        array.principal_id = arr[i].PRINCIPAL_ID
                         b.push(array);
                     }
                     commit(TYPES.changeActivity, b)
@@ -56,19 +51,16 @@ const actions = {
             }).then(
                 response => {
                     console.log(response);
+                    let arr = response.data
                     let array = {}
-                    array.id = response.data.ID;
-                    array.cover = response.data.COVER;
-                    array.name = response.data.TITLE;
-                    array.subtitle = response.data.SUBTITLE;
-                    array.content = response.data.CONTENT;
-                    array.avatar = response.data.AVATAR;
-                    array.teacher = response.data.TEACHER_NAME;
-                    array.release_time = response.data.RELEASE_TIME
-                    array.type = response.data.ACTIVITY_TYPE;
-                    array.time = response.data.ACTIVITY_TIME;
-                    array.price = response.data.ACTIVITY_PRICE;
-                    array.place = response.data.ACTIVITY_PLACE;
+                    array.id = arr.ID;
+                    array.cover = arr.ACTIVITY_COVER;
+                    array.title = arr.ACTIVITY_TITLE;
+                    array.content = arr.ACTIVITY_CONTENT_IMG;
+                    array.avatar = arr.AVATAR;
+                    array.time = arr.ACTIVITY_TIME;
+                    array.price = arr.ACTIVITY_PRICE;
+                    array.place = arr.ACTIVITY_PLACE;
                     state.payInfo = array;
                     commit(TYPES.updateLoading, false)
                 },
@@ -292,18 +284,27 @@ const actions = {
                         point.description = chaptersArr[i].CP_DESCRIPTION;
                         point.number = chaptersArr[i].CP_NUMBER;
                         point.name = chaptersArr[i].CP_NAME;
-                        if(chaptersArr[i].CP_RESOURCE && chaptersArr[i].CP_RESOURCE.VIDEO && chaptersArr[i].CP_RESOURCE.LECTURE && chaptersArr[i].CP_RESOURCE.TEMPLATE){
+                        if (chaptersArr[i].CP_RESOURCE && chaptersArr[i].CP_RESOURCE.VIDEO) {
                             point.videoSrc = chaptersArr[i].CP_RESOURCE.VIDEO;
-                            point.lectureSrc = chaptersArr[i].CP_RESOURCE.LECTURE;
-                            point.templateSrc = chaptersArr[i].CP_RESOURCE.TEMPLATE;
-                        }else{
+                            // point.lectureSrc = chaptersArr[i].CP_RESOURCE.LECTURE;
+                            // point.templateSrc = chaptersArr[i].CP_RESOURCE.TEMPLATE;
+                        } else {
                             point.videoSrc = "";
                         }
+                        console.log(point.videoSrc)
                         point.chapterId = chaptersArr[i].CP_ID;
                         List.list.push(point);
                     }
+                    for (i = 0; i >= chaptersArr.length; i++) {
+                        var point = {}
+                        point.bgImg =
+                            "../../static/images/scratch/coordinate.a15fa38.png";
+                        point.status = "未解锁";
+                        point.flag = false;
+                        List.list.push(point);
+                    }
                     List.name = response.data.data.courseName,
-                        console.log(List)
+                    console.log(List)
                     commit(TYPES.changeCouseDetail, List)
                     commit(TYPES.updateLoading, false)
                 },

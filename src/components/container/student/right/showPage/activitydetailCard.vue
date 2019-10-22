@@ -21,13 +21,15 @@
     <div class="activity-section3" :style="{backgroundImage:'url('+activitydetialUrl+')'}">
       <div class="activity-left">
         <div class="info-name">{{card.title}}</div>
-        <div class="info-desc">{{card.content}}</div>
+        <div class="info-desc">
+          <img :src="card.content" style="width: 100%;">
+        </div>
       </div>
       <div class="activity-right">
         <div class="teacher">
           <img :src="card.avatar" class="teacher-img" />
         </div>
-        <p>{{card.teacher}}</p>
+        <!-- <p>{{card.teacher}}</p> -->
       </div>
     </div>
     <div class="activity-section4"
@@ -154,7 +156,7 @@
     position: relative;
     width: 80%;
     margin: 0 auto;
-    height: 448px;
+    min-height: 448px;
     top: 50px;
     border-radius: 16px;
     background-repeat: no-repeat;
