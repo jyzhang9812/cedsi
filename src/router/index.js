@@ -79,6 +79,11 @@ const coursemap = resolve => {
     resolve(require('../components/container/student/right/course/coursemap.vue'));
   });
 };
+const addHomework = resolve => {
+  require.ensure(['../components/container/student/right/course/addHomework.vue'], () => {
+    resolve(require('../components/container/student/right/course/addHomework.vue'));
+  });
+};
 const payment = resolve => {
   require.ensure(['../components/container/student/payment.vue'], () => {
     resolve(require('../components/container/student/payment.vue'));
@@ -441,6 +446,15 @@ export default new Router({
           next('/signin')
         }
       }, name: 'coursemap', component: coursemap
+    },
+    {
+      path: '/dashboard/addHomework', beforeEnter(to, from, next) {
+        if (window.localStorage.getItem("idToken")) {
+          next()
+        } else {
+          next('/signin')
+        }
+      }, name: 'addHomework', component: addHomework
     },
     {
       path: '/console', beforeEnter(to, from, next) {

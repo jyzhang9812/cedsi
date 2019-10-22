@@ -19,10 +19,10 @@
               <p class="intro-detials">{{courseIntro}}</p>
               <p class="course-warn">
                 不要忘记交作业呀！
-                <br />1.点击视频右下方【我要做作业】
-                <br />2.点击去发布，填写作品名称，选择封面后即可提交
+                <br />1.点击视频右下方【我要做作业】，填写名称和描述，上传封面，即可提交
+                <br />2.点击我的首页【开始创作】，进入scratch页面
               </p>
-              <a class="work-btn" :href="scratch" @click='saveCourseDetail(index)'>我要做作业</a>
+              <router-link class="work-btn" data-dismiss="modal" :to="{name:'addHomework',query:{chapterId:chapterId,courseId:this.courseId}}">我要做作业</router-link>
               <p class="preview">预览讲义</p>
             </div>
           </div>
@@ -328,7 +328,7 @@
     font-size: 12px;
     margin-top: 10px;
     border-radius: 6px;
-    height: 165px;
+    min-height: 100px;
     line-height: 25px;
     padding: 10px;
     color: #22a0ff;
@@ -346,7 +346,7 @@
   #coursemap .work-btn {
     padding: 5px;
     font-size: 12px;
-    line-height: 25px;
+    line-height: 35px;
     text-align: center;
     background: #22a0ff;
     color: #fff;
