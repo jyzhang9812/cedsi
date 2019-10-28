@@ -39,10 +39,6 @@
       <span class="upload-title">机构负责人:</span>
       <input class="upload-input" placeholder="请输入机构负责人" v-model="organizationPrin" />
     </div>
-    <!-- <div class="upload">
-      <span class="upload-title">教师人数:</span>
-      <input class="upload-input" placeholder="请输入教师人数" v-model="organizationTeacherNum" />
-    </div>-->
     <div class="upload">
       <span class="upload-title">上传营业执照:</span>
       <div class="upload-cover-btn">
@@ -62,17 +58,6 @@
         />
       </div>
     </div>
-    <!-- <div class="upload">
-      <span class="upload-title">上传相关文件:</span>
-      <div class="upload-cover-btn">
-        上传文件
-        <input type="file" class @change="getFile($event)" style="opacity: 0" />
-      </div>
-    </div>
-    <div class="upload upload-height">
-      <span class="upload-title">文件名称:</span>
-      <input class="upload-input" :value="fileName" disabled />
-    </div>-->
     <div class="upload-footer">
       <button class="btn upload-btn" @click="submit">确定</button>
       <button class="btn upload-btn">取消</button>
@@ -116,12 +101,10 @@ export default {
       },
       organizationName: "",
       organizationPrin: "",
-      //organizationTeacherNum: "",
       businessLicense: "",
       fileName: "",
       organizationAddress: "",
       organizationIntro: ""
-      //机构教师人数、营业执照、合同扫描件、机构地区、机构名称、负责人
     };
   },
   methods: {
@@ -157,20 +140,9 @@ export default {
         that.businessLicense = this.result;
       };
     },
-    // getFile(event) {
-    //   this.file = event.target.files[0];
-    //   console.log(this.file);
-    //   this.fileName = this.file.name;
-    //   this.type = this.file.type.split("/")[1];
-    //   this.size = this.file.size;
-    // },
     submit() {
       var that = this
       var token = window.localStorage.getItem("idToken");
-      // var neworganization = {};
-      // neworganization.organizationName = this.organizationName;
-      // neworganization.organizationDesc = this.organizationDesc;
-      // neworganization.courseId = this.courseId;
       this.organizationAddress =
         this.organization.province +
         this.organization.city +
@@ -184,8 +156,6 @@ export default {
       newOrg.code = this.code;
       newOrg.organizationType = this.inputData.org.option.name;
       newOrg.type = this.licenseType;
-      //console.log(newOrg);
-      //console.log(this.organization);
       globalAxios
         .post(
           "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/org",
@@ -199,7 +169,6 @@ export default {
         )
         .then(
           response => {
-            //console.log(response);
               this.$toast.success({ title: "机构管理", message: "操作成功" });
               setTimeout(function() {
                 this.$router.push({ path: "/Admin/organizationManagement" });

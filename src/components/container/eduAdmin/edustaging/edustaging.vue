@@ -13,14 +13,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="selectschool">
-        <span>请选择学校：</span>
-        <input class="check" type="checkbox" id="isall" @click="checkall"/>全选
-        <div class="schoolname" v-for="(schoolname,index) in school" :key="schoolname.schoolname" >
-          <input class="check" type="checkbox" :checked="schoolname.ischecked" @click='getchecked(index)'>
-          {{schoolname.schoolname}}
-        </div>
-      </div> -->
       <h4 class="title">学校信息详情</h4>
       <div class="chart">
         <ve-histogram :data="chartData" style="width:700px; margin:0 auto;"></ve-histogram>
@@ -35,11 +27,6 @@ export default {
   data() {
     return {
       lists: [
-        // {
-        //   img: this.$store.state.url + "eduAdmin/school.png",
-        //   num: 1,
-        //   title: "开课学校数量"
-        // },
         {
           img: this.$store.state.url + "eduAdmin/teach.png",
           num: 1,

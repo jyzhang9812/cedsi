@@ -33,9 +33,6 @@
       </ol>
     </div>
     <div class="first-floor">
-      <!-- <label for="class-name"></label>
-      <input type="text" placeholder="请输入课程账号" class="textBox" id="class-name" />
-      <button class="btn btn-search">搜索</button> -->
       <button class="btn btn-clear" @click="addCourse">新增课程</button>
     </div>
     <div class="second-floor row">
@@ -96,7 +93,8 @@
           response => {
             console.log(response);
             this.courseList[index].status=false;
-            alert("发布成功")
+            // alert("发布成功")
+            this.$toast.success({ title: "课程管理", message: "发布成功" });
           },
           error => {
             console.log(error);

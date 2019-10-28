@@ -128,15 +128,6 @@
       </ol>
     </div>
     <div class="first-floor">
-      <!-- <label for="class-name"></label>
-      <input
-        type="text"
-        placeholder="请输入教师姓名"
-        class="textBox"
-        id="class-name"
-        v-model="inputData.teacherName"
-      />
-      <button class="btn btn-search">搜索</button>-->
       <button
         class="btn btn-clear"
         data-toggle="modal"

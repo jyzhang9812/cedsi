@@ -41,7 +41,6 @@
       aria-labelledby="myModalLabel"
       aria-hidden="true"
     >
-      <!-- <div class="alert alert-success" role="alert">哈哈哈</div> -->
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header border-none">

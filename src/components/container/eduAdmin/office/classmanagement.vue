@@ -177,16 +177,6 @@
       </ol>
     </div>
     <div class="first-floor">
-      <!-- <label for="class-name"></label>
-      <input
-        type="text"
-        placeholder="请输入班级名称"
-        class="textBox"
-        id="class-name"
-        v-model="inputData.className"
-      />
-      <button class="btn btn-search" @click="conditionSearch">搜索</button>-->
-      <!-- <button class="btn btn-clear" @click="clearChoices">清空筛选</button> -->
       <button
         class="btn btn-clear"
         data-toggle="modal"
@@ -208,7 +198,6 @@
             <td>{{classes.teacherName}}</td>
             <td>{{classes.courseName}}</td>
             <td style="width:150px">
-              <!-- <span class="blue" data-toggle="modal" data-target="#courseScheduling">排课</span>&nbsp;&nbsp; -->
               <span
                 class="blue"
                 data-toggle="modal"
@@ -222,12 +211,6 @@
                 @click="updateClass(seq)"
               >编辑</span>&nbsp;&nbsp;
               <br />
-              <!-- <span
-                class="red"
-                data-toggle="modal"
-                data-target="#alterModal"
-                @click="deleteClass(seq)"
-              >删除</span>-->
               <span class="blue" @click="addStudent(seq)">导入学生</span>
             </td>
           </tr>
@@ -281,10 +264,6 @@ export default {
       addClassName: "",
       isName: true,
       index: -1,
-      //修改备注成功弹出标签
-      // message:
-      //   "<div v-show='isShowAlter' class='alert alert-success alter-width' role='alert'>修改成功!</div>",
-      // isShowAlter: false,
       currentList: [],
       isChange: false, //班级名称是否可修改
       modalTitle: "", //模态框名称
@@ -354,62 +333,6 @@ export default {
         path: "/eduAdmin/classManagement/" + classId + "/addStudent"
       });
     },
-    // importExcel(file) {
-    //   var file = file.files[0]; // 使用传统的input方法需要加上这一步
-    //   const types = file.name.split(".")[1];
-    //   const fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(
-    //     item => item === types
-    //   );
-    //   if (!fileType) {
-    //     alert("格式错误！请重新选择");
-    //     return;
-    //   }
-    //   this.file2Xce(file).then(tabJson => {
-    //     if (tabJson && tabJson.length > 0) {
-    //       this.xlsxJson = tabJson[0].sheet;
-    //       console.log(this.xlsxJson);
-    //       var token = window.localStorage.getItem("idToken");
-    //       globalAxios({
-    //         url:
-    //           "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/133/students",
-    //         method: "post",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //           Authorization: token
-    //         },
-    //         data: { sheet: this.xlsxJson }
-    //       }).then(
-    //         response => {
-    //           console.log(response);
-    //         },
-    //         error => {
-    //           console.log(error);
-    //         }
-    //       );
-    //     }
-    //   });
-    // },
-    // file2Xce(file) {
-    //   return new Promise(function(resolve, reject) {
-    //     const reader = new FileReader();
-    //     reader.onload = function(e) {
-    //       const data = e.target.result;
-    //       this.wb = XLSX.read(data, {
-    //         type: "binary"
-    //       });
-    //       const result = [];
-    //       this.wb.SheetNames.forEach(sheetName => {
-    //         result.push({
-    //           sheetName: sheetName,
-    //           sheet: XLSX.utils.sheet_to_json(this.wb.Sheets[sheetName])
-    //         });
-    //       });
-    //       resolve(result);
-    //     };
-    //     // reader.readAsBinaryString(file.raw)
-    //     reader.readAsBinaryString(file); // 传统input方法
-    //   });
-    // },
     optionsInit() {
       this.inputData = {
         className: "",
@@ -509,7 +432,6 @@ export default {
       else {
         newClass.className = this.addClassName;
         newClass.teacherId = this.addClassData.teacher.option.id;
-        // newClass.course = JSON.stringify(this.addClassData.course.option);
         newClass.courseId = this.addClassData.course.option.id;
         newClass.courseName = this.addClassData.course.option.name;
         console.log(newClass);
@@ -557,7 +479,6 @@ export default {
                     this.changeTablePages(0);
                   },
                   error => {
-                    // this.$router.push({path:'/404'})
                     console.log(error);
                   }
                 );
@@ -602,7 +523,6 @@ export default {
   },
   mounted() {
     //获取班级列表
-    //this.tableData = this.originalTableData
     var token = window.localStorage.getItem("idToken");
     globalAxios
       .get(
@@ -637,7 +557,6 @@ export default {
           this.changeTablePages(0);
         },
         error => {
-          // this.$router.push({path:'/404'})
           console.log(error);
         }
       );
@@ -677,7 +596,6 @@ export default {
           console.log(this.addClassData.course.list);
         },
         error => {
-          // this.$router.push({path:'/404'})
           console.log(error);
         }
       );

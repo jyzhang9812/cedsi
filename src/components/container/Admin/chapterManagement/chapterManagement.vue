@@ -77,6 +77,7 @@ import globalAxios from "axios";
 import fs from "fs";
 import AWS from "aws-sdk";
 import { mapState } from "vuex";
+import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 
 export default {
   name: "chapters",
@@ -134,6 +135,7 @@ export default {
     },
     deleteChapter(seq) {
       this.alterMes = "确认删除吗？";
+      // this.alterMes = this.$toast.warning({ title: "章节管理", message: "确认删除吗" });
       this.chapterIndex = this.currentPage * this.limit + seq;
     },
     submitDelete() {

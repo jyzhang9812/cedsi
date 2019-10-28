@@ -73,15 +73,6 @@
       </ol>
     </div>
     <div class="first-floor">
-      <!-- <label for="class-name"></label>
-      <input
-        type="text"
-        placeholder="请输入机构账号"
-        class="textBox"
-        id="class-name"
-        v-model="inputData.organizationName"
-      />
-      <button class="btn btn-search">搜索</button> -->
       <button class="btn btn-clear" @click="addOrganization()">新增机构</button>
     </div>
     <div class="second-floor">
@@ -101,7 +92,6 @@
             <td>{{organization.location}}</td>
             <td>
               <span class="blue" @click="See(seq)">查看营业执照</span>
-              <!-- <span class="blue">下载相关文件</span> -->
               <br />
               <span
                 class="blue"
@@ -109,11 +99,6 @@
                 data-target="#courseModal"
                 @click="getCourseList(seq)"
               >分配课程</span>
-              <!-- <span
-                class="red"
-                data-toggle="modal"
-                data-target="#alterModal"
-              >删除</span> -->
             </td>
           </tr>
         </tbody>
@@ -168,31 +153,6 @@ export default {
       console.log(this.index);
       this.alterMes = "确认删除吗？";
     },
-    // submitDelete() {
-    //   var deleteorganization = this.tableData[this.index];
-    //   console.log(deleteorganization);
-    //   var token = window.localStorage.getItem("idToken");
-    //   console.log(token);
-    //   this.$http
-    //     .delete(
-    //       "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/superadmin/admin",
-    //       { userId: deleteorganization.id },
-    //       {
-    //         "Content-Type": "application/json",
-    //         Authorization: token
-    //       }
-    //     )
-    //     .then(
-    //       response => {
-    //         console.log(response);
-    //         this.tableData.splice(this.index, 1);
-    //       },
-    //       error => {
-    //         console.log(error);
-    //       }
-    //     );
-    //   this.getNew(this.currentPage * this.limit);
-    // },
     See(index) {
       window.location.href = this.tableData[index].license;
     },

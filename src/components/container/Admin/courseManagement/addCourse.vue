@@ -20,11 +20,6 @@
       <span class="upload-title">付费金额:</span>
       <input :class="isPrice==true?'upload-input right':'upload-input err'" v-model="price" placeholder="请输入付费金额" />
     </div>
-    <!-- <div v-if='radiolist[2,1].isCheck==true' class="upload">
-      <span class="upload-title">付费章节:</span>
-      <input class="upload-input" v-model='chapter' placeholder="请输入付费开始章节" />
-      </span>
-    </div>-->
     <div class="upload upload-height">
       <span class="upload-title">课程描述:</span>
       <textarea
@@ -161,7 +156,8 @@ export default {
                 that.$router.push({ path: "/Admin/" });
               }, 1000);
             } else {
-              alert("上传失败!");
+              // alert("上传失败!");
+              that.$toast.warning({title:"课程管理",message:'上传失败'})
             }
           }
         });

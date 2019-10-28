@@ -119,8 +119,6 @@ export default {
           response => {
             var that = this;
             console.log(response);
-            //this.$router.push({path:"/Admin/"})
-            //console.log(this.inputData.chapter.list);
             AWS.config = new AWS.Config({
               accessKeyId: response.data.AccessKeyId,
               secretAccessKey: response.data.SecretAccessKey,
@@ -154,7 +152,6 @@ export default {
               Metadata: {
                 uploader: window.localStorage.getItem("user")
               }
-              //Key: "course/" + config.id + "." + file.type.split('/')[1],
             };
             s3.putObject(params, function(err, data) {
               if (err) {
@@ -171,7 +168,6 @@ export default {
             });
           },
           error => {
-            // this.$router.push({path:'/404'})
             console.log(error);
           }
         );
