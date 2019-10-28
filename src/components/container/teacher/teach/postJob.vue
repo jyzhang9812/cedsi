@@ -61,9 +61,28 @@
             @changeDate="changeDate">
           </date-picker>
         </div>
-        <div class="item">
+        <!-- <div class="item">
           <p>作业内容：</p>
           <textarea class="form-control" rows="10" v-model="inputData.homework.CONTENT"></textarea>
+        </div> -->
+        <div class="item">
+          <p class="upload-title">上传附件：</p>
+          <div class="upload-cover-btn"> 上传文件
+            <input type="file" @change="getAttachedFile" style="opacity: 0" />
+          </div>
+          <span>&nbsp;&nbsp;{{attachedFile.name}}</span>
+        </div>
+        <div class="item">
+          <p class="upload-title">作业图片：</p>
+          <div class="upload-cover-btn"> 作业图片
+            <input type="file" @change="getCoverFile" style="opacity: 0" />
+          </div>
+        </div>
+        <div class="item">
+          <p class="upload-title">图片预览:</p>
+          <div class="upload-cover-img">
+            <img id="headimage" :src="coverImageDisplay" class="cover-image" alt="" />
+          </div>
         </div>
         <div class="item1">
           <button type="button" class="btn-my" @click="saveAsDraft">保存草稿</button>
@@ -80,6 +99,7 @@
   import DatePicker from "../utils/datePicker";
   import selectInput from "../utils/selectInput";
   import instance from "../../../../axios-auth.js";
+  import AWS from "aws-sdk";
 
   export default {
     name: 'postJob',
@@ -95,7 +115,7 @@
         ],
         currentList: [],
         inputData: {
-          homework: { CONTENT: "", DEADLINE: "", HW_NAME: "" },
+          homework: { CONTENT: "null ", DEADLINE: "", HW_NAME: "" },
           classes1: { option: "", list: [], id: [] },
           chapter1: { option: "", list: [], id: [] },
           classes2: { option: "", list: [], id: [] },
@@ -103,7 +123,10 @@
         },
         originalInputData: [],
         tableData: [],
-        originalTableData: []
+        originalTableData: [],
+        coverImageDisplay: "",
+        coverImage: {},
+        attachedFile: {}
       }
     },
     methods: {
@@ -219,20 +242,34 @@
         let postData = {
           CLASS_ID: this.searchForClassId(this.inputData.classes2.option),
           COURSE_ID: this.searchForCourseId(this.inputData.classes2.option),
-          CONTENT: homework.CONTENT,
+          CONTENT_TYPE: "." + this.coverImage.type.split("/")[1],
           CP_ID: chapter2.id[chapter2.list.findIndex(item => item === chapter2.option)],
           DEADLINE: homework.DEADLINE,
-          HW_NAME: homework.HW_NAME
+          HW_NAME: homework.HW_NAME,
+          FILE_TYPE: "." + this.attachedFile.type.split("/")[1]
         };
         if (this.operation === "PUT") { postData.HW_ID = this.currentWorkId }
         console.log(postData);
         instance[this.operation]("teacher/homework", postData, config)
           .then(res => {
             console.log(res);
-            if (res.status === 200) {
-              alert("保存成功!");
-              this.newHomeWork();
-            } else { console.log("保存失败!") }
+            console.log(res.data);
+            let config = res.data.data;
+            config.path = "content";
+            this.uploadToBucket(config, this.coverImage)
+              .then(res => {
+                console.log(res);
+                config.path = "attachedFile";
+                return this.uploadToBucket(config, this.attachedFile);
+              })
+              .then(res => {
+                console.log(res);
+                if (res.ETag) {
+                  alert("保存成功!");
+                  this.newHomeWork();
+                } else { console.log("保存失败!") }
+              })
+              .catch(err => { console.log(err) });
           })
           .catch(err => { console.log(err) });
       },
@@ -347,9 +384,64 @@
         return this.originalTableData.find(item => {
           return (item.CLASS_NAME + item.HW_NAME) === (line.classes + line.hwName);
         });
+      },
+      /**
+       * 上传图片的绑定函数
+       * 
+       * @param {Object} event
+      */
+      getCoverFile(event) {
+        this.coverImage = event.target.files[0];
+        console.log(this.coverImage);
+        let reader = new FileReader();
+        let that = this;
+        reader.readAsDataURL(this.coverImage);
+        reader.onload = function (e) {
+          that.coverImageDisplay = this.result;
+        };
+      },
+      /**
+       * 上传附件的绑定函数
+       * 
+       * @param {Object} event
+      */
+      getAttachedFile(event) {
+        this.attachedFile = event.target.files[0];
+      },
+      /**
+       * 上传附件的绑定函数
+       *
+       * @param {Object} config
+       * @param {Object} file
+      */
+      uploadToBucket(config, file) {
+        AWS.config = new AWS.Config({
+          accessKeyId: config.AccessKeyId,
+          secretAccessKey: config.SecretAccessKey,
+          sessionToken: config.SessionToken,
+          region: 'cn-northwest-1'
+        });
+        let s3 = new AWS.S3();
+        let params = {
+          ACL: 'public-read',
+          Bucket: "cedsi",
+          Body: file,
+          Key: `preHomework/${config.path}/${config.id}.${file.type.split('/')[1]}`,
+          ContentType: file.type,
+          Metadata: { 'uploader': window.localStorage.getItem('user') }
+        };
+        return new Promise((resolve, reject) => {
+          s3.putObject(params, (err, data) => {
+            err ? reject(err) : resolve(data);
+          });
+        });
       }
     },
-    computed: { deletePromptId() { return "postJob_deletePrompt" } },
+    computed: {
+      deletePromptId() {
+        return "postJob_deletePrompt"
+      }
+    },
     created() {
       this.pullClassAndCourseData();
       this.pullHomeworkData()
@@ -507,5 +599,58 @@
     width: 750px;
     padding: 10px;
     font-size: 14px;
+  }
+
+  #teacher-postJob.upload-title {
+    color: #606266;
+    display: block;
+    text-align: right;
+    width: 100px;
+    height: 40px;
+    float: left;
+    line-height: 40px;
+  }
+
+  #teacher-postJob .upload-cover-btn {
+    width: 80px;
+    height: 35px;
+    display: inline-block;
+    background-color: #409eff;
+    color: #fff;
+    border-radius: 5px;
+    line-height: 35px;
+    text-align: center;
+  }
+
+  #teacher-postJob input[type="file"] {
+    width: 80px;
+    height: 35px;
+    position: relative;
+    top: -35px;
+  }
+
+  #teacher-postJob .upload-cover-img {
+    display: inline-block;
+    border: 1px dashed #dcdfe6;
+    width: 290px;
+    height: 150px;
+    margin-left: 10px;
+    border-radius: 5px;
+    background-color: #f5f7fa;
+  }
+
+  #teacher-postJob .upload-height {
+    height: 190px;
+  }
+
+  #teacher-postJob .upload {
+    width: 100%;
+    height: 50px;
+    margin-bottom: 20px;
+  }
+
+  #teacher-postJob .cover-image {
+    width: 100%;
+    height: 100%;
   }
 </style>
