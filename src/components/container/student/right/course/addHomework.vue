@@ -136,12 +136,13 @@
                         homeworkName: this.name,
                         homeworkDesc: this.description,
                         homeworkGuide: this.guide,
-                        imageType: this.file.type.split("/")[1],
+                        fileType: this.file.type.split("/")[1],
                     },
                     postImgToS3
                 );
             },
             postFormData(formData, postImgToS3) {
+                console.log(formData)
                 let file = this.file;
                 instance
                     .post('/student/courses/' + this.chapterId + '/homework', formData, {
@@ -149,7 +150,7 @@
                     })
                     .then(res => {
                         console.log(res);
-                        postImgToS3(res.data, file);
+                        postImgToS3(res.data.data, file);
                     })
                     .catch(err => {
                         console.log(err);
@@ -247,6 +248,7 @@
         created: function () {
             this.courseId = this.$route.query.courseId
             this.chapterId = this.$route.query.chapterId
+            this.chapterName  =this.$route.query.chapterName
         }
     };
 </script>
