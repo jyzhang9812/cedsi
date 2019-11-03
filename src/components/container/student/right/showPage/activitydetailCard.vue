@@ -1,10 +1,10 @@
 <template>
   <div id="activity-detial">
     <div class="activity-section1" :style="{backgroundImage:'url('+activitybgUrl+')'}">
-      <h1 class="activity-title">{{card.name}}</h1>
-      <h2 class="activity-brief">{{card.subtitle}}</h2>
+      <h1 class="activity-title">{{card.title}}</h1>
+      <!-- <h2 class="activity-brief">{{card.subtitle}}</h2> -->
       <div class="fixed-box" :style="{backgroundImage:'url(../../'+$store.state.url+'activity/fixedbg.png'}">
-        <div class="activity-price">￥{{card.price/100}}</div>
+        <div class="activity-price">￥{{card.price}}</div>
         <button class="join-btn" @click="payment">我要报名</button>
       </div>
     </div>
@@ -18,28 +18,21 @@
         <div class="content">{{card.place}}</div>
       </div>
     </div>
-    <div class="activity-section3" :style="{backgroundImage:'url('+activitydetialUrl+')'}">
-      <div class="activity-left">
-        <div class="info-name">{{card.title}}</div>
+    <div class="activity-section3">
+      <!-- <div class="activity-left"> -->
         <div class="info-desc">
           <img :src="card.content" style="width: 100%;">
         </div>
-      </div>
-      <div class="activity-right">
-        <div class="teacher">
-          <img :src="card.avatar" class="teacher-img" />
-        </div>
-        <!-- <p>{{card.teacher}}</p> -->
-      </div>
+      <!-- </div> -->
     </div>
-    <div class="activity-section4"
+    <!-- <div class="activity-section4"
       :style="{backgroundImage:'url(../../'+$store.state.url+'activity/activityfooter.jpg)'}">
-      <!-- <div class="row activity-row">
+      <div class="row activity-row">
         <div class="col-md-4 activity-images">
           <img :src="card.cover" />
         </div>
-      </div> -->
-    </div>
+      </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -89,12 +82,13 @@
     padding: 0;
     min-width: 1000px;
     overflow-y: hidden;
+    margin-bottom: 50px;
   }
 
   #activity-detial .activity-section1 {
     width: 100%;
     margin: 0 auto;
-    height: 280px;
+    min-height: 280px;
     background-color: #000;
     position: relative;
   }
@@ -155,14 +149,14 @@
   #activity-detial .activity-section3 {
     position: relative;
     width: 80%;
-    margin: 0 auto;
+    margin: 0 auto 50px;
     min-height: 448px;
     top: 50px;
     border-radius: 16px;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    padding: 80px;
+    padding: 30px;
   }
 
   #activity-detial .activity-left {
