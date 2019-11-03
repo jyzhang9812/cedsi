@@ -46,7 +46,7 @@
               <th>活动名称</th>
               <th>活动地点</th>
               <th>活动时间</th>
-              <th>负责人</th>
+              <th>价格</th>
               <th>操作</th>
             </tr>
           </thead>
@@ -56,7 +56,7 @@
               <td class="blue">{{list.name}}</td>
               <td>{{list.place}}</td>
               <td>{{list.time}}</td>
-              <td>{{list.principal}}</td>
+              <td>{{list.price}}</td>
               <td>
                 <!-- <span class="blue">编辑</span> -->
                 <span class="blue" data-toggle="modal" data-target="#checkStudent" @click="checkStu(list)">查看学生</span>
@@ -178,10 +178,10 @@
         this.currentList = this.tableData
           .map(item => {
             return {
-              name: item.ACTIVITY_NAME,
+              name: item.ACTIVITY_TITLE,
               place: item.ACTIVITY_PLACE,
               time: item.ACTIVITY_TIME,
-              principal: item.PRINCIPAL_NAME,
+              price: item.ACTIVITY_PRICE,
               id: item.ACTIVITY_ID
             };
           }).slice(value, value + this.limit);
@@ -498,8 +498,4 @@
     height: 100%;
     margin: 20px 0 50px 0;
   }
-
-
-
-  #eduActivity .student-list {}
 </style>
