@@ -1,6 +1,6 @@
 <template>
   <div id="eduActivity">
-    <div class="body">
+    <div class="body" v-show="!createClassShown">
       <p>活动管理</p>
       <div class="filter">
         <div class="option">
@@ -60,12 +60,64 @@
               <td>
                 <!-- <span class="blue">编辑</span> -->
                 <span class="blue" data-toggle="modal" data-target="#checkStudent" @click="checkStu(list)">查看学生</span>
+                &nbsp;&nbsp;
+                <span class="blue" @click="createClassFromActivity(list)">创建班级</span>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
       <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
+    </div>
+    <div class="body" v-show="createClassShown">
+      <p>创建班级</p>
+      <div class="create-class">
+        <div class="add">
+          <span class="keypoint">*</span>
+          <span class="addtitle">班级名称</span>
+          <input :class="isName==false?'addcon':'addcon err'" placeholder="请输入班级名称" v-model="createClass.className"
+            :disabled="isChange" />
+          <span :class="isName==true?'inputtips':'inputerr'">不超过10个字符</span>
+        </div>
+        <div class="add">
+          <span class="keypoint">*</span>
+          <span class="addtitle">指定教师</span>
+          <select-input id="classTeacher" tips="请选择教师" :option="createClass.classTeacher.option" @option="changeOption"
+            :drop-down-list="createClass.classTeacher.options"></select-input>
+        </div>
+        <div class="add">
+          <span class="keypoint">*</span>
+          <span class="addtitle">选择课程</span>
+          <select-input id="classCourse" tips="请选择课程" :option="createClass.classCourse.option" @option="changeOption"
+            :drop-down-list="createClass.classCourse.options"></select-input>
+        </div>
+      </div>
+      <div class="student-list">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th @click="chooseAllStudents" style="text-align: center; width: 60px;">{{chooseAll ? "全不选" : "全选"}}</th>
+              <th v-for="(title,index) in studentTitle" class="titles" :key="index">{{title}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(student, seq) in studentData" :key="seq" class="content">
+              <td> <input type="checkbox"> </td>
+              <td>{{seq+1}}</td>
+              <td>{{student.name}}</td>
+              <td>{{student.studentId}}</td>
+              <td>{{student.gender}}</td>
+              <td>{{student.grade}}</td>
+              <td>{{student.age}}</td>
+              <td>{{student.mobilePhone}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="item1">
+          <button type="button" class="btn-my" @click="createClassWithStudents">创建班级</button>
+          <button type="button" class="btn-my" @click="cancelEdit">取消操作</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -75,6 +127,7 @@
   import selectInput from "../../teacher/utils/selectInput";
   import deletePrompt from "../../teacher/utils/deletePrompt";
   import instance from '../../../../axios-auth.js';
+
   export default {
     name: 'activity',
     data() {
@@ -88,7 +141,16 @@
           "序号", "学生姓名", "学号", "性别",
           "年级", "年龄", "手机号"
         ],
-        studentData: []
+        studentData: [],
+        createClass: {
+          className: "",
+          classTeacher: { option: "", options: [], id: [] },
+          classCourse: { option: "", options: [], id: [] }
+        },
+        isChange: false,
+        isName: true,
+        createClassShown: false,
+        chooseAll: false
       }
     },
     components: { pagination, selectInput, deletePrompt },
@@ -99,6 +161,7 @@
       checkStu(item) {
         this.pullParticipatingStudents(item.id)
           .then(res => {
+            console.log(res);
             this.studentData = res.data.map(item => {
               return {
                 name: item.STUDENT_NAME,
@@ -127,13 +190,61 @@
         let config = { headers: { Authorization: localStorage.getItem('idToken') } };
         instance.get('/eduadmin/activity', config)
           .then(res => {
+            console.log(res);
             this.tableData = res.data || [];
             this.getNew(0);
-          }).catch(err => { console.log(err) });
+          })
+          .catch(err => { console.log(err) });
       },
       pullParticipatingStudents(id) {
         let config = { headers: { Authorization: localStorage.getItem('idToken') } };
         return instance.get(`/eduadmin/activity/${id}/student`, config);
+      },
+      changeOption(item, id) {
+        this.createClass[id].option = item;
+      },
+      createClassFromActivity(list) {
+        this.createClassShown = !this.createClassShown;
+        this.checkStu(list);
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        instance.get("eduadmin/class/msg", config)
+          .then(res => {
+            this.createClass.classTeacher.options = res.data.teacher.map(item => item.TEACHER_NAME);
+            this.createClass.classTeacher.id = res.data.teacher.map(item => item.TEACHER_ID);
+            this.createClass.classCourse.options = res.data.course.map(item => item.COURSE_NAME);
+            this.createClass.classCourse.id = res.data.course.map(item => item.COURSE_ID);
+          })
+          .catch(err => { console.log(err) });
+      },
+      createClassWithStudents() {
+        let classTeacher = this.createClass.classTeacher;
+        let classCourse = this.createClass.classCourse;
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        let data = {
+          className: this.createClass.className,
+          teacherId: classCourse.id[classCourse.options.indexOf(classCourse.option)],
+          courseId: classTeacher.id[classTeacher.options.indexOf(classTeacher.option)],
+          courseName: classCourse.option
+        };
+        let students = [];
+        console.log(data);
+        instance.post("eduadmin/class", data, config)
+          .then(res => {
+            if (res.data.status === "ok") {
+              instance.post(`eduadmin/class/${res.data.courseId}/students`)
+                .then(res => {
+
+                })
+                .catch(err => console.log(err));
+            }
+          })
+          .catch(err => console.log(err));
+      },
+      cancelEdit() {
+        this.createClassShown = !this.createClassShown;
+      },
+      chooseAllStudents() {
+
       }
     },
     computed: {
@@ -224,11 +335,10 @@
 
   #eduActivity .add {
     display: flex;
-    flex-direction: column;
     flex-wrap: wrap;
     justify-content: flex-start;
     font-size: 13px;
-    min-width: 850px;
+    width: 100%;
   }
 
   #eduActivity .title {
@@ -309,12 +419,6 @@
     line-height: 30px;
   }
 
-  #eduActivity .content {
-    margin: 0 auto;
-    width: 55%;
-    height: 100%;
-  }
-
   #eduActivity table {
     border: #eeeeee;
   }
@@ -327,7 +431,75 @@
     vertical-align: middle !important;
   }
 
+  #eduActivity table td input {
+    width: 15px;
+    height: 15px;
+  }
+
   #eduActivity .titles {
     text-align: center;
   }
+
+  #eduActivity .keypoint {
+    line-height: 30px;
+    color: red;
+  }
+
+  #eduActivity .addtitle {
+    color: #606266;
+  }
+
+  #eduActivity .addcon {
+    width: 180px;
+    border: 1px solid #409eff;
+    border-radius: 5px;
+    height: 32px;
+    line-height: 32px;
+    margin-left: 5px;
+    padding: 0 20px;
+  }
+
+  #eduActivity .addcon:hover {
+    border: 1px solid #dcdfe6;
+  }
+
+  #eduActivity .addcon:focus {
+    outline: none;
+  }
+
+  #eduActivity .content {
+    margin: 0 auto;
+    width: 55%;
+    height: 100%;
+  }
+
+  #eduActivity .err {
+    border: 1px solid red;
+  }
+
+  #eduActivity .inputtips {
+    display: inline-block;
+    color: red;
+    margin-left: 20%;
+    height: 10px;
+    width: 100%;
+  }
+
+  #eduActivity .inputerr {
+    visibility: hidden;
+    height: 10px;
+    width: 100%;
+  }
+
+  #eduActivity .create-class {
+    display: flex;
+    justify-content: flex-start;
+    width: 55%;
+    height: 100%;
+    margin: 20px 0 50px 0;
+  }
+
+
+
+  #eduActivity .student-list {}
 </style>
