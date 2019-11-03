@@ -18,7 +18,7 @@
         <div class="content">{{card.place}}</div>
       </div>
     </div>
-    <div class="activity-section3" :style="{backgroundImage:'url('+activitydetialUrl+')'}">
+    <div class="activity-section3">
       <!-- <div class="activity-left"> -->
         <div class="info-desc">
           <img :src="card.content" style="width: 100%;">
@@ -156,7 +156,7 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    padding: 80px;
+    padding: 30px;
   }
 
   #activity-detial .activity-left {
