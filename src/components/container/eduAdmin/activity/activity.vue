@@ -26,11 +26,11 @@
                   <tr v-for="(student, seq) in studentData" :key="seq" class="content">
                     <td>{{seq+1}}</td>
                     <td>{{student.name}}</td>
-                    <td>{{student.studentId}}</td>
+                    <td>{{student.id}}</td>
                     <td>{{student.gender}}</td>
                     <td>{{student.grade}}</td>
                     <td>{{student.age}}</td>
-                    <td>{{student.mobilePhone}}</td>
+                    <td>{{student.mobile}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -102,14 +102,14 @@
           </thead>
           <tbody>
             <tr v-for="(student, seq) in studentData" :key="seq" class="content">
-              <td> <input type="checkbox"> </td>
+              <td> <input type="checkbox" v-model="student.checked"></td>
               <td>{{seq+1}}</td>
-              <td>{{student.name}}</td>
+              <td>{{student.studentName}}</td>
               <td>{{student.studentId}}</td>
               <td>{{student.gender}}</td>
               <td>{{student.grade}}</td>
               <td>{{student.age}}</td>
-              <td>{{student.mobilePhone}}</td>
+              <td>{{student.mobile}}</td>
             </tr>
           </tbody>
         </table>
@@ -164,12 +164,16 @@
             console.log(res);
             this.studentData = res.data.map(item => {
               return {
-                name: item.STUDENT_NAME,
+                studentName: item.STUDENT_NAME,
                 studentId: item.STUDENT_ID,
                 gender: item.GENDER,
                 grade: item.GRADE,
                 age: item.AGE,
-                mobilePhone: item.MOBILE_PHONE
+                mobile: item.MOBILE_PHONE,
+                avatar: item.AVATAR,
+                orgId: item.ORG_ID,
+                userId: item.USER_ID,
+                checked: true
               }
             });
           }).catch(err => { console.log(err) });
@@ -226,17 +230,27 @@
           courseId: classTeacher.id[classTeacher.options.indexOf(classTeacher.option)],
           courseName: classCourse.option
         };
-        let students = [];
         console.log(data);
         instance.post("eduadmin/class", data, config)
           .then(res => {
+            console.log(res);
             if (res.data.status === "ok") {
-              instance.post(`eduadmin/class/${res.data.courseId}/students`)
-                .then(res => {
-
-                })
-                .catch(err => console.log(err));
+              let studentData = this.studentData
+                .filter(student => student.checked)
+                .map(student => {
+                  delete student.checked;
+                  return student;
+                });
+              console.log(studentData);
+              let url = `eduadmin/class/${res.data.classId}/students`;
+              return instance.post(url, { studentData }, config);
             }
+            return Promise.reject("创建班级时发生错误!");
+          })
+          .then(res => {
+            console.log(res);
+            this.$toast.success({ title: "创建班级", message: "操作成功" });
+            this.createClassShown = !this.createClassShown;
           })
           .catch(err => console.log(err));
       },
