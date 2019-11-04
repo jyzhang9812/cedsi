@@ -61,6 +61,7 @@ const actions = {
                     array.time = arr.ACTIVITY_TIME;
                     array.price = arr.ACTIVITY_PRICE;
                     array.place = arr.ACTIVITY_PLACE;
+                    array.type = 1;
                     state.payInfo = array;
                     commit(TYPES.updateLoading, false)
                 },
@@ -171,7 +172,7 @@ const actions = {
     },
 
 
-    //students方法
+    //student方法
     //获取用户个人资料
     getUser({ commit, state }) {
         return globalAxios.get('/student/studentinfo',
@@ -304,7 +305,7 @@ const actions = {
                         List.list.push(point);
                     }
                     List.name = response.data.data.courseName,
-                    console.log(List)
+                        console.log(List)
                     commit(TYPES.changeCouseDetail, List)
                     commit(TYPES.updateLoading, false)
                 },
@@ -334,9 +335,17 @@ const actions = {
             for (var i = 0; i < arr.length; i++) {
                 var array = {}
                 array.id = arr[i].HW_ID;
-                array.url = 'https://s3.cn-northwest-1.amazonaws.com.cn/ced.cedsie.com/cedScratch/player.html?projectUrl=' + arr[i].HW_URL;
                 array.name = arr[i].HW_NAME;
-                array.img_url = arr[i].HW_COVER;
+                let substr = arr[i].HW_URL.substring(arr[i].HW_URL.length-3)
+                if(substr=='sb3'){
+                    array.flag = 0
+                    array.img_url = '../../static/images/dashboard/scratch.jpeg';
+                    array.url = 'https://s3.cn-northwest-1.amazonaws.com.cn/ced.cedsie.com/cedScratch/player.html?projectUrl=' + arr[i].HW_URL;
+                }else{
+                    array.flag = 1
+                    array.img_url = '../../static/images/dashboard/othertype.jpeg';
+                    array.url = arr[i].HW_URL;
+                }
                 array.guide = arr[i].HW_GUIDE;
                 if (arr[i].TEACHER_REMARK != 'null') {
                     array.teacher_remark = arr[i].TEACHER_REMARK;
@@ -570,7 +579,73 @@ const actions = {
             })
 
     },
-
+    //获取教务活动
+    getEduActivity({ commit, state }) {
+        return globalAxios.get("/student/activity",
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': state.idToken
+                }
+            }).then(
+                response => {
+                    console.log(response);
+                    let arr = []
+                    // let b = []
+                    for (var i = 0; i < response.data.length; i++) {
+                        arr.push(response.data[i])
+                    }
+                    for (var i = 0; i < arr.length; i++) {
+                        var array = {}
+                        array.id = arr[i].ACTIVITY_ID;
+                        array.cover = arr[i].ACTIVITY_COVER;
+                        array.title = arr[i].ACTIVITY_TITLE;
+                        array.avatar = arr[i].AVATAR;
+                        array.time = arr[i].ACTIVITY_TIME;
+                        array.price = arr[i].ACTIVITY_PRICE;
+                        array.place = arr[i].ACTIVITY_PLACE;
+                        state.slidePic.push(array);
+                    }
+                },
+                error => {
+                    router.push({ path: '/404' })
+                    console.log(error);
+                }
+            );
+    },
+    //获取具体活动
+    searchEduActivity({ commit, state }, id) {
+        return globalAxios
+            ({
+                method: "GET",
+                url: "/student/activity/" + id + "/eduadmin",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': state.idToken
+                }
+            }).then(
+                response => {
+                    console.log(response);
+                    let arr = response.data
+                    let array = {}
+                    array.id = arr.ACTIVITY_ID;
+                    array.cover = arr.ACTIVITY_COVER;
+                    array.title = arr.ACTIVITY_TITLE;
+                    array.content = arr.ACTIVITY_CONTENT_IMG;
+                    array.avatar = arr.AVATAR;
+                    array.time = arr.ACTIVITY_TIME;
+                    array.price = arr.ACTIVITY_PRICE;
+                    array.place = arr.ACTIVITY_PLACE;
+                    array.type = 1;
+                    state.payInfo = array;
+                    commit(TYPES.updateLoading, false)
+                },
+                error => {
+                    commit(TYPES.updateLoading, false)
+                    router.push({ path: '/404' })
+                    console.log(error);
+                });
+    },
 
     // Admin方法
     //获取课程目录

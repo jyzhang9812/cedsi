@@ -92,7 +92,7 @@
         },
         methods: {
             gotoActivity(index) {
-                this.$router.push({ path: '/activitydetailCard', query: { id: this.slidePic[index].id ,type:0} })
+                this.$router.push({ path: '/activitydetailCard', query: { id: this.slidePic[index].id ,type:this.slidePic[index].type} })
             },
             tab(index) {
                 this.curId = index;
@@ -128,6 +128,7 @@
         },
         created: function () {
             this.$store.dispatch('getActivity')
+            this.$store.dispatch('getEduActivity')
         },
         computed: {
             ...mapState({
