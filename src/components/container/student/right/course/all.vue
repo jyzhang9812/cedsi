@@ -172,7 +172,7 @@
             },
             jmpPay(index) {
                 if(this.currentList[index].PRICE!=0){
-                this.$router.push({path:'/payment',query: { id: this.currentList[index].ID,type:1} })
+                this.$router.push({path:'/payment',query: { id: this.currentList[index].ID,type:2} })
                 }else{
                 this.$router.push({path:'/dashboard/coursemap',query: { id: this.currentList[index].ID} })
                 }

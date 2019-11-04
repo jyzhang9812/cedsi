@@ -139,10 +139,12 @@
     created: function () {
       this.orderId = random(6) + Date.now();
       this.$store.commit('updateLoading', true)
-      if (this.$route.query.type == 1) {
+      if (this.$route.query.type == 2) {
         this.$store.dispatch('payCourse', this.$route.query.id)
-      } else {
+      } else if(this.$route.query.type == 0){
         this.$store.dispatch('searchActivity', this.$route.query.id)
+      }else{
+        this.$store.dispatch('searchEduActivity', this.$route.query.id)
       }
     },
     computed: {

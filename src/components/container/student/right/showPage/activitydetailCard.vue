@@ -60,12 +60,18 @@
           //发送当前用户信息，返回success之后跳转界面
         }
         else{
-          this.$router.push({ path: '/payment', query: { id: this.card.id ,type:0} })
+          this.$router.push({ path: '/payment', query: { id: this.card.id ,type:this.$route.query.type} })
         }
       }
     },
     created: function () {
-      this.$store.dispatch('searchActivity',this.$route.query.id)
+      let type = this.$route.query.type
+      console.log(type)
+      if(type==0){
+        this.$store.dispatch('searchActivity',this.$route.query.id)
+      }else{
+        this.$store.dispatch('searchEduActivity',this.$route.query.id)
+      }
     },
     computed: {
       ...mapState({
