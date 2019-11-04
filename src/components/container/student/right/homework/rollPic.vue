@@ -158,6 +158,13 @@
                 var currentPage = value / this.limit;
                 this.currentPage = currentPage;
                 this.$store.commit("changeWorkCurrentList", this.currentPage * this.limit)
+                if (this.tableData.length == 0) {
+                    this.txt = true;
+                } else {
+                    for (let i = 0; i <= this.currentList.length; i++) {
+                        this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
+                    }
+                }
             },
             del(index) {
 
