@@ -62,6 +62,13 @@ import { fail } from 'assert';
             close: true,
             route: "/Admin/activityManagement"
           },
+          {
+            name: "个人资料",
+            icon: 'fa-user-circle ',
+            children: [],
+            close: true,
+            route: "/Admin/userCenter"
+          },
         ],
         height: 0,
         style: '',

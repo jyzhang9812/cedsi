@@ -229,6 +229,11 @@ const addActivity = resolve => {
     resolve(require('../components/container/eduAdmin/activity/addActivity.vue'));
   });
 };
+const eduUserCenter = resolve => {
+  require.ensure(['../components/container/eduAdmin/eduUserCenter/eduUserCenter.vue'], () => {
+    resolve(require('../components/container/eduAdmin/eduUserCenter/eduUserCenter.vue'));
+  });
+};
 import { resolve } from 'url';
 // import { resolveSoa } from 'dns';
 //以下是超级管理员角色
@@ -296,6 +301,11 @@ const activityManagement = resolve => {
 const activityManagementAdd = resolve => {
   require.ensure(['../components/container/Admin/activityManagement/addActivity.vue'], () => {
     resolve(require('../components/container/Admin/activityManagement/addActivity.vue'));
+  });
+};
+const adminUserCenter = resolve => {
+  require.ensure(['../components/container/Admin/AdminUserCenter/AdminUserCenter.vue'], () => {
+    resolve(require('../components/container/Admin/AdminUserCenter/AdminUserCenter.vue'));
   });
 };
 Vue.use(Router);
@@ -684,7 +694,16 @@ export default new Router({
               next('/signin')
             }
           }, component: teacherManagement
-        }
+        },
+        {
+          path: '/eduAdmin/userCenter', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: eduUserCenter
+        },
       ]
     },
     {
@@ -810,6 +829,15 @@ export default new Router({
               next('/signin')
             }
           }, component: activityManagementAdd
+        },
+        {
+          path: '/Admin/userCenter', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: adminUserCenter
         },
       ]
     }

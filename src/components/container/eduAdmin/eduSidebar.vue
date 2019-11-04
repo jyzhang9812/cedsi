@@ -67,7 +67,14 @@
               { name: "学情分析", route: "/eduAdmin/statistics" }
             ],
             close: true
-          }
+          },
+          {
+            name: "个人资料",
+            icon: 'fa-user-circle',
+            children: [],
+            close: true,
+            route: "/eduAdmin/userCenter"
+          },
         ],
         height: 0,
         style: '',
