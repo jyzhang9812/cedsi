@@ -65,7 +65,9 @@
       }
     },
     created: function () {
-      if(this.$route.query.type==0){
+      let type = this.$route.query.type
+      console.log(type)
+      if(type==0){
         this.$store.dispatch('searchActivity',this.$route.query.id)
       }else{
         this.$store.dispatch('searchEduActivity',this.$route.query.id)

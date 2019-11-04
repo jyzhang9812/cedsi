@@ -32,6 +32,7 @@ const actions = {
                         array.time = arr[i].ACTIVITY_TIME;
                         array.price = arr[i].ACTIVITY_PRICE;
                         array.place = arr[i].ACTIVITY_PLACE;
+                        array.type = 0;
                         b.push(array);
                     }
                     commit(TYPES.changeActivity, b)
@@ -61,7 +62,7 @@ const actions = {
                     array.time = arr.ACTIVITY_TIME;
                     array.price = arr.ACTIVITY_PRICE;
                     array.place = arr.ACTIVITY_PLACE;
-                    array.type = 1;
+                    array.type = 0;
                     state.payInfo = array;
                     commit(TYPES.updateLoading, false)
                 },
@@ -604,6 +605,7 @@ const actions = {
                         array.time = arr[i].ACTIVITY_TIME;
                         array.price = arr[i].ACTIVITY_PRICE;
                         array.place = arr[i].ACTIVITY_PLACE;
+                        array.type = 1;
                         state.slidePic.push(array);
                     }
                 },
