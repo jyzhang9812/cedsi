@@ -237,7 +237,7 @@ const state = {
         }
     ],
     courseName: "",
-    roles: ['/dashboard/class', '/console', '/EduAdmin', '/Admin', '/superAdmin'],
+    roles: ['/dashboard/class', '/console/postJob', '/EduAdmin', '/Admin', '/superAdmin'],
     roleId: 0,
     courseList: [],
     courseCurrentList: [],

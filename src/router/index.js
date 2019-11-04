@@ -178,6 +178,11 @@ const coursePlan = resolve => {
     resolve(require('../components/container/teacher/teach/coursePlan.vue'));
   });
 }
+const teacherUserCenter = resolve => {
+  require.ensure(['../components/container/teacher/teacherUserCenter/teacherUserCenter.vue'], () => {
+    resolve(require('../components/container/teacher/teacherUserCenter/teacherUserCenter.vue'));
+  });
+};
 //以下是教务角色
 const eduAdmin = resolve => {
   require.ensure(['../components/container/eduAdmin/eduSidebar.vue'], () => {
@@ -601,6 +606,15 @@ export default new Router({
               next('/signin')
             }
           }, component: coursePlan
+        },
+        {
+          path: '/console/userCenter', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: teacherUserCenter
         }
       ]
     },

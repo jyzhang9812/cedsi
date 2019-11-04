@@ -95,8 +95,8 @@
             icon: 'fa-user',
             children: [
               {
-                name: "消息通知",
-                route: "/console/message"
+                name: "个人资料",
+                route: "/console/userCenter"
               },
               // {
               //   name: "个人资料",

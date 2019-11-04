@@ -20,10 +20,11 @@
                 </div> -->
                 <div class="formdetail">
                     <label class="formlabel" for="headsculpture">头像</label>
-                    <img id="headimage" :src="headsculpture" class="cover-image" alt="" v-show="headsculpture!==''">
+                    <!-- <img id="headimage" :src="headsculpture" class="cover-image" alt="" v-show="headsculpture!==''"> -->
+                    <img id="headimage" :src="user.avatar" class="cover-image" alt="">
                     <div class="upload">
                         <div class="upload-cover-btn">
-                            上传文件
+                            修改头像
                             <input type="file" class="" @change="getFile($event)" style="opacity: 0">
                         </div>
                     </div>
@@ -41,6 +42,16 @@
                     <input class="input" placeholder="请输入手机号码" v-model="user.phone">
                 </div>
                 <div class="formdetail">
+                    <label class="formlabel" for="password">密码</label>
+                    <input class="input" type="password" v-model="password" :disabled="updatePW" placeholder="请输入旧密码">
+                    <span class="blue-text" @click="updatePassword()" v-show="updatePW==true">修改密码</span>
+                </div>
+                <div class="formdetail" v-show="updatePW==false">
+                    <label class="formlabel" for="newpw">新密码</label>
+                    <input class="input" type="password" v-model="newpassword" placeholder="请输入新密码">
+                    <span class="blue-text" @click="submitPassword()" v-show="newpassword!==''">确认修改</span>
+                </div>
+                <div class="formdetail">
                     <button class="buttonsave" @click='submit($event)'>
                         保存
                     </button>
@@ -53,10 +64,15 @@
 <script>
     import AWS from 'aws-sdk';
     import instance from '../../../../../axios-auth.js';
+    import crypto from 'crypto';
+    import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
     export default {
-        name: 'updateUser',
+        name: 'adminUserCenter',
         data() {
             return {
+                newpassword:"",
+                updatePW:true,
+                password:"*********",
                 file: null,
                 fileName: '',
                 headsculpture: '',
@@ -64,6 +80,40 @@
             }
         },
         methods: {
+            updatePassword(){
+                this.updatePW=false
+                this.password=""
+            },
+            submitPassword(){
+                var that = this
+                var password={}
+                password.oldPassword=crypto.createHash('SHA256').update(this.password).digest('hex');
+                password.newPassword=crypto.createHash('SHA256').update(this.newpassword).digest('hex');
+                console.log(password)
+                instance.post('/user/password', password, {
+                    headers: { 
+                        Authorization: localStorage.getItem('idToken'),
+                        'Content-Type': 'application/json'}
+                })
+                .then((res) => {
+                    console.log(res);
+                    if(res.data.errorMessage=="密码错误"){
+                        that.$toast.error({title:"个人中心",message:'修改失败！原密码错误'})
+                    }
+                    else{
+                        that.$toast.success({title:"个人中心",message:'修改成功'})
+                        localStorage.removeItem('idToken');
+                        localStorage.removeItem('userId');
+                        localStorage.removeItem('roleId');
+                        localStorage.removeItem('expirationDate');
+                        localStorage.removeItem('user');
+                        that.$router.push({ path: "/signin" });
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            },
             changeInput(index) {
                 this.radiolist.map((v, i) => {
                     if (i == index) {
@@ -81,7 +131,7 @@
                 var that = this;
                 reader.readAsDataURL(this.file);
                 reader.onload = function (e) {
-                    that.headsculpture = this.result
+                    that.user.avatar = this.result
                 }
             },
             submit(event) {
@@ -155,6 +205,7 @@
         created: function () {
             this.$store.commit('updateLoading', true)
             this.$store.dispatch('getUser')
+            console.log(this.user)
         },
         computed: {
             user: function (state) {
@@ -264,7 +315,7 @@
     }
 
     #personalcontent .upload-cover-btn {
-        margin-left: 10px;
+        margin-left: 170px;
         width: 80px;
         height: 35px;
         display: inline-block;
@@ -285,5 +336,10 @@
     #personalcontent .cover-image {
         width: 200px;
         height: 200px;
+        margin-bottom: 20px;
+    }
+    .blue-text{
+        cursor: pointer;
+        color: #409eff;
     }
 </style>
