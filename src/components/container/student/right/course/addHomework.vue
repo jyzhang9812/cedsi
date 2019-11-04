@@ -108,7 +108,7 @@
                         ACL: "public-read",
                         Bucket: "cedsi",
                         Body: formData.get("content"),
-                        Key: "course/" + config.id + "." + file.type.split("/")[1],
+                        Key: "homework/work/" + config.id + "." + file.type.split("/")[1],
                         ContentType: file.type,
                         Metadata: { uploader: window.localStorage.getItem("user") }
                     };
