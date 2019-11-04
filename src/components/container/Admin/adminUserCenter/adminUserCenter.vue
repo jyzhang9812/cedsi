@@ -63,7 +63,7 @@
 
 <script>
     import AWS from 'aws-sdk';
-    import instance from '../../../../../axios-auth.js';
+    import instance from '../../../../axios-auth.js';
     import crypto from 'crypto';
     import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
     export default {

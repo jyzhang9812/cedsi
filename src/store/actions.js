@@ -184,7 +184,7 @@ const actions = {
                 }
             }
         ).then(response => {
-            // console.log(response.data)
+            console.log(response.data)
             var user = {}
             var arr = response.data
             user.avatar = arr.AVATAR,

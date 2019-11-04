@@ -178,6 +178,11 @@ const coursePlan = resolve => {
     resolve(require('../components/container/teacher/teach/coursePlan.vue'));
   });
 }
+const teacherUserCenter = resolve => {
+  require.ensure(['../components/container/teacher/teacherUserCenter/teacherUserCenter.vue'], () => {
+    resolve(require('../components/container/teacher/teacherUserCenter/teacherUserCenter.vue'));
+  });
+};
 //以下是教务角色
 const eduAdmin = resolve => {
   require.ensure(['../components/container/eduAdmin/eduSidebar.vue'], () => {
@@ -227,6 +232,11 @@ const teacherManagement = resolve => {
 const addActivity = resolve => {
   require.ensure(['../components/container/eduAdmin/activity/addActivity.vue'], () => {
     resolve(require('../components/container/eduAdmin/activity/addActivity.vue'));
+  });
+};
+const eduUserCenter = resolve => {
+  require.ensure(['../components/container/eduAdmin/eduUserCenter/eduUserCenter.vue'], () => {
+    resolve(require('../components/container/eduAdmin/eduUserCenter/eduUserCenter.vue'));
   });
 };
 import { resolve } from 'url';
@@ -296,6 +306,11 @@ const activityManagement = resolve => {
 const activityManagementAdd = resolve => {
   require.ensure(['../components/container/Admin/activityManagement/addActivity.vue'], () => {
     resolve(require('../components/container/Admin/activityManagement/addActivity.vue'));
+  });
+};
+const adminUserCenter = resolve => {
+  require.ensure(['../components/container/Admin/AdminUserCenter/AdminUserCenter.vue'], () => {
+    resolve(require('../components/container/Admin/AdminUserCenter/AdminUserCenter.vue'));
   });
 };
 Vue.use(Router);
@@ -591,6 +606,15 @@ export default new Router({
               next('/signin')
             }
           }, component: coursePlan
+        },
+        {
+          path: '/console/userCenter', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: teacherUserCenter
         }
       ]
     },
@@ -684,7 +708,16 @@ export default new Router({
               next('/signin')
             }
           }, component: teacherManagement
-        }
+        },
+        {
+          path: '/eduAdmin/userCenter', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: eduUserCenter
+        },
       ]
     },
     {
@@ -810,6 +843,15 @@ export default new Router({
               next('/signin')
             }
           }, component: activityManagementAdd
+        },
+        {
+          path: '/Admin/userCenter', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: adminUserCenter
         },
       ]
     }
