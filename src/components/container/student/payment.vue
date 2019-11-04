@@ -6,7 +6,7 @@
       <div class="modal-dialog mypay">
         <div class="modal-content mypay-height">
           <div class="modal-header mypay-title">
-            <h4 class="modal-title" id="myModalLabel">微信支付¥{{payinfo.price/100}}</h4>
+            <h4 class="modal-title" id="myModalLabel">微信支付¥{{payinfo.price}}</h4>
             <button type="button" class="close" style="position: absolute;top:20px;right: 20px;" data-dismiss="modal"
               aria-hidden="true">
               &times;
@@ -35,7 +35,7 @@
         <div class="order-title">{{payinfo.name}}</div>
         <div class="order-price">
           实付金额:
-          <span>¥{{payinfo.price/100}}</span>
+          <span>¥{{payinfo.price}}</span>
         </div>
       </div>
       <div class="pay-method">
@@ -46,7 +46,7 @@
       </div>
       <div class="summary">
         应付金额:
-        <span>¥{{payinfo.price/100}}</span>
+        <span>¥{{payinfo.price}}</span>
         <button class="pay" data-toggle="modal" data-target="#myPay" @click="closeModal">立即支付</button>
       </div>
     </div>

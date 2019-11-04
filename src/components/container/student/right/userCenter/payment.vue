@@ -40,7 +40,14 @@
       getNew(value) {
         var currentPage = value / this.limit;
         this.currentPage = currentPage;
-        this.$store.commit("changeOrderCurrentList", this.currentPage * this.limit);
+        this.$store.commit("changeOrderCurrentList", this.currentPage * this.limit)
+        if (this.tableData.length == 0) {
+          this.txt = true;
+        } else {
+          for (let i = 0; i <= this.currentList.length; i++) {
+            this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
+          }
+        }
       },
       timestampToTime(timestamp) {
         timestamp = String(timestamp);
@@ -48,10 +55,10 @@
         var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
         var Y = date.getFullYear() + "-";
         var M = (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-";
-        var D = (date.getDate() <10 ? "0"+ date.getDate() :date.getDate())+ " ";
-        var h = (date.getHours() <10 ? "0"+ date.getHours() :date.getHours() )+':';
-        var m = (date.getMinutes() <10 ? "0"+date.getMinutes() :date.getMinutes() )+ ":";
-        var s = date.getSeconds() <10 ? "0"+date.getSeconds() :date.getSeconds();
+        var D = (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
+        var h = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ':';
+        var m = (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":";
+        var s = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
         return Y + M + D + h + m + s;
       },
     },
@@ -60,7 +67,7 @@
       this.$store.dispatch("getOrder").then(() => {
         if (this.tableData.length == 0) {
           this.txt = true;
-        }else{
+        } else {
           for (let i = 0; i <= this.currentList.length; i++) {
             this.currentList[i].COMMIT_TIME = this.timestampToTime(this.currentList[i].COMMIT_TIME)
           }

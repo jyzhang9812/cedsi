@@ -73,8 +73,11 @@
                         </div>
                     </div>
                     <div class="right">
-                        <button class="edit" data-toggle="modal" data-target="#myHomework"
+                        <button v-if='item.flag==0' class="edit" data-toggle="modal" data-target="#myHomework"
                             data-index="index">查看</button>
+                        <button v-if='item.flag==1' class="edit" @click='download(index)'>
+                            查看
+                        </button>
                         <button class="delete" @click='del(index)'>删除</button>
                     </div>
                 </div>
@@ -109,6 +112,10 @@
             }
         },
         methods: {
+            //下载
+            download(index) {
+                window.open(this.currentList[index].url);
+            },
             show(index) {
                 this.num = index;
                 this.i = index;
@@ -151,6 +158,13 @@
                 var currentPage = value / this.limit;
                 this.currentPage = currentPage;
                 this.$store.commit("changeWorkCurrentList", this.currentPage * this.limit)
+                if (this.tableData.length == 0) {
+                    this.txt = true;
+                } else {
+                    for (let i = 0; i <= this.currentList.length; i++) {
+                        this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
+                    }
+                }
             },
             del(index) {
 
