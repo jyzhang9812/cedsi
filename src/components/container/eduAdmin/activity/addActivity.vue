@@ -25,10 +25,10 @@
         @changeDate="changeDate"
       ></date-picker>
     </div>
-    <div class="upload">
+    <!-- <div class="upload">
       <span class="upload-title">活动价格:</span>
       <input class="upload-input" placeholder="请输入活动价格" v-model="activityPrice" />
-    </div>
+    </div> -->
     <div class="upload">
       <span class="upload-title">上传活动封面:</span>
       <div class="upload-cover-btn">
@@ -85,7 +85,7 @@ export default {
         }
       },
       activityName: "",
-      activityPrice: "",
+      activityPrice: 0,
       coverImage: "",
       coverImageDisplay: "",
       coverType: "",

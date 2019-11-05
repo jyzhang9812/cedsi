@@ -397,7 +397,7 @@ const actions = {
             }
         ).then(
             response => {
-                // console.log(response);
+                console.log(response);
                 var arr = [];
                 if (response.data != null) {
                     for (var i = 0; i < response.data.length; i++) {
