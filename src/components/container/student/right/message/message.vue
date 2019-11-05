@@ -15,8 +15,8 @@
                         </h4>
                     </div>
                     <div class="modal-body">
-                        {{currentList[num].MESSAGE_CONTENT}}
-                        <a href=''></a>
+                        <img :src="currentList[num].MESSAGE_CONTENT" width="100%">
+                        附件：<a :href='currentList[num].ATTACHED_FILE' download="">点击下载</a>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">
@@ -37,7 +37,7 @@
             <div class="cardbox" v-if='txt==false' v-for="(item,index) in currentList" data-toggle="modal"
                 data-target="#myMessage" v-on:click='num = index'>
                 <div class="card_content">
-                    {{item.MESSAGE_CONTENT}}
+                    {{item.HW_NAME}}:{{item.COURSE_NAME}}课程{{item.CP_NAME}}作业，截止日期{{item.DEADLINE}}
                 </div>
                 <div class="card_footer">
                     <span>
