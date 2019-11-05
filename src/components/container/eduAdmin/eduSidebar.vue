@@ -60,14 +60,14 @@
             ],
             close: true
           },
-          {
-            name: "统计分析",
-            icon: 'fa-bar-chart',
-            children: [
-              { name: "学情分析", route: "/eduAdmin/statistics" }
-            ],
-            close: true
-          },
+          // {
+          //   name: "统计分析",
+          //   icon: 'fa-bar-chart',
+          //   children: [
+          //     { name: "学情分析", route: "/eduAdmin/statistics" }
+          //   ],
+          //   close: true
+          // },
           {
             name: "个人资料",
             icon: 'fa-user-circle',
