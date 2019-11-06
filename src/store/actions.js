@@ -326,6 +326,7 @@ const actions = {
                 }
             }
         ).then(response => {
+            console.log(response)
             var arr = []
             var content = []
             console.log(response);
@@ -341,12 +342,11 @@ const actions = {
                 if(substr=='sb3'){
                     array.flag = 0
                     array.img_url = '../../static/images/dashboard/scratch.jpeg';
-                    array.url = 'https://s3.cn-northwest-1.amazonaws.com.cn/ced.cedsie.com/cedScratch/player.html?projectUrl=' + arr[i].HW_URL;
                 }else{
                     array.flag = 1
                     array.img_url = '../../static/images/dashboard/othertype.jpeg';
-                    array.url = arr[i].HW_URL;
                 }
+                array.url = arr[i].HW_URL;
                 array.guide = arr[i].HW_GUIDE;
                 if (arr[i].TEACHER_REMARK != 'null') {
                     array.teacher_remark = arr[i].TEACHER_REMARK;

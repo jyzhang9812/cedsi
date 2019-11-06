@@ -83,6 +83,7 @@
                 this.file = event.target.files[0];
                 console.log(this.file);
                 this.fileName = this.file.name;
+                console.log(this.file.name.split(".")[this.file.name.split(".").length-1])
                 var reader = new FileReader();
                 var that = this;
                 reader.readAsDataURL(this.file);
@@ -108,8 +109,8 @@
                         ACL: "public-read",
                         Bucket: "cedsi",
                         Body: formData.get("content"),
-                        Key: "homework/work/" + config.id + "." + file.type.split("/")[1],
-                        ContentType: file.type,
+                        Key: "homework/work/" + config.id + "." + that.file.name.split(".")[that.file.name.split(".").length-1],
+                        // ContentType:
                         Metadata: { uploader: window.localStorage.getItem("user") }
                     };
                     s3.putObject(params, function (err, data) {
@@ -136,7 +137,7 @@
                         homeworkName: this.name,
                         homeworkDesc: this.description,
                         homeworkGuide: this.guide,
-                        fileType: this.file.type.split("/")[1],
+                        fileType: this.file.name.split(".")[this.file.name.split(".").length-1],
                     },
                     postImgToS3
                 );

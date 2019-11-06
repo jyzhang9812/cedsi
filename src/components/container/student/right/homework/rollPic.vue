@@ -7,7 +7,7 @@
                 <div class="modal-content">
                     <div class="modal-body head">
                         <div class="left">
-                            <iframe :src="currentList[num].url"></iframe>
+                            <iframe :src="'https://s3.cn-northwest-1.amazonaws.com.cn/ced.cedsie.com/cedScratch/player.html?projectUrl=' + currentList[num].url"></iframe>
                         </div>
                         <div class="right">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -114,7 +114,8 @@
         methods: {
             //下载
             download(index) {
-                window.open(this.currentList[index].url);
+                console.log("download")
+                window.open('https://' + this.currentList[index].url);
             },
             show(index) {
                 this.num = index;
