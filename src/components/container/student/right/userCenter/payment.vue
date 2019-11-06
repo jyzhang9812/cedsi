@@ -13,7 +13,7 @@
         <div class="order-title">{{item.PRODUCT_NAME}}</div>
         <div class="order-price">
           实付金额:
-          <span>{{item.FEE/100}}</span>
+          <span>{{item.FEE}}</span>
         </div>
       </div>
     </div>
@@ -45,7 +45,7 @@
           this.txt = true;
         } else {
           for (let i = 0; i <= this.currentList.length; i++) {
-            this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
+            this.currentList[i].COMMIT_TIME = this.timestampToTime(this.currentList[i].COMMIT_TIME)
           }
         }
       },

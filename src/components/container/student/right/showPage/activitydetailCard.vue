@@ -42,17 +42,18 @@
   export default {
     data() {
       return {
+        type:0,
         activitybgUrl: 'https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/static/activitybg.png',
         activitydetialUrl: 'https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/static/activitydetial.png',
       };
     },
     methods: {
       payment() {
-        if(this.card.price==0){
+        if(this.type==1){
           this.$store.dispatch('postUserInfo', this.$route.query.id).then((res)=>{
             if(res==1){
               this.$toast.success({message:'报名成功 ~!'})
-              this.$router.push({ path: '/payOK' })
+              this.$router.push({ path: '/dashboard/showPage' })
             }else{
               this.$toast.success({message:'哎呀...报名失败了，请重试'})
             }
@@ -60,14 +61,14 @@
           //发送当前用户信息，返回success之后跳转界面
         }
         else{
-          this.$router.push({ path: '/payment', query: { id: this.card.id ,type:this.$route.query.type} })
+          this.$toast.warn({message:'请扫描下方二维码报名线下活动 ~!'})          
+          // this.$router.push({ path: '/payment', query: { id: this.card.id ,type:this.$route.query.type} })
         }
       }
     },
     created: function () {
-      let type = this.$route.query.type
-      console.log(type)
-      if(type==0){
+      this.type = this.$route.query.type
+      if(this.type==0){
         this.$store.dispatch('searchActivity',this.$route.query.id)
       }else{
         this.$store.dispatch('searchEduActivity',this.$route.query.id)

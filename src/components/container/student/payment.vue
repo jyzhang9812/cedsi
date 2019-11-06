@@ -58,6 +58,7 @@
   import globalAxios from "axios";
   import random from "string-random";
   import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
+  import instance from "../../../axios-auth.js";
 
   export default {
     data() {
@@ -70,26 +71,21 @@
     },
     methods: {
       closeModal() {
-        var payment = {};
-        payment.orderId = this.orderId;
-        payment.productId = this.$route.query.id;
-        payment.productName = this.payinfo.name;
-        payment.userId = localStorage.getItem('userId');
-        payment.fee = this.payinfo.price;
-        globalAxios
-          .post(
-            "https://wx.cedsie.com:12345/pay",
-            payment,
-          )
-          .then(
-            response => {
-              console.log(response.data);
-              this.qrCode(response.data, payment.orderId);
-            },
-            error => {
-              console.error(error);
-            }
-          )
+        let payment = {
+          orderId: this.orderId,
+          productId: this.$route.query.id,
+          productName: this.payinfo.title,
+          userId: localStorage.getItem('userId'),
+          fee: this.payinfo.price * 100
+        };
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        console.log(payment);
+        instance.post("/lambda", payment, config)
+          .then(res => {
+            console.log(res);
+            this.qrCode(res.data.code_url, payment.orderId);
+          })
+          .catch(err => { console.error(err) });
       },
       qrCode(url, orderId) {
         var that = this;
@@ -98,7 +94,7 @@
           if (error) console.error(error);
           var timer = setInterval(function () {
             that.query(timer, orderId)
-          }, 2000)
+          }, 2000);
         });
       },
       query(timer, orderId) {
@@ -111,19 +107,18 @@
               console.log(response.data)
               if (response.data == "SUCCESS") {
                 $('#myPay').modal('hide');
-                if (this.$route.query.type == 1) {
-                  var allid = {
+                var allid = {
                     id: this.$route.query.id,
                     orderId: orderId,
                     cover: this.payinfo.cover
                   }
-                  console.log(allid)
+                if (this.$route.query.type == 1) {
                   this.$store.dispatch('postCourseId', allid)
-                }else{
-                  this.$store.dispatch('postUserInfo', this.$route.query.id)
+                } else {
+                  this.$store.dispatch('postUserInfo', allid)
                 }
                 clearInterval(timer)
-                this.$toast.success({message:'报名成功 ~!'})
+                this.$toast.success({ message: '报名成功 ~!' })
                 this.$router.push({ path: '/payOK' });
               }
             },
@@ -141,9 +136,9 @@
       this.$store.commit('updateLoading', true)
       if (this.$route.query.type == 2) {
         this.$store.dispatch('payCourse', this.$route.query.id)
-      } else if(this.$route.query.type == 0){
+      } else if (this.$route.query.type == 0) {
         this.$store.dispatch('searchActivity', this.$route.query.id)
-      }else{
+      } else {
         this.$store.dispatch('searchEduActivity', this.$route.query.id)
       }
     },
