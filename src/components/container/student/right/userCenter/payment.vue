@@ -45,7 +45,7 @@
           this.txt = true;
         } else {
           for (let i = 0; i <= this.currentList.length; i++) {
-            this.currentList[i].time = this.timestampToTime(this.currentList[i].time)
+            this.currentList[i].COMMIT_TIME = this.timestampToTime(this.currentList[i].COMMIT_TIME)
           }
         }
       },
