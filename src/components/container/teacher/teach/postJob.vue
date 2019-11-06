@@ -239,6 +239,7 @@
         let config = { headers: { Authorization: localStorage.getItem('idToken') } };
         let chapter2 = this.inputData.chapter2;
         let homework = this.inputData.homework;
+        let fix = this.attachedFile.name.split('.');
         let postData = {
           CLASS_ID: this.searchForClassId(this.inputData.classes2.option),
           COURSE_ID: this.searchForCourseId(this.inputData.classes2.option),
@@ -246,7 +247,7 @@
           CP_ID: chapter2.id[chapter2.list.findIndex(item => item === chapter2.option)],
           DEADLINE: homework.DEADLINE,
           HW_NAME: homework.HW_NAME,
-          FILE_TYPE: "." + this.attachedFile.type.split("/")[1]
+          FILE_TYPE: "." + fix[fix.length - 1]
         };
         if (this.operation === "PUT") { postData.HW_ID = this.currentWorkId }
         console.log(postData);
@@ -422,11 +423,12 @@
           region: 'cn-northwest-1'
         });
         let s3 = new AWS.S3();
+        let fix = file.name.split(".");
         let params = {
           ACL: 'public-read',
           Bucket: "cedsi",
           Body: file,
-          Key: `preHomework/${config.path}/${config.id}.${file.type.split('/')[1]}`,
+          Key: `preHomework/${config.path}/${config.id}.${fix[fix.length - 1]}`,
           ContentType: file.type,
           Metadata: { 'uploader': window.localStorage.getItem('user') }
         };

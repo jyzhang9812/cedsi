@@ -226,8 +226,8 @@
         let config = { headers: { Authorization: localStorage.getItem('idToken') } };
         let data = {
           className: this.createClass.className,
-          teacherId: classCourse.id[classCourse.options.indexOf(classCourse.option)],
-          courseId: classTeacher.id[classTeacher.options.indexOf(classTeacher.option)],
+          courseId: classCourse.id[classCourse.options.indexOf(classCourse.option)],
+          teacherId: classTeacher.id[classTeacher.options.indexOf(classTeacher.option)],
           courseName: classCourse.option
         };
         console.log(data);
