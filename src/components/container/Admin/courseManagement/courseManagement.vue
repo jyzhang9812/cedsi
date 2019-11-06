@@ -17,10 +17,10 @@
               <h5 class="modal-list-title">课程详情:</h5>
               <span class="modal-list-course">{{courseIntro}}</span>
             </div>
-            <div class="modal-list">
+            <!-- <div class="modal-list">
               <h5 class="modal-list-title">上课人数:</h5>
               <span class="modal-list-course">{{courseNum}}人</span>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
