@@ -470,10 +470,10 @@ const actions = {
             })
     },
     //向购买的活动发送用户信息
-    postUserInfo({ commit, state }, id) {
+    postUserInfo({ commit, state }, msg) {
         globalAxios({
             method: "post",
-            url: '/student/activity/' + id + '/cedsi ',
+            url: '/student/activity/' + msg.id + '/eduadmin',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': state.idToken

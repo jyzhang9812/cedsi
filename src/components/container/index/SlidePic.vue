@@ -41,7 +41,7 @@
         methods: {
             gotoActivity(index) {
                 console.log(this.slidePic[index])
-                this.$router.push({ path: '/activitydetailCard', query: { id: this.slidePic[index].id } })
+                this.$router.push({ path: '/activitydetailCard', query: { id: this.slidePic[index].id, type:this.slidePic[index].type} })
             },
         },
         created: function () {

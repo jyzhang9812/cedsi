@@ -76,16 +76,16 @@
           productId: this.$route.query.id,
           productName: this.payinfo.title,
           userId: localStorage.getItem('userId'),
-          fee: this.payinfo.price
+          fee: this.payinfo.price * 100
         };
         let config = { headers: { Authorization: localStorage.getItem('idToken') } };
         console.log(payment);
         instance.post("/lambda", payment, config)
           .then(res => {
-            console.log(response.data);
-            this.qrCode(response.data, payment.orderId);
+            console.log(res);
+            this.qrCode(res.data.code_url, payment.orderId);
           })
-          .catch(err => { console.error(error) });
+          .catch(err => { console.error(err) });
       },
       qrCode(url, orderId) {
         var that = this;
@@ -107,16 +107,15 @@
               console.log(response.data)
               if (response.data == "SUCCESS") {
                 $('#myPay').modal('hide');
-                if (this.$route.query.type == 1) {
-                  var allid = {
+                var allid = {
                     id: this.$route.query.id,
                     orderId: orderId,
                     cover: this.payinfo.cover
                   }
-                  console.log(allid)
+                if (this.$route.query.type == 1) {
                   this.$store.dispatch('postCourseId', allid)
                 } else {
-                  this.$store.dispatch('postUserInfo', this.$route.query.id)
+                  this.$store.dispatch('postUserInfo', allid)
                 }
                 clearInterval(timer)
                 this.$toast.success({ message: '报名成功 ~!' })
