@@ -169,10 +169,8 @@ export default {
         )
         .then(
           response => {
-              this.$toast.success({ title: "机构管理", message: "操作成功" });
-              setTimeout(function() {
-                this.$router.push({ path: "/Admin/organizationManagement" });
-              }, 1000);
+            this.$toast.success({ title: "机构管理", message: "操作成功" });
+            this.$router.push({ path: "/Admin/organizationManagement" });
             AWS.config = new AWS.Config({
               accessKeyId: response.data.AccessKeyId,
               secretAccessKey: response.data.SecretAccessKey,
