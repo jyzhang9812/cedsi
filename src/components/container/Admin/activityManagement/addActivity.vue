@@ -256,6 +256,7 @@ export default {
   margin-left: 10px !important;
   height: 40px !important;
   width: 300px !important;
+  line-height: 40px;
 }
 
 #add-activity .upload-textarea {
@@ -288,6 +289,7 @@ export default {
   height: 35px !important;
   font-size: 14px !important;
   width: 230px !important;
+  text-align: inherit !important;
 }
 
 #add-activity .dropdown-menu {
