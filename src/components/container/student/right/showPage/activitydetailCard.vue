@@ -52,16 +52,16 @@
         if(this.type==1){
           this.$store.dispatch('postUserInfo', this.$route.query.id).then((res)=>{
             if(res==1){
-              this.$toast.success({message:'报名成功 ~!'})
+              this.$toast.success({title:"提示",message:'报名成功 ~!'})
               this.$router.push({ path: '/dashboard/showPage' })
             }else{
-              this.$toast.success({message:'哎呀...报名失败了，请重试'})
+              this.$toast.error({title:"提示",message:'哎呀...报名失败了，请重试'})
             }
           })
           //发送当前用户信息，返回success之后跳转界面
         }
         else{
-          this.$toast.warn({message:'请扫描下方二维码报名线下活动 ~!'})          
+          this.$toast.warn({title:"提示",message:'请扫描下方二维码报名线下活动 ~!'})          
           // this.$router.push({ path: '/payment', query: { id: this.card.id ,type:this.$route.query.type} })
         }
       }
