@@ -15,7 +15,7 @@
                 <div class="iconleft" v-on:click="zuohua(0)" v-show='calleft[0]!=0'>
                     <i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i>
                 </div>
-                <ul :style="{'left':calleft[0] + 'px'}">
+                <ul :style="{'left':calleft[0] + 'px','width':slidePic.length*350+'px'}">
                     <li class="course_card" v-for="(item,index) in slidePic" :key="index" @mouseover="show(index)"
                         @mouseleave="hidden(index)">
                         <div class="inside">
@@ -30,7 +30,7 @@
                         </div>
                     </li>
                 </ul>
-                <div class="iconright" v-on:click="youhua(0)" v-show='!calleft[0]>0'>
+                <div class="iconright" v-on:click="youhua(0)">
                     <i class="fa fa-chevron-right fa-2x" aria-hidden="true"></i>
                 </div>
             </div>
@@ -107,20 +107,20 @@
             },
             //点击按钮左移
             zuohua(index) {
-                this.calleft[index] -= 340;
-                if (this.calleft[index] < -1020) {
-                    this.calleft[index] = 0
-                }
+                this.calleft[index] += 1020;
+                // if (this.calleft[index] < -1020) {
+                //     this.calleft[index] = 0
+                // }
                 // for (var i = 0; i < 4; i++) {
                 //     console.log(this.calleft[i])
                 // }
             },
             //点击按钮右移
             youhua(index) {
-                this.calleft[index] += 340;
-                if (this.calleft[index] > 0) {
-                    this.calleft[index] = -1020
-                }
+                this.calleft[index] -= 1020;
+                // if (this.calleft[index] > 0) {
+                //     this.calleft[index] =-1020
+                // }
                 // for (var i = 0; i < 4; i++) {
                 //     console.log(this.calleft[i])
                 // }
@@ -157,7 +157,7 @@
 
     .threeImg .Containt ul {
         margin: 0 auto;
-        width: 2400px;
+        /* width: 2400px; */
         position: absolute;
         left: 0px;
         cursor: pointer;
