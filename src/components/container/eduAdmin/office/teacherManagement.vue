@@ -175,7 +175,7 @@ export default {
   components: { SelectInput, pagination },
   data() {
     return {
-      limit: 3,
+      limit: 10,
       currentList: [],
       inputData: {
         teacherName: ""
