@@ -163,7 +163,7 @@
                             if (data.hasOwnProperty('ETag')) {
                                 this.$toast.success({title:"个人中心",message:'修改成功'})
                                 // alert("上传成功!");
-                                // this.$router.replace({ path: '/Admin/courseManagement/' });
+                                this.$router.replace({ path: '/dashboard/class' });
                             } else {
                                 this.$toast.error({title:"个人中心",message:'修改失败'})
                                 // alert("上传失败!");
