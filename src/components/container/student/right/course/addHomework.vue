@@ -41,7 +41,8 @@
         </div> -->
         <div class="upload-footer">
             <button class="btn upload-btn" @click="submit1($event)">确定</button>
-            <button class="btn upload-btn" @click="calcelUpload">取消</button>
+            <button class="btn upload-btn" @click="calcelUpload">清空</button>
+            <button class="btn upload-btn" @click="backToCourse">返回</button>
         </div>
     </div>
 </template>
@@ -69,6 +70,9 @@
             };
         },
         methods: {
+            backToCourse(){
+                this.$router.go(-1)
+            },
             calcelUpload() {
                 this.headsculpture = "";
                 this.file = null;
@@ -77,6 +81,7 @@
                 // this.cover = null;
                 this.name = "";
                 this.description = "";
+                this.guide = "";
                 this.$router.replace({ path: "/dashboard/addHomework?chapterId=" + this.chapterId + "&courseId=" + this.courseId });
             },
             getFile(event) {

@@ -60,6 +60,7 @@
             </td>
             <td>{{student.name}}</td>
             <td>{{student.gender}}</td>
+            <td>{{student.age}}</td>
             <td>{{student.phone}}</td>
             <td>{{student.grade}}</td>
           </tr>
@@ -85,7 +86,7 @@ export default {
       fileName:"",
       limit: 10,
       currentList: [],
-      tableTitle: ["序号", "学号", "头像", "姓名", "性别", "手机号", "年级"],
+      tableTitle: ["序号", "学号", "头像", "姓名", "性别", "年龄","手机号", "年级"],
       tableData: []
     };
   },
@@ -190,6 +191,7 @@ export default {
               else student.gender = "男";
               student.phone = allStudent[i].MOBILE_PHONE;
               student.grade = allStudent[i].GRADE;
+              student.age = allStudent[i].AGE;
               allStudentList.push(student);
             }
             this.tableData = allStudentList;
