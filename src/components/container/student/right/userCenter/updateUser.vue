@@ -161,10 +161,12 @@
                         } else {
                             console.log(data);
                             if (data.hasOwnProperty('ETag')) {
-                                alert("上传成功!");
+                                this.$toast.success({title:"个人中心",message:'修改成功'})
+                                // alert("上传成功!");
                                 // this.$router.replace({ path: '/Admin/courseManagement/' });
                             } else {
-                                alert("上传失败!");
+                                this.$toast.error({title:"个人中心",message:'修改失败'})
+                                // alert("上传失败!");
                             }
                         }
                     });
