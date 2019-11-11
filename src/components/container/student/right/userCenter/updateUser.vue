@@ -135,6 +135,7 @@
                 }
             },
             submit(event) {
+                var that = this
                 let postImgToS3 = function (config, file) {
                     AWS.config = new AWS.Config({
                         accessKeyId: config.AccessKeyId,
@@ -161,12 +162,16 @@
                         } else {
                             console.log(data);
                             if (data.hasOwnProperty('ETag')) {
+<<<<<<< HEAD
                                 this.$toast.success({title:"个人中心",message:'修改成功'})
                                 // alert("上传成功!");
                                 this.$router.replace({ path: '/dashboard/class' });
+=======
+                                that.$toast.error({title:"个人中心",message:'已保存'})
+                                // this.$router.replace({ path: '/Admin/courseManagement/' });
+>>>>>>> e3df57550a18ec350778ada76f04764bf9b4c83f
                             } else {
-                                this.$toast.error({title:"个人中心",message:'修改失败'})
-                                // alert("上传失败!");
+                                that.$toast.error({title:"个人中心",message:'保存失败'})
                             }
                         }
                     });
