@@ -162,8 +162,9 @@
                         } else {
                             console.log(data);
                             if (data.hasOwnProperty('ETag')) {
-                                that.$toast.error({title:"个人中心",message:'已保存'})
-                                // this.$router.replace({ path: '/Admin/courseManagement/' });
+                                this.$toast.success({title:"个人中心",message:'修改成功'})
+                                // alert("上传成功!");
+                                this.$router.replace({ path: '/dashboard/class' });
                             } else {
                                 that.$toast.error({title:"个人中心",message:'保存失败'})
                             }

@@ -68,6 +68,7 @@ import SelectInput from "../../Admin/utils/selectInput";
 import AWS from "aws-sdk";
 import globalAxios from "axios";
 import instance from "../../../../axios-auth.js";
+import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 
 export default {
   name: "addactivity",
@@ -152,6 +153,7 @@ export default {
         })
         .then(res => {
           console.log(res);
+          this.$toast.success({ title: "新增活动", message: "操作成功" });
           this.$router.replace({ path: "/eduAdmin/activity/",query:{alert:"1"} });
         })
         .catch(err => {
