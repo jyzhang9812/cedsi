@@ -1,3 +1,10 @@
+<!--
+ * @Email: rumosky@163.com
+ * @Author: rumosky
+ * @Github: https://github.com/rumosky
+ * @Date: 2019-09-04 23:30:17
+ * @Description: 教务角色管理教师页面
+ -->
 <template>
   <div id="teacherManagement">
     <!-- 添加教师模态框（Modal） -->
@@ -175,7 +182,7 @@ export default {
   components: { SelectInput, pagination },
   data() {
     return {
-      limit: 10,
+      limit: 15,
       currentList: [],
       inputData: {
         teacherName: ""
