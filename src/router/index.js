@@ -635,7 +635,7 @@ export default new Router({
             } else {
               next('/signin')
             }
-          }, component: eduStaging
+          }, component: classManagement
         },
         {
           path: '/eduAdmin/activity', beforeEnter(to, from, next) {

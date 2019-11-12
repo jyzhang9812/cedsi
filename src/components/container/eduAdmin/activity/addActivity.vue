@@ -39,7 +39,7 @@
     <div class="upload upload-height">
       <span class="upload-title">预览:</span>
       <div class="upload-cover-img">
-        <img id="headimage" :src="coverImageDisplay" class="cover-image" />
+        <img id="headimage" :src="coverImageDisplay" class="cover-image" alt=""/>
       </div>
     </div>
     <div class="upload">
@@ -52,7 +52,7 @@
     <div class="upload upload-height">
       <span class="upload-title">预览:</span>
       <div class="upload-cover-img">
-        <img id="headimage" :src="activityContentImageDisplay" class="cover-image" />
+        <img id="headimage" :src="activityContentImageDisplay" class="cover-image" alt=""/>
       </div>
     </div>
     <div class="upload-footer">

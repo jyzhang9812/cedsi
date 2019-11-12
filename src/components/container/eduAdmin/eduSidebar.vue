@@ -35,13 +35,13 @@
     data() {
       return {
         aside: [
-          {
-            name: "工作台",
-            icon: 'fa-desktop',
-            children: [],
-            close: true,
-            route: "/eduAdmin/"
-          },
+          // {
+          //   name: "工作台",
+          //   icon: 'fa-desktop',
+          //   children: [],
+          //   close: true,
+          //   route: "/eduAdmin/"
+          // },
           {
             name: "教务管理",
             icon: 'fa-graduation-cap',
