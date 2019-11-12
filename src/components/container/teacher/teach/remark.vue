@@ -37,7 +37,7 @@
             <td>
               <button class="edit" data-toggle="modal" data-target="#remarkHomework" data-index="index"
                 @click="viewWork(line)">查看作品</button>&nbsp;&nbsp;
-              <!-- <span class="blue" @click="popModal('remark', line)">点评</span>&nbsp;&nbsp; -->
+              <span class="blue" @click="popModal('remark', line)">点评</span>&nbsp;&nbsp;
               <!-- <span class="blue" @click="popModal('turndown', line)">驳回</span>&nbsp;&nbsp; -->
               <!-- <span class="red" @click="popModal('delete', line)">删除</span> -->
             </td>
