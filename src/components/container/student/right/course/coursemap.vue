@@ -14,7 +14,7 @@
               </div>
               <button class="study-btn" data-toggle="modal" data-target="#myVideo">开始学习</button>
             </div>
-            <div class="right-box">
+            <div class="right-box" v-if='role!=0'>
               <p class="course-intro">课程介绍</p>
               <p class="intro-detials">{{courseIntro}}</p>
               <p class="course-warn">
@@ -24,6 +24,11 @@
               </p>
               <router-link class="work-btn" data-dismiss="modal" :to="{name:'addHomework',query:{chapterId:chapterId,courseId:this.courseId,chapterName:chapterName}}">我要做作业</router-link>
               <p class="preview">预览讲义</p>
+            </div>
+            <div class="right-box" v-if='role==0'>
+              <p class="course-intro">课程介绍</p>
+              <p class="intro-detials">{{courseIntro}}</p>
+              <button class="work-btn" data-dismiss="modal">预览讲义</button>
             </div>
           </div>
         </div>
@@ -85,6 +90,7 @@
         i: 0,
         videoend: false,
         chapterId: "",
+        role:0,
       };
     },
     methods: {
@@ -142,6 +148,7 @@
       this.$store.commit("updateLoading", true);
       this.$store.dispatch("getCourseDetail", this.$route.query.id);
       this.userName = window.localStorage.getItem("user");
+      this.role = window.localStorage.getItem("roleId");
     },
     computed: {
       ...mapState({
