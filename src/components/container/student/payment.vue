@@ -74,7 +74,7 @@
         let payment = {
           orderId: this.orderId,
           productId: this.$route.query.id,
-          productName: this.payinfo.title,
+          productName: this.payinfo.name,
           userId: localStorage.getItem('userId'),
           fee: this.payinfo.price * 100
         };
