@@ -162,11 +162,11 @@
                         } else {
                             console.log(data);
                             if (data.hasOwnProperty('ETag')) {
-                                this.$toast.success({title:"个人中心",message:'修改成功'})
+                                that.$toast.success({title:"个人中心",message:'头像修改成功'})
                                 // alert("上传成功!");
-                                this.$router.replace({ path: '/dashboard/class' });
+                                that.$router.replace({ path: '/dashboard/class' });
                             } else {
-                                that.$toast.error({title:"个人中心",message:'保存失败'})
+                                that.$toast.error({title:"个人中心",message:'头像保存失败'})
                             }
                         }
                     });
@@ -196,6 +196,11 @@
                 })
                     .then((res) => {
                         console.log(res);
+                        if(res.status=='200'){
+                            this.$toast.success({title:"个人中心",message:'修改成功'})
+                        }else{
+                            this.$toast.error({title:"个人中心",message:'修改失败'})
+                        }
                         if(res.data.AccessKeyId){
                         postImgToS3(res.data, file);}
                     })

@@ -109,7 +109,11 @@ const actions = {
                         console.log('error')
                     }
                     else {
-                        router.replace({ path: state.roles[state.roleId - 1] })
+                        if(state.roleId==0){
+                            router.replace({ path: state.roles[state.roleId] })
+                        }else{
+                            router.replace({ path: state.roles[state.roleId - 1] })
+                        }
                     }
                 },
                 error => {

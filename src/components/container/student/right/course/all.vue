@@ -82,9 +82,10 @@
                 <div class="outside">
                     <h4>{{item.COURSE_NAME}}</h4>
                     <div class="right">
-                        <button :class="(index==i)?'btnh btn_green':'btn'" data-toggle="modal"
-                        data-target="#myVideo" @click='changeCourseNum(index)'>试听</button>
-                        <button :class="(index==i)?'btnh':'btn'" @click='jmpPay(index)'>{{item.PRICE!=0?'购买':'学习'}}课程</button>
+                        <button :class="(index==i)?'btnh btn_green':'btn'" data-toggle="modal" data-target="#myVideo"
+                            @click='changeCourseNum(index)'>试听</button>
+                        <button :class="(index==i)?'btnh':'btn'"
+                            @click='jmpPay(index)'>{{item.PRICE!=0?'购买':'学习'}}课程</button>
                     </div>
                 </div>
                 <!-- </router-link> -->
@@ -165,16 +166,23 @@
             },
             changeCourseNum(index) {
                 this.courseNum = index;
-                this.$store.dispatch('getCourseDetail',this.currentList[index].ID).then(()=>{
+                this.$store.dispatch('getCourseDetail', this.currentList[index].ID).then(() => {
                     this.videosrc = this.$store.state.pointList[0].videoSrc
                     console.log(this.videosrc)
                 })
             },
             jmpPay(index) {
-                if(this.currentList[index].PRICE!=0){
-                this.$router.push({path:'/payment',query: { id: this.currentList[index].ID,type:2} })
-                }else{
-                this.$router.push({path:'/dashboard/coursemap',query: { id: this.currentList[index].ID} })
+                if (this.currentList[index].PRICE != 0) {
+                    this.$router.push({ path: '/payment', query: { id: this.currentList[index].ID, type: 2 } })
+                } else {
+                    let allid = {
+                        id: this.currentList[index].ID,
+                        orderId: '000',
+                        cover: this.currentList[index].COVER
+                    }
+                    this.$store.dispatch('postCourseId', allid).then(()=>{
+                        this.$router.push({ path: '/dashboard/coursemap', query: { id: this.currentList[index].ID } })
+                    })
                 }
             },
             handle() {
@@ -211,7 +219,7 @@
             // })
 
             this.$store.commit('updateLoading', true)
-            this.$store.dispatch('getCourse').then(()=>{
+            this.$store.dispatch('getCourse').then(() => {
                 this.$store.dispatch('getAllCourse')
             })
         },
@@ -227,7 +235,7 @@
 
 
 <style scoped>
-    #allCourse{
+    #allCourse {
         margin: 0;
     }
 
