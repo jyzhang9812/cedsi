@@ -177,8 +177,8 @@
                 } else {
                     let allid = {
                         id: this.currentList[index].ID,
-                        orderId: '000',
-                        cover: this.currentList[index].COVER
+                        // orderId: '000',
+                        // cover: this.currentList[index].COVER
                     }
                     this.$store.dispatch('postCourseId', allid).then(()=>{
                         this.$router.push({ path: '/dashboard/coursemap', query: { id: this.currentList[index].ID } })
