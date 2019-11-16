@@ -15,7 +15,7 @@
                 <div class="iconleft" v-on:click="zuohua(0)" v-show='calleft[0]!=0'>
                     <i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i>
                 </div>
-                <ul :style="{'left':calleft[0] + 'px','width':slidePic.length*350+'px'}">
+                <ul :style="{'left':calleft[0] + 'px','width':(40+slidePic.length*340)+'px'}">
                     <li class="course_card" v-for="(item,index) in slidePic" :key="index" @mouseover="show(index)"
                         @mouseleave="hidden(index)">
                         <div class="inside">
