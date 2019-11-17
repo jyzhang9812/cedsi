@@ -1,11 +1,11 @@
 <!--
  * @Email: rumosky@163.com
  * @Author: rumosky
- * @Gitee: https://gitee.com/rumosky_admin
- * @Date: 2019-10-18 17:02:27
+ * @Github: https://github.com/rumosky
+ * @Date: 2019-09-14 21:50:53
  * @Description: 教务角色发布活动页面
  -->
- <template>
+<template>
   <div id="add-activity">
     <div class="upload">
       <span class="upload-title">活动名称:</span>
@@ -28,7 +28,7 @@
     <!-- <div class="upload">
       <span class="upload-title">活动价格:</span>
       <input class="upload-input" placeholder="请输入活动价格" v-model="activityPrice" />
-    </div> -->
+    </div>-->
     <div class="upload">
       <span class="upload-title">上传活动封面:</span>
       <div class="upload-cover-btn">
@@ -39,7 +39,7 @@
     <div class="upload upload-height">
       <span class="upload-title">预览:</span>
       <div class="upload-cover-img">
-        <img id="headimage" :src="coverImageDisplay" class="cover-image" alt=""/>
+        <img id="headimage" :src="coverImageDisplay" class="cover-image" alt />
       </div>
     </div>
     <div class="upload">
@@ -52,7 +52,7 @@
     <div class="upload upload-height">
       <span class="upload-title">预览:</span>
       <div class="upload-cover-img">
-        <img id="headimage" :src="activityContentImageDisplay" class="cover-image" alt=""/>
+        <img id="headimage" :src="activityContentImageDisplay" class="cover-image" alt />
       </div>
     </div>
     <div class="upload-footer">
@@ -118,7 +118,7 @@ export default {
         that.coverImageDisplay = this.result;
       };
     },
-    getActivityImg(event) {   
+    getActivityImg(event) {
       this.activityContentImage = event.target.files[0];
       console.log(this.activityContentImage);
       this.activityContentImageType =
@@ -154,7 +154,10 @@ export default {
         .then(res => {
           console.log(res);
           this.$toast.success({ title: "新增活动", message: "操作成功" });
-          this.$router.replace({ path: "/eduAdmin/activity/",query:{alert:"1"} });
+          this.$router.replace({
+            path: "/eduAdmin/activity/",
+            query: { alert: "1" }
+          });
         })
         .catch(err => {
           console.log(err);
@@ -227,6 +230,11 @@ export default {
   margin-bottom: 20px;
 }
 
+#add-activity .upload img {
+  width: 18px;
+  height: 18px;
+}
+
 #add-activity .upload-title {
   color: #606266;
   display: block;
@@ -258,6 +266,7 @@ export default {
   margin-left: 10px !important;
   height: 40px !important;
   width: 300px !important;
+  line-height: 40px;
 }
 
 #add-activity .upload-textarea {
@@ -290,6 +299,7 @@ export default {
   height: 35px !important;
   font-size: 14px !important;
   width: 230px !important;
+  text-align: inherit !important;
 }
 
 #add-activity .dropdown-menu {
