@@ -1,8 +1,8 @@
 <!--
  * @Email: rumosky@163.com
  * @Author: rumosky
- * @Gitee: https://gitee.com/rumosky_admin
- * @Date: 2019-10-22 19:27:43
+ * @Github: https://github.com/rumosky
+ * @Date: 2019-11-12 20:08:53
  * @Description: 管理员角色发布活动页面
  -->
 <template>
@@ -223,6 +223,11 @@ export default {
   width: 100%;
   height: 50px;
   margin-bottom: 20px;
+}
+
+#add-activity .upload img {
+  width: 18px;
+  height: 18px;
 }
 
 #add-activity .upload-title {

@@ -1,5 +1,5 @@
 <template>
-  <div id="datePicker">
+  <div class="outside">
     <img class="icon-prefix" :src="inputPrefixSrc" alt="">
     <label :for="id"></label>
     <input type="text" :id="id" :value="date" :placeholder='tips' class="inputbox">
@@ -43,7 +43,7 @@
 </script>
 
 <style scoped>
-  #datePicker{
+  .outside {
     display: inline-block;
     border: 1px solid #409eff;
     width: 180px;
@@ -53,25 +53,21 @@
     transition: all .3s cubic-bezier(.645, .045, .355, 1);
   }
 
-  #datePicker .outside:hover {
+  .outside:hover {
     border-color: #c0c4cc;
   }
 
-  #datePicker .icon-prefix {
-    display: inline-block;
-    height: 18px;
-    width: 18px;
+  .icon-prefix {
+    display: inline;
     margin-left: 5px;
   }
 
-  #datePicker .icon-suffix {
-    display: inline-block;
-    height: 18px;
-    width: 18px;
+  .icon-suffix {
+    display: inline;
     cursor: pointer;
   }
 
-  #datePicker .inputbox {
+  .inputbox {
     text-align: center;
     height: 30px;
     width: 120px;
@@ -80,11 +76,11 @@
     font-size: 12px;
   }
 
-  #datePicker .inputbox:focus {
+  .inputbox:focus {
     outline: none;
   }
 
-  #datePicker .inputbox::placeholder {
+  .inputbox::placeholder {
     font-size: 12px;
   }
 </style>
