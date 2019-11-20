@@ -46,7 +46,7 @@
               @click="deletevideo">&times;</button>
           </div>
           <div class="modal-body modal-box">
-            <Media :autoplay="false" :kind="'video'" :controls="true" :src="videosrc"
+            <Media :controls="true" :controlslist="'nodownload'" :autoplay="false" disablePictureInPicture :kind="'video'" :src="videosrc"
               style="height: 400px;width: 700px;" @ended="videoEnd()"></Media>
           </div>
         </div>
