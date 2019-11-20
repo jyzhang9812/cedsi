@@ -131,7 +131,6 @@
     width: 98%;
     margin: 0 auto;
   }
-
   #courseManagement .breadcrumb {
     background-color: #fff;
     color: #606266;
@@ -257,9 +256,10 @@
   /*课程详情模态框*/
   #courseManagement .modal-list {
     width: 100%;
-    height: 40px;
+    min-height: 40px;
     line-height: 40px;
     clear: both;
+    overflow:hidden;
   }
 
   #courseManagement .modal-list-title {
