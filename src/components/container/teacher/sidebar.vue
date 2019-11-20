@@ -98,14 +98,10 @@
                 name: "个人资料",
                 route: "/console/userCenter"
               },
-              // {
-              //   name: "个人资料",
-              //   route: "/console/space"
-              // },
-              // {
-              //   name: "修改密码",
-              //   route: "/console/password"
-              // }
+              {
+                name: "所带班级",
+                route: "/console/teachingClass"
+              }
             ],
             close: true,
           }],
