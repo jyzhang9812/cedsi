@@ -37,7 +37,7 @@
                 @focus="usernameFocus"
                 @blur="usernameBlur"
               />
-              <span class="tiShi">{{ tiShi.tishi1 }}</span>
+              <span class="tip">{{ tip.tip1 }}</span>
               <span class="focus-input100" data-placeholder></span>
             </div>
             <div class="text-center p-t-90" v-if="submit && !checkusr()">
@@ -54,7 +54,7 @@
                 @focus="passwordFocus"
                 @blur="passwordBlur"
               />
-              <span class="tiShi">{{ tiShi.tishi2 }}</span>
+              <span class="tip">{{ tip.tip2 }}</span>
               <span class="focus-input100" data-placeholder></span>
             </div>
             <div class="text-center p-t-90" v-if="submit && !checkpwd()">
@@ -97,9 +97,9 @@ export default {
       confirmPassword: "",
       role: "1",
       username: "",
-      tiShi: {
-        tishi1: "",
-        tishi2: "",
+      tip: {
+        tip1: "",
+        tip2: "",
       },
       submit: 0,
       code: "",
@@ -113,9 +113,9 @@ export default {
         ""
       );
       this.username = this.username.replace(/[^_A-Za-z0-9\u4e00-\u9fa5]/g,'');
-      console.log(this.tiShi.tishi1.length);
+      console.log(this.tip.tip1.length);
       if (this.username.length >= 6 && this.username.length <= 12) {
-        this.tiShi.tishi1 = "";
+        this.tip.tip1 = "";
         this.username = this.username.substring(0,12);
         console.log(this.username);
       }
@@ -128,7 +128,7 @@ export default {
       this.password = this.password.replace(/[\W]/g, "");
       console.log(this.password);
       if (this.password.length >= 6 && this.password.length <= 12) {
-        this.tiShi.tishi2 = "";
+        this.tip.tip2 = "";
       }
     }
   },
@@ -150,15 +150,10 @@ export default {
       console.log(formData);
       if (this.checkusr() && this.checkpwd() && this.onConfirm()) {
         this.$store.dispatch("signup", formData);
-        // console.log("okoko!");
       } else {
         console.log("aaa");
       }
     },
-    // changeType() {
-    //   this.pwdType = this.pwdType === 'password' ? 'text' : 'password';
-    //   this.seen = !this.seen;//小眼睛的变化
-    // },
     checkNull(arr) {
       if (arr == "") {
         return 0;
@@ -170,10 +165,10 @@ export default {
       } else return 1;
     },
     usernameFocus(){
-      this.tiShi.tishi1 = "请输入6~12位数字和大小写字母";
+      this.tip.tip1 = "请输入6~12位数字和大小写字母";
     },
     usernameBlur(){
-      this.tiShi.tishi1 = "";
+      this.tip.tip1 = "";
     },
     checkusr() {
       return this.checkNull(this.username) && this.checkNum(this.username);
@@ -182,10 +177,10 @@ export default {
       return this.checkNull(this.account);
     },
     passwordFocus(){
-      this.tiShi.tishi2 = "请输入6~12位数字、大小写字母和字符";
+      this.tip.tip2 = "请输入6~12位数字、大小写字母和字符";
     },
     passwordBlur(){
-      this.tiShi.tishi2 = "";
+      this.tip.tip2 = "";
     },
     checkpwd() {
       return this.checkNull(this.password) && this.checkNum(this.password);
@@ -292,7 +287,7 @@ input {
   border: none;
 }
 
-.tiShi {
+.tip {
   color: #f87c56;
 }
 
