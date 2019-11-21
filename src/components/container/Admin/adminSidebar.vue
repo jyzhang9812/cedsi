@@ -1,5 +1,6 @@
 <template>
-  <div class="row" id="admin-sidebar">
+  <allsidebar :allside="aside"></allsidebar>
+  <!-- <div class="row" id="admin-sidebar">
     <div class="aside">
       <ul class="menu nav">
         <li v-for="item in aside" :class="item.close==false?'bg-hover active':'bg-hover'" :key="item.name">
@@ -23,14 +24,16 @@
     <div class="sonContainer">
       <router-view></router-view>
     </div>
-  </div>
+  </div> -->
 
 </template>
 
 <script>
+import allsidebar from '../../sidebar/allSidebar.vue'
 import { fail } from 'assert';
   export default {
     name: "asider",
+    components:{allsidebar},
     data() {
       return {
         aside: [
@@ -75,14 +78,14 @@ import { fail } from 'assert';
         width: 0
       }
     },
-    methods: {
-      dropDownListListener(item) {
-        if (item.children.length === 0) {
-          this.$router.push(item.route);
-        } else {
-          item.close = !item.close;
-        }
-      },
+    // methods: {
+    //   dropDownListListener(item) {
+    //     if (item.children.length === 0) {
+    //       this.$router.push(item.route);
+    //     } else {
+    //       item.close = !item.close;
+    //     }
+    //   },
       //导航active样式
       // nav(){
       //   var currentRoute=this.$route.fullPath
@@ -94,17 +97,17 @@ import { fail } from 'assert';
       //       this.aside[i].close=true;
       //   }
       // }
-    },
-    created: function () {
-      var currentRoute=this.$route.fullPath
-      this.width = document.documentElement.clientWidth
-      this.screenWidth = 'min-width:' + (this.width - 320) + 'px;'
-      //this.nav(currentRoute)
-    }
+    // },
+    // created: function () {
+    //   var currentRoute=this.$route.fullPath
+    //   this.width = document.documentElement.clientWidth
+    //   this.screenWidth = 'min-width:' + (this.width - 320) + 'px;'
+    //   //this.nav(currentRoute)
+    // }
   }
 </script>
 
-<style scoped>
+<!-- <style scoped>
   .row {
     margin: 0 !important;
     width: 100%;
@@ -169,4 +172,4 @@ import { fail } from 'assert';
     width: 18px;
     height: 18px;
   }
-</style>
+</style> -->

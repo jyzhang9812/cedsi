@@ -172,22 +172,22 @@ const postJob = resolve => {
   require.ensure(['../components/container/teacher/teach/postJob.vue'], () => {
     resolve(require('../components/container/teacher/teach/postJob.vue'));
   });
-}
+};
 const coursePlan = resolve => {
   require.ensure(['../components/container/teacher/teach/coursePlan.vue'], () => {
     resolve(require('../components/container/teacher/teach/coursePlan.vue'));
   });
-}
+};
 const teacherUserCenter = resolve => {
   require.ensure(['../components/container/teacher/teacherUserCenter/teacherUserCenter.vue'], () => {
     resolve(require('../components/container/teacher/teacherUserCenter/teacherUserCenter.vue'));
   });
 };
-const teachingClass = resolve => {
-  require.ensure(['../components/container/teacher/teacherUserCenter/teachingClass.vue'], () => {
-    resolve(require('../components/container/teacher/teacherUserCenter/teachingClass.vue'));
+const teacherClass = resolve => {
+  require.ensure(['../components/container/teacher/teacherUserCenter/teacherClass.vue'],() => {
+    resolve(require('../components/container/teacher/teacherUserCenter/teacherClass.vue'));
   });
-}
+};
 //以下是教务角色
 const eduAdmin = resolve => {
   require.ensure(['../components/container/eduAdmin/eduSidebar.vue'], () => {
@@ -396,68 +396,148 @@ const router = new Router({
       component: asider,
       children: [
         {
-          path: '/console/space',
-          component: space
+          path: '/console/space', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: space
         },
         {
-          path: '/console/password',
-          component: password
+          path: '/console/password', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: password
         },
         {
-          path: '/console/homework',
-          component: remark
+          path: '/console/homework', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: remark
         },
         {
-          path: '/console/choiceness',
-          component: choiceness
+          path: '/console/choiceness', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: choiceness
         },
         {
-          path: '/console/video',
-          component: videos
+          path: '/console/video', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: videos
         },
         {
-          path: '/console/activity',
-          component: activity
+          path: '/console/activity', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: activity
         },
         {
-          path: '/console/question',
-          component: quiz
+          path: '/console/question', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: quiz
         },
         {
-          path: '/console/opuscomment',
-          component: opuscomment
+          path: '/console/opuscomment', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: opuscomment
         },
         {
-          path: '/console/topiccomment',
-          component: topiccomment
+          path: '/console/topiccomment', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: topiccomment
         },
         {
-          path: '/console/material',
-          component: material
+          path: '/console/material', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: material
         },
         {
-          path: '/console/statistics',
-          component: statistics
+          path: '/console/statistics', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: statistics
         },
         {
-          path: '/console/message',
-          component: tMessage
+          path: '/console/message', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: tMessage
         },
         {
-          path: '/console/postJob',
-          component: postJob
+          path: '/console/postJob', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: postJob
         },
         {
-          path: '/console/coursePlan',
-          component: coursePlan
+          path: '/console/coursePlan', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: coursePlan
         },
         {
-          path: '/console/userCenter',
-          component: teacherUserCenter
+          path: '/console/userCenter', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: teacherUserCenter
         },
         {
-          path: '/console/teachingClass',
-          component: teachingClass
+          path: '/console/teacherClass', beforeEnter(to,from,next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: teacherClass
         }
       ]
     },
