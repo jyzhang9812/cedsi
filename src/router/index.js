@@ -184,7 +184,7 @@ const teacherUserCenter = resolve => {
   });
 };
 const teacherClass = resolve => {
-  require.ensure(['../components/container/teacher/teacherUserCenter/teacherClass.vue'],() => {
+  require.ensure(['../components/container/teacher/teacherUserCenter/teacherClass.vue'], () => {
     resolve(require('../components/container/teacher/teacherUserCenter/teacherClass.vue'));
   });
 };
@@ -531,7 +531,7 @@ const router = new Router({
           }, component: teacherUserCenter
         },
         {
-          path: '/console/teacherClass', beforeEnter(to,from,next) {
+          path: '/console/teacherClass', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
               next()
             } else {
@@ -655,7 +655,8 @@ router.beforeEach((to, from, next) => {
   if (window.localStorage.getItem("idToken")) {
     next();
   } else {
-    to.path === '/signin' ? next() : next('/signin');
+    let condition = to.path === '/signin' || to.path === '/signup';
+    condition ? next() : next('/signin');
   }
 });
 
