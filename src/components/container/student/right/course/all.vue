@@ -53,8 +53,8 @@
                             @click="deletevideo">&times;</button>
                     </div>
                     <div class="modal-box">
-                        <Media :autoplay="false" :kind="'video'" :controls="true" :src="videosrc"
-                            style="height: 400px;width: 700px;" @pause="handle()"></Media>
+                        <Media :controls="true" :controlslist="'nodownload'" :autoplay="false" disablePictureInPicture :kind="'video'" :src="videosrc"
+                            style="height: 400px;width: 700px;"  @pause="handle()"></Media>
                     </div>
                 </div>
             </div>
@@ -180,7 +180,7 @@
                         // orderId: '000',
                         // cover: this.currentList[index].COVER
                     }
-                    this.$store.dispatch('postCourseId', allid).then(()=>{
+                    this.$store.dispatch('postCourseId', allid).then(() => {
                         this.$router.push({ path: '/dashboard/coursemap', query: { id: this.currentList[index].ID } })
                     })
                 }
