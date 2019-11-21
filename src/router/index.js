@@ -172,15 +172,20 @@ const postJob = resolve => {
   require.ensure(['../components/container/teacher/teach/postJob.vue'], () => {
     resolve(require('../components/container/teacher/teach/postJob.vue'));
   });
-}
+};
 const coursePlan = resolve => {
   require.ensure(['../components/container/teacher/teach/coursePlan.vue'], () => {
     resolve(require('../components/container/teacher/teach/coursePlan.vue'));
   });
-}
+};
 const teacherUserCenter = resolve => {
   require.ensure(['../components/container/teacher/teacherUserCenter/teacherUserCenter.vue'], () => {
     resolve(require('../components/container/teacher/teacherUserCenter/teacherUserCenter.vue'));
+  });
+};
+const teacherClass = resolve => {
+  require.ensure(['../components/container/teacher/teacherUserCenter/teacherClass.vue'], () => {
+    resolve(require('../components/container/teacher/teacherUserCenter/teacherClass.vue'));
   });
 };
 //以下是教务角色
@@ -315,7 +320,7 @@ const adminUserCenter = resolve => {
 };
 Vue.use(Router);
 //增加了导航钩子，如果没有token则不能进入页面
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     { path: '*', component: ErrorPage }, //重定向
@@ -325,160 +330,69 @@ export default new Router({
     { path: '/404', component: ErrorPage },
     {
       path: '/dashboard',
-      beforeEnter(to, from, next) {
-        if (window.localStorage.getItem("idToken")) {
-          next()
-        } else {
-          next('/signin')
-        }
-      },
       component: sidebar, children: [
         {
           path: '/dashboard/showPage',
-          beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          },
           component: showPage
         },
         {
-          path: '/dashboard/community', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: community
+          path: '/dashboard/community',
+          component: community
         },
         {
           path: '/dashboard/class',
-          beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          },
           component: myclass
         },
         {
-          path: '/dashboard/message', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: message
+          path: '/dashboard/message',
+          component: message
         },
         {
-          path: '/dashboard/homework', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: homework
+          path: '/dashboard/homework',
+          component: homework
         },
         {
-          path: '/dashboard/create', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: create
+          path: '/dashboard/create',
+          component: create
         },
         {
-          path: '/dashboard/course', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: course
+          path: '/dashboard/course',
+          component: course
         },
         {
-          path: '/dashboard/presentation', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: presentation
+          path: '/dashboard/presentation',
+          component: presentation
         },
         {
-          path: '/dashboard/question', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: question
+          path: '/dashboard/question',
+          component: question
         },
       ]
     },
     {
       path: '/payment',
-      beforeEnter(to, from, next) {
-        if (window.localStorage.getItem("idToken")) {
-          next()
-        } else {
-          next('/signin')
-        }
-      },
       component: payment
     },
     {
       path: '/payOK',
-      beforeEnter(to, from, next) {
-        if (window.localStorage.getItem("idToken")) {
-          next()
-        } else {
-          next('/signin')
-        }
-      },
       component: payOK
     },
     {
       path: '/activitydetailCard',
-      beforeEnter(to, from, next) {
-        if (window.localStorage.getItem("idToken")) {
-          next()
-        } else {
-          next('/signin')
-        }
-      },
       component: activitydetailCard
     },
     {
-      path: '/dashboard/coursemap', beforeEnter(to, from, next) {
-        if (window.localStorage.getItem("idToken")) {
-          next()
-        } else {
-          next('/signin')
-        }
-      }, name: 'coursemap', component: coursemap
+      path: '/dashboard/coursemap',
+      name: 'coursemap',
+      component: coursemap
     },
     {
-      path: '/dashboard/addHomework', beforeEnter(to, from, next) {
-        if (window.localStorage.getItem("idToken")) {
-          next()
-        } else {
-          next('/signin')
-        }
-      }, name: 'addHomework', component: addHomework
+      path: '/dashboard/addHomework',
+      name: 'addHomework',
+      component: addHomework
     },
     {
-      path: '/console', beforeEnter(to, from, next) {
-        if (window.localStorage.getItem("idToken")) {
-          next()
-        } else {
-          next('/signin')
-        }
-      },
+      path: '/console',
       component: asider,
       children: [
         {
@@ -615,245 +529,135 @@ export default new Router({
               next('/signin')
             }
           }, component: teacherUserCenter
+        },
+        {
+          path: '/console/teacherClass', beforeEnter(to, from, next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: teacherClass
         }
       ]
     },
     {
-      path: '/eduAdmin', beforeEnter(to, from, next) {
-        if (window.localStorage.getItem("idToken")) {
-          next()
-        } else {
-          next('/signin')
-        }
-      },
+      path: '/eduAdmin',
       component: eduAdmin,
       children: [
         {
-          path: '/eduAdmin/', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: classManagement
+          path: '/eduAdmin/',
+          component: classManagement
         },
         {
-          path: '/eduAdmin/activity', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: eduActivity
+          path: '/eduAdmin/activity',
+          component: eduActivity
         },
         {
-          path: '/eduAdmin/activity/addActivity', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: addActivity
+          path: '/eduAdmin/activity/addActivity',
+          component: addActivity
         },
         {
-          path: '/eduAdmin/classManagement', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: classManagement
+          path: '/eduAdmin/classManagement',
+          component: classManagement
         },
         {
-          path: '/eduAdmin/classManagement/:classId/addStudent', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: addStudent
+          path: '/eduAdmin/classManagement/:classId/addStudent',
+          component: addStudent
         },
         {
-          path: '/eduAdmin/stuManagement', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: stuManagement
+          path: '/eduAdmin/stuManagement',
+          component: stuManagement
         },
         {
-          path: '/eduAdmin/teaching', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: teaching
+          path: '/eduAdmin/teaching',
+          component: teaching
         },
         {
-          path: '/eduAdmin/eduStatistice', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: eduStatistics
+          path: '/eduAdmin/eduStatistice',
+          component: eduStatistics
         },
         {
-          path: '/eduAdmin/teacherManagement', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: teacherManagement
+          path: '/eduAdmin/teacherManagement',
+          component: teacherManagement
         },
         {
-          path: '/eduAdmin/userCenter', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: eduUserCenter
+          path: '/eduAdmin/userCenter',
+          component: eduUserCenter
         },
       ]
     },
     {
-      path: '/superAdmin', beforeEnter(to, from, next) {
-        if (window.localStorage.getItem("idToken")) {
-          next()
-        } else {
-          next('/signin')
-        }
-      },
+      path: '/superAdmin',
       component: superAdmin,
       children: [
         {
-          path: '/superAdmin/', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: adminManagement
-        },
+          path: '/superAdmin/',
+          component: adminManagement
+        }
       ]
     },
     {
       path: '/Admin',
       component: Admin,
       children: [
-        // {
-        //   path: '/Admin/', beforeEnter(to, from, next) {
-        //     if (window.localStorage.getItem("idToken")) {
-        //       next()
-        //     } else {
-        //       next('/signin')
-        //     }
-        //   }, component: eduAdminManagement
-        // },
         {
-          path: '/Admin/', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: courseManagement
+          path: '/Admin/',
+          component: courseManagement
         },
         {
-          path: '/Admin/videoManagement/:courseId/uploadVideo', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: uploadVideo
+          path: '/Admin/videoManagement/:courseId/uploadVideo',
+          component: uploadVideo
         },
         {
-          path: '/Admin/videoManagement', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: videoManagement
+          path: '/Admin/videoManagement',
+          component: videoManagement
         },
         {
-          path: '/Admin/courseManagement/addCourse', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: addCourse
+          path: '/Admin/courseManagement/addCourse',
+          component: addCourse
         },
         {
-          path: '/Admin/chapterManagement/:courseId', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: chapterManagement
+          path: '/Admin/chapterManagement/:courseId',
+          component: chapterManagement
         },
         {
-          path: '/Admin/chapterManagement/:courseId/addChapter', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: addChapter, name: 'addChapter'
+          path: '/Admin/chapterManagement/:courseId/addChapter',
+          component: addChapter,
+          name: 'addChapter'
         },
         {
-          path: '/Admin/organizationManagement', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: organizationManagement
+          path: '/Admin/organizationManagement',
+          component: organizationManagement
         },
         {
-          path: '/Admin/organizationManagement/addOrganization', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: addOrganization
+          path: '/Admin/organizationManagement/addOrganization',
+          component: addOrganization
         },
         {
-          path: '/Admin/activityManagement', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: activityManagement
+          path: '/Admin/activityManagement',
+          component: activityManagement
         },
         {
-          path: '/Admin/activityManagement/addActivity', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: activityManagementAdd
+          path: '/Admin/activityManagement/addActivity',
+          component: activityManagementAdd
         },
         {
-          path: '/Admin/userCenter', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: adminUserCenter
-        },
+          path: '/Admin/userCenter',
+          component: adminUserCenter
+        }
       ]
     }
   ]
-})
+});
+
+router.beforeEach((to, from, next) => {
+  if (window.localStorage.getItem("idToken")) {
+    next();
+  } else {
+    let condition = to.path === '/signin' || to.path === '/signup';
+    condition ? next() : next('/signin');
+  }
+});
+
+export default router;

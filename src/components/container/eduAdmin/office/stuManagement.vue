@@ -43,6 +43,8 @@
     </div>
     <div class="second-floor">
       <button class="btn btn-clear" data-toggle="modal" data-target="#addStudents">批量导入</button>
+       <input class="searchtext" type="text" placeholder="请输入学生的姓名或学号" v-model="inputData.keywords" />
+      <button type="button" class="btn btn-search" v-on:click="conditionSearch">搜索</button>
     </div>
     <div class="forth-floor">
       <table class="table table-hover">
@@ -67,7 +69,7 @@
         </tbody>
       </table>
     </div>
-    <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit"></pagination>
+    <pagination :num="tempTableData.length" @getNew="getNew" :limit="limit"></pagination>
   </div>
 </template>
 
@@ -86,11 +88,48 @@ export default {
       fileName:"",
       limit: 10,
       currentList: [],
+       inputData: {
+        keywords: "",
+      },
       tableTitle: ["序号", "学号", "头像", "姓名", "性别", "年龄","手机号", "年级"],
-      tableData: []
+      tableData: [],
+      tempTableData:[],
     };
   },
   methods: {
+    //搜索学生
+    getNew(value) {
+      let currentPage = value / this.limit;
+      this.currentPage = currentPage;
+      this.currentList = this.tempTableData.slice(value, value + this.limit);
+    },
+    conditionSearch() {
+      let temp = this.nameOrStuIDFilter(
+        this.inputData.keywords,
+        this.tableData,
+      );
+      this.tempTableData= temp;
+      // this.currentList=temp;
+      this.getNew(0);
+    },
+    nameOrStuIDFilter(nameOrID, tableList) {
+        if (nameOrID === "") return tableList;
+        let restTableList = tableList.slice(0);
+        for (let i = 0, j = restTableList.length; i < j; i++) {
+          if ((!new RegExp(nameOrID).test(restTableList[i]["name"])) &&
+            (!new RegExp(nameOrID).test(restTableList[i]["id"]))) {
+            restTableList.splice(i, 1);
+            j -= 1;
+            i -= 1;
+          }
+        }
+        return restTableList;
+      },
+      changeTablePages(value) {
+      let currentPage = value / this.limit;
+      this.currentPage = currentPage;
+      this.currentList = this.tableData.slice(value, value + this.limit);
+      },
     //下载模板
     download() {
       window.open(
@@ -161,9 +200,9 @@ export default {
         reader.readAsBinaryString(file); // 传统input方法
       });
     },
-    changeTablePages(value) {
-      this.currentList = this.tableData.slice(value, value + this.limit);
-    },
+    // changeTablePages(value) {
+    //   this.currentList = this.tempTableData.slice(value, value + this.limit);
+    // },
     getStudents() {
       var token = window.localStorage.getItem("idToken");
       globalAxios
@@ -196,11 +235,17 @@ export default {
             }
             this.tableData = allStudentList;
             console.log(this.tableData);
+            this.tempTableData=this.tableData;
             this.changeTablePages(0);
+           
           },
           error => {}
         );
     }
+  },
+  mounted() {
+     this.tempTableData=this.tableData;
+    this.getNew(0);
   },
   mounted() {
     //this.tableData = this.originalTableData;
@@ -292,8 +337,14 @@ export default {
 
 #stuManagement .btn-clear {
   width: 78px;
+   margin-right: 70%;
 }
-
+#stuManagement .btn-search {
+  width: 78px;
+}
+#stuManagement .searchtext{
+  width:20%;
+}
 #stuManagement .blue {
   cursor: pointer;
   color: #409eff;
