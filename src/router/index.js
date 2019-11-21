@@ -172,15 +172,20 @@ const postJob = resolve => {
   require.ensure(['../components/container/teacher/teach/postJob.vue'], () => {
     resolve(require('../components/container/teacher/teach/postJob.vue'));
   });
-}
+};
 const coursePlan = resolve => {
   require.ensure(['../components/container/teacher/teach/coursePlan.vue'], () => {
     resolve(require('../components/container/teacher/teach/coursePlan.vue'));
   });
-}
+};
 const teacherUserCenter = resolve => {
   require.ensure(['../components/container/teacher/teacherUserCenter/teacherUserCenter.vue'], () => {
     resolve(require('../components/container/teacher/teacherUserCenter/teacherUserCenter.vue'));
+  });
+};
+const teacherClass = resolve => {
+  require.ensure(['../components/container/teacher/teacherUserCenter/teacherClass.vue'],() => {
+    resolve(require('../components/container/teacher/teacherUserCenter/teacherClass.vue'));
   });
 };
 //以下是教务角色
@@ -615,6 +620,15 @@ export default new Router({
               next('/signin')
             }
           }, component: teacherUserCenter
+        },
+        {
+          path: '/console/teacherClass', beforeEnter(to,from,next) {
+            if (window.localStorage.getItem("idToken")) {
+              next()
+            } else {
+              next('/signin')
+            }
+          }, component: teacherClass
         }
       ]
     },

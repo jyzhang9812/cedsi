@@ -98,6 +98,10 @@
                 name: "个人资料",
                 route: "/console/userCenter"
               },
+              {
+                name: "任课班级",
+                route: "/console/teacherClass"
+              }
               // {
               //   name: "个人资料",
               //   route: "/console/space"
