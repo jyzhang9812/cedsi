@@ -1,5 +1,6 @@
 <template>
-  <div id="eduSidebar">
+    <allsidebar :allside="aside"></allsidebar>
+  <!-- <div id="eduSidebar">
     <div class="aside">
       <ul class="menu">
         <li v-for="item in aside" class="bg-hover" :key="item.name">
@@ -24,14 +25,16 @@
     <div class="sonContainer">
       <router-view></router-view>
     </div>
-  </div>
+  </div> -->
 
 </template>
 
 <script>
+import allsidebar from '../../sidebar/allSidebar.vue'
 
   export default {
     name: "asider",
+    components:{allsidebar},
     data() {
       return {
         aside: [
@@ -81,22 +84,22 @@
         width: 0
       }
     },
-    methods: {
-      dropDownListListener(item) {
-        if (item.children.length === 0) {
-          this.$router.push(item.route);
-        } else {
-          item.close = !item.close;
-        }
-      }
-    },
-    created: function () {
-      this.width = document.documentElement.clientWidth,
-        this.screenWidth = 'min-width:' + (this.width - 320) + 'px;'
-    }
+    // methods: {
+    //   dropDownListListener(item) {
+    //     if (item.children.length === 0) {
+    //       this.$router.push(item.route);
+    //     } else {
+    //       item.close = !item.close;
+    //     }
+    //   }
+    // },
+    // created: function () {
+    //   this.width = document.documentElement.clientWidth,
+    //     this.screenWidth = 'min-width:' + (this.width - 320) + 'px;'
+    // }
   }
 </script>
-
+<!-- 
 <style scoped>
   #eduSidebar {
     margin: 0 !important;
@@ -164,4 +167,4 @@
     flex-grow: 1;
     min-width: 800px;
   }
-</style>
+</style> -->

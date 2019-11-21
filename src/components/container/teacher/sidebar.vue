@@ -1,5 +1,6 @@
 <template>
-  <div class="row">
+    <allsidebar :allside="aside"></allsidebar>
+  <!-- <div class="row">
     <div class="asidebg">
       <div class="aside">
         <ul class="menu">
@@ -26,12 +27,15 @@
     <div class="sonContainer">
       <router-view></router-view>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
+  import allsidebar from '../../sidebar/allSidebar.vue'
+
   export default {
     name: "asider",
+    components:{allsidebar},
     data() {
       return {
         aside: [
@@ -109,15 +113,15 @@
         style: ''
       }
     },
-    methods: {
-      dropDownListListener(item) {
-        if (item.children.length === 0) {
-          this.$router.push(item.route)
-        } else {
-          item.close = !item.close
-        }
-      }
-    }
+    // methods: {
+    //   dropDownListListener(item) {
+    //     if (item.children.length === 0) {
+    //       this.$router.push(item.route)
+    //     } else {
+    //       item.close = !item.close
+    //     }
+    //   }
+    // }
   }
 //课程规划（教学计划=>名称课时作业布置，考核方式，活动）
 //布置作业，收作业，改作业，发通知
@@ -125,7 +129,7 @@
 //驳回作业，一次，确认提交之后，重新设置时间
 </script>
 
-<style scoped>
+<!-- <style scoped>
   .row {
     /* height: 100%; */
     margin: 0 !important;
@@ -202,4 +206,4 @@
     padding: 0;
     width: 100%;
   }
-</style>
+</style> -->
