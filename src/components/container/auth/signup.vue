@@ -33,15 +33,11 @@
                 v-model="username"
                 class="input100"
                 placeholder="用户名"
-                maxlength=12
-                @focus="usernameFocus"
-                @blur="usernameBlur"
+                maxlength=12  
+                @focus="usernameFocus"          
               />
-              <span class="tip">{{ tip.tip1 }}</span>
+              <span class="tip" v-show="tip.username_tip">支持6~12位数字、大小写字母、汉字及下划线</span>
               <span class="focus-input100" data-placeholder></span>
-            </div>
-            <div class="text-center p-t-90" v-if="submit && !checkusr()">
-              <p style="color: #f87c56">用户名输入不规范</p>
             </div>
             <div class="wrap-input100 validate-input">
               <input
@@ -51,14 +47,10 @@
                 class="input100"
                 placeholder="密码"
                 maxlength=12
-                @focus="passwordFocus"
-                @blur="passwordBlur"
+                @focus="passwordFocus"                
               />
-              <span class="tip">{{ tip.tip2 }}</span>
+              <span class="tip" v-if="tip.pwd1_tip">支持6~12位数字、大小写字母及标点符号</span>
               <span class="focus-input100" data-placeholder></span>
-            </div>
-            <div class="text-center p-t-90" v-if="submit && !checkpwd()">
-              <p style="color: #f87c56">密码少于六位或超过12位</p>
             </div>
             <div class="wrap-input100 validate-input">
               <input
@@ -67,14 +59,15 @@
                 v-model="confirmPassword"
                 class="input100"
                 placeholder="确认密码"
+                maxlength=12
+                @focus="confirmPasswordFocus"                
               />
+              <span class="tip" v-if="tip.pwd2_tip">密码输入不一致</span>
               <span class="focus-input100" data-placeholder></span>
             </div>
-            <div class="text-center p-t-90" v-if="submit && !onConfirm()">
-              <p style="color: #f87c56">确认密码与原密码不符合，请重试</p>
-            </div>
             <div class="container-login100-form-btn">
-              <button type="submit" class="login100-form-btn">确定</button>
+              <button type="submit" class="login100-form-btn-2" :disabled="true" v-if="tip.isDisabled">确定</button>
+              <button type="submit" class="login100-form-btn" :disabled="false" v-else>确定</button>
             </div>
           </form>
         </div>
@@ -98,8 +91,10 @@ export default {
       role: "1",
       username: "",
       tip: {
-        tip1: "",
-        tip2: "",
+        username_tip: false,
+        pwd1_tip: false,
+        pwd2_tip: false,
+        isDisabled: true,
       },
       submit: 0,
       code: "",
@@ -113,23 +108,36 @@ export default {
         ""
       );
       this.username = this.username.replace(/[^_A-Za-z0-9\u4e00-\u9fa5]/g,'');
-      console.log(this.tip.tip1.length);
-      if (this.username.length >= 6 && this.username.length <= 12) {
-        this.tip.tip1 = "";
-        this.username = this.username.substring(0,12);
-        console.log(this.username);
+      if (this.checkusr()) {
+        this.tip.username_tip = false;
+      } else {
+        this.tip.username_tip = true;
       }
+      this.checkUserAndPwd();
     },
     password: function() {
       this.password = this.password.replace(
-        /[`~!@$%^&()\-+=<>?:"{}|,./;'#*·~！@￥%……&（）——\-+={}|《》？：“”【】、；‘’，。、]/g,
+        /[^a-zA-Z/a-zA-Z0-9/`~!@$%^&()\-+=<>?:"{}|,./;'_#*·~！@￥%……&（）——\-+={}|《》？：“”【】、；‘’，。、]/g,
         ""
       );
-      this.password = this.password.replace(/[\W]/g, "");
-      console.log(this.password);
-      if (this.password.length >= 6 && this.password.length <= 12) {
-        this.tip.tip2 = "";
+      if (this.checkpwd()) {
+        this.tip.pwd1_tip = false;
+      } else {
+        this.tip.pwd1_tip = true;
       }
+      this.checkUserAndPwd();
+    },
+    confirmPassword: function() {
+      this.confirmPassword = this.confirmPassword.replace(
+        /[^a-zA-Z/a-zA-Z0-9/`~!@$%^&()\-+=<>?:"{}|,./;'_#*·~！@￥%……&（）——\-+={}|《》？：“”【】、；‘’，。、]/g,
+        ""
+      );
+      if (this.confirmPassword == this.password) {
+        this.tip.pwd2_tip = false;
+      } else {
+        this.tip.pwd2_tip = true;
+      }
+      this.checkUserAndPwd();
     }
   },
   methods: {
@@ -164,32 +172,48 @@ export default {
         return 0;
       } else return 1;
     },
-    usernameFocus(){
-      this.tip.tip1 = "请输入6~12位数字和大小写字母";
-    },
-    usernameBlur(){
-      this.tip.tip1 = "";
-    },
     checkusr() {
       return this.checkNull(this.username) && this.checkNum(this.username);
     },
     checkaccount() {
       return this.checkNull(this.account);
     },
-    passwordFocus(){
-      this.tip.tip2 = "请输入6~12位数字、大小写字母和字符";
-    },
-    passwordBlur(){
-      this.tip.tip2 = "";
-    },
     checkpwd() {
       return this.checkNull(this.password) && this.checkNum(this.password);
-    },
+    }, 
     onConfirm() {
       if (this.password == this.confirmPassword) {
         return 1;
       } else return 0;
-    }
+    },
+    checkUserAndPwd(){
+      if(this.checkusr() && this.checkpwd() && this.onConfirm()) {
+        this.tip.isDisabled = false;
+      } else {
+        this.tip.isDisabled = true; //设为true即可禁止按钮点击
+      }
+    },
+    usernameFocus() {
+      if (this.checkusr()) {
+        this.tip.username_tip = false;
+      } else {
+        this.tip.username_tip = true;
+      }
+    },
+    passwordFocus() {
+      if (this.checkpwd()) {
+        this.tip.pwd1_tip = false;
+      } else {
+        this.tip.pwd1_tip = true;
+      }
+    },
+    confirmPasswordFocus() {
+      if (this.password == this.confirmPassword) {
+        this.tip.pwd2_tip = false;
+      } else {
+        this.tip.pwd2_tip = true;
+      }
+    },
   },
   created() {
     this.imagesurl =
@@ -536,6 +560,38 @@ label {
   background: -o-linear-gradient(bottom, #7579ff, #b224ef);
   background: -moz-linear-gradient(bottom, #7579ff, #b224ef);
   background: linear-gradient(bottom, #7579ff, #b224ef);
+  position: relative;
+  z-index: 1;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+.login100-form-btn-2 {
+  font-family: Poppins-Medium;
+  font-size: 16px;
+  color: #555555;
+  line-height: 1.2;
+
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  min-width: 120px;
+  height: 50px;
+  border-radius: 25px;
+
+  background: #908d93;
+  background: -webkit-linear-gradient(bottom, #908d93, #908d93);
+  background: -o-linear-gradient(bottom, #908d93, #908d93);
+  background: -moz-linear-gradient(bottom, #908d93, #908d93);
+  background: linear-gradient(bottom, #908d93, #908d93);
   position: relative;
   z-index: 1;
 
