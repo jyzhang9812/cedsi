@@ -17,13 +17,8 @@
     </div>
     <div class="upload">
       <span class="upload-title">活动时间:</span>
-      <date-picker
-        class="activity-time"
-        tips="选择开始时间"
-        id="datePicker"
-        :date="startDate"
-        @changeDate="changeDate"
-      ></date-picker>
+      <date-picker class="activity-time" tips="选择开始时间" id="datePicker" :date="startDate" @changeDate="changeDate">
+      </date-picker>
     </div>
     <div class="upload">
       <span class="upload-title">活动价格:</span>
@@ -39,7 +34,7 @@
     <div class="upload upload-height">
       <span class="upload-title">预览:</span>
       <div class="upload-cover-img">
-        <img id="headimage" :src="coverImageDisplay" class="cover-image" />
+        <img id="headimage" :src="coverImageDisplay" class="cover-image" alt="" />
       </div>
     </div>
     <div class="upload">
@@ -52,8 +47,26 @@
     <div class="upload upload-height">
       <span class="upload-title">预览:</span>
       <div class="upload-cover-img">
-        <img id="headimage" :src="activityContentImageDisplay" class="cover-image" />
+        <img id="headimage" :src="activityContentImageDisplay" class="cover-image" alt="" />
       </div>
+    </div>
+    <div class="upload">
+      <span class="upload-title">请选择视频:</span>
+      <div class="upload-cover-btn">
+        选择文件
+        <input type="file" @change="getVideoFile($event)" style="opacity: 0" />
+      </div>
+    </div>
+    <div class="upload">
+      <span class="upload-title">上传进度:</span>
+      <div class="progress upload-process">
+        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+          :style="{width:progressWidth}">{{progressWidth}}</div>
+      </div>
+    </div>
+    <div class="upload upload-height">
+      <span class="upload-title">文件名称:</span>
+      <input class="upload-input" :value="videoName" disabled />
     </div>
     <div class="upload-footer">
       <button class="btn upload-btn" @click="submit">确定</button>
@@ -63,336 +76,404 @@
 </template>
 
 <script>
-import DatePicker from "../utils/datePicker";
-import SelectInput from "../../Admin/utils/selectInput";
-import AWS from "aws-sdk";
-import globalAxios from "axios";
-import instance from "../../../../axios-auth.js";
+  import DatePicker from "../utils/datePicker";
+  import SelectInput from "../../Admin/utils/selectInput";
+  import AWS from "aws-sdk";
+  import globalAxios from "axios";
+  import instance from "../../../../axios-auth.js";
 
-export default {
-  name: "addactivity",
-  components: {
-    SelectInput,
-    DatePicker
-  },
-  data() {
-    return {
-      startDate: "",
-      inputData: {
-        activity: {
-          option: {},
-          list: []
-        }
+  export default {
+    name: "addactivity",
+    components: {
+      SelectInput,
+      DatePicker
+    },
+    data() {
+      return {
+        startDate: "",
+        inputData: {
+          activity: {
+            option: {},
+            list: []
+          }
+        },
+        activityName: "",
+        activityPrice: "",
+        coverImage: "",
+        coverImageDisplay: "",
+        coverType: "",
+        activityContentImage: "",
+        activityContentImageDisplay: "",
+        activityContentImageType: "",
+        activityAddress: "",
+        progressWidth: "0%",
+        videoFile: {},
+        videoName: "暂未上传",
+        videoType: ""
+      };
+    },
+    methods: {
+      changeDate(value) {
+        this.startDate = value;
       },
-      activityName: "",
-      activityPrice: "",
-      coverImage: "",
-      coverImageDisplay: "",
-      coverType: "",
-      activityContentImage: "",
-      activityContentImageDisplay: "",
-      activityContentImageType: "",
-      activityAddress: ""
-    };
-  },
-  methods: {
-    changeDate(value) {
-      this.startDate = value;
-    },
-    changeOption(item, id) {
-      Object.keys(this.inputData).forEach(res => {
-        if (res === id) {
-          this.inputData[res].option = item;
-        }
-      });
-    },
-    getCoverFile(event) {
-      this.coverImage = event.target.files[0];
-      console.log(this.coverImage);
-      this.coverType = "." + this.coverImage.type.split("/")[1];
-      let reader = new FileReader();
-      let that = this;
-      reader.readAsDataURL(this.coverImage);
-      reader.onload = function(e) {
-        that.coverImageDisplay = this.result;
-      };
-    },
-    getActivityImg(event) {   
-      this.activityContentImage = event.target.files[0];
-      console.log(this.activityContentImage);
-      this.activityContentImageType =
-        "." + this.activityContentImage.type.split("/")[1];
-      let reader = new FileReader();
-      let that = this;
-      reader.readAsDataURL(this.activityContentImage);
-      reader.onload = function(e) {
-        that.activityContentImageDisplay = this.result;
-      };
-    },
-    cancel() {
-      this.$router.replace({
-        path: "/Admin/activityManagement/"
-      });
-    },
-    uploadTwoImages(config) {
-      let missions = [];
-      let rawId = config.id;
-      config.id = `${rawId}1`;
-      missions.push(this.uploadToBucket(config, this.coverImage));
-      config.id = `${rawId}2`;
-      missions.push(this.uploadToBucket(config, this.activityContentImage));
-      return Promise.all(missions);
-    },
-    submit() {
-      let types = [this.coverType, this.activityContentImageType];
-      this.insertActivity(types)
-        .then(res => {
-          console.log(res);
-          return this.uploadTwoImages(res.data.data);
-        })
-        .then(res => {
-          console.log(res);
-          this.$router.replace({ path: "/Admin/activityManagement/",query:{alert:"1"} });
-        })
-        .catch(err => {
-          console.log(err);
+      changeOption(item, id) {
+        Object.keys(this.inputData).forEach(res => {
+          if (res === id) {
+            this.inputData[res].option = item;
+          }
         });
-    },
-    uploadToBucket(config, file) {
-      AWS.config = new AWS.Config({
-        accessKeyId: config.AccessKeyId,
-        secretAccessKey: config.SecretAccessKey,
-        sessionToken: config.SessionToken,
-        region: "cn-northwest-1"
-      });
-      let s3 = new AWS.S3();
-      let params = {
-        ACL: "public-read",
-        Bucket: "cedsi",
-        Body: file,
-        Key: "activity/" + config.id + "." + file.type.split("/")[1],
-        ContentType: file.type,
-        Metadata: {
-          uploader: window.localStorage.getItem("user")
-        }
-      };
-      return new Promise((resolve, reject) => {
-        s3.putObject(params, (err, data) => {
-          err ? reject(err) : resolve(data);
+      }, 
+      getVideoFile(event) {
+        this.videoFile = event.target.files[0];
+        console.log(this.videoFile);
+        this.videoName = this.videoFile.name;
+        this.videoType = this.videoFile.type.split("/")[1];
+        this.videoSize = this.videoFile.size;
+      },
+      getCoverFile(event) {
+        this.coverImage = event.target.files[0];
+        console.log(this.coverImage);
+        this.coverType = "." + this.coverImage.type.split("/")[1];
+        let reader = new FileReader();
+        let that = this;
+        reader.readAsDataURL(this.coverImage);
+        reader.onload = function (e) {
+          that.coverImageDisplay = this.result;
+        };
+      },
+      getActivityImg(event) {
+        this.activityContentImage = event.target.files[0];
+        console.log(this.activityContentImage);
+        this.activityContentImageType =
+          "." + this.activityContentImage.type.split("/")[1];
+        let reader = new FileReader();
+        let that = this;
+        reader.readAsDataURL(this.activityContentImage);
+        reader.onload = function (e) {
+          that.activityContentImageDisplay = this.result;
+        };
+      },
+      cancel() {
+        this.$router.replace({
+          path: "/Admin/activityManagement/"
         });
-      });
+      },
+      uploadTwoImages(config) {
+        let missions = [];
+        let rawId = config.id;
+        config.id = `${rawId}1`;
+        missions.push(this.uploadFileToBucket(config, this.coverImage));
+        config.id = `${rawId}2`;
+        missions.push(this.uploadFileToBucket(config, this.activityContentImage));
+        return Promise.all(missions);
+      },
+      uploadVideoFile(config, file) {
+        AWS.config = new AWS.Config({
+          accessKeyId: config.AccessKeyId,
+          secretAccessKey: config.SecretAccessKey,
+          sessionToken: config.SessionToken,
+          region: "cn-northwest-1"
+        });
+        let that = this;
+        let s3 = new AWS.S3();
+        let rawId = config.id;
+        config.id = `${rawId}3`;
+        let params = {
+          ACL: "public-read",
+          Bucket: "cedsi",
+          Body: file,
+          Key: "activity/" + config.id + "." + file.type.split("/")[1],
+          ContentType: file.type,
+          Metadata: { uploader: window.localStorage.getItem("user") }
+        };
+        return new Promise((resolve, reject) => {
+          s3.putObject(params, (err, data) => {
+            err ? reject(err) : resolve(data);
+          }).on("httpUploadProgress", event => {
+            let process = Number((event.loaded * 100) / event.total);
+            that.progressWidth = parseInt(process) + "%";
+          });
+        });
+      },
+      submit() {
+        let types = [this.coverType, this.activityContentImageType];
+        let config = {};
+        this.insertActivity(types)
+          .then(res => {
+            console.log(res);
+            config = res.data.data;
+            return this.uploadTwoImages(config);
+          })
+          .then(res => {
+            console.log(res);
+            if(this.videoFile) {
+              return this.uploadVideoFile(config, this.videoFile);
+            }
+            return Promise.resolve("activity with no video!");
+          })
+          .then(res => {
+            console.log(res);
+            this.$router.replace({ path: "/Admin/activityManagement/", query: { alert: "1" } });
+          })
+          .catch(err => { console.log(err) });
+      },
+      uploadFileToBucket(config, file) {
+        AWS.config = new AWS.Config({
+          accessKeyId: config.AccessKeyId,
+          secretAccessKey: config.SecretAccessKey,
+          sessionToken: config.SessionToken,
+          region: "cn-northwest-1"
+        });
+        let s3 = new AWS.S3();
+        let params = {
+          ACL: "public-read",
+          Bucket: "cedsi",
+          Body: file,
+          Key: "activity/" + config.id + "." + file.type.split("/")[1],
+          ContentType: file.type,
+          Metadata: { uploader: window.localStorage.getItem("user") }
+        };
+        return new Promise((resolve, reject) => {
+          s3.putObject(params, (err, data) => {
+            err ? reject(err) : resolve(data);
+          });
+        });
+      },
+      insertActivity(types) {
+        let config = {
+          headers: { Authorization: localStorage.getItem("idToken") }
+        };
+        let data = {
+          activityTime: this.startDate,
+          activityPlace: this.activityAddress,
+          activityTitle: this.activityName,
+          activityPrice: this.activityPrice,
+          coverType: types[0],
+          imgType: types[1],
+          videoType: this.videoType || 'null'
+        };
+        console.log(data);
+        return instance.post("/admin/activity", data, config);
+      }
     },
-    insertActivity(types) {
-      let config = {
-        headers: { Authorization: localStorage.getItem("idToken") }
-      };
-      let data = {
-        activityTime: this.startDate,
-        activityPlace: this.activityAddress,
-        activityTitle: this.activityName,
-        activityPrice: this.activityPrice,
-        coverType: types[0],
-        imgType: types[1]
-      };
-      console.log(data);
-      return instance.post("/admin/activity", data, config);
-    }
-  },
-  computed: {
-    currentPrincipal() {
-      let name = this.inputData.activity.option;
-      return this.inputData.activity.list.find(item => {
-        console.log(item.name);
-        console.log(name);
-        return item.name === name;
-      });
-    }
-  },
-  mounted() {}
-};
+    computed: {
+      currentPrincipal() {
+        let name = this.inputData.activity.option;
+        return this.inputData.activity.list.find(item => {
+          console.log(item.name);
+          console.log(name);
+          return item.name === name;
+        });
+      }
+    },
+    mounted() { }
+  };
 </script>
 
 <style>
-#add-activity {
-  width: 98%;
-  margin: 0 auto;
-  padding-top: 30px;
-}
+  #add-activity {
+    width: 98%;
+    margin: 0 auto;
+    padding-top: 30px;
+  }
 
-#add-activity .upload {
-  width: 100%;
-  height: 50px;
-  margin-bottom: 20px;
-}
+  #add-activity .upload {
+    width: 100%;
+    height: 50px;
+    margin-bottom: 20px;
+  }
 
-#add-activity .upload img {
-  width: 18px;
-  height: 18px;
-}
+  #add-activity .upload>.outside>img {
+    width: 18px;
+    height: 18px;
+  }
 
-#add-activity .upload-title {
-  color: #606266;
-  display: block;
-  text-align: right;
-  width: 100px;
-  height: 40px;
-  float: left;
-  line-height: 40px;
-}
+  #add-activity .upload-title {
+    color: #606266;
+    display: block;
+    text-align: right;
+    width: 100px;
+    height: 40px;
+    float: left;
+    line-height: 40px;
+  }
 
-#add-activity .upload-input {
-  width: 300px;
-  height: 40px;
-  border-radius: 5px;
-  border: 1px solid #409eff;
-  margin-left: 10px;
-  padding-left: 10px;
-}
+  #add-activity .upload-input {
+    width: 300px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #409eff;
+    margin-left: 10px;
+    padding-left: 10px;
+  }
 
-#add-activity .upload-input:hover {
-  border: 1px solid #66b1ff;
-}
+  #add-activity .upload-input:hover {
+    border: 1px solid #66b1ff;
+  }
 
-#add-activity .upload-input:focus {
-  outline: none;
-}
+  #add-activity .upload-input:focus {
+    outline: none;
+  }
 
-#add-activity .activity-time {
-  margin-left: 10px !important;
-  height: 40px !important;
-  width: 300px !important;
-  line-height: 40px;
-}
+  #add-activity .activity-time {
+    margin-left: 10px !important;
+    height: 40px !important;
+    width: 300px !important;
+    line-height: 40px;
+  }
 
-#add-activity .upload-textarea {
-  border: 1px solid #409eff;
-  border-radius: 5px;
-  margin-left: 10px;
-  padding: 10px;
-}
+  #add-activity .upload-textarea {
+    border: 1px solid #409eff;
+    border-radius: 5px;
+    margin-left: 10px;
+    padding: 10px;
+  }
 
-#add-activity .upload-height {
-  height: 190px;
-}
+  #add-activity .upload-height {
+    height: 190px;
+  }
 
-#add-activity .upload-textarea:hover {
-  border: 1px solid #66b1ff;
-}
+  #add-activity .upload-textarea:hover {
+    border: 1px solid #66b1ff;
+  }
 
-#add-activity .upload-textarea:focus {
-  outline: none;
-}
+  #add-activity .upload-textarea:focus {
+    outline: none;
+  }
 
-#add-activity .outside {
-  width: 300px !important;
-  height: 40px !important;
-  margin-left: 10px !important;
-}
+  #add-activity .outside {
+    width: 300px !important;
+    height: 40px !important;
+    margin-left: 10px !important;
+  }
 
-#add-activity .inputBox,
-#add-activity .inputbox {
-  height: 35px !important;
-  font-size: 14px !important;
-  width: 230px !important;
-  text-align: inherit !important;
-}
+  #add-activity .inputBox,
+  #add-activity .inputbox {
+    height: 35px !important;
+    font-size: 14px !important;
+    width: 230px !important;
+    text-align: inherit !important;
+  }
 
-#add-activity .dropdown-menu {
-  left: 100px !important;
-}
+  #add-activity .dropdown-menu {
+    left: 100px !important;
+  }
 
-#add-activity .upload-footer {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 20px;
-}
+  #add-activity .upload-footer {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+  }
 
-#add-activity .upload-btn {
-  background-color: #409eff;
-  color: #fff;
-  margin-left: 10px;
-}
+  #add-activity .upload-btn {
+    background-color: #409eff;
+    color: #fff;
+    margin-left: 10px;
+  }
 
-#add-activity .upload-btn:hover {
-  color: #fff;
-}
+  #add-activity .upload-btn:hover {
+    color: #fff;
+  }
 
-#add-activity .upload-btn:focus {
-  outline: none;
-  color: #fff;
-}
+  #add-activity .upload-btn:focus {
+    outline: none;
+    color: #fff;
+  }
 
-/**/
-#add-activity .address-input select {
-  margin-left: 10px;
-  font-size: 14px;
-}
+  /**/
+  #add-activity .address-input select {
+    margin-left: 10px;
+    font-size: 14px;
+  }
 
-#add-activity .upload-cover-btn {
-  margin-left: 10px;
-  width: 80px;
-  height: 35px;
-  display: inline-block;
-  background-color: #409eff;
-  color: #fff;
-  border-radius: 5px;
-  line-height: 35px;
-  text-align: center;
-}
+  #add-activity .upload-cover-btn {
+    margin-left: 10px;
+    width: 80px;
+    height: 35px;
+    display: inline-block;
+    background-color: #409eff;
+    color: #fff;
+    border-radius: 5px;
+    line-height: 35px;
+    text-align: center;
+  }
 
-#add-activity input[type="file"] {
-  width: 80px;
-  height: 35px;
-  position: relative;
-  top: -35px;
-}
+  #add-activity input[type="file"] {
+    width: 80px;
+    height: 35px;
+    position: relative;
+    top: -35px;
+  }
 
-#add-activity .upload-cover-img {
-  display: inline-block;
-  border: 1px dashed #dcdfe6;
-  width: 290px;
-  height: 150px;
-  margin-left: 10px;
-  border-radius: 5px;
-  background-color: #f5f7fa;
-}
+  #add-activity .upload-cover-img {
+    display: inline-block;
+    border: 1px dashed #dcdfe6;
+    width: 290px;
+    height: 150px;
+    margin-left: 10px;
+    border-radius: 5px;
+    background-color: #f5f7fa;
+  }
 
-#add-activity .cover-image {
-  width: 100%;
-  height: 100%;
-}
+  #add-activity .cover-image {
+    width: 100%;
+    height: 100%;
+  }
 
-#add-activity .upload-height {
-  height: 190px;
-}
+  #add-activity .upload-height {
+    height: 190px;
+  }
 
-#add-activity .editor {
-  width: 800px;
-  position: relative;
-}
+  #add-activity .upload-process {
+    width: 30%;
+    margin-left: 10px;
+    display: inline-block;
+    position: relative;
+    top: 10px;
+  }
 
-#add-activity .w-e-toolbar {
-  position: relative;
-  left: 10px;
-}
+  #add-activity .btn-upload-file {
+    position: relative;
+    top: -35px;
+    margin-left: 10px;
+    background-color: #2fc27e;
+    border: none;
+    width: 80px;
+    height: 35px;
+    font-size: 14px;
+  }
 
-#add-activity .w-e-text-container {
-  position: relative;
-  left: 110px;
-  width: 700px;
-}
+  #add-activity .btn-upload-file:hover {
+    background-color: #2fc27ddc;
+  }
 
-#add-activity .w-e-text {
-  position: relative;
-  top: -10px;
-  background-color: #fff;
-}
+  #add-activity .editor {
+    width: 800px;
+    position: relative;
+  }
 
-#add-activity .upload-height2 {
-  height: 350px;
-}
+  #add-activity .w-e-toolbar {
+    position: relative;
+    left: 10px;
+  }
 
-#add-activity .upload-width {
-  width: 200px;
-}
+  #add-activity .w-e-text-container {
+    position: relative;
+    left: 110px;
+    width: 700px;
+  }
+
+  #add-activity .w-e-text {
+    position: relative;
+    top: -10px;
+    background-color: #fff;
+  }
+
+  #add-activity .upload-height2 {
+    height: 350px;
+  }
+
+  #add-activity .upload-width {
+    width: 200px;
+  }
 </style>
