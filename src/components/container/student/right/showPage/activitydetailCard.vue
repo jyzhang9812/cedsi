@@ -4,7 +4,7 @@
       <h1 class="activity-title">{{card.title}}</h1>
       <!-- <h2 class="activity-brief">{{card.subtitle}}</h2> -->
       <div class="fixed-box" :style="{backgroundImage:'url(../../'+$store.state.url+'activity/fixedbg.png'}">
-        <div class="activity-price">￥{{card.price}}</div>
+        <div class="activity-price">￥{{card.price / 100}}</div>
         <button class="join-btn" @click="payment">我要报名</button>
       </div>
     </div>
