@@ -122,7 +122,7 @@
             this.inputData[res].option = item;
           }
         });
-      }, 
+      },
       getVideoFile(event) {
         this.videoFile = event.target.files[0];
         console.log(this.videoFile);
@@ -206,13 +206,14 @@
           })
           .then(res => {
             console.log(res);
-            if(this.videoFile) {
+            if (this.videoFile) {
               return this.uploadVideoFile(config, this.videoFile);
             }
             return Promise.resolve("activity with no video!");
           })
           .then(res => {
             console.log(res);
+            this.$toast.success({ title: "活动管理", message: "添加成功" });
             this.$router.replace({ path: "/Admin/activityManagement/", query: { alert: "1" } });
           })
           .catch(err => { console.log(err) });

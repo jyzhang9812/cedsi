@@ -23,6 +23,7 @@
               <th>发布时间</th>
               <th>活动地点</th>
               <th>价格</th>
+              <th>报名信息</th>
             </tr>
           </thead>
           <tbody>
@@ -32,12 +33,61 @@
               <td>{{list.ACTIVITY_TIME}}</td>
               <td>{{list.ACTIVITY_PLACE}}</td>
               <td>{{list.ACTIVITY_PRICE}}</td>
+              <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applyMessage" @click="checkMessage(list)">查看</button></td>
             </tr>
           </tbody>
         </table>
       </div>
       <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
     </div>
+
+    <!-- 查看报名信息模态框 -->
+    <div class="panels">
+    <div class="modal fade" id="applyMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+              报名信息
+            </h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>学生姓名</th>
+                  <th>学校</th>
+                  <th>年级</th>
+                  <!-- <th>专业</th> -->
+                  <th>联系方式</th>
+                  <th>备注</th>
+                  <!-- <th>家长姓名</th> -->
+                  <!-- <th>报名时间</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item,index) in messList">
+                  <td>{{index + 1}}</td>
+                  <td>{{item.STUDENT_NAME}}</td>
+                  <td>{{item.SCHOOL}}</td>
+                  <td>{{item.GRADE}}</td>
+                  <!-- <td>{{item.MAJOR}}</td> -->
+                  <td>{{item.PHONE}}</td>
+                  <td>{{item.REMARK}}</td>
+                  <!-- <td>{{item.CREATE_TIME}}</td> -->
+                </tr> 
+              </tbody>
+            </table>
+            <pagination :num="messageData.length" :limit="limit" @getNew="getMessNew"></pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -58,14 +108,8 @@
         limit: 10,
         currentList: [],
         tableData: [],
-        activityList: [{
-            title: "",
-            releaseTime: "",
-            activityType: "",
-            place: "",
-            price: "",
-          }
-        ]
+        messList:[],
+        messageData:[],
       }
     },
     components: {
@@ -82,27 +126,34 @@
       getNew(value) {
         this.currentList = this.tableData.slice(value, value + this.limit);
       },
+      getMessNew(value){
+        this.messList = this.messageData.slice(value, value + this.limit);
+      },
       pullOriginalTableData() {
         let config = { headers: { Authorization: localStorage.getItem('idToken') } };
         instance.get('/activity', config)
           .then(res => {
             this.tableData = res.data || [];
             this.getNew(0);
-            if(this.alert){
-            this.$toast.success({ title: "活动管理", message: "添加成功" });
-            }
+          }).catch(err => { console.log(err) });
+      },
+      checkMessage(list){
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        instance.get(`/admin/activity/${list.ID}/student`, config)
+          .then(res => {
+            console.log(res.data);
+            this.messageData = res.data || [];
+            this.getMessNew(0);
           }).catch(err => { console.log(err) });
       }
+      },
+    created() {
+      if (this.$route.query.alert) {
+        this.alert = this.$route.query.alert;
+      }
     },
-     created() {
-    if (this.$route.query.alert) {
-      this.alert = this.$route.query.alert;
-    }
-  },
     mounted() {
       this.pullOriginalTableData();
-      this.tableData = this.activityList;
-      this.getNew(0);
     }
   }
 
@@ -247,5 +298,4 @@
     margin-top: 20px;
     margin-left: 356px;
   }
-
 </style>
