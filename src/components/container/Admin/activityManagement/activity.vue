@@ -62,7 +62,7 @@
                   <th>学生姓名</th>
                   <th>学校</th>
                   <th>年级</th>
-                  <!-- <th>专业</th> -->
+                  <th>专业</th>        
                   <th>联系方式</th>
                   <th>备注</th>
                   <!-- <th>家长姓名</th> -->
@@ -75,7 +75,7 @@
                   <td>{{item.STUDENT_NAME}}</td>
                   <td>{{item.SCHOOL}}</td>
                   <td>{{item.GRADE}}</td>
-                  <!-- <td>{{item.MAJOR}}</td> -->
+                  <td>{{item.MAJOR}}</td>
                   <td>{{item.PHONE}}</td>
                   <td>{{item.REMARK}}</td>
                   <!-- <td>{{item.CREATE_TIME}}</td> -->
