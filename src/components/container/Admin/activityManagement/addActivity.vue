@@ -107,7 +107,7 @@
         activityContentImageType: "",
         activityAddress: "",
         progressWidth: "0%",
-        videoFile: {},
+        videoFile: "",
         videoName: "暂未上传",
         videoType: ""
       };
