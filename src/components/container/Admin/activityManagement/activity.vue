@@ -33,7 +33,8 @@
               <td>{{list.ACTIVITY_TIME}}</td>
               <td>{{list.ACTIVITY_PLACE}}</td>
               <td>{{list.ACTIVITY_PRICE}}</td>
-              <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applyMessage" @click="checkMessage(list)">查看</button></td>
+              <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applyMessage"
+                  @click="checkMessage(list)">查看</button></td>
             </tr>
           </tbody>
         </table>
@@ -43,51 +44,54 @@
 
     <!-- 查看报名信息模态框 -->
     <div class="panels">
-    <div class="modal fade" id="applyMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-              &times;
-            </button>
-            <h4 class="modal-title" id="myModalLabel">
-              报名信息
-            </h4>
-          </div>
-          <div class="modal-body">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>序号</th>
-                  <th>学生姓名</th>
-                  <th>学校</th>
-                  <th>年级</th>
-                  <th>专业</th>        
-                  <th>联系方式</th>
-                  <th>备注</th>
-                  <!-- <th>家长姓名</th> -->
-                  <!-- <th>报名时间</th> -->
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(item,index) in messList">
-                  <td>{{index + 1}}</td>
-                  <td>{{item.STUDENT_NAME}}</td>
-                  <td>{{item.SCHOOL}}</td>
-                  <td>{{item.GRADE}}</td>
-                  <td>{{item.MAJOR}}</td>
-                  <td>{{item.PHONE}}</td>
-                  <td>{{item.REMARK}}</td>
-                  <!-- <td>{{item.CREATE_TIME}}</td> -->
-                </tr> 
-              </tbody>
-            </table>
-            <pagination :num="messageData.length" :limit="limit" @getNew="getMessNew"></pagination>
+      <div class="modal fade" id="applyMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;
+              </button>
+              <h4 class="modal-title" id="myModalLabel">
+                报名信息
+              </h4>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>序号</th>
+                    <th>学生姓名</th>
+                    <th>学校</th>
+                    <th>年级</th>
+                    <th>专业</th>
+                    <th>联系方式</th>
+                    <th>备注</th>
+                    <th>验票</th>
+                    <!-- <th>家长姓名</th> -->
+                    <!-- <th>报名时间</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item,index) in messList">
+                    <td>{{index + 1}}</td>
+                    <td>{{item.STUDENT_NAME}}</td>
+                    <td>{{item.SCHOOL}}</td>
+                    <td>{{item.GRADE}}</td>
+                    <td>{{item.MAJOR}}</td>
+                    <td>{{item.PHONE}}</td>
+                    <td>{{item.REMARK}}</td>
+                    <td>{{item.SIGH_STATUS === "NOT_SIGH" ? "未验票" : "已验票"}}</td>
+                    <!-- <td>{{item.CREATE_TIME}}</td> -->
+                  </tr>
+                </tbody>
+              </table>
+              <pagination :num="messageData.length" :limit="limit" @getNew="getMessNew"></pagination>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -108,8 +112,8 @@
         limit: 10,
         currentList: [],
         tableData: [],
-        messList:[],
-        messageData:[],
+        messList: [],
+        messageData: [],
       }
     },
     components: {
@@ -126,7 +130,7 @@
       getNew(value) {
         this.currentList = this.tableData.slice(value, value + this.limit);
       },
-      getMessNew(value){
+      getMessNew(value) {
         this.messList = this.messageData.slice(value, value + this.limit);
       },
       pullOriginalTableData() {
@@ -137,7 +141,7 @@
             this.getNew(0);
           }).catch(err => { console.log(err) });
       },
-      checkMessage(list){
+      checkMessage(list) {
         let config = { headers: { Authorization: localStorage.getItem('idToken') } };
         instance.get(`/admin/activity/${list.ID}/student`, config)
           .then(res => {
@@ -146,7 +150,7 @@
             this.getMessNew(0);
           }).catch(err => { console.log(err) });
       }
-      },
+    },
     created() {
       if (this.$route.query.alert) {
         this.alert = this.$route.query.alert;
@@ -297,5 +301,9 @@
     justify-content: flex-start;
     margin-top: 20px;
     margin-left: 356px;
+  }
+
+  #eduActivity .modal-dialog {
+    width: 800px;
   }
 </style>
