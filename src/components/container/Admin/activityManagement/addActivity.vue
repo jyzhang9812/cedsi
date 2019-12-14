@@ -1,10 +1,3 @@
-<!--
- * @Email: rumosky@163.com
- * @Author: rumosky
- * @Github: https://github.com/rumosky
- * @Date: 2019-11-12 20:08:53
- * @Description: 管理员角色发布活动页面
- -->
 <template>
   <div id="add-activity">
     <div class="upload">
@@ -23,6 +16,12 @@
     <div class="upload">
       <span class="upload-title">活动价格:</span>
       <input class="upload-input" placeholder="请输入活动价格" v-model="activityPrice" />
+    </div>
+    <div class="upload">
+      <span class="upload-title">表单类型:</span>
+      <select-input tips="请选择表单类型" id="formType" :option="inputData.formType.option" :dropDownList="formTypeList"
+        @option="changeOption">
+      </select-input>
     </div>
     <div class="upload">
       <span class="upload-title">上传活动封面:</span>
@@ -92,9 +91,26 @@
       return {
         startDate: "",
         inputData: {
-          activity: {
-            option: {},
-            list: []
+          formType: {
+            option: "",
+            list: [
+              {
+                title: "大学生",
+                data: ["姓名", "学校", "年级", "专业", "联系电话", "备注说明"]
+              },
+              {
+                title: "中小学生",
+                data: ["学生姓名", "学校", "年级", "家长姓名", "家长电话", "备注说明"]
+              },
+              {
+                title: "在职学校教师",
+                data: ["姓名", "学校", "学科", "电话", "备注说明"]
+              },
+              {
+                title: "在职机构教师",
+                data: ["姓名", "学校", "学科", "电话", "备注说明"]
+              }
+            ]
           }
         },
         activityName: "",
@@ -117,11 +133,8 @@
         this.startDate = value;
       },
       changeOption(item, id) {
-        Object.keys(this.inputData).forEach(res => {
-          if (res === id) {
-            this.inputData[res].option = item;
-          }
-        });
+        console.log(item);
+        this.inputData[id].option = item;
       },
       getVideoFile(event) {
         this.videoFile = event.target.files[0];
@@ -244,6 +257,9 @@
         let config = {
           headers: { Authorization: localStorage.getItem("idToken") }
         };
+        let formType = this.inputData.formType;
+        let formDetail = formType.list.find(item => item.title = formType.option);
+        formDetail = formDetail || formType.list[0];
         let data = {
           activityTime: this.startDate,
           activityPlace: this.activityAddress,
@@ -251,20 +267,16 @@
           activityPrice: this.activityPrice,
           coverType: types[0],
           imgType: types[1],
-          videoType: this.videoType || 'null'
+          videoType: this.videoType || 'null',
+          formDetail: formDetail
         };
         console.log(data);
         return instance.post("/admin/activity", data, config);
       }
     },
     computed: {
-      currentPrincipal() {
-        let name = this.inputData.activity.option;
-        return this.inputData.activity.list.find(item => {
-          console.log(item.name);
-          console.log(name);
-          return item.name === name;
-        });
+      formTypeList() {
+        return this.inputData.formType.list.map(item => item.title);
       }
     },
     mounted() { }
