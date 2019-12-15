@@ -89,26 +89,42 @@
     },
     data() {
       return {
-        startDate: "",
+        startDate: '',
         inputData: {
           formType: {
-            option: "",
+            option: '',
             list: [
               {
-                title: "大学生",
-                data: ["姓名", "学校", "年级", "专业", "联系电话", "备注说明"]
+                title: '大学生',
+                data: [
+                  ['name', '姓名'], ['phone', '联系电话'],
+                  ['school', '学校'], ['grade', '年级'],
+                  ['major', '专业'], ['remark', '备注说明']
+                ]
               },
               {
-                title: "中小学生",
-                data: ["学生姓名", "学校", "年级", "家长姓名", "家长电话", "备注说明"]
+                title: '中小学生',
+                data: [
+                  ['name', '学生姓名'], ['phone', '家长电话'],
+                  ['school', '学校'], ['grade', '年级'],
+                  ['pName', '家长姓名'], ['remark', '备注说明']
+                ]
               },
               {
-                title: "在职学校教师",
-                data: ["姓名", "学校", "学科", "电话", "备注说明"]
+                title: '在职学校教师',
+                data: [
+                  ['name', '姓名'], ['phone', '电话'],
+                  ['school', '学校'], ['subject', '学科'],
+                  ['remark', '备注说明']
+                ]
               },
               {
-                title: "在职机构教师",
-                data: ["姓名", "学校", "学科", "电话", "备注说明"]
+                title: '在职机构教师',
+                data: [
+                  ['name', '姓名'], ['phone', '电话'],
+                  ['school', '学校'], ['subject', '学科'],
+                  ['remark', '备注说明']
+                ]
               }
             ]
           }
