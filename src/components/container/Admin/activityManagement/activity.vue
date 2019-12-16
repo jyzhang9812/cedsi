@@ -24,6 +24,7 @@
               <th>活动地点</th>
               <th>价格</th>
               <th>报名信息</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -33,17 +34,18 @@
               <td>{{list.ACTIVITY_TIME}}</td>
               <td>{{list.ACTIVITY_PLACE}}</td>
               <td>{{list.ACTIVITY_PRICE}}</td>
-              <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#applyMessage"
-                  @click="checkMessage(list)">查看</button></td>
+              <td><button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#applyMessage"
+                @click="checkMessage(list)">查看</button></td>
+              <td ><button class="btn btn-primary btn-xs" data-toggle="modal"
+                @click="editActivity(index)">编辑</button></td>
             </tr>
           </tbody>
         </table>
       </div>
       <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
     </div>
-
-    <!-- 查看报名信息模态框 -->
-    <div class="panels">
+     <!-- 查看报名信息模态框 -->
+     <div class="panels">
       <div class="modal fade" id="applyMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -57,7 +59,7 @@
               </h4>
             </div>
             <div class="modal-body">
-              <table class="table table-striped">
+              <table class="table table-striped table-responsive">
                 <thead>
                   <tr>
                     <th>序号</th>
@@ -127,6 +129,20 @@
           path: "/Admin/activityManagement/addActivity"
         });
       },
+      editActivity(index) {
+        this.$router.push({
+          path: "/Admin/activityManagement/editActivity",
+          query: { 
+            id: this.currentList[index].ID,
+            title: this.currentList[index].ACTIVITY_TITLE,
+            place:this.currentList[index].ACTIVITY_PLACE,
+            price:this.currentList[index].ACTIVITY_PRICE,
+            time:this.currentList[index].ACTIVITY_TIME,
+            cover:this.currentList[index].ACTIVITY_COVER,
+            contentImg:this.currentList[index].ACTIVITY_CONTENT_IMG,
+          }
+        });
+      },
       getNew(value) {
         this.currentList = this.tableData.slice(value, value + this.limit);
       },
@@ -139,6 +155,7 @@
           .then(res => {
             this.tableData = res.data || [];
             this.getNew(0);
+            console.log(this.tableData);
           }).catch(err => { console.log(err) });
       },
       checkMessage(list) {
@@ -151,6 +168,7 @@
           }).catch(err => { console.log(err) });
       }
     },
+    
     created() {
       if (this.$route.query.alert) {
         this.alert = this.$route.query.alert;
@@ -302,8 +320,6 @@
     margin-top: 20px;
     margin-left: 356px;
   }
-
-  #eduActivity .modal-dialog {
-    width: 800px;
-  }
+  #eduActivity .modal-dialog{
+    width:75%  }
 </style>

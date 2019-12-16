@@ -313,6 +313,11 @@ const activityManagementAdd = resolve => {
     resolve(require('../components/container/Admin/activityManagement/addActivity.vue'));
   });
 };
+const activityManagementEdit = resolve => {
+  require.ensure(['../components/container/Admin/activityManagement/editActivity.vue'], () => {
+    resolve(require('../components/container/Admin/activityManagement/editActivity.vue'));
+  });
+};
 const adminUserCenter = resolve => {
   require.ensure(['../components/container/Admin/AdminUserCenter/AdminUserCenter.vue'], () => {
     resolve(require('../components/container/Admin/AdminUserCenter/AdminUserCenter.vue'));
@@ -641,6 +646,10 @@ const router = new Router({
         {
           path: '/Admin/activityManagement/addActivity',
           component: activityManagementAdd
+        },
+        {
+          path: '/Admin/activityManagement/editActivity',
+          component: activityManagementEdit
         },
         {
           path: '/Admin/userCenter',
