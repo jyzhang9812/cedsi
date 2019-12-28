@@ -77,10 +77,11 @@
                 <tbody>
                   <tr v-for="(item,index) in messList">
                     <td>{{index + 1}}</td>
-                    <td>{{item.STUDENT_NAME}}</td>
+                    <td v-if="item.STUDENT_NAME">{{item.STUDENT_NAME}}</td>
+                    <td v-else>{{item.NAME}}</td>
                     <td>{{item.SCHOOL}}</td>
                     <td>{{item.GRADE}}</td>
-                    <td>{{item.MAJOR}}</td>
+                    <td >{{item.MAJOR}}</td>
                     <td>{{item.PHONE}}</td>
                     <td>{{item.REMARK}}</td>
                     <td>{{item.SIGH_STATUS === "NOT_SIGH" ? "未验票" : "已验票"}}</td>
@@ -109,6 +110,7 @@
     name: 'activity',
     data() {
       return {
+        isShow:'',
         alert: '',
         content: '',
         limit: 10,
@@ -176,7 +178,7 @@
     },
     mounted() {
       this.pullOriginalTableData();
-    }
+    },
   }
 
 </script>
