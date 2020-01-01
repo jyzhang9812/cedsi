@@ -84,7 +84,7 @@
     </el-form>
     <div class="btn-box">
       <el-button class="upload-btn" type="primary" @click="submit">确定</el-button>
-      <el-button class="upload-btn" type="primary">取消</el-button>
+      <el-button class="upload-btn" type="primary" @click="cancle">取消</el-button>
     </div>
   </div>
 </template>
@@ -278,7 +278,7 @@
         let config = {
           headers: { Authorization: localStorage.getItem("idToken") }
         };
-        let formType =this.form.formType;
+        let formType = this.form.formType;
         let formDetail = formType.list.find(item => item.title = formType.option);
         formDetail = formDetail || formType.list[0];
         let date = this.form.startDate.getFullYear() + "-" + this.repairZero(this.form.startDate.getMonth() + 1) + "-" + this.repairZero(this.form.startDate.getDate()) + " " + this.repairZero(this.form.startDate.getHours()) + ":" + this.repairZero(this.form.startDate.getMinutes()) + ":" + this.repairZero(this.form.startDate.getSeconds());
@@ -296,6 +296,11 @@
         console.log('hhhhhhhhhh');
         console.log(data);
         return instance.post("/admin/activity", data, config);
+      },
+      cancle() {
+        this.$router.replace({
+          path: "/Admin/activityManagement/"
+        });
       }
     },
     computed: {},
