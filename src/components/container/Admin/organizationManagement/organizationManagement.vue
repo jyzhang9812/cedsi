@@ -79,8 +79,7 @@
       <el-table
       :data="tableData"
       style="width: 100%"
-      v-for="(organization, seq) in currentList"
-      :key="seq">
+     >
       <el-table-column
         prop="num"
         label="序号"
@@ -114,14 +113,17 @@
       <el-table-column
         prop="address"
         label="操作"
-        width="180">
-        <el-link type="primary" @click="See(seq)">查看营业执照</el-link>
+        width="180"
+        >
+        <template slot-scope="scope">
+        <el-link type="primary" @click="See(scope.$index)">查看营业执照</el-link>
               <br />
               <el-link type="primary"
                 data-toggle="modal"
                 data-target="#courseModal"
-                @click="getCourseList(seq)"
+                @click="getCourseList(scope.$index)"
               >分配课程</el-link>
+        </template>
       </el-table-column>
     </el-table>
     </div>
@@ -163,6 +165,7 @@ export default {
     }
   },
   methods: {
+
     deleteOrganization(seq) {
       this.index = this.currentPage * this.limit + seq;
       console.log(this.index);
