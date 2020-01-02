@@ -78,7 +78,9 @@
     <div class="second-floor">
       <el-table
       :data="tableData"
-      style="width: 100%">
+      style="width: 100%"
+      v-for="(organization, seq) in currentList"
+      :key="seq">
       <el-table-column
         prop="num"
         label="序号"
@@ -133,15 +135,13 @@
 </template>
 
 <script>
-//import pagination from "../../teacher/utils/pagination.vue";
 import globalAxios from "axios";
 import { error } from "util";
 export default {
   name: "adminManagement",
-  //components: { pagination },
   data() {
     return {
-
+      limit: 20,
       currentList: [],
       inputData: {
         organizationUserName: ""
