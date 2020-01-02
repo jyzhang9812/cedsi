@@ -78,6 +78,7 @@
     <div class="second-floor">
       <el-table
       :data="tableData"
+      stripe
       style="width: 100%"
      >
       <el-table-column
