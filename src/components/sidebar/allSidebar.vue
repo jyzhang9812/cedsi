@@ -67,4 +67,7 @@
     height: 100%;
     background-color: #3766A6;
   }
+  .el-menu-item i {
+    color: #FFF;
+  }
 </style>
