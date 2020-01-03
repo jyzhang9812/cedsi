@@ -1,186 +1,134 @@
 <template>
-  <div id="addCourse">
-    <div class="upload">
-      <span class="upload-title">课程名称:</span>
-      <input class="upload-input right" v-model="name" placeholder="请输入课程名称" />
-    </div>
-    <div class="upload">
-      <span class="upload-title">是否付费:</span>
-      <span style="margin:30px 0 0 50px" v-for="(item,index) in radiolist" :key="index">
-        <input
-          type="radio"
-          :value="item.value"
-          :checked="item.isCheck"
-          @change="changeInput(index)"
-        />
-        {{item.name}}
-      </span>
-    </div>
-    <div v-if="radiolist[2,1].isCheck==true" class="upload">
-      <span class="upload-title">付费金额:</span>
-      <input :class="isPrice==true?'upload-input right':'upload-input err'" v-model="price" placeholder="请输入付费金额" />
-    </div>
-    <div class="upload upload-height">
-      <span class="upload-title">课程描述:</span>
-      <textarea
-        class="upload-textarea"
-        rows="8"
-        cols="70"
-        v-model="description"
-        placeholder="请输入课程描述"
-      />
-    </div>
-    <div class="upload">
-      <span class="upload-title">请选择封面:</span>
-      <div class="upload-cover-btn">
-        上传文件
-        <input type="file" class @change="getFile($event)" style="opacity: 0" />
+  <div>
+    <el-form ref="form" :model="form" label-width="100px">
+      <el-form-item label="课程名称：">
+        <el-input v-model="form.name" placeholder="请输入课程名称"></el-input>
+      </el-form-item>
+      <el-form-item label="是否付费：">
+        <el-radio-group v-model="form.isFree">
+          <el-radio label="0">免费</el-radio>
+          <el-radio label="1">付费</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <div v-if="form.isFree==='1'">
+        <el-form-item label="付费金额：">
+          <el-input v-model="form.price" placeholder="请输入付费金额"></el-input>
+        </el-form-item>
       </div>
-    </div>
-    <div class="upload upload-height">
-      <span class="upload-title">预览:</span>
-      <div class="upload-cover-img">
-        <img
-          id="headimage"
-          :src="headsculpture"
-          class="cover-image"
-          alt
-          v-show="headsculpture!==''"
-        />
-      </div>
-    </div>
-    <div class="upload-footer">
-      <button class="btn upload-btn" @click="submit1($event)" :disabled="!isPrice">确定</button>
-      <button class="btn upload-btn" @click="calcelUpload">取消</button>
-    </div>
+      <el-form-item label="课程描述：">
+        <el-input type="textarea" :autosize="{ minRows: 6, maxRows: 6}" v-model="form.description"></el-input>
+      </el-form-item>
+      <el-form-item label="封面：" prop="cover">
+        <el-upload
+          class="avatar-uploader"
+          action="#"
+          :http-request="loadActivityCover"
+          :show-file-list="false"
+        >
+          <img v-if="form.cover" :src="form.cover" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submit1($event)" :disabled="!form.isPrice">确定</el-button>
+        <el-button @click="calcelUpload">取消</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
 import AWS from "aws-sdk";
 import instance from "../../../../axios-auth.js";
-import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
+import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 
 export default {
   name: "uploadVideo",
   data() {
     return {
+      form: {
+        name: "",
+        price: 0,
+        isFree: "0",
+        description: "",
+        cover: "",
+        isPrice: true
+      },
       file: null,
       fileName: "",
-      headsculpture: "",
-      name: "",
-      price: 0,
-      // chapter: null,
       ispay: 0,
-      description: "",
-      radiolist: [
-        { name: "免费", value: 1, isCheck: false },
-        { name: "付费", value: 2, isCheck: false }
-      ],
-      isPrice:true
     };
   },
   watch: {
     price(val, oldVal) {
-      var regPos = /^\d+(\.\d+)?$/; 
+      var regPos = /^\d+(\.\d+)?$/;
       if (regPos.test(val)) {
-        this.isPrice = true;
+        this.form.isPrice = true;
       } else {
-        this.isPrice = false;
+        this.form.isPrice = false;
       }
     }
   },
   methods: {
-    changeInput(index) {
-      this.radiolist.map((v, i) => {
-        if (i == index) {
-          v.isCheck = true;
-          this.price=0
-        } else {
-          v.isCheck = false;
-          this.price=0
-        }
-      });
-    },
-    calcelUpload() {
-      this.headsculpture = "";
-      this.file = null;
-      this.fileName = "";
-      this.name = "";
-      this.price = null;
-      // this.chapter = null;
-      this.description = "";
-      this.$router.replace({ path: "/Admin/courseManagement/" });
-    },
-    getFile(event) {
-      this.file = event.target.files[0];
-      console.log(this.file);
-      this.fileName = this.file.name;
-      var reader = new FileReader();
-      var that = this;
-      reader.readAsDataURL(this.file);
-      reader.onload = function(e) {
-        that.headsculpture = this.result;
+    loadActivityCover(event) {
+      this.file = event.file;
+      let reader = new FileReader();
+      let that = this;
+      reader.readAsDataURL(event.file);
+      reader.onload = function() {
+        that.form.cover = this.result;
       };
     },
-    submit1(event) {
-      var that = this;
-      let postImgToS3 = function(config, file) {
+    calcelUpload() {
+      this.file = null;
+      this.fileName = "";
+      this.form.name = "";
+      this.form.price = null;
+      this.form.description = "";
+      this.$router.replace({ path: "/Admin" });
+    },
+    submit1(event) {     
+      console.log(this.file);
+      let data=  {
+          name: this.form.name,
+          ispay: this.ispay,
+          price: this.form.price * 100,
+          introduction: this.form.description,
+          type: this.file.type.split("/")[1]
+        };
+        this.postFormData(data);        
+    },
+
+    postImgToS3(config, file) {
+        const that = this;
         AWS.config = new AWS.Config({
           accessKeyId: config.AccessKeyId,
           secretAccessKey: config.SecretAccessKey,
           sessionToken: config.SessionToken,
-          region: "cn-northwest-1"
+          region: 'cn-northwest-1'
         });
-        var s3 = new AWS.S3();
-        let formData = new FormData();
-        formData.append("content", file);
-        const reader = new FileReader();
-        var content = reader.readAsArrayBuffer(file);
-        var params = {
-          ACL: "public-read",
+        let s3 = new AWS.S3();
+        let params = {
+          ACL: 'public-read',
           Bucket: "cedsi",
-          Body: formData.get("content"),
+          Body: file,
           Key: "course/" + config.id + "." + file.type.split("/")[1],
           ContentType: file.type,
-          Metadata: { uploader: window.localStorage.getItem("user") }
+          Metadata: { 'uploader': window.localStorage.getItem('user') }
         };
-        s3.putObject(params, function(err, data) {
-          if (err) {
-            console.log(err, err.stack);
+        s3.putObject(params, function (err, data) {
+          console.log(err);
+          console.log(data);
+          that.screenLoading = false;
+          if (data.ETag) {
+            that.$message({ message: '课程增加成功', type: 'success' });
           } else {
-            console.log(data);
-            if (data.hasOwnProperty("ETag")) {
-              that.$toast.success({title:"课程管理",message:'操作成功'})
-              setTimeout(function() {
-                that.$router.push({ path: "/Admin/" });
-              }, 1000);
-            } else {
-              // alert("上传失败!");
-              that.$toast.warning({title:"课程管理",message:'上传失败'})
-            }
+            that.$message({ message: '课程增加失败', type: 'error' });
           }
         });
-      };
-      this.radiolist.map((v, i) => {
-        if (v.isCheck) {
-          console.log("被选中的值为:" + v.value);
-          this.ispay = v.value;
-        }
-      });
-      this.postFormData(
-        {
-          name: this.name,
-          ispay: this.ispay,
-          price: this.price * 100,
-          // chapter: this.chapter,
-          introduction: this.description,
-          type: this.file.type.split("/")[1]
-        },
-        postImgToS3
-      );
-    },
-    postFormData(formData, postImgToS3) {
+      },
+
+    postFormData(formData) {
       let file = this.file;
       instance
         .post("/admin/course", formData, {
@@ -188,7 +136,7 @@ export default {
         })
         .then(res => {
           console.log(res);
-          postImgToS3(res.data, file);
+          this.postImgToS3(res.data, file);
         })
         .catch(err => {
           console.log(err);
@@ -199,116 +147,36 @@ export default {
 </script>
 
 <style scoped>
-#addCourse {
-  width: 98%;
-  margin: 0 auto;
-  padding-top: 30px;
-}
-#addCourse .upload {
-  width: 100%;
-  height: 50px;
-  margin-bottom: 20px;
-}
-#addCourse .upload-title {
-  color: #606266;
-  display: block;
-  text-align: right;
-  width: 80px;
-  height: 40px;
-  float: left;
-  line-height: 40px;
-}
-#addCourse .upload-input {
-  width: 300px;
-  height: 40px;
-  border-radius: 5px;
-  margin-left: 10px;
-  padding-left: 10px;
-}
-#addCourse .upload-input:hover {
-  border: 1px solid #66b1ff;
-}
-#addCourse .upload-input:focus {
-  outline: none;
-}
-#addCourse .upload-textarea {
-  border: 1px solid #409eff;
-  border-radius: 5px;
-  margin-left: 10px;
-  padding: 10px;
-}
-#addCourse .upload-height {
-  height: 190px;
-}
-#addCourse .upload-textarea:hover {
-  border: 1px solid #66b1ff;
-}
-#addCourse .upload-textarea:focus {
-  outline: none;
-}
-#addCourse .outside[data-v-5567b275] {
-  width: 300px !important;
-  height: 40px !important;
-  margin-left: 10px !important;
-}
-#addCourse .inputBox[data-v-5567b275] {
-  height: 35px !important;
-  font-size: 14px !important;
-  width: 230px !important;
-}
-#addCourse .dropdown-menu {
-  left: 100px !important;
-}
-#addCourse .upload-footer {
-  width: 100%;
-  text-align: center;
-}
-#addCourse .upload-btn {
-  background-color: #409eff;
-  color: #fff;
-  margin-left: 10px;
-}
-#addCourse .upload-btn:hover {
-  color: #fff;
-}
-#addCourse .upload-btn:focus {
-  outline: none;
-  color: #fff;
-}
-#addCourse .upload-cover-btn {
-  margin-left: 10px;
-  width: 80px;
-  height: 35px;
-  display: inline-block;
-  background-color: #409eff;
-  color: #fff;
-  border-radius: 5px;
-  line-height: 35px;
-  text-align: center;
-}
-#addCourse input[type="file"] {
-  width: 80px;
-  height: 35px;
+.avatar-uploader {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
   position: relative;
-  top: -35px;
-}
-#addCourse .upload-cover-img {
-  display: inline-block;
-  border: 1px dashed #dcdfe6;
+  overflow: hidden;
   width: 290px;
   height: 150px;
-  margin-left: 10px;
-  border-radius: 5px;
-  background-color: #f5f7fa;
 }
-#addCourse .cover-image {
-  width: 100%;
-  height: 100%;
+
+.avatar-uploader:hover {
+  border-color: #409eff;
 }
-.right{
-  border: 1px solid #409eff;
+
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 290px;
+  height: 150px;
+  line-height: 150px;
+  text-align: center;
 }
-.err{
-  border: 1px solid red;
+
+.avatar {
+  width: 290px;
+  height: 150px;
+  display: block;
+}
+
+.el-form-item {
+  width: 400px;
 }
 </style>

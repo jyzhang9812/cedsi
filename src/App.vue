@@ -1,9 +1,15 @@
 <template>
-  <div id="app" :style="appheight">
-    <app-header />
+  <div id="app">
+    <el-container>
+      <el-header>
+        <app-header height="56px"></app-header>
+      </el-header>
+      <router-view></router-view>
+      <el-footer height="53px">
+        <app-footer></app-footer>
+      </el-footer>
+    </el-container>
     <vue-element-loading :active="vueElementLoading" :is-full-screen="true" spinner="bar-fade-scale" color="#FF6700" />
-    <router-view :style="screenHeight"></router-view>
-    <app-footer />
   </div>
 </template>
 
@@ -21,22 +27,9 @@
       VueElementLoading
     },
     data() {
-      return {
-        height: 0,
-        width: 0,
-        appheight: 0,
-      }
+      return {}
     },
     created: function () {
-      this.height = document.documentElement.clientHeight,
-        console.log(this.height)
-      if (this.height > 620) {
-        this.appheight = 'min-height:' + this.height + 'px;';
-        this.screenHeight = 'min-height:1000px;';
-      } else {
-        this.appheight = 'min-height:650px;';
-        this.screenHeight = 'min-height: 1000px;';
-      }
       this.$store.dispatch('tryAutoLogin');
     },
     computed: {
@@ -48,12 +41,23 @@
 </script>
 
 <style>
-  body,
+  #app,
+  .el-container,
+  .el-aside,
   html,
-  #app {
+  body {
     margin: 0;
-    min-height: 100%;
-    /* font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; */
-    font-family: 'TianZhen19e6a6ae661ff1';
+    padding: 0;
+    height: 100%;
+  }
+
+  .el-header,
+  .el-footer {
+    margin: 0;
+    padding: 0;
+  }
+
+  .el-main {
+    padding: 0;
   }
 </style>

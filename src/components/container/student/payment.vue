@@ -6,7 +6,7 @@
       <div class="modal-dialog mypay">
         <div class="modal-content mypay-height">
           <div class="modal-header mypay-title">
-            <h4 class="modal-title" id="myModalLabel">微信支付¥{{payinfo.price}}</h4>
+            <h4 class="modal-title" id="myModalLabel">微信支付¥{{payinfo.price / 100}}</h4>
             <button type="button" class="close" style="position: absolute;top:20px;right: 20px;" data-dismiss="modal"
               aria-hidden="true">
               &times;
@@ -35,7 +35,7 @@
         <div class="order-title">{{payinfo.name}}</div>
         <div class="order-price">
           实付金额:
-          <span>¥{{payinfo.price}}</span>
+          <span>¥{{payinfo.price / 100}}</span>
         </div>
       </div>
       <div class="pay-method">
@@ -46,7 +46,7 @@
       </div>
       <div class="summary">
         应付金额:
-        <span>¥{{payinfo.price}}</span>
+        <span>¥{{payinfo.price / 100}}</span>
         <button class="pay" data-toggle="modal" data-target="#myPay" @click="closeModal">立即支付</button>
       </div>
     </div>
@@ -98,38 +98,30 @@
         });
       },
       query(timer, orderId) {
-        globalAxios
-          .get(
-            "https://wx.cedsie.com:12345/query?orderId=" + orderId
-          )
-          .then(
-            response => {
-              console.log(response.data)
-              if (response.data == "SUCCESS") {
-                $('#myPay').modal('hide');
-                var allid = {
-                    id: this.$route.query.id,
-                    orderId: orderId,
-                    cover: this.payinfo.cover
-                  }
-                if (this.$route.query.type == 1) {
-                  this.$store.dispatch('postCourseId', allid)
-                } else {
-                  this.$store.dispatch('postUserInfo', allid)
-                }
-                clearInterval(timer)
-                this.$toast.success({ message: '报名成功 ~!' })
-                this.$router.push({ path: '/payOK' });
+        let config = { params: { orderId: orderId } };
+        instance.get("/lambda/tenpay", config)
+          .then(response => {
+            console.log(response.data)
+            console.log(this.$route.query.type);
+            if (response.data == "SUCCESS") {
+              $('#myPay').modal('hide');
+              let allid = {
+                id: this.$route.query.id,
+                orderId: orderId,
+                cover: this.payinfo.cover
+              };
+              if (this.$route.query.type == 2) {
+                this.$store.dispatch('postCourseId', allid)
+              } else {
+                this.$store.dispatch('postUserInfo', allid)
               }
-            },
-            error => {
-
+              clearInterval(timer)
+              this.$toast.success({ message: '报名成功 ~!' })
+              this.$router.push({ path: '/payOK' });
             }
-          )
-      },
-      // payReasult() {
-      //   this.$router.push({ path: '/payOK' });
-      // }
+          })
+          .catch(err => console.log(err));
+      }
     },
     created: function () {
       this.orderId = random(6) + Date.now();
@@ -144,7 +136,7 @@
     },
     computed: {
       ...mapState({
-        payinfo: state => state.payInfo,
+        payinfo: state => state.payInfo
       }),
     },
   };

@@ -12,7 +12,7 @@
       <div class="modal-dialog alterwidth">
         <div class="modal-content">
           <div class="modal-header alterheader">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <el-button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</el-button>
             <h4 class="modal-title" id="myModalLabel">提示</h4>
           </div>
           <div class="modal-body">
@@ -22,13 +22,13 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button
+            <el-button type="button" class="btn btn-default" data-dismiss="modal">取消</el-button>
+            <el-button
               type="button"
               class="btn btn-primary"
               data-dismiss="modal"
               @click="submitDelete()"
-            >确定</button>
+            >确定</el-button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -47,7 +47,7 @@
       <div class="modal-dialog alterwidth">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <el-button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</el-button>
             <h4 class="modal-title" id="myModalLabel">分配课程</h4>
           </div>
           <div class="modal-body">
@@ -59,8 +59,8 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="submit()">确定</button>
+            <el-button type="primary"  size="small" data-dismiss="modal">取消</el-button>
+            <el-button type="primary"  size="small" data-dismiss="modal" @click="submit()">确定</el-button>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -73,48 +73,75 @@
       </ol>
     </div>
     <div class="first-floor">
-      <button class="btn btn-clear" @click="addOrganization()">新增机构</button>
+      <el-button type="primary"  size="medium" @click="addOrganization()" round>新增机构</el-button>
     </div>
     <div class="second-floor">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th v-for="(title,index) in tableTitle" class="title" :key="index">{{title}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(organization, seq) in currentList" :key="seq" class="content">
-            <td>{{organization.num}}</td>
-            <td>{{organization.id}}</td>
-            <td>{{organization.name}}</td>
-            <td>{{organization.headmaster}}</td>
-            <td>{{organization.intro}}</td>
-            <td>{{organization.location}}</td>
-            <td>
-              <span class="blue" @click="See(seq)">查看营业执照</span>
+      <el-table
+      :data="tableData"
+      stripe
+      style="width: 100%"
+     >
+      <el-table-column
+        prop="num"
+        label="序号"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="id"
+        label="企业账号"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="机构名称"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="headmaster"
+        label="机构负责人"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="intro"
+        label="介绍"
+        width="200">
+      </el-table-column>
+      <el-table-column
+        prop="location"
+        label="所属地区"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="操作"
+        width="180"
+        >
+        <template slot-scope="scope">
+        <el-link type="primary" @click="See(scope.$index)">查看营业执照</el-link>
               <br />
-              <span
-                class="blue"
+              <el-link type="primary"
                 data-toggle="modal"
                 data-target="#courseModal"
-                @click="getCourseList(seq)"
-              >分配课程</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                @click="getCourseList(scope.$index)"
+              >分配课程</el-link>
+        </template>
+      </el-table-column>
+    </el-table>
     </div>
-    <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit"></pagination>
+    <el-pagination
+    :num="tableData.length"
+    @getNew="changeTablePages"
+    layout="prev, pager, next"
+    :total=10>
+  </el-pagination>
   </div>
 </template>
 
 <script>
-import pagination from "../../teacher/utils/pagination.vue";
 import globalAxios from "axios";
 import { error } from "util";
 export default {
   name: "adminManagement",
-  components: { pagination },
   data() {
     return {
       limit: 20,
@@ -122,15 +149,6 @@ export default {
       inputData: {
         organizationUserName: ""
       },
-      tableTitle: [
-        "序号",
-        "企业账号",
-        "机构名称",
-        "机构负责人",
-        "介绍",
-        "所属地区",
-        "操作"
-      ],
       tableData: [], //页面表格内容
       //提示框
       alterimg: this.$store.state.url + "organization/alter.png",
@@ -148,6 +166,7 @@ export default {
     }
   },
   methods: {
+
     deleteOrganization(seq) {
       this.index = this.currentPage * this.limit + seq;
       console.log(this.index);
@@ -340,40 +359,6 @@ label {
   border-color: #409eff;
 }
 
-#organizationManagement .btn {
-  background: #409eff;
-  color: #fff;
-  height: 30px;
-  border-radius: 5px;
-  font-size: 12px;
-  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-}
-
-#organizationManagement .btn:focus {
-  outline: none;
-}
-
-#organizationManagement .btn:hover {
-  background: #66b1ff;
-}
-
-#organizationManagement .btn-search {
-  width: 54px;
-}
-
-#organizationManagement .btn-clear {
-  width: 88px;
-}
-
-#organizationManagement .blue {
-  cursor: pointer;
-  color: #409eff;
-}
-
-#organizationManagement .red {
-  cursor: pointer;
-  color: red;
-}
 
 table {
   border: #eeeeee;
