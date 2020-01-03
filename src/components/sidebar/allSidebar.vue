@@ -70,4 +70,7 @@
   .el-menu-item i {
     color: #FFF;
   }
+  .el-container {
+    overflow: hidden;
+  }
 </style>
