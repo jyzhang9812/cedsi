@@ -1,7 +1,7 @@
 <template>
-  <div id="courseManagement">
-    <!-- 课程详情模态框-->
-    <div class="modal fade" id="detials" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <!-- <div id="courseManagement"> -->
+  <!-- 课程详情模态框-->
+  <!-- <div class="modal fade" id="detials" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -16,18 +16,18 @@
             <div class="modal-list">
               <h5 class="modal-list-title">课程详情:</h5>
               <span class="modal-list-course">{{courseIntro}}</span>
-            </div>
-            <!-- <div class="modal-list">
+  </div>-->
+  <!-- <div class="modal-list">
               <h5 class="modal-list-title">上课人数:</h5>
               <span class="modal-list-course">{{courseNum}}人</span>
-            </div> -->
-          </div>
+  </div>-->
+  <!-- </div>
         </div>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal -->
-    <div class="classroute">
+  </div>-->
+  <!-- /.modal-content -->
+  <!-- </div> -->
+  <!-- /.modal -->
+  <!-- <div class="classroute">
       <ol class="breadcrumb">
         <li>课程管理</li>
       </ol>
@@ -49,39 +49,123 @@
         </div>
       </div>
     </div>
+  </div>-->
+
+  <!-- <div class="modal fade" id="detials" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <el-button type="text" class="close" data-dismiss="modal" aria-hidden="true">&times;</el-button>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">课程详情</h4>
+          </div>
+          <div class="modal-body">
+            <div class="modal-list">
+              <h5 class="modal-list-title">课程名称:</h5>
+              <span class="modal-list-course">{{courseName}}</span>
+            </div>
+            <div class="modal-list">
+              <h5 class="modal-list-title">课程详情:</h5>
+              <span class="modal-list-course">{{courseIntro}}</span>
+            </div>
+            <div class="modal-list">
+              <h5 class="modal-list-title">上课人数:</h5>
+              <span class="modal-list-course">{{courseNum}}人</span>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>-->
+
+  <div>
+    <!-- <el-breadcrumb>
+      <el-breadcrumb-item :to="{ path: '/' }">课程管理</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-row>
+      <el-button type="primary" size="medium" @click="addCourse">新增课程</el-button>
+    </el-row>
+    <el-row>
+      <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
+        <el-card :body-style="{ padding: '0px' }">
+          <img src="course.img" class="image"/>
+          <div style="padding: 14px;">
+            <span>好吃的汉堡</span>
+            <div class="bottom clearfix">
+              <time class="time">{{ currentDate }}</time>
+              <el-button type="text" class="button">操作按钮</el-button>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row> -->
+
+
+
+    <el-card label-width="100px">
+      <el-card-item label="课程管理">
+        <el-button type="primary" @click="addCourse">新增课程</el-button>
+      </el-card-item>
+       <el-row>
+      <el-col :span="8" v-for="(course, index) in courseList" :key="course.name" :offset="index > 0 ? 2 : 0">
+        <el-card :body-style="{ padding: '0px' }">
+          <img :src="course.img" class="image"/>
+          <div style="padding: 14px;">
+            <span>好吃的汉堡</span>
+            <div class="bottom clearfix">
+              <time class="time">{{ currentDate }}</time>
+              <el-button type="text" class="button">操作按钮</el-button>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    </el-card>
   </div>
 </template>
 <script>
-  import instance from "../../../../axios-auth.js";
+import instance from "../../../../axios-auth.js";
 
-  export default {
-    data() {
-      return {
-        courseList: [],
-        courseName: "",
-        courseIntro: "",
-        courseNum: 0,
-      };
+export default {
+  data() {
+    return {
+      courseList: [],
+      courseName: "",
+      courseIntro: "",
+      courseNum: 0
+    };
+  },
+  methods: {
+    open() {
+      this.$alert("这是一段内容", "课程详情", {
+        confirmButtonText: "确定",
+        callback: action => {
+          this.$message({
+            type: "info",
+            message: `action: ${action}`
+          });
+        }
+      });
     },
-    methods: {
-      courseDetials(index) {
-        this.courseName = this.courseList[index].name;
-        this.courseIntro = this.courseList[index].introduction;
-        this.courseNum = this.courseList[index].num;
-      },
-      addCourse() {
-        this.$router.push({ path: '/Admin/courseManagement/addCourse' })
-      },
-      gotoChapter(index) {
-        this.$router.push({ path: '/Admin/chapterManagement/' + this.courseList[index].id })
-      },
-      coursePublish(index){
-        var token = window.localStorage.getItem("idToken");
+    courseDetials(index) {
+      this.courseName = this.courseList[index].name;
+      this.courseIntro = this.courseList[index].introduction;
+      this.courseNum = this.courseList[index].num;
+    },
+    addCourse() {
+      this.$router.push({ path: "/Admin/courseManagement/addCourse" });
+    },
+    gotoChapter(index) {
+      this.$router.push({
+        path: "/Admin/chapterManagement/" + this.courseList[index].id
+      });
+    },
+    coursePublish(index) {
+      var token = window.localStorage.getItem("idToken");
       this.courseId = this.courseList[index].id;
       instance
         .put(
-          "/admin/course/" +
-            this.courseId ,{},
+          "/admin/course/" + this.courseId,
+          {},
           {
             headers: {
               "Content-Type": "application/json",
@@ -92,7 +176,7 @@
         .then(
           response => {
             console.log(response);
-            this.courseList[index].status=false;
+            this.courseList[index].status = false;
             // alert("发布成功")
             this.$toast.success({ title: "课程管理", message: "发布成功" });
           },
@@ -100,182 +184,210 @@
             console.log(error);
           }
         );
-      }
-    },
-    mounted() {
-      let config = { headers: { Authorization: localStorage.getItem('idToken') } };
-      instance.get('/admin/course', config)
-        .then((res) => {
-          console.log(res)
-          res.data.forEach(item => {
-            this.courseList.push({
-              name: item.COURSE_NAME,
-              introduction: item.INTRO,
-              img:item.COVER,
-              num: 100,
-              id:item.ID,
-              price:item.PRICE/100,
-              status:item.COURSE_STATUS=="NOT_PUBLISH"
-            });
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     }
-  };
+  },
+  mounted() {
+    let config = {
+      headers: { Authorization: localStorage.getItem("idToken") }
+    };
+    instance
+      .get("/admin/course", config)
+      .then(res => {
+        console.log(res);
+        res.data.forEach(item => {
+          this.courseList.push({
+            name: item.COURSE_NAME,
+            introduction: item.INTRO,
+            img: item.COVER,
+            num: 100,
+            id: item.ID,
+            price: item.PRICE / 100,
+            status: item.COURSE_STATUS == "NOT_PUBLISH"
+          });
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+};
 </script>
 
 <style scoped>
-  #courseManagement{
-    width: 98%;
-    margin: 0 auto;
+.time {
+    font-size: 13px;
+    color: #999;
   }
-  #courseManagement .breadcrumb {
-    background-color: #fff;
-    color: #606266;
-    margin-bottom: 0;
-  }
+  
+.bottom {
+  margin-top: 13px;
+  line-height: 12px;
+}
 
-  #courseManagement .first-floor {
-    margin-top: 20px;
-  }
-  .floor-height{
-    height: 350px;
-  }
+.button {
+  padding: 0;
+  float: right;
+}
 
-  #courseManagement .textBox {
-    width: 180px;
-    height: 32px;
-    font-size: 12px;
-    padding-left: 15px;
-    border: 1px solid #409eff;
-    border-radius: 5px;
-    margin-left: 5px;
-    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  }
+.image {
+  width: 100%;
+  display: block;
+}
 
-  #courseManagement .textBox:focus {
-    outline: none;
-  }
+.clearfix:before,.clearfix:after {
+    display: table;
+    content: "";
+}
 
-  #courseManagement .textBox:hover {
-    border-color: #409eff;
-  }
-  .btn-red{
-    background-color: red !important;
-  }
+/* #courseManagement {
+  width: 98%;
+  margin: 0 auto;
+}
+#courseManagement .breadcrumb {
+  background-color: #fff;
+  color: #606266;
+  margin-bottom: 0;
+}
 
-  #courseManagement .btn {
-    background: #409eff;
-    color: #fff;
-    height: 30px;
-    border-radius: 5px;
-    font-size: 12px;
-    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  }
+#courseManagement .first-floor {
+  margin-top: 20px;
+}
+.floor-height {
+  height: 350px;
+}
 
-  #courseManagement .btn:focus {
-    outline: none;
-    color: #fff;
-  }
+#courseManagement .textBox {
+  width: 180px;
+  height: 32px;
+  font-size: 12px;
+  padding-left: 15px;
+  border: 1px solid #409eff;
+  border-radius: 5px;
+  margin-left: 5px;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
 
-  #courseManagement .btn:hover {
-    background: #66b1ff;
-    color: #fff;
-  }
+#courseManagement .textBox:focus {
+  outline: none;
+}
 
-  #courseManagement .btn-search {
-    width: 54px;
-  }
+#courseManagement .textBox:hover {
+  border-color: #409eff;
+}
+.btn-red {
+  background-color: red !important;
+}
 
-  #courseManagement .btn-clear {
-    width: 88px;
-  }
-  #courseManagement .row{
-    margin: 0;
-  }
-  #courseManagement .second-floor {
-    width: 95%;
-    margin: 0px auto;
-  }
-  #courseManagement .course {
-    height: 300px;
-  }
-  #courseManagement .course-card {
-    height: 250px;
-    background-color: rgb(80, 118, 255);
-    border-radius: 8px;
-    margin-top: 20px;
-    box-shadow: 0 10px 1rem rgba(0, 0, 0, 0.16);
-    transition: All 0.4s ease-in-out;
-    -webkit-transition: All 0.4s ease-in-out;
-    -moz-transition: All 0.4s ease-in-out;
-    -o-transition: All 0.4s ease-in-out;
-  }
+#courseManagement .btn {
+  background: #409eff;
+  color: #fff;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 12px;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
 
-  #courseManagement .course-card:hover {
-    transform: scale(1.1);
-    -webkit-transform: scale(1.1);
-    -moz-transform: scale(1.1);
-    -o-transform: scale(1.1);
-    -ms-transform: scale(1.1);
-  }
+#courseManagement .btn:focus {
+  outline: none;
+  color: #fff;
+}
 
-  #courseManagement .course-image {
-    width: 100%;
-    height: 100%;
-    border-radius:8px; 
-  }
+#courseManagement .btn:hover {
+  background: #66b1ff;
+  color: #fff;
+}
 
-  #courseManagement .course-title {
-    width: 100%;
-    height: 50px;
-    line-height: 50px;
-  }
+#courseManagement .btn-search {
+  width: 54px;
+}
 
-  #courseManagement .course-name {
-    line-height: 20px;
-  }
-  .course-price{
-    margin-top: 20px;
-    display: inline-block;
-    color: red;
-    margin-right: 10px;
-  }
+#courseManagement .btn-clear {
+  width: 88px;
+}
+#courseManagement .row {
+  margin: 0;
+}
+#courseManagement .second-floor {
+  width: 95%;
+  margin: 0px auto;
+}
+#courseManagement .course {
+  height: 300px;
+}
+#courseManagement .course-card {
+  height: 250px;
+  background-color: rgb(80, 118, 255);
+  border-radius: 8px;
+  margin-top: 20px;
+  box-shadow: 0 10px 1rem rgba(0, 0, 0, 0.16);
+  transition: All 0.4s ease-in-out;
+  -webkit-transition: All 0.4s ease-in-out;
+  -moz-transition: All 0.4s ease-in-out;
+  -o-transition: All 0.4s ease-in-out;
+}
 
-  #courseManagement .course-detials {
-    margin: 15px 5px 5px 0;
-    background-color: #2fc27e;
-  }
+#courseManagement .course-card:hover {
+  transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+}
 
-  #courseManagement .course-detials:hover {
-    background-color: #2fc27dc7;
-  }
+#courseManagement .course-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
 
-  /*课程详情模态框*/
-  #courseManagement .modal-list {
-    width: 100%;
-    min-height: 40px;
-    line-height: 40px;
-    clear: both;
-    overflow:hidden;
-  }
+#courseManagement .course-title {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+}
 
-  #courseManagement .modal-list-title {
-    margin: 0;
-    width: 20%;
-    text-align: right;
-    display: block;
-    float: left;
-    line-height: 40px;
-  }
+#courseManagement .course-name {
+  line-height: 20px;
+}
+.course-price {
+  margin-top: 20px;
+  display: inline-block;
+  color: red;
+  margin-right: 10px;
+}
 
-  #courseManagement .modal-list-course {
-    width: 70%;
-    display: block;
-    margin-left: 10px;
-    float: left;
-    line-height: 40px;
-  }
+#courseManagement .course-detials {
+  margin: 15px 5px 5px 0;
+  background-color: #2fc27e;
+}
+
+#courseManagement .course-detials:hover {
+  background-color: #2fc27dc7;
+} */
+
+/*课程详情模态框*/
+/* #courseManagement .modal-list {
+  width: 100%;
+  min-height: 40px;
+  line-height: 40px;
+  clear: both;
+  overflow: hidden;
+}
+
+#courseManagement .modal-list-title {
+  margin: 0;
+  width: 20%;
+  text-align: right;
+  display: block;
+  float: left;
+  line-height: 40px;
+}
+
+#courseManagement .modal-list-course {
+  width: 70%;
+  display: block;
+  margin-left: 10px;
+  float: left;
+  line-height: 40px;
+} */
 </style>

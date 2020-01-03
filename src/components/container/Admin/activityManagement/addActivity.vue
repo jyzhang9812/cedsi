@@ -69,7 +69,7 @@
       <input class="upload-input" :value="videoName" disabled />
     </div>
     <div class="upload-footer">
-      <button class="btn upload-btn" @click="submit">确定</button>
+      <button class="btn upload-btn" :disabled=submitButtonIsAvailable @click="submit">确定</button>
       <button class="btn upload-btn" @click="cancel">取消</button>
     </div>
   </div>
@@ -109,7 +109,7 @@
         progressWidth: "0%",
         videoFile: {},
         videoName: "暂未上传",
-        videoType: ""
+        videoType: "",
       };
     },
     methods: {
@@ -264,9 +264,42 @@
           console.log(name);
           return item.name === name;
         });
+        this.submitButtonIsAvailable
+      },
+      submitButtonIsAvailable() {
+        if(this.activityNameNormative) {
+          return false;
+        }
+        if(this.activityPlaceIsNormative) {
+          return false;
+        }
+        if(this.activityImageIsNormative) {
+          return false;
+        }
+        
+
+      },
+      activityNameNormative() {
+        if(this.activityName.length > 20) {
+          return false;
+        }
+        return true;
+      },
+      activityPlaceIsNormative() {
+        if(this.activityAddress.length > 50) {
+          return false;
+        }
+        return true;
+      },
+      activityImageIsNormative() {
+        if(this.coverImage && this.coverType) {
+          return true;
+        }
+        return false;
       }
     },
-    mounted() { }
+
+      mounted() { }
   };
 </script>
 
