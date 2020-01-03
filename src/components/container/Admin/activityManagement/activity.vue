@@ -15,7 +15,7 @@
           </el-button>
         </div>
       </div>
-      <div class="panels">
+      <div>
         <el-table :data="currentList" style="width: 100%">
           <el-table-column type="index" label="序号" width="120">
           </el-table-column>
@@ -175,20 +175,6 @@ export default {
   justify-content: flex-start;
 }
 
-#eduActivity .option input {
-  width: 220px;
-  height: 32px;
-}
-
-#eduActivity .blue {
-  color: #409eff;
-  cursor: pointer;
-}
-
-#eduActivity .red {
-  color: #ff6947;
-}
-
 #eduActivity .filter {
   margin-bottom: 30px;
 }
@@ -199,100 +185,4 @@ export default {
   margin-right: 5px;
 }
 
-#eduActivity .panels {
-  text-align: center;
-}
-
-#eduActivity .panels tr {
-  height: 40px;
-  text-align: center;
-}
-
-#eduActivity .panels th {
-  text-align: center;
-}
-
-#eduActivity table {
-  border: #eeeeee;
-}
-
-#eduActivity .btn-my {
-  margin-right: 8px;
-  height: 32px;
-  border-radius: 4px;
-  font-size: 13px;
-  color: #ffffff;
-  background-color: #409eff;
-  border: 1px solid #409eff;
-}
-
-#eduActivity .add {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  font-size: 13px;
-  min-width: 850px;
-}
-
-#eduActivity .title {
-  width: 750px;
-  display: block;
-  height: 34px;
-  padding: 6px 12px;
-  font-size: 13px;
-  line-height: 1.42857143;
-  color: #555;
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  -webkit-transition: border-color ease-in-out 0.15s,
-    -webkit-box-shadow ease-in-out 0.15s;
-  -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-}
-
-#eduActivity .item {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-top: 20px;
-}
-
-#eduActivity .item p {
-  height: 32px;
-  line-height: 32px;
-  vertical-align: middle;
-  margin-right: 5px;
-}
-
-#eduActivity .file {
-  height: 32px;
-}
-
-#eduActivity .checkbox {
-  vertical-align: middle;
-  margin: 0;
-  height: 32px;
-}
-
-#eduActivity .editor {
-  width: 800px;
-}
-
-#eduActivity .item1 {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-top: 20px;
-  margin-left: 356px;
-}
-#eduActivity .modal-dialog {
-  width: 75%;
-}
 </style>
