@@ -40,7 +40,7 @@
         </el-table>
       
       </div>
-      <el-pagination layout="prev, pager, next" :total="tableData.length" @getNew="getNew">
+      <el-pagination background layout="prev, pager, next" :total="tableData.length" @getNew="getNew">
       </el-pagination>
     </div>
 
@@ -55,7 +55,7 @@
         <el-table-column property="REMARK" label="备注" width="150"></el-table-column>
         <el-table-column property="SIGH_STATUS === "NOT_SIGH" ? "未验票" : "已验票"" label="验票" width="120"></el-table-column>
       </el-table>
-      <el-pagination layout="prev, pager, next" :total="messageData.length" @getNew="getMessNew"></el-pagination>
+      <el-pagination background layout="prev, pager, next" :total="messageData.length" @getNew="getMessNew"></el-pagination>
     </el-dialog>
   </div>
 </template>
