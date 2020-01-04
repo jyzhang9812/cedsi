@@ -1,70 +1,67 @@
 <template>
   <div id="addOrganization">
-    <div class="upload">
-      <span class="upload-title">机构名称:</span>
-      <input class="upload-input" placeholder="请输入机构名称" v-model="organizationName" />
-    </div>
-    <div class="upload">
-      <span class="upload-title" style="margin-right:10px">机构地区:</span>
-      <v-distpicker
-        class="address-input"
-        @province="onChangeProvince"
-        @city="onChangeCity"
-        @area="onChangeArea"
-      ></v-distpicker>
-    </div>
-    <div class="upload">
-      <span class="upload-title" style="margin-right:10px">机构类型:</span>
-      <select-input
-        class="upload-select"
-        id="org"
-        tips="请选择机构类型"
-        :option="inputData.org.option.name"
-        @option="changeOption"
-        :drop-down-list="inputData.org.list"
-        style="margin-left:100px;"
-      ></select-input>
-    </div>
-    <div class="upload upload-height">
-      <span class="upload-title">机构描述:</span>
-      <textarea
-        class="upload-textarea"
-        rows="8"
-        cols="70"
-        placeholder="请输入机构描述"
-        v-model="organizationIntro"
-      />
-    </div>
-    <div class="upload">
-      <span class="upload-title">机构负责人:</span>
-      <input class="upload-input" placeholder="请输入机构负责人" v-model="organizationPrin" />
-    </div>
-    <div class="upload">
-      <span class="upload-title">上传营业执照:</span>
-      <div class="upload-cover-btn">
-        上传文件
-        <input type="file" @change="getLicenseFile($event)" style="opacity: 0" />
-      </div>
-    </div>
-    <div class="upload upload-height">
-      <span class="upload-title">预览:</span>
-      <div class="upload-cover-img">
-        <img
-          id="headimage"
-          :src="businessLicense"
-          class="cover-image"
-          alt
-          v-show="businessLicense!==''"
-        />
-      </div>
-    </div>
+    <el-form ref="form" :model="form" label-width="105px">
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <el-form-item label="机构名称">
+            <el-input v-model="form.organizationName" placeholder="请输入机构名称"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="机构负责人">
+            <el-input v-model="form.organizationPrin" placeholder="请输入机构负责人"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <el-form-item label="机构类型">
+            <el-select v-model="form.inputData.option" placeholder="请选择机构类型" style="width: 300px">
+              <el-option
+                v-for="item in form.inputData.org.list"
+                :key="item.name"
+                :label="item.name"
+                :value="item.name"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="机构地区" style="margin-left:-12px">
+            <v-distpicker 
+              class="address-input"
+              @province="onChangeProvince"
+              @city="onChangeCity"
+              @area="onChangeArea"
+            ></v-distpicker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-form-item label="机构描述" >
+        <el-input type="textarea" :autosize="{ minRows:6, maxRows: 10}" placeholder="请输入机构描述" v-model="form.organizationIntro" style="width: 420px" ></el-input>
+      </el-form-item>
+      <el-form-item label="上传营业执照"  style="margin-left:28px">
+        <div class="upload-cover-btn">
+          上传图片
+          <input type="file" @change="getLicenseFile($event)" style="opacity: 0" />
+        </div>
+      </el-form-item>
+      <el-form-item label="预览">
+        <div class="upload-cover-img">
+          <img
+            id="headimage"
+            :src="form.businessLicense"
+            class="cover-image"
+          />
+        </div>
+      </el-form-item>
+    </el-form>
     <div class="upload-footer">
-      <button class="btn upload-btn" @click="submit">确定</button>
-      <button class="btn upload-btn">取消</button>
+      <el-button  type="primary" @click="submit">确定</el-button>
+      <el-button  type="primary" @click="cancle">取消</el-button>
     </div>
   </div>
 </template>
-
 <script>
 import VDistpicker from "v-distpicker";
 import SelectInput from "../utils/selectInput";
@@ -76,86 +73,87 @@ export default {
   components: { VDistpicker, SelectInput },
   data() {
     return {
-      organization: {
-        province: "",
-        provinceCode: "",
-        city: "",
-        cityCode: "",
-        area: "",
-        areaCode: ""
-      },
-      inputData: {
-        org: {
-          option: "",
-          list: [
-            {
-              name: "学校",
-              id: "0"
-            },
-            {
-              name: "企业",
-              id: "1"
-            }
-          ]
-        }
-      },
-      organizationName: "",
-      organizationPrin: "",
-      businessLicense: "",
-      fileName: "",
-      organizationAddress: "",
-      organizationIntro: ""
+      form: {
+        organization: {
+          province: "",
+          provinceCode: "",
+          city: "",
+          cityCode: "",
+          area: "",
+          areaCode: ""
+        },
+        inputData: {
+          org: {
+            option: "",
+            list: [
+              {
+                name: "学校",
+                id: "0"
+              },
+              {
+                name: "企业",
+                id: "1"
+              }
+            ]
+          }
+        },
+        organizationName: "",
+        organizationPrin: "",
+        businessLicense: "",
+        fileName: "",
+        organizationAddress: "",
+        organizationIntro: "",
+        licenseFile:"",
+        licenseFileName:"",
+        licenseType:"",
+        licenseSize:"",
+      }
     };
   },
   methods: {
-    changeOption(item, id) {
-      Object.keys(this.inputData).forEach(res => {
-        if (res === id) {
-          this.inputData[res].option = item;
-        }
-      });
-    },
     onChangeProvince(data) {
-      this.organization.province = data.value;
-      this.organization.provinceCode = data.code;
+      this.form.organization.province = data.value;
+      this.form.organization.provinceCode = data.code;
     },
     onChangeCity(data) {
-      this.organization.city = data.value;
-      this.organization.cityCode = data.code;
+      this.form.organization.city = data.value;
+      this.form.organization.cityCode = data.code;
     },
     onChangeArea(data) {
-      this.organization.area = data.value;
-      this.organization.areaCode = data.code;
+      this.form.organization.area = data.value;
+      this.form.organization.areaCode = data.code;
     },
     getLicenseFile(event) {
-      this.licenseFile = event.target.files[0];
-      console.log(this.licenseFile);
-      this.licenseFileName = this.licenseFile.name;
-      this.licenseType = this.licenseFile.type.split("/")[1];
-      this.licenseSize = this.licenseFile.size;
+      this.form.licenseFile = event.target.files[0];
+      console.log(this.form.licenseFile);
+      this.form.licenseFileName = this.form.licenseFile.name;
+      this.form.licenseType = this.form.licenseFile.type.split("/")[1];
+      this.form.licenseSize = this.form.licenseFile.size;
       var reader = new FileReader();
       var that = this;
-      reader.readAsDataURL(this.licenseFile);
+      reader.readAsDataURL(this.form.licenseFile);
       reader.onload = function(e) {
-        that.businessLicense = this.result;
+        that.form.businessLicense = this.result;
       };
     },
     submit() {
-      var that = this
+    console.log(this.form);
+      var that = this;
       var token = window.localStorage.getItem("idToken");
-      this.organizationAddress =
-        this.organization.province +
-        this.organization.city +
-        this.organization.area;
-      this.code = this.organization.areaCode;
+      this.form.organizationAddress =
+        this.form.organization.province +
+        this.form.organization.city +
+        this.form.organization.area;
+      this.code = this.form.organization.areaCode;
       var newOrg = {};
-      newOrg.organizationName = this.organizationName;
-      newOrg.organizationPrin = this.organizationPrin;
-      newOrg.organizationAddress = this.organizationAddress;
-      newOrg.organizationIntro = this.organizationIntro;
+      newOrg.organizationName = this.form.organizationName;
+      newOrg.organizationPrin = this.form.organizationPrin;
+      newOrg.organizationAddress = this.form.organizationAddress;
+      newOrg.organizationIntro = this.form.organizationIntro;
       newOrg.code = this.code;
-      newOrg.organizationType = this.inputData.org.option.name;
-      newOrg.type = this.licenseType;
+      newOrg.organizationType = this.form.inputData.option;
+      newOrg.type = this.form.licenseType;
+      console.log(newOrg)
       globalAxios
         .post(
           "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/org",
@@ -180,16 +178,16 @@ export default {
             var s3 = new AWS.S3();
             let formData = new FormData();
 
-            formData.append("content", this.licenseFile);
+            formData.append("content", this.form.licenseFile);
             console.log(window.localStorage.getItem("user"));
             const reader = new FileReader();
-            var content = reader.readAsArrayBuffer(this.licenseFile);
+            var content = reader.readAsArrayBuffer(this.form.licenseFile);
             var params = {
               ACL: "public-read",
               Bucket: "cedsi",
               Body: formData.get("content"),
-              Key: "license/" + response.data.id + "." + this.licenseType,
-              ContentType: this.licenseType,
+              Key: "license/" + response.data.id + "." + this.form.licenseType,
+              ContentType: this.form.licenseType,
               Metadata: {
                 uploader: window.localStorage.getItem("user")
               }
@@ -206,7 +204,12 @@ export default {
             console.log(error);
           }
         );
-    }
+    },
+    cancle() {
+        this.$router.replace({
+          path: "/Admin/organizationManagement/"
+        });
+      }
   }
 };
 </script>
@@ -217,86 +220,13 @@ export default {
   margin: 0 auto;
   padding-top: 30px;
 }
-#addOrganization .upload {
-  width: 100%;
-  height: 50px;
-  margin-bottom: 20px;
-}
-#addOrganization .upload-title {
-  color: #606266;
-  display: block;
-  text-align: right;
-  width: 100px;
-  height: 40px;
-  float: left;
-  line-height: 40px;
-}
-#addOrganization .upload-input {
-  width: 300px;
-  height: 40px;
-  border-radius: 5px;
-  border: 1px solid #409eff;
-  margin-left: 10px;
-  padding-left: 10px;
-}
-#addOrganization .upload-input:hover {
-  border: 1px solid #66b1ff;
-}
-#addOrganization .upload-input:focus {
-  outline: none;
-}
-#addOrganization .upload-textarea {
-  border: 1px solid #409eff;
-  border-radius: 5px;
-  margin-left: 10px;
-  padding: 10px;
-}
-#addOrganization .upload-height {
-  height: 190px;
-}
-#addOrganization .upload-textarea:hover {
-  border: 1px solid #66b1ff;
-}
-#addOrganization .upload-textarea:focus {
-  outline: none;
-}
-#addOrganization .outside {
-  width: 300px !important;
-  height: 40px !important;
-  margin-left: 10px !important;
-}
-#addOrganization .inputBox {
-  height: 35px !important;
-  font-size: 14px !important;
-  width: 230px !important;
-}
-#addOrganization .dropdown-menu {
-  left: 100px !important;
-}
 #addOrganization .upload-footer {
   width: 100%;
   text-align: center;
-  margin-bottom: 20px;
-}
-#addOrganization .upload-btn {
-  background-color: #409eff;
-  color: #fff;
-  margin-left: 10px;
-}
-#addOrganization .upload-btn:hover {
-  color: #fff;
-}
-#addOrganization .upload-btn:focus {
-  outline: none;
-  color: #fff;
-}
-/**/
-#addOrganization .address-input select {
-  margin-left: 100px;
-  font-size: 14px;
+  margin-top: 35px;
 }
 #addOrganization .upload-cover-btn {
-  margin-left: 10px;
+  margin-left: 15px;
   width: 80px;
   height: 35px;
   display: inline-block;
@@ -324,9 +254,6 @@ input[type="file"] {
 #addOrganization .cover-image {
   width: 100%;
   height: 100%;
-}
-#addOrganization .upload-height {
-  height: 190px;
 }
 </style>
 
