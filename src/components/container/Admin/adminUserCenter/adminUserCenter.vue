@@ -18,9 +18,6 @@
     <el-form-item label="邮箱">
       <el-input type="text" v-model="user.email" placeholder="请输入邮箱"></el-input>
     </el-form-item>
-    <el-form-item label="移动电话">
-      <el-input type="text" v-model="user.mobile" placeholder="请输入手机号码"></el-input>
-    </el-form-item>
     <el-form-item label="固定电话">
       <el-input type="text" v-model="user.phone" placeholder="请输入固定电话"></el-input>
     </el-form-item>
@@ -111,7 +108,6 @@
           nickName: this.user.username,
           gender: this.user.gender,
           email: this.user.email,
-          mobile: this.user.mobile,
           phone: this.user.phone,
           type: file ? file.type.split('/')[1] : ""
         };
@@ -175,7 +171,7 @@
     computed: {
       user(state) {
         return this.$store.state.userInfo
-      },
+      }
     }
   }
 
