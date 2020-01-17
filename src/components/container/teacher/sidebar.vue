@@ -58,7 +58,7 @@
           // },
           {
             name: "作业管理",
-            icon: 'fa-book',
+            icon: 'fa fa-book',
             children: [
               {
                 name: "布置作业",
@@ -96,7 +96,7 @@
           // },
           {
             name: "个人中心",
-            icon: 'fa-user',
+            icon: 'fa fa-user',
             children: [
               {
                 name: "个人资料",
