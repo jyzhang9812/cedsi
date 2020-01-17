@@ -7,9 +7,9 @@
       <el-button size='medium' type="primary" @click="addCourse" style="margin: 10px 10px">新增课程</el-button>
     </el-row>
     <el-row class="mycard">
-      <el-col :span="6.5" v-for="(course, index) in courseList" :key="course.name" :offset="1">
-        <el-card>
-          <img :src="course.img" class="image" />
+      <el-col :span="6.5" v-for="(course, index) in courseList" :key="course.name + index" :offset="1">
+        <el-card shadow='hover'>
+          <img :src="course.img" @click="manageChapter(index)" class="image" />
           <div style="padding: 5px;">
             <div class="bottom clearfix">
               <span style="display: inline; line-height: 30px"><strong>{{course.name}}</strong></span>
@@ -59,7 +59,7 @@
       addCourse() {
         this.$router.push({ path: "/Admin/courseManagement/addCourse" });
       },
-      gotoChapter(index) {
+      manageChapter(index) {
         this.$router.push({
           path: "/Admin/chapterManagement/" + this.courseList[index].id
         });
@@ -78,7 +78,7 @@
       }
     },
     mounted() {
-      let config = { headers: { Authorization: localStorage.getItem("idToken") } };
+      const config = { headers: { Authorization: localStorage.getItem("idToken") } };
       instance.get("/admin/course", config)
         .then(res => {
           console.log(res);
