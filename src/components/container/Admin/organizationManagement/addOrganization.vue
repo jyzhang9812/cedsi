@@ -64,13 +64,12 @@
 </template>
 <script>
 import VDistpicker from "v-distpicker";
-import SelectInput from "../utils/selectInput";
 import AWS from "aws-sdk";
 import globalAxios from "axios";
 import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 export default {
   name: "addorganization",
-  components: { VDistpicker, SelectInput },
+  components: { VDistpicker },
   data() {
     return {
       form: {

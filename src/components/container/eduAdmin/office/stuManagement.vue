@@ -74,9 +74,6 @@
 </template>
 
 <script>
-import pagination from "../../teacher/utils/pagination.vue";
-import DatePicker from "../utils/datePicker";
-import SelectInput from "../../Admin/utils/selectInput";
 import globalAxios from "axios";
 import XLSX from "xlsx";
 import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
@@ -252,8 +249,7 @@ export default {
   },
   created() {
     this.getStudents();
-  },
-  components: { SelectInput, DatePicker, pagination }
+  }
 };
 </script>
 

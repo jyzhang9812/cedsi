@@ -35,14 +35,11 @@
 </template>
 
 <script>
-import pagination from "../../teacher/utils/pagination.vue";
-import SelectInput from "../../Admin/utils/selectInput.vue";
 import globalAxios from "axios";
 import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 
 export default {
   name: "adminManagement",
-  components: { pagination, SelectInput },
   data() {
     return {
       addClassName: "",

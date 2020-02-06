@@ -76,18 +76,12 @@
 </template>
 
 <script>
-    import DatePicker from "../utils/datePicker";
-    import SelectInput from "../../Admin/utils/selectInput";
     import AWS from "aws-sdk";
     import globalAxios from "axios";
     import instance from "../../../../axios-auth.js";
 
     export default {
         name: "editactivity",
-        components: {
-            SelectInput,
-            DatePicker
-        },
         data() {
             return {
                 startDate: "",

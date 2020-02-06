@@ -72,16 +72,13 @@
 </template>
 
 <script>
-import Pagination from "../utils/pagination";
 import globalAxios from "axios";
-import fs from "fs";
 import AWS from "aws-sdk";
 import { mapState } from "vuex";
 import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 
 export default {
   name: "chapters",
-  components: { Pagination },
   data() {
     return {
       file: null,
@@ -90,7 +87,7 @@ export default {
       tableTitle: [
         "序号",
         "章节名称",
-        "操作说明",
+        "章节描述",
         "上传时间",
         "创建人",
         "操作"
@@ -115,9 +112,7 @@ export default {
     gotoAdd() {
       this.$router.push({
         path: "/Admin/chapterManagement/" + this.courseId + "/addChapter",
-        // name:"addChapter",
         query: {
-          //     courseId:this.courseId,
           chapterNum: this.chapterLength + 1
         }
       });
@@ -135,7 +130,6 @@ export default {
     },
     deleteChapter(seq) {
       this.alterMes = "确认删除吗？";
-      // this.alterMes = this.$toast.warning({ title: "章节管理", message: "确认删除吗" });
       this.chapterIndex = this.currentPage * this.limit + seq;
     },
     submitDelete() {

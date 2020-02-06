@@ -63,8 +63,6 @@
 </template>
 
 <script>
-import DatePicker from "../utils/datePicker";
-import SelectInput from "../../Admin/utils/selectInput";
 import AWS from "aws-sdk";
 import globalAxios from "axios";
 import instance from "../../../../axios-auth.js";
@@ -72,10 +70,6 @@ import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 
 export default {
   name: "addactivity",
-  components: {
-    SelectInput,
-    DatePicker
-  },
   data() {
     return {
       startDate: "",

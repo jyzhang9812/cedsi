@@ -150,12 +150,9 @@
 </template>
 
 <script>
-import pagination from "../../teacher/utils/pagination.vue";
 import globalAxios from "axios";
-import SelectInput from "../../teacher/utils/selectInput";
 export default {
   name: "adminManagement",
-  components: { pagination,SelectInput },
   data() {
     return {
       limit: 20,

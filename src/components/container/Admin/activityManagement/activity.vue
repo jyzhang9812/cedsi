@@ -80,8 +80,6 @@ export default {
       dialogTableVisible: false
     };
   },
-  components: {
-  },
   methods: {
     addActivity() {
       this.$router.push({

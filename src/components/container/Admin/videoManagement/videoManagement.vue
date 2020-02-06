@@ -154,15 +154,12 @@
 </template>
 
 <script>
-import Pagination from "../utils/pagination";
 import Media from "@dongido/vue-viaudio";
 import { mapState } from "vuex";
 import globalAxios from "axios";
 
 export default {
   name: "videos",
-  components: { Pagination },
-
   data() {
     return {
       tableTitle: [

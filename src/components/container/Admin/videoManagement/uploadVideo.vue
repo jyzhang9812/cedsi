@@ -60,7 +60,6 @@
 </template>
 
 <script>
-import SelectInput from "../utils/selectInput";
 import AWS from "aws-sdk";
 import globalAxios from "axios";
 import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
@@ -194,8 +193,7 @@ export default {
     inputData() {
       return this.$store.state.inputData;
     }
-  },
-  components: { SelectInput }
+  }
 };
 </script>
 

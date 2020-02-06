@@ -222,15 +222,11 @@
 </template>
 
 <script>
-import pagination from "../../teacher/utils/pagination.vue";
-import SelectInput from "../../Admin/utils/selectInput";
-import DatePicker from "../utils/datePicker";
 import globalAxios from "axios";
 import XLSX from "xlsx";
 
 export default {
   name: "classmanagement",
-  components: { SelectInput, DatePicker, pagination },
   data() {
     return {
       limit: 10,

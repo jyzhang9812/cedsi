@@ -87,7 +87,6 @@ import SelectInput from "../../Admin/utils/selectInput";
 import globalAxios from "axios";
 export default {
   name: "adminManagement",
-  components: { pagination,SelectInput },
   data() {
     return {
       addClassName: "",
