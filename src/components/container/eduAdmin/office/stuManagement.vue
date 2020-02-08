@@ -18,7 +18,7 @@
           <el-row>
             <el-col :span="4" style="margin-left: 15px;">文件名称：</el-col>
             <el-col :span="14">
-              <el-input placeholder="" v-model="fileName" :disabled="true" width="150px"></el-input>
+              <el-input placeholder v-model="fileName" :disabled="true" width="150px"></el-input>
             </el-col>
           </el-row>
           <div class="btn-box">
@@ -55,221 +55,204 @@
       <el-table-column prop="grade" label="年级" align="center"></el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination background layout="prev, pager, next" @current-change="handlePageChange"
-      @prev-click="handlePageChange" @next-click="handlePageChange" :page-size="limit" :total="tempStudentList.length">
-    </el-pagination>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      @current-change="handlePageChange"
+      @prev-click="handlePageChange"
+      @next-click="handlePageChange"
+      :page-size="limit"
+      :total="tempStudentList.length"
+    ></el-pagination>
   </div>
 </template>
 
 <script>
-  import instance from "../../../../axios-auth.js";
-  import XLSX from "xlsx";
+import instance from "../../../../axios-auth.js";
+import XLSX from "xlsx";
 
-  export default {
-    data() {
-      return {
-        inputData: {
-          keywords: "",
-        },
-        currentList: [],//当前绑定的学生列表
-        limit: 4,
-        allStudentList: [],//获取到的整个学生列表
-        tempStudentList: [],//临时的学生列表
-        dialogVisible: false,
-        fileName: ''
+export default {
+  data() {
+    return {
+      inputData: {
+        keywords: ""
+      },
+      currentList: [], //当前绑定的学生列表
+      limit: 4,
+      allStudentList: [], //获取到的整个学生列表
+      tempStudentList: [], //临时的学生列表
+      dialogVisible: false,
+      fileName: ""
+    };
+  },
+  created() {
+    this.getStudents();
+  },
+  methods: {
+    handlePageChange(pageIndex) {
+      let start = (pageIndex - 1) * this.limit;
+      let end = start + this.limit;
+      this.currentList = this.tempStudentList.slice(start, end);
+      // console.log({学生列表:this.allStudentList})
+    },
+    nameOrStuIDFilter(nameOrID, tableList) {
+      if (nameOrID === "") return tableList;
+      let restTableList = tableList.slice(0);
+      for (let i = 0, j = restTableList.length; i < j; i++) {
+        if (
+          !new RegExp(nameOrID).test(restTableList[i]["name"]) &&
+          !new RegExp(nameOrID).test(restTableList[i]["id"])
+        ) {
+          restTableList.splice(i, 1);
+          j -= 1;
+          i -= 1;
+        }
+      }
+      return restTableList;
+    },
+    conditionSearch() {
+      let temp = this.nameOrStuIDFilter(
+        this.inputData.keywords,
+        this.allStudentList
+      );
+      this.tempStudentList = temp;
+      console.log({ 过滤的: this.tempStudentList });
+      this.handlePageChange(1);
+    },
+    download() {
+      const url1 = "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/";
+      const url2 = "%E5%AD%A6%E7%94%9F%E5%BD%95%E5%85%A5%E8%A1%A8.xlsx";
+      window.open(url1 + url2);
+    },
+    importExcel({ files }) {
+      let file = files[0]; // 使用传统的input方法需要加上这一步
+      this.file = file;
+      this.fileName = file.name;
+      const types = file.name.split(".")[1];
+      const fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(
+        item => item === types
+      );
+      if (!fileType) {
+        alert("格式错误！请重新选择");
+        return;
       }
     },
-    created() {
-      this.getStudents();
+    file2Xce(file) {
+      return new Promise(function(resolve, reject) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const data = e.target.result;
+          this.wb = XLSX.read(data, { type: "binary" });
+          const result = [];
+          this.wb.SheetNames.forEach(sheetName => {
+            result.push({
+              sheetName: sheetName,
+              sheet: XLSX.utils.sheet_to_json(this.wb.Sheets[sheetName])
+            });
+          });
+          resolve(result);
+        };
+        // reader.readAsBinaryString(file.raw)
+        reader.readAsBinaryString(file); // 传统input方法
+      });
     },
-    methods: {
-      handlePageChange(pageIndex) {
-        let start = (pageIndex - 1) * this.limit;
-        let end = start + this.limit;
-        this.currentList = this.tempStudentList.slice(start, end);
-        // console.log({学生列表:this.allStudentList})
-      },
-      nameOrStuIDFilter(nameOrID, tableList) {
-        if (nameOrID === "") return tableList;
-        let restTableList = tableList.slice(0);
-        for (let i = 0, j = restTableList.length; i < j; i++) {
-          if ((!new RegExp(nameOrID).test(restTableList[i]["name"])) &&
-            (!new RegExp(nameOrID).test(restTableList[i]["id"]))) {
-            restTableList.splice(i, 1);
-            j -= 1;
-            i -= 1;
-          }
-        }
-        return restTableList;
-      },
-      conditionSearch() {
-        let temp = this.nameOrStuIDFilter(
-          this.inputData.keywords,
-          this.allStudentList,
-        );
-        // console.log({过滤的:temp})
-        this.tempStudentList = temp;
-        console.log({ 过滤的: this.tempStudentList })
-        this.handlePageChange(1)
-      },
-      //下载模板
-      download() {
-        window.open(
-          "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/%E5%AD%A6%E7%94%9F%E5%BD%95%E5%85%A5%E8%A1%A8.xlsx"
-        );
-      },
-      //批量导入学生
-      importExcel(file) {
-        var file = file.files[0]; // 使用传统的input方法需要加上这一步
-        this.file = file;
-        this.fileName = file.name;
-        const types = file.name.split(".")[1];
-        const fileType = ["xlsx", "xlc", "xlm", "xls", "xlt", "xlw", "csv"].some(
-          item => item === types
-        );
-        if (!fileType) {
-          alert("格式错误！请重新选择");
-          return;
-        }
-      },
-      file2Xce(file) {
-        return new Promise(function (resolve, reject) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            const data = e.target.result;
-            this.wb = XLSX.read(data, {
-              type: "binary"
+    submit() {
+      let file = this.file;
+      this.file2Xce(file).then(tabJson => {
+        if (tabJson && tabJson.length > 0) {
+          this.xlsxJson = tabJson[0].sheet;
+          console.log(this.xlsxJson);
+          let token = localStorage.getItem("idToken");
+          const config = { headers: { Authorization: token } };
+          instance
+            .post("/eduadmin/student", { sheet: this.xlsxJson }, config)
+            .then(response => {
+              console.log(response);
+              this.$message.success({ title: "学生管理", message: "操作成功" });
+              this.dialogVisible = false;
+              this.getStudents();
+            })
+            .catch(err => {
+              console.error(err);
             });
-            const result = [];
-            this.wb.SheetNames.forEach(sheetName => {
-              result.push({
-                sheetName: sheetName,
-                sheet: XLSX.utils.sheet_to_json(this.wb.Sheets[sheetName])
-              });
-            });
-            resolve(result);
-          };
-          // reader.readAsBinaryString(file.raw)
-          reader.readAsBinaryString(file); // 传统input方法
+        }
+      });
+    },
+    getStudents() {
+      let token = localStorage.getItem("idToken");
+      const config = { headers: { Authorization: token } };
+      instance
+        .get("/eduadmin/student", config)
+        .then(response => {
+          let allStudent = response.data.data;
+          console.log({ 学生数据: allStudent });
+          this.allStudentList = allStudent.map(item => {
+            let info = item.STUDENT_INFO;
+            return {
+              age: info.AGE,
+              id: info.STUDENT_ID,
+              avatar: info.AVATAR,
+              phone: info.PHONE,
+              grade: info.GRADE,
+              name: info.STUDENT_NAME,
+              gender: info.GENDER === "0" ? "女" : "男"
+            };
+          });
+          this.tempStudentList = this.allStudentList;
+          this.handlePageChange(1);
+        })
+        .catch(err => {
+          console.error(err);
         });
-      },
-      submit() {
-        var file = this.file
-        this.file2Xce(file).then(tabJson => {
-          if (tabJson && tabJson.length > 0) {
-            this.xlsxJson = tabJson[0].sheet;
-            console.log(this.xlsxJson);
-            var token = window.localStorage.getItem("idToken");
-            instance({
-              url:
-                '/eduadmin/student',
-              method: "post",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: token
-              },
-              data: { sheet: this.xlsxJson }
-            }).then(
-              response => {
-                console.log(response);
-                this.$message.success({ title: "学生管理", message: "操作成功" });
-                this.dialogVisible=false
-                this.getStudents();
-              },
-              error => {
-                console.log(error);
-              }
-            );
-          }
-        });
-      },
-      getStudents() {
-        var token = window.localStorage.getItem("idToken");
-        instance
-          .get(
-            '/eduadmin/student',
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: token
-              }
-            }
-          )
-          .then(
-            response => {
-              //console.log(response);
-              //所有学生
-              var allStudent = response.data.data;
-              console.log("从后台获取的")
-              console.log(allStudent)
-              for (var i = 0; i < allStudent.length; i++) {
-                var student = {};
-                student.id = allStudent[i].STUDENT_INFO.STUDENT_ID;
-                student.name = allStudent[i].STUDENT_INFO.STUDENT_NAME;
-                student.avatar = allStudent[i].STUDENT_INFO.AVATAR;
-                if (allStudent[i].STUDENT_INFO.GENDER == "0") student.gender = "女";
-                else student.gender = "男";
-                student.phone = allStudent[i].STUDENT_INFO.PHONE;
-                student.grade = allStudent[i].STUDENT_INFO.GRADE;
-                student.age = allStudent[i].STUDENT_INFO.AGE;
-                this.allStudentList.push(student);
-              }
-              console.log("拿到的数据")
-              console.log(this.allStudentList)
-              this.tempStudentList = this.allStudentList
-              this.handlePageChange(1);
-            },
-            error => { }
-          );
-      }
     }
   }
+};
 </script>
 
 <style scoped>
-  .el-breadcrumb {
-    margin: 20px;
-    font-size: 12px;
-  }
+.el-breadcrumb {
+  margin: 20px;
+  font-size: 12px;
+}
 
-  .el-button {
-    margin-left: 20px;
-  }
+.el-button {
+  margin-left: 20px;
+}
 
-  .el-table {
-    margin: 0 0px 15px 5px;
-  }
+.el-table {
+  margin: 0 0px 15px 5px;
+}
 
-  .btn-box {
-    margin: 30px 0 30px 100px;
-  }
+.btn-box {
+  margin: 30px 0 30px 100px;
+}
 
-  .upload-cover-btn {
-    margin-left: 10px;
-    width: 80px;
-    height: 35px;
-    display: inline-block;
-    background-color: #409eff;
-    color: #fff;
-    border-radius: 5px;
-    line-height: 35px;
-    text-align: center;
-  }
+.upload-cover-btn {
+  margin-left: 10px;
+  width: 80px;
+  height: 35px;
+  display: inline-block;
+  background-color: #409eff;
+  color: #fff;
+  border-radius: 5px;
+  line-height: 35px;
+  text-align: center;
+}
 
-  input[type="file"] {
-    width: 80px;
-    height: 35px;
-    position: relative;
-    top: -35px;
-    display: inline-block;
-  }
+input[type="file"] {
+  width: 80px;
+  height: 35px;
+  position: relative;
+  top: -35px;
+  display: inline-block;
+}
 
-  .btn-upload-file {
-    position: relative;
-    top: -34px;
-    padding: 0;
-    margin-left: 10px;
-    width: 80px;
-    height: 35px;
-  }
+.btn-upload-file {
+  position: relative;
+  top: -34px;
+  padding: 0;
+  margin-left: 10px;
+  width: 80px;
+  height: 35px;
+}
 </style>
