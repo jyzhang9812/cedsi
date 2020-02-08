@@ -11,8 +11,8 @@
       </el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submit">保存信息</el-button>
-      <el-button type="primary" @click="backToChapterList">取消编辑</el-button>
+      <el-button type="primary" size="small" @click="submit">保存信息</el-button>
+      <el-button type="primary" size="small" @click="backToChapterList">取消编辑</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -46,7 +46,6 @@ export default {
       const config = {
         headers: { Authorization: localStorage.getItem("idToken") }
       };
-      // 新增一个章节
       if (this.chapterId === -1) {
         const url = `/admin/course/${this.courseId}/chapters`;
         instance
@@ -55,6 +54,9 @@ export default {
             this.screenLoading = false;
             if (res.data.status === "ok") {
               this.$message({ message: "章节保存成功", type: "success" });
+              setTimeout(() => {
+                this.backToChapterList();
+              }, 2000);
             } else {
               return Promise.reject(res.data);
             }
@@ -90,6 +92,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.$route.query);
     this.courseId = this.$route.params.courseId;
     this.form.chapterNum = this.$route.query.chapterNum;
     if (!this.$route.query.chapterId) {
