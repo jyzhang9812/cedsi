@@ -48,7 +48,6 @@ export default {
       fileName: "",
       chapterData: [],
       chapterList: [],
-      currentPage: 0,
       limit: 8,
       dialogVisible: false
     };

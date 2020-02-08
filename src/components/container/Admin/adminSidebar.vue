@@ -32,13 +32,13 @@
             close: true,
             route: "/Admin/organizationManagement"
           },
-          {
-            name: "活动管理",
-            icon: 'el-icon-s-flag',
-            children: [],
-            close: true,
-            route: "/Admin/activityManagement"
-          },
+          // {
+          //   name: "活动管理",
+          //   icon: 'el-icon-s-flag',
+          //   children: [],
+          //   close: true,
+          //   route: "/Admin/activityManagement"
+          // },
           {
             name: "个人资料",
             icon: 'el-icon-s-custom',
