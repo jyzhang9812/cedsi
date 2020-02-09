@@ -46,8 +46,8 @@
               @click="deletevideo">&times;</button>
           </div>
           <div class="modal-body modal-box">
-            <Media :controls="true" :controlslist="'nodownload'" :autoplay="false" disablePictureInPicture :kind="'video'" :src="videosrc"
-              style="height: 400px;width: 700px;" @ended="videoEnd()"></Media>
+            <!-- <Media :controls="true" :controlslist="'nodownload'" :autoplay="false" disablePictureInPicture :kind="'video'" :src="videosrc"
+              style="height: 400px;width: 700px;" @ended="videoEnd()"></Media> -->
           </div>
         </div>
       </div>
@@ -75,7 +75,6 @@
 </template>
 
 <script>
-  import Media from "@dongido/vue-viaudio";
   import globalAxios from "axios";
   import { mapState } from 'vuex'
   export default {

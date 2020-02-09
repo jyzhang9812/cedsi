@@ -13,7 +13,6 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@dongido/vue-viaudio": "^0.2.9",
     "amazon-cognito-identity-js": "^3.0.13",
     "aws-sdk": "^2.538.0",
     "axios": "^0.19.0",

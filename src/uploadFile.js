@@ -34,4 +34,4 @@ function uploadFile(file, AWSConfig, callback, progress) {
   S3.putObject(params, callback).on("httpUploadProgress", progress);
 }
 
-module.exports = { uploadFile };
+export { uploadFile };
