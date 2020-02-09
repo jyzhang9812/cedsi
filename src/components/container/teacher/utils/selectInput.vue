@@ -31,9 +31,9 @@
     data() {
       return {
         rotate: false,
-        deleteIcon: "../"+this.$store.state.url+"datepicker/delete.png",
-        menudownIcon: "../"+this.$store.state.url+"selectInput/menudown.png",
-        menuIconSrc: "../"+this.$store.state.url+"selectInput/menudown.png"
+        deleteIcon: this.$store.state.url+"datepicker/delete.png",
+        menudownIcon: this.$store.state.url+"selectInput/menudown.png",
+        menuIconSrc: this.$store.state.url+"selectInput/menudown.png"
       }
     },
     methods: {

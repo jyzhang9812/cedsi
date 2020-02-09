@@ -9,20 +9,20 @@
             <h4 class="modal-title" id="myModalLabel">{{modalTitle}}班级</h4>
           </div>
           <div class="modal-body">
-            <el-form ref="form" label-width="80px">
+            <el-form :model="addClassData" label-width="80px">
               <el-form-item label="班级名称">
                 <el-input v-model="addClassName"></el-input>
               </el-form-item>
-              <el-form-item label="指定教师">
-                <el-select  id="teacher" placeholder="请选择教师" :option="addClassData.teacher.option.name"
-                  @option="changeOption" >
-                  <el-option :label="addClassData.teacher.list.name" value="12" v-for="(item,index) in addClassData.teacher.list" :key="index"></el-option>
+              <el-form-item label="选择教师">
+                <el-select v-model="addClassData.teacher.option.name" placeholder="请选择教师">
+                  <el-option :label="item.name" value="item.id" v-for="(item,index) in addClassData.teacher.list"
+                    :key="index"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="选择课程">
-                <el-select id="course" placeholder="请选择课程" :option="addClassData.course.option.name" @option="changeOption"
-                  :drop-down-list="addClassData.course.list">
-                  <el-option :label="addClassData.teacher.list.name" value="12" v-for="(item,index) in addClassData.course.list" :key="index"></el-option>
+                <el-select v-model="addClassData.course.option.name" placeholder="请选择课程">
+                  <el-option :label="item.name" :value="item.id" v-for="(item,index) in addClassData.course.list"
+                    :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </el-form>
@@ -127,8 +127,10 @@
     </div>
     <div class="second-floor">
       <el-table :data="currentList" stripe style="width: 100%">
-        <el-table-column :prop="title.prop" :label="title.label" width="230"
-          v-for="(title,index) in tableTitle" :key="index">
+        <el-table-column type="index" label="序号" width="180"></el-table-column>
+        <el-table-column :prop="title.prop" :label="title.label" width="230" v-for="(title,index) in tableTitle"
+          :key="index">
+        </el-table-column>
         </el-table-column>
         <el-table-column prop="" label="操作">
           <el-button type="text" size="mini" data-toggle="modal" data-target="#checkStudent" @click="checkStudent(seq)">
@@ -145,10 +147,13 @@
 
 <script>
   import instance from "../../../../axios-auth";
+  import selectinput from "../utils/selectInput.vue"
+  import pagination from "../../teacher/utils/pagination.vue"
   import XLSX from "xlsx";
 
   export default {
     name: "classmanagement",
+    component: { pagination },
     data() {
       return {
         limit: 10,
@@ -167,9 +172,6 @@
           }
         },
         tableTitle: [
-          {
-            label: "序号", prop: "seq"
-          },
           {
             label: "班级名称", prop: "className"
           },
@@ -514,6 +516,7 @@
               teacherArr.push(teacher);
             }
             this.addClassData.teacher.list = teacherArr;
+            console.log("教师");
             console.log(this.addClassData.teacher.list);
             var courseList = response.data.course;
             var courseArr = [];
@@ -524,7 +527,7 @@
               courseArr.push(course);
             }
             this.addClassData.course.list = courseArr;
-            console.log(this.addClassData.course.list);
+            console.log((this.addClassData.course.list));
           },
           error => {
             console.log(error);
@@ -535,11 +538,11 @@
 </script>
 
 <style scoped>
-  #classmanagement .breadcrumb {
+  /* #classmanagement .breadcrumb {
     background-color: #fff;
     color: #606266;
     margin-bottom: 0;
-  }
+  } */
 
   #classmanagement {
     font-size: 12px;
@@ -559,19 +562,19 @@
     margin-top: 20px;
   }
 
-  #classmanagement .select-input {
+  /* #classmanagement .select-input {
     display: inline-block;
   }
 
   #classmanagement label {
     display: inline;
-  }
+  } */
 
   #classmanagement .content td {
     line-height: 30px;
   }
 
-  #classmanagement .textBox {
+  /* #classmanagement .textBox {
     width: 180px;
     height: 32px;
     font-size: 12px;
@@ -580,7 +583,7 @@
     border-radius: 5px;
     margin-left: 5px;
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  }
+  } */
 
   #classmanagement .textBox:focus {
     outline: none;
@@ -692,25 +695,25 @@
     outline: none;
   }
 
-  #classmanagement .content {
+  /* #classmanagement .content {
     margin: 0 auto;
     width: 55%;
     height: 100%;
-  }
+  } */
 
   #classmanagement .modal-footer {
     border: none;
     text-align: center;
   }
 
-  #classmanagement .modal-select-input {
+  /* #classmanagement .modal-select-input {
     display: inline-block;
     margin-left: 5px;
-  }
-
+  } */
+/* 
   #classmanagement .inputBox {
     padding: 0;
-  }
+  } */
 
   /*排课模态框*/
   #classmanagement .nav-pills>li.active>a,
