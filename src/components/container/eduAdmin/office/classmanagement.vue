@@ -1,813 +1,283 @@
 <template>
   <div id="classmanagement">
-    <!-- 添加班级模态框（Modal） -->
-    <div class="modal fade" id="addClass" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog addwidth">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">{{modalTitle}}班级</h4>
-          </div>
-          <div class="modal-body">
-            <el-form :model="addClassData" label-width="80px">
-              <el-form-item label="班级名称">
-                <el-input v-model="addClassName"></el-input>
-              </el-form-item>
-              <el-form-item label="选择教师">
-                <el-select v-model="addClassData.teacher.option.name" placeholder="请选择教师">
-                  <el-option :label="item.name" value="item.id" v-for="(item,index) in addClassData.teacher.list"
-                    :key="index"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="选择课程">
-                <el-select v-model="addClassData.course.option.name" placeholder="请选择课程">
-                  <el-option :label="item.name" :value="item.id" v-for="(item,index) in addClassData.course.list"
-                    :key="index"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="submit()">确定</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 查看学生模态框（Modal） -->
-    <div class="modal fade" id="checkStudent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-      aria-hidden="true" ref="checkStudent">
-      <!-- <div v-html="message" :class="isShowAlter==true?'isshow':'notshow'">{{message}}</div> -->
-      <div class="modal-dialog tablewidth">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">查看学生({{studentNum}}人)</h4>
-          </div>
-          <div class="modal-body">
-            <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th v-for="(title,index) in studentTitle" class="title" :key="index">{{title}}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(student, seq) in studentData" :key="seq" class="content">
-                  <td>{{seq+1}}</td>
-                  <td>{{student.name}}</td>
-                  <td>{{student.studentId}}</td>
-                  <td>{{student.gender}}</td>
-                  <td>{{student.grade}}</td>
-                  <td>{{student.age}}</td>
-                  <td>{{student.mobilePhone}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
-    <!-- 批量导入（Modal） -->
-    <div class="modal fade" id="addStudents" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">批量导入学生</h4>
-          </div>
-          <div class="modal-body">
-            <input type="file" @change="importExcel($event.target)" />
-          </div>
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary">确定</button>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
-    <!-- 提示模态框（Modal） -->
-    <div class="modal fade" id="alterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog alterwidth">
-        <div class="modal-content">
-          <div class="modal-header alterheader">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">提示</h4>
-          </div>
-          <div class="modal-body">
-            <div class="altercontent" aria-hidden="true">
-              <img :src="alterimg" class="alterimg" />
-              <span>{{alterMes}}</span>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="submitDelete()">确定</button>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
+    <el-form :model="form" label-width="80px">
+      <el-form-item label="班级名称">
+        <el-input v-model="addClassName" maxlength="10" show-word-limit></el-input>
+      </el-form-item>
+      <el-form-item label="选择教师">
+        <el-select v-model="form.currentTeacher" placeholder="请选择教师">
+          <el-option
+            :label="item.name"
+            :value="item.id"
+            v-for="(item,index) in form.teacherList"
+            :key="index"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="选择课程">
+        <el-select v-model="form.currentCourse" placeholder="请选择课程">
+          <el-option
+            :label="item.name"
+            :value="item.id"
+            v-for="(item,index) in form.courseList"
+            :key="index"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item>教务管理</el-breadcrumb-item>
       <el-breadcrumb-item>班级管理</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="first-floor">
-      <el-button type="primary" size="small" data-toggle="modal" data-target="#addClass" @click="addClass()">新增班级
-      </el-button>
-
-      <!-- <button class="btn btn-clear" data-toggle="modal" data-target="#addClass" @click="addClass()">新增班级</button> -->
+      <el-button
+        type="primary"
+        size="small"
+        data-toggle="modal"
+        data-target="#addClass"
+        @click="addClass()"
+      >新增班级</el-button>
     </div>
     <div class="second-floor">
       <el-table :data="currentList" stripe style="width: 100%">
         <el-table-column type="index" label="序号" width="180"></el-table-column>
-        <el-table-column :prop="title.prop" :label="title.label" width="230" v-for="(title,index) in tableTitle"
-          :key="index">
-        </el-table-column>
-        </el-table-column>
-        <el-table-column prop="" label="操作">
-          <el-button type="text" size="mini" data-toggle="modal" data-target="#checkStudent" @click="checkStudent(seq)">
-            查看学生
-          </el-button>
+        <el-table-column
+          :prop="title.prop"
+          :label="title.label"
+          width="230"
+          v-for="(title,index) in tableTitle"
+          :key="index"
+        ></el-table-column>
+        <el-table-column prop label="操作">
+          <el-button
+            type="text"
+            size="mini"
+            data-toggle="modal"
+            data-target="#checkStudent"
+            @click="checkStudent(seq)"
+          >查看学生</el-button>
           <el-button type="text" size="mini" data-target="#addClass" @click="updateClass(seq)">编辑</el-button>
           <el-button type="text" size="mini" @click="addStudent(seq)">导入学生</el-button>
         </el-table-column>
       </el-table>
     </div>
-    <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit"></pagination>
   </div>
 </template>
 
 <script>
-  import instance from "../../../../axios-auth";
-  import selectinput from "../utils/selectInput.vue"
-  import pagination from "../../teacher/utils/pagination.vue"
-  import XLSX from "xlsx";
+import instance from "../../../../axios-auth";
+import XLSX from "xlsx";
 
-  export default {
-    name: "classmanagement",
-    component: { pagination },
-    data() {
-      return {
-        limit: 10,
-        inputData: {
-          className: ""
+export default {
+  name: "classmanagement",
+  data() {
+    return {
+      limit: 10,
+      className: "",
+      form: {
+        currentCourse: "",
+        courseList: [],
+        currentTeacher: "",
+        teacherList: []
+      },
+      tableTitle: [
+        {
+          label: "班级名称",
+          prop: "className"
         },
-        addClassData: {
-          addClassName: "",
-          teacher: {
-            option: "",
-            list: []
-          },
-          course: {
-            option: "",
-            list: []
-          }
+        {
+          label: "教师",
+          prop: "teacherName"
         },
-        tableTitle: [
-          {
-            label: "班级名称", prop: "className"
-          },
-          {
-            label: "教师", prop: "teacherName"
-          },
-          {
-            label: "课程", prop: "courseName"
-          }
-        ],
-        tableData: [],
-        studentTitle: [
-          "序号",
-          "学生姓名",
-          "学号",
-          "性别",
-          "年级",
-          "年龄",
-          "手机号"
-        ],
-        studentData: [],
-        //添加新班级
-        addClassName: "",
-        isName: true,
-        index: -1,
-        currentList: [],
-        isChange: false, //班级名称是否可修改
-        modalTitle: "", //模态框名称
-        //提示框
-        alterimg: this.$store.state.url + "eduAdmin/alter.png",
-        alterMes: "",
-        studentNum: 0
-      };
-    },
-    watch: {
-      addClassName(val, oldVal) {
-        if (val.length <= 10 && val.length > 0) {
-          this.isName = false;
-        } else {
-          this.isName = true;
+        {
+          label: "课程",
+          prop: "courseName"
         }
-      }
+      ],
+      tableData: [],
+      studentData: [],
+      addClassName: "",
+      isName: true,
+      index: -1,
+      currentList: [],
+      isChange: false, //班级名称是否可修改
+      modalTitle: "", //模态框名称
+      studentNum: 0
+    };
+  },
+  methods: {
+    checkStudent(seq) {
+      this.index = this.currentPage * this.limit + seq;
+      let token = window.localStorage.getItem("idToken");
+      let classId = this.tableData[this.index].classId;
+      const url = `/eduadmin/class/${classId}/students`;
+      const config = { headers: { Authorization: token } };
+      instance
+        .get(url, config)
+        .then(response => {
+          console.log(response);
+          let studentData = [];
+          if (response.data != null) {
+            let studentList = response.data.Items;
+            this.studentNum = response.data.Count;
+            for (let i = 0; i < studentList.length; i++) {
+              let student = {};
+              student.name = studentList[i].STUDENT_NAME;
+              student.age = studentList[i].AGE;
+              student.gender = studentList[i].GENDER;
+              student.studentId = studentList[i].STUDENT_ID;
+              student.mobilePhone = studentList[i].MOBILE_PHONE;
+              student.grade = studentList[i].GRADE;
+              studentData.push(student);
+            }
+          }
+          this.studentData = studentData;
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
-    methods: {
-      //查看学生
-      checkStudent(seq) {
-        this.index = this.currentPage * this.limit + seq;
-        var token = window.localStorage.getItem("idToken");
-        var classId = this.tableData[this.index].classId;
+    addStudent(seq) {
+      this.index = this.currentPage * this.limit + seq;
+      let classId = this.tableData[this.index].classId;
+      this.$router.push({
+        path: "/eduAdmin/classManagement/" + classId + "/addStudent"
+      });
+    },
+    updateClass(seq) {
+      this.modalTitle = "编辑";
+      this.isChange = true;
+      this.index = this.currentPage * this.limit + seq;
+      this.addClassName = this.tableData[this.index].className;
+      let teacher = {};
+      teacher.name = this.tableData[this.index].teacherName;
+      teacher.id = this.tableData[this.index].teacherId;
+      let course = {};
+      course.name = this.tableData[this.index].courseName;
+      course.id = this.tableData[this.index].courseId;
+      this.addClassData.teacher.option = teacher;
+      this.addClassData.course.option = course;
+    },
+    //添加班级
+    addClass() {
+      this.modalTitle = "添加";
+      this.isChange = false;
+      this.index = -1;
+      this.addClassName = "";
+      this.addClassData.teacher.option = "";
+      this.addClassData.course.option = "";
+    },
+    //编辑或更改提交
+    submit() {
+      let that = this;
+      let token = window.localStorage.getItem("idToken");
+      let newClass = {};
+      console.log(this.index);
+      //编辑提交
+      if (this.index >= 0) {
+        let updateClass = {};
+        updateClass.courseId = this.addClassData.course.option.id;
+        updateClass.courseName = this.addClassData.course.option.name;
+        updateClass.teacherId = this.addClassData.teacher.option.id;
+        updateClass.classId = this.tableData[this.index].classId;
+        console.log(updateClass);
+        const url = `/eduadmin/class/${updateClass.classId}/course`;
+        const config = { headers: { Authorization: token } };
         instance
-          .get(
-            "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/" +
-            classId +
-            "/students",
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: token
-              }
-            }
-          )
-          .then(
-            response => {
-              console.log(response);
-              var studentData = [];
-              if (response.data != null) {
-                var studentList = response.data.Items;
-                this.studentNum = response.data.Count;
-                for (var i = 0; i < studentList.length; i++) {
-                  var student = {};
-                  student.name = studentList[i].STUDENT_NAME;
-                  student.age = studentList[i].AGE;
-                  student.gender = studentList[i].GENDER;
-                  student.studentId = studentList[i].STUDENT_ID;
-                  student.mobilePhone = studentList[i].MOBILE_PHONE;
-                  student.grade = studentList[i].GRADE;
-                  studentData.push(student);
-                }
-              }
-              this.studentData = studentData;
-            },
-            error => {
-              console.log(error);
-            }
-          );
-      },
-      //导入学生
-      addStudent(seq) {
-        this.index = this.currentPage * this.limit + seq;
-        var classId = this.tableData[this.index].classId;
-        this.$router.push({
-          path: "/eduAdmin/classManagement/" + classId + "/addStudent"
-        });
-      },
-      optionsInit() {
-        this.inputData = {
-          className: "",
-          startDate: "",
-          school: {
-            option: "",
-            list: ["师大一中", "师大二中", "师大三中"]
-          }
-        };
-      },
-      changeOption(item, id) {
-        Object.keys(this.addClassData).forEach(res => {
-          if (res === id) {
-            this.addClassData[res].option = item;
-          }
-        });
-      },
-      clearChoices() {
-        this.optionsInit();
-      },
-      changeDate(value, id) {
-        if (id === "datePicker_start") {
-          this.addClassData.startDate = value;
-        }
-      },
-      //编辑班级
-      updateClass(seq) {
-        this.modalTitle = "编辑";
-        this.isChange = true;
-        this.index = this.currentPage * this.limit + seq;
-        this.addClassName = this.tableData[this.index].className;
-        var teacher = {};
-        teacher.name = this.tableData[this.index].teacherName;
-        teacher.id = this.tableData[this.index].teacherId;
-        var course = {};
-        course.name = this.tableData[this.index].courseName;
-        course.id = this.tableData[this.index].courseId;
-        this.addClassData.teacher.option = teacher;
-        this.addClassData.course.option = course;
-      },
-      //添加班级
-      addClass() {
-        this.modalTitle = "添加";
-        this.isChange = false;
-        this.index = -1;
-        this.addClassName = "";
-        this.addClassData.teacher.option = "";
-        this.addClassData.course.option = "";
-      },
-      //编辑或更改提交
-      submit() {
-        var that = this;
-        var token = window.localStorage.getItem("idToken");
-        var newClass = {};
-        console.log(this.index);
-        //编辑提交
-        if (this.index >= 0) {
-          var updateClass = {};
-          updateClass.courseId = this.addClassData.course.option.id;
-          updateClass.courseName = this.addClassData.course.option.name;
-          updateClass.teacherId = this.addClassData.teacher.option.id;
-          updateClass.classId = this.tableData[this.index].classId;
-          console.log(updateClass);
-          instance
-            .post(
-              "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/" +
-              updateClass.classId +
-              "/course",
-              updateClass,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: token
-                }
-              }
-            )
-            .then(
-              response => {
-                console.log(response);
-                this.tableData[
-                  this.index
-                ].teacherName = this.addClassData.teacher.option.name;
-                this.tableData[
-                  this.index
-                ].teacherId = this.addClassData.teacher.option.id;
-                this.tableData[
-                  this.index
-                ].courseName = this.addClassData.course.option.name;
-                this.tableData[
-                  this.index
-                ].courseId = this.addClassData.course.option.id;
-              },
-              error => { }
-            );
-        }
-        //修改提交
-        else {
-          newClass.className = this.addClassName;
-          newClass.teacherId = this.addClassData.teacher.option.id;
-          newClass.courseId = this.addClassData.course.option.id;
-          newClass.courseName = this.addClassData.course.option.name;
-          console.log(newClass);
-          instance
-            .post(
-              "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class",
-              newClass,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: token
-                }
-              }
-            )
-            .then(
-              response => {
-                console.log(response);
-                instance
-                  .get(
-                    "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class",
-                    {
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: token
-                      }
-                    }
-                  )
-                  .then(
-                    response => {
-                      console.log(response);
-                      var classList = response.data;
-                      var classArr = [];
-                      for (var i = 0; i < classList.length; i++) {
-                        var classes = {};
-                        classes.classId = classList[i].CLASS_ID;
-                        classes.className = classList[i].CLASS_NAME;
-                        classes.teacherName = classList[i].TEACHER_NAME;
-                        classes.courseId = classList[i].COURSE_ID;
-                        classes.courseName = classList[i].COURSE_NAME;
-                        classes.courseMemberCount =
-                          classList[i].CLASS_MEMBER_COUNT;
-                        classArr.push(classes);
-                      }
-                      this.tableData = classArr;
-                      this.changeTablePages(0);
-                    },
-                    error => {
-                      console.log(error);
-                    }
-                  );
-              },
-              error => {
-                console.log(error);
-              }
-            );
-        }
-      },
-      changeTablePages(value) {
-        var currentPage = value / this.limit;
-        this.currentPage = currentPage;
-        this.currentList = this.tableData.slice(value, value + this.limit);
-      },
-      //搜索
-      conditionSearch() {
-        let temp = this.telOrNameFilter(this.inputData.className, temp);
-        this.tableData = temp;
-        this.changeTablePages(0);
-      },
-      telOrNameFilter(telOrName, tableList) {
-        if (telOrName === "") return tableList;
-        let testArg = "tel";
-        if (Number.isNaN(Number.parseInt(telOrName))) {
-          testArg = "authorName";
-        }
-        let restTableList = tableList.slice(0);
-        for (let i = 0, j = restTableList.length; i < j; i++) {
-          if (!new RegExp(telOrName).test(restTableList[i][testArg])) {
-            restTableList.splice(i, 1);
-            j -= 1;
-            i -= 1;
-          }
-        }
-        return restTableList;
-      },
-      deleteClass(seq) {
-        this.index = seq;
-        this.alterMes = "确认删除吗？";
+          .post(url, config)
+          .then(response => {
+            console.log(response);
+            this.tableData[
+              this.index
+            ].teacherName = this.addClassData.teacher.option.name;
+            this.tableData[
+              this.index
+            ].teacherId = this.addClassData.teacher.option.id;
+            this.tableData[
+              this.index
+            ].courseName = this.addClassData.course.option.name;
+            this.tableData[
+              this.index
+            ].courseId = this.addClassData.course.option.id;
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      } else {
+        newClass.className = this.addClassName;
+        newClass.teacherId = this.addClassData.teacher.option.id;
+        newClass.courseId = this.addClassData.course.option.id;
+        newClass.courseName = this.addClassData.course.option.name;
+        console.log(newClass);
+        const config = { headers: { Authorization: token } };
+        instance
+          .post("eduadmin/class", newClass)
+          .then(response => {
+            console.log(response);
+            return instance.get("eduadmin/class", config);
+          })
+          .then(({ data }) => {
+            console.log(data);
+            this.tableData = data.map(item => {
+              return {
+                classId: item.CLASS_ID,
+                className: item.CLASS_NAME,
+                teacherName: item.TEACHER_NAME,
+                courseId: item.COURSE_ID,
+                courseName: item.COURSE_NAME,
+                courseMemberCount: item.CLASS_MEMBER_COUNT
+              };
+            });
+          })
+          .catch(err => {
+            console.error(err);
+          });
       }
-    },
-    mounted() {
-      //获取班级列表
-      var token = window.localStorage.getItem("idToken");
-      instance
-        .get(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token
-            }
-          }
-        )
-        .then(
-          response => {
-            console.log(response);
-            var classArr = [];
-            if (response.data != null) {
-              var classList = response.data;
-              console.log(classList);
-              for (var i = 0; i < classList.length; i++) {
-                var classes = {};
-                classes.classId = classList[i].CLASS_ID;
-                classes.className = classList[i].CLASS_NAME;
-                classes.teacherName = classList[i].TEACHER_NAME;
-                classes.teacherId = classList[i].TEACHER_ID;
-                classes.courseName = classList[i].COURSE_NAME;
-                classes.courseId = classList[i].COURSE_ID;
-                classes.courseMemberCount = classList[i].CLASS_MEMBER_COUNT;
-                classArr.push(classes);
-              }
-            }
-            this.tableData = classArr;
-            this.changeTablePages(0);
-          },
-          error => {
-            console.log(error);
-          }
-        );
-      //获取教师列表以及课程列表
-      instance
-        .get(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/eduadmin/class/msg",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token
-            }
-          }
-        )
-        .then(
-          response => {
-            console.log(response);
-            var teacherList = response.data.teacher;
-            var teacherArr = [];
-            for (var i = 0; i < teacherList.length; i++) {
-              var teacher = {};
-              teacher.name = teacherList[i].TEACHER_NAME;
-              teacher.id = teacherList[i].TEACHER_ID;
-              teacherArr.push(teacher);
-            }
-            this.addClassData.teacher.list = teacherArr;
-            console.log("教师");
-            console.log(this.addClassData.teacher.list);
-            var courseList = response.data.course;
-            var courseArr = [];
-            for (var i = 0; i < courseList.length; i++) {
-              var course = {};
-              course.name = courseList[i].COURSE_NAME;
-              course.id = courseList[i].COURSE_ID;
-              courseArr.push(course);
-            }
-            this.addClassData.course.list = courseArr;
-            console.log((this.addClassData.course.list));
-          },
-          error => {
-            console.log(error);
-          }
-        );
     }
-  };
+  },
+  mounted() {
+    let token = localStorage.getItem("idToken");
+    const config = { headers: { Authorization: token } };
+    instance
+      .get("/eduadmin/class", config)
+      .then(({ data }) => {
+        console.log({ 班级数据: data });
+        if (data.length) {
+          this.tableData = data.map(item => {
+            return {
+              classId: item.CLASS_ID,
+              className: item.CLASS_NAME,
+              teacherName: item.TEACHER_NAME,
+              teacherId: item.TEACHER_ID,
+              courseName: item.COURSE_NAME,
+              courseId: item.COURSE_ID,
+              courseMemberCount: item.CLASS_MEMBER_COUNT
+            };
+          });
+        }
+        return instance.get("/eduadmin/class/msg", config);
+      })
+      .then(({ data }) => {
+        console.log({ 教师和课程: data });
+        let teacherList = data.teacher;
+        let courseList = data.course;
+        this.form.teacherList = teacherList.map(item => {
+          return {
+            name: item.TEACHER_NAME,
+            id: item.TEACHER_ID
+          };
+        });
+        this.form.courseList = courseList.map(item => {
+          return {
+            name: item.COURSE_NAME,
+            id: item.COURSE_ID
+          };
+        });
+      })
+      .catch(err => console.error(err));
+  }
+};
 </script>
 
 <style scoped>
-  /* #classmanagement .breadcrumb {
-    background-color: #fff;
-    color: #606266;
-    margin-bottom: 0;
-  } */
-
-  #classmanagement {
-    font-size: 12px;
-    color: #606266;
-    width: 100%;
-    margin: 0 auto;
-    padding: 10px;
-  }
-
-  #classmanagement .first-floor {
-    margin-top: 20px;
-  }
-
-  #classmanagement .second-floor {
-    font-size: 12px;
-    color: #606266;
-    margin-top: 20px;
-  }
-
-  /* #classmanagement .select-input {
-    display: inline-block;
-  }
-
-  #classmanagement label {
-    display: inline;
-  } */
-
-  #classmanagement .content td {
-    line-height: 30px;
-  }
-
-  /* #classmanagement .textBox {
-    width: 180px;
-    height: 32px;
-    font-size: 12px;
-    padding-left: 15px;
-    border: 1px solid #409eff;
-    border-radius: 5px;
-    margin-left: 5px;
-    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  } */
-
-  #classmanagement .textBox:focus {
-    outline: none;
-  }
-
-  #classmanagement .textBox:hover {
-    border-color: #409eff;
-  }
-
-  #classmanagement .btn {
-    background: #409eff;
-    color: #fff;
-    height: 30px;
-    border-radius: 5px;
-    font-size: 12px;
-    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  }
-
-  #classmanagement .btn:focus {
-    outline: none;
-  }
-
-  #classmanagement .btn:hover {
-    background: #66b1ff;
-  }
-
-  #classmanagement .btn-search {
-    width: 54px;
-  }
-
-  #classmanagement .btn-clear {
-    width: 78px;
-  }
-
-  #classmanagement .blue {
-    cursor: pointer;
-    color: #409eff;
-  }
-
-  #classmanagement .red {
-    cursor: pointer;
-    color: red;
-  }
-
-  #classmanagement table {
-    border: #eeeeee;
-  }
-
-  #classmanagement table tr {
-    text-align: center !important;
-  }
-
-  #classmanagement table td {
-    vertical-align: middle !important;
-  }
-
-  #classmanagement .title {
-    text-align: center;
-  }
-
-  #classmanagement .select-input {
-    margin-right: 8px;
-  }
-
-  /*添加班级模态框*/
-  #classmanagement .addwidth {
-    width: 500px;
-  }
-
-  #classmanagement .modal-dialog {
-    top: 100px;
-    position: relative;
-  }
-
-  #classmanagement .modal-header {
-    background-color: #409eff;
-    color: #fff;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-  }
-
-  #classmanagement .add {
-    width: 100%;
-  }
-
-  #classmanagement .keypoint {
-    color: red;
-  }
-
-  #classmanagement .addtitle {
-    color: #606266;
-  }
-
-  #classmanagement .addcon {
-    width: 180px;
-    border: 1px solid #409eff;
-    border-radius: 5px;
-    height: 32px;
-    line-height: 32px;
-    margin-left: 5px;
-    padding: 0 20px;
-  }
-
-  #classmanagement .addcon:hover {
-    border: 1px solid #dcdfe6;
-  }
-
-  #classmanagement .addcon:focus {
-    outline: none;
-  }
-
-  /* #classmanagement .content {
-    margin: 0 auto;
-    width: 55%;
-    height: 100%;
-  } */
-
-  #classmanagement .modal-footer {
-    border: none;
-    text-align: center;
-  }
-
-  /* #classmanagement .modal-select-input {
-    display: inline-block;
-    margin-left: 5px;
-  } */
-/* 
-  #classmanagement .inputBox {
-    padding: 0;
-  } */
-
-  /*排课模态框*/
-  #classmanagement .nav-pills>li.active>a,
-  #classmanagement .nav-pills>li.active>a:focus,
-  #classmanagement .nav-pills>li.active>a:hover {
-    background-color: #409eff;
-    margin-bottom: 10px;
-  }
-
-  #classmanagement .tab-content {
-    margin: 0 auto;
-  }
-
-  #classmanagement .course-content {
-    height: 30px;
-    line-height: 30px;
-    margin-bottom: 10px;
-  }
-
-  #classmanagement .course-time {
-    display: inline-block;
-    width: 250px;
-    text-align: left;
-  }
-
-  #classmanagement .datepicker {
-    margin-right: 20px;
-  }
-
-  /*查看学生模态框*/
-  #classmanagement .tablewidth {
-    width: 90%;
-    margin: 0 auto;
-  }
-
-  #classmanagement .tips {
-    border-radius: 5px;
-    border: 1px solid #409eff;
-    padding-left: 10px;
-  }
-
-  #classmanagement .tips:focus {
-    outline: none;
-  }
-
-  #classmanagement .tips:hover {
-    border: 1px solid #dcdfe6;
-  }
-
-  /*正则判断*/
-  #classmanagement .inputtips {
-    display: inline-block;
-    color: red;
-    margin-left: 80px;
-    height: 10px;
-    width: 100%;
-  }
-
-  #classmanagement .err {
-    border: 1px solid red;
-  }
-
-  #classmanagement .inputerr {
-    visibility: hidden;
-    height: 10px;
-    width: 100%;
-  }
-
-  /*修改成功弹出框*/
-  #classmanagement .isshow {
-    width: 30%;
-    position: relative;
-    margin: 20px auto;
-  }
-
-  #classmanagement .notshow {
-    width: 40%;
-    position: relative;
-    margin: 20px auto;
-    visibility: hidden;
-  }
-
-  #classmanagement .alterwidth {
-    width: 30%;
-  }
-
-  #classmanagement .altercontent {
-    width: 300px;
-    margin: 0 auto;
-  }
-
-  #classmanagement .alterimg {
-    width: 25px;
-    height: 25px;
-    margin-right: 10px;
-  }
 </style>

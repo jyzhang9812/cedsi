@@ -1,73 +1,63 @@
 <template>
   <div id="upload-video">
-    <div class="upload">
-      <span class="upload-title">视频名称:</span>
-      <input class="upload-input" placeholder="请输入视频名称" v-model="videoName" />
-    </div>
-    <div class="upload upload-height">
-      <span class="upload-title">视频描述:</span>
-      <textarea
-        class="upload-textarea"
-        rows="8"
-        cols="70"
-        placeholder="请输入视频描述"
-        v-model="videoIntro"
-      />
-    </div>
-    <div class="upload">
-      <span class="upload-title" style="margin-right:10px">请选择章节:</span>
-      <select-input
-        class="upload-select"
-        id="chapter"
-        tips="请选章节"
-        :option="inputData.chapter.option.name"
-        @option="changeOption"
-        :drop-down-list="inputData.chapter.list"
-        autocomplete="off"
-        style="margin-left:90px;"
-      ></select-input>
-    </div>
-    <div class="upload">
-      <span class="upload-title">请选择视频:</span>
-      <div class="upload-cover-btn">
-        选择文件
-        <input type="file" class @change="getFile($event)" style="opacity: 0" />
-      </div>
-      <button class="btn btn-primary btn-upload-file" @click="submit($event)">上传文件</button>
-    </div>
-    <div class="upload">
-      <span class="upload-title">上传进度:</span>
-      <div class="progress upload-process">
-        <div
-          class="progress-bar"
-          role="progressbar"
-          aria-valuenow="60"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          :style="{width:progressWidth}"
-        >{{progressWidth}}</div>
-      </div>
-    </div>
-    <div class="upload upload-height">
-      <span class="upload-title">文件名称:</span>
-      <input class="upload-input" :value="fileName" disabled />
-    </div>
-    <div class="upload-footer">
-      <button class="btn upload-btn" :disabled="isComplete" @click="gotoVideo">提交</button>
-      <button class="btn upload-btn" @click="goback()">取消</button>
-    </div>
+    <el-form ref="form" :model="form" label-width="80px">
+      <el-form-item label="视频名称">
+        <el-input v-model="form.name" placeholder="请输入视频名称"></el-input>
+      </el-form-item>
+      <el-form-item label="视频描述">
+        <el-input
+          v-model="form.desc"
+          :autosize="{minRows:4,maxRows:4}"
+          type="textarea"
+          placeholder="请输入视频描述"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="选择章节">
+        <el-select v-model="form.chapterId" placeholder="请选择章节">
+          <el-option
+            v-for="(chapter,index) in chapters"
+            :key="index"
+            :label="chapter.name"
+            :value="chapter.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="选择视频">
+        <el-upload drag action="#" :http-request="uploadVideo" :limit="1" accept="video/mp4">
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">
+            将文件拖到此处，或
+            <em>点击上传</em>
+          </div>
+          <div class="el-upload__tip" slot="tip">请上传MP4视频格式的文件</div>
+        </el-upload>
+      </el-form-item>
+      <el-form-item label="上传进度">
+        <el-progress :text-inside="true" :stroke-width="24" :percentage="progress" status="success"></el-progress>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" size="small" @click="submitUpload">提交</el-button>
+        <el-button type="primary" size="small" @click="cancelUpload">取消</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
 import AWS from "aws-sdk";
-import globalAxios from "axios";
-import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
+import instance from "../../../../axios-auth";
 
 export default {
   name: "uploadVideo",
   data() {
     return {
+      chapters: [],
+      form: {
+        name: "",
+        desc: "",
+        chapterId: ""
+      },
+      progress: 0,
       file: null,
       fileName: "",
       videoName: "",
@@ -79,6 +69,9 @@ export default {
     };
   },
   methods: {
+    uploadVideo() {},
+    submitUpload() {},
+    cancelUpload() {},
     changeOption(item, id) {
       Object.keys(this.inputData).forEach(res => {
         if (res === id) {
@@ -175,8 +168,8 @@ export default {
       this.$router.push({ path: "/Admin/videoManagement" });
     },
     gotoVideo() {
-      var that=this
-      this.$toast.success({title:"视频管理",message:'操作成功'})
+      var that = this;
+      this.$toast.success({ title: "视频管理", message: "操作成功" });
       setTimeout(function() {
         that.$router.push({
           path: "/Admin/videoManagement"
@@ -198,122 +191,11 @@ export default {
 </script>
 
 <style scoped>
-#upload-video {
-  width: 98%;
-  margin: 0 auto;
-  padding-top: 30px;
+#upload-video .el-form-item {
+  width: 400px;
 }
-#upload-video .upload {
-  width: 100%;
-  height: 50px;
-  margin-bottom: 20px;
-}
-#upload-video .upload-title {
-  color: #606266;
-  display: block;
-  text-align: right;
-  width: 80px;
-  height: 40px;
-  float: left;
-  line-height: 40px;
-}
-#upload-video .upload-input {
-  width: 300px;
-  height: 40px;
-  border-radius: 5px;
-  border: 1px solid #409eff;
-  margin-left: 10px;
-  padding-left: 10px;
-}
-#upload-video .upload-input:hover {
-  border: 1px solid #66b1ff;
-}
-#upload-video .upload-input:focus {
-  outline: none;
-}
-#upload-video .upload-textarea {
-  border: 1px solid #409eff;
-  border-radius: 5px;
-  margin-left: 10px;
-  padding: 10px;
-}
-#upload-video .upload-height {
-  height: 190px;
-}
-#upload-video .upload-textarea:hover {
-  border: 1px solid #66b1ff;
-}
-#upload-video .upload-textarea:focus {
-  outline: none;
-}
-#upload-video .outside[data-v-d899aefc] {
-  width: 300px !important;
-  height: 40px !important;
-  margin-left: 10px !important;
-}
-#upload-video .inputBox[data-v-d899aefc] {
-  height: 35px !important;
-  font-size: 14px !important;
-  width: 230px !important;
-}
-#upload-video .dropdown-menu {
-  left: 100px !important;
-  overflow: auto !important;
-  max-height: 300px !important;
-}
-#upload-video .upload-footer {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 20px;
-}
-#upload-video .upload-btn {
-  background-color: #409eff;
-  color: #fff;
-  margin-left: 10px;
-}
-#upload-video .upload-btn:hover {
-  color: #fff;
-}
-#upload-video .upload-btn:focus {
-  outline: none;
-  color: #fff;
-}
-#upload-video .upload-cover-btn {
-  margin-left: 10px;
-  width: 80px;
-  height: 35px;
-  display: inline-block;
-  background-color: #409eff;
-  color: #fff;
-  border-radius: 5px;
-  line-height: 35px;
-  text-align: center;
-}
-#upload-video input[type="file"] {
-  width: 80px;
-  height: 35px;
-  position: relative;
-  top: -35px;
-  display: inline-block;
-}
-#upload-video .upload-process {
-  width: 30%;
-  margin-left: 10px;
-  display: inline-block;
-  position: relative;
-  top: 10px;
-}
-#upload-video .btn-upload-file {
-  position: relative;
-  top: -35px;
-  margin-left: 10px;
-  background-color: #2fc27e;
-  border: none;
-  width: 80px;
-  height: 35px;
-  font-size: 14px;
-}
-#upload-video .btn-upload-file:hover {
-  background-color: #2fc27ddc;
+#upload-video .el-upload__text > .el-upload-dragger {
+  height: 150px;
+  width: 320px;
 }
 </style>
