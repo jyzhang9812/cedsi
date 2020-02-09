@@ -27,29 +27,48 @@
     </el-row>
     <div class="spaceLine"></div>
     <el-row>
-      <el-table :data="videoData" style="width: 100%">
+      <el-table :data="temp" style="width: 100%">
         <el-table-column align="center" type="index" label="序号"></el-table-column>
         <el-table-column align="center" prop="name" label="视频名称"></el-table-column>
-        <el-table-column align="center" prop="address" label="章节名称"></el-table-column>
-        <el-table-column align="center" prop="address" label="操作说明"></el-table-column>
-        <el-table-column align="center" prop="address" label="上传时间"></el-table-column>
-        <el-table-column align="center" prop="address" label="创建人"></el-table-column>
-        <el-table-column align="center" prop="address" label="操作">
+        <el-table-column align="center" prop="name" label="章节名称"></el-table-column>
+        <el-table-column align="center" prop="name" label="操作说明"></el-table-column>
+        <el-table-column align="center" prop="name" label="上传时间"></el-table-column>
+        <el-table-column align="center" prop="name" label="创建人"></el-table-column>
+        <el-table-column align="center" prop="name" label="操作">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button size="mini" slot="reference" type="danger" @click="dialogVisible=true">删除</el-button>
-            <el-dialog title :visible.sync="dialogVisible" width="20%">
-              <i class="el-icon-info"></i>
-              <span>确定要删除此视频吗</span>
-              <span slot="footer" class="dialog-footer">
-                <el-button type="success" size="mini" @click="dialogVisible=false">取 消</el-button>
-                <el-button type="danger" size="mini" @click="handleDelete(scope.row)">确 定</el-button>
-              </span>
-            </el-dialog>
           </template>
         </el-table-column>
       </el-table>
     </el-row>
+    <el-dialog title="视频编辑" :visible.sync="editVisible" @close="player.pause()" width="40%">
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item label="视频名称">
+          <el-input v-model="form.name" placeholder="请输入视频名称"></el-input>
+        </el-form-item>
+        <el-form-item label="视频介绍">
+          <el-input v-model="form.desc" placeholder="请输入视频介绍"></el-input>
+        </el-form-item>
+        <el-form-item label="视频资源">
+          <video id="myVideo" class="video-js">
+            <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4" />
+          </video>
+        </el-form-item>
+      <el-form-item>
+        <el-button size="small" type="primary" @click="updateVideoInfo">保存信息</el-button>
+        <el-button size="small" type="primary" @click="editVisible=false">取消编辑</el-button>
+      </el-form-item>
+      </el-form>
+    </el-dialog>
+    <el-dialog title :visible.sync="dialogVisible" width="20%">
+      <i class="el-icon-info"></i>
+      <span>确定要删除此视频吗</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="success" size="mini" @click="dialogVisible=false">取 消</el-button>
+        <el-button type="danger" size="mini" @click="handleDelete(scope.row)">确 定</el-button>
+      </span>
+    </el-dialog>
     <div class="spaceLine"></div>
     <el-row>
       <el-pagination
@@ -66,7 +85,6 @@
 </template>
 
 <script>
-import Media from "@dongido/vue-viaudio";
 import { mapState } from "vuex";
 import instance from "../../../../axios-auth";
 
@@ -76,18 +94,39 @@ export default {
     return {
       currentCourse: null,
       dialogVisible: false,
+      editVisible: false,
       limit: 8,
       videoData: [],
-      videoList: []
+      videoList: [],
+      form: {
+        name: "",
+        desc: ""
+      },
+      temp: [{ name: "好" }],
+      player: null
     };
   },
   methods: {
+    updateVideoInfo() {
+      // 更新视频信息
+    },
     uploadNewVideo(courseId) {
       this.$router.push({
         path: `/Admin/videoManagement/${this.currentCourse}/uploadVideo`
       });
     },
-    handleEdit() {},
+    handleEdit({ name, id }) {
+      this.form = { name, id };
+      this.editVisible = true;
+      setTimeout(() => {
+        if (!this.player) {
+          this.player = this.$video("myVideo", {
+            controls: true,
+            preload: "none"
+          });
+        }
+      }, 1000);
+    },
     handleDelete() {
       const config = {
         headers: { Authorization: token },
@@ -122,28 +161,7 @@ export default {
       this.currentCourse = item;
       console.log(item);
     },
-    previewVideo(seq) {
-      this.index = this.currentPage * this.limit + seq;
-      this.videosrc = this.videoData[this.index].videoUrl;
-      this.videoName = this.videoData[this.index].videoName;
-    },
-    updateVideo(seq) {
-      this.index = this.currentPage * this.limit + seq;
-      this.videoDesc = this.videoData[this.index].introduction;
-      this.videoName = this.videoData[this.index].videoName;
-      this.videoId = this.videoData[this.index].videoId;
-    },
     submit() {
-      let courseId = "";
-      let postVideo = {};
-      postVideo.videoName = this.videoName;
-      postVideo.videoDesc = this.videoDesc;
-      for (let i = 0; i < this.courseList.length; i++) {
-        if (this.courseList[i].isActive == true) {
-          courseId = this.courseList[i].id;
-          break;
-        }
-      }
       const url = `/admin/course/${courseId}/video`;
       const config = {
         headers: {
@@ -162,16 +180,6 @@ export default {
           console.error(err);
           this.$message({ type: "error", message: "上传失败" });
         });
-    },
-    handle() {
-      console.log("Video paused!, playing in 2 sec...");
-      setTimeout(() => {
-        this.$refs.coursevideo.play();
-      }, 2000);
-    },
-    //删除视频
-    deletevideo() {
-      this.videosrc = "";
     },
     timestampToTime(timestamp) {
       let date = new Date(Number.parseInt(timestamp));
@@ -219,6 +227,9 @@ export default {
 #videoManagement {
   padding: 0 20px 20px 20px;
 }
+#videoManagement .el-form-item {
+  width: 92%;
+}
 #videoManagement .spaceLine {
   display: block;
   height: 15px;
@@ -231,5 +242,10 @@ export default {
   font-weight: 800;
   line-height: 30px;
   color: #909399;
+}
+#videoManagement .video-js {
+  width: 450px;
+  height: 250px;
+  border-radius: 4px;
 }
 </style>

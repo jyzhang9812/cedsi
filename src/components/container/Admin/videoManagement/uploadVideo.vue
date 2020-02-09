@@ -1,6 +1,12 @@
 <template>
   <div id="upload-video">
-    <el-form ref="form" :model="form" label-width="80px">
+    <el-form
+      ref="form"
+      :model="form"
+      label-width="80px"
+      v-loading="screenLoading"
+      :element-loading-text="loadingTips"
+    >
       <el-form-item label="视频名称">
         <el-input v-model="form.name" placeholder="请输入视频名称"></el-input>
       </el-form-item>
@@ -15,7 +21,7 @@
       <el-form-item label="选择章节">
         <el-select v-model="form.chapterId" placeholder="请选择章节">
           <el-option
-            v-for="(chapter,index) in chapters"
+            v-for="(chapter,index) in inputData.chapter.list"
             :key="index"
             :label="chapter.name"
             :value="chapter.id"
@@ -23,7 +29,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="选择视频">
-        <el-upload drag action="#" :http-request="uploadVideo" :limit="1" accept="video/mp4">
+        <el-upload drag action="#" :http-request="loadUserVideo" :limit="1" accept="video/mp4">
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">
             将文件拖到此处，或
@@ -31,9 +37,6 @@
           </div>
           <div class="el-upload__tip" slot="tip">请上传MP4视频格式的文件</div>
         </el-upload>
-      </el-form-item>
-      <el-form-item label="上传进度">
-        <el-progress :text-inside="true" :stroke-width="24" :percentage="progress" status="success"></el-progress>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" size="small" @click="submitUpload">提交</el-button>
@@ -44,8 +47,8 @@
 </template>
 
 <script>
-import AWS from "aws-sdk";
 import instance from "../../../../axios-auth";
+import { uploadFile } from "../../../../uploadFile";
 
 export default {
   name: "uploadVideo",
@@ -55,130 +58,75 @@ export default {
       form: {
         name: "",
         desc: "",
-        chapterId: ""
+        chapterId: "",
+        file: null
       },
-      progress: 0,
-      file: null,
-      fileName: "",
-      videoName: "",
-      videoIntro: "",
-      type: "",
-      fileName: "暂未上传",
-      progressWidth: "0%",
-      isComplete: true
+      screenLoading: false,
+      loadingTips: "正在连接，请耐心等待。"
     };
   },
   methods: {
-    uploadVideo() {},
-    submitUpload() {},
-    cancelUpload() {},
-    changeOption(item, id) {
-      Object.keys(this.inputData).forEach(res => {
-        if (res === id) {
-          this.inputData[res].option = item;
-        }
-      });
+    loadUserVideo(event) {
+      this.form.file = event.file;
     },
-    getFile(event) {
-      this.file = event.target.files[0];
-      console.log(this.file);
-      this.fileName = this.file.name;
-      this.type = this.file.type.split("/")[1];
-      this.size = this.file.size;
+    submitUpload() {
+      let uploadCheck = Object.values(this.form).reduce((result, item) => {
+        return result && item;
+      }, true);
+      if (uploadCheck) {
+        this.screenLoading = true;
+        let token = localStorage.getItem("idToken");
+        const url = `/admin/course/${this.courseId}/video`;
+        const config = { headers: { Authorization: token } };
+        const data = {
+          comment: this.form.desc,
+          type: this.form.file.name.split(".").pop(),
+          video_name: this.form.name,
+          size: this.form.file.size,
+          chapter_id: this.form.chapterId
+        };
+        this.submitAttributes(url, data, config);
+      } else {
+        this.$message({ type: "error", message: "表单填写完整才能上传哦" });
+      }
     },
-    submit(event) {
-      var token = window.localStorage.getItem("idToken");
-      globalAxios
-        .post(
-          "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/course/" +
-            this.courseId +
-            "/video",
-          {
-            name: this.videoName,
-            comment: this.videoIntro,
-            chapterId: this.inputData.chapter.option.id,
-            type: this.type,
-            size: this.size + ""
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token
+    submitAttributes(url, data, config) {
+      instance
+        .post(url, data, config)
+        .then(({ data }) => {
+          console.log(data);
+          if (data.status !== "ok") {
+            throw new Error("upload attributes error");
+          }
+          const that = this;
+          let AWSConfig = { ...data, path: "course/video" };
+          const upload = (err, data) => {
+            that.screenLoading = false;
+            if (err || !data.ETag) {
+              console.error(err, data);
+              that.$message({ type: "error", message: "上传失败" });
+            } else {
+              that.$message({ type: "success", message: "上传成功" });
+              that.cancelUpload();
             }
-          }
-        )
-        .then(
-          response => {
-            var that = this;
-            console.log(response);
-            AWS.config = new AWS.Config({
-              accessKeyId: response.data.AccessKeyId,
-              secretAccessKey: response.data.SecretAccessKey,
-              sessionToken: response.data.SessionToken,
-              region: "cn-northwest-1"
-            });
-            var s3 = new AWS.S3();
-            let formData = new FormData();
-
-            formData.append("caption", this.caption);
-            formData.append("hour", this.hour);
-            formData.append("particulars", this.particulars);
-            formData.append("content", this.file);
-            var config = {
-              onUploadProgress: progressEvent => {
-                var complete =
-                  (((progressEvent.loaded / progressEvent.total) * 100) | 0) +
-                  "%";
-                this.progress = complete;
-              }
-            };
-            console.log(window.localStorage.getItem("user"));
-            const reader = new FileReader();
-            var content = reader.readAsArrayBuffer(this.file);
-            var params = {
-              ACL: "public-read",
-              Bucket: "cedsi",
-              Body: formData.get("content"),
-              Key: "course/video/" + response.data.id + "." + this.type,
-              ContentType: this.type,
-              Metadata: {
-                uploader: window.localStorage.getItem("user")
-              }
-            };
-            s3.putObject(params, function(err, data) {
-              if (err) {
-                console.log(err, err.stack);
-              } else {
-                console.log(data);
-              }
-            }).on("httpUploadProgress", function(e) {
-              var process = Number((e.loaded * 100) / e.total);
-              that.progressWidth = parseInt(process) + "%";
-              if (process == 100) {
-                that.isComplete = false;
-              }
-            });
-          },
-          error => {
-            console.log(error);
-          }
-        );
-    },
-    goback() {
-      this.$router.push({ path: "/Admin/videoManagement" });
-    },
-    gotoVideo() {
-      var that = this;
-      this.$toast.success({ title: "视频管理", message: "操作成功" });
-      setTimeout(function() {
-        that.$router.push({
-          path: "/Admin/videoManagement"
+          };
+          const progress = event => {
+            let process = Number((event.loaded * 100) / event.total);
+            that.loadingTips = `连接成功，上传进度为 ${parseInt(process)}%`;
+          };
+          uploadFile(this.form.file, AWSConfig, upload, progress);
+        })
+        .catch(err => {
+          console.error(err);
+          this.$message({ type: "error", message: "上传失败" });
         });
-      }, 1000);
+    },
+    cancelUpload() {
+      this.$router.replace({ path: "/Admin/videoManagement" });
     }
   },
   created() {
-    var courseId = this.$route.params.courseId;
+    let courseId = this.$route.params.courseId;
     this.courseId = courseId;
     this.$store.dispatch("getCourseChapter", courseId);
   },

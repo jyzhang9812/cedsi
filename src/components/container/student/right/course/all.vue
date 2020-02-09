@@ -53,8 +53,8 @@
                             @click="deletevideo">&times;</button>
                     </div>
                     <div class="modal-box">
-                        <Media :controls="true" :controlslist="'nodownload'" :autoplay="false" disablePictureInPicture :kind="'video'" :src="videosrc"
-                            style="height: 400px;width: 700px;"  @pause="handle()"></Media>
+                        <!-- <Media :controls="true" :controlslist="'nodownload'" :autoplay="false" disablePictureInPicture :kind="'video'" :src="videosrc"
+                            style="height: 400px;width: 700px;"  @pause="handle()"></Media> -->
                     </div>
                 </div>
             </div>
@@ -98,7 +98,6 @@
 
 <script>
     import pagination from '../pagination.vue'
-    import Media from "@dongido/vue-viaudio";
     import { mapState } from 'vuex'
     export default {
         name: "courseCard",
