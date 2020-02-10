@@ -173,13 +173,11 @@
 </template>
 
 <script>
-import pagination from "../../teacher/utils/pagination.vue";
-import SelectInput from "../utils/selectInput";
+
 import globalAxios from "axios";
 import crypto from "crypto";
 export default {
   name: "classmanagement",
-  components: { SelectInput, pagination },
   data() {
     return {
       limit: 15,

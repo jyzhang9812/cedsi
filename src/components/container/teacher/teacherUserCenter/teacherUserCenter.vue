@@ -1,346 +1,213 @@
 <template>
-    <div id="personalcontent">
-        <div class="contentdetail">
-            <form class="form" @submit.prevent="submit">
-                <div class="formdetail">
-                    <label class="formlabel" for="name">昵称</label>
-                    <input class="input" placeholder="请输入用户名" v-model="user.username">
-                </div>
-                <div class="formdetail">
-                    <label class="formlabel" for="gender">性别</label>
-                    <span style='margin-right: 50px' v-for="(item,index) in radiolist" :key=index>
-                        <input type="radio" :value='item.value' :checked="item.isCheck" v-model="user.gender"
-                            @change="changeInput(index)">
-                        {{item.name}}
-                    </span>
-                </div>
-                <!-- <div class="formdetail">
-                    <label class="formlabel" for="time">加入时间</label>
-                    <input class="input disabledinput" value='user.time' disabled="disabled" v-model="user.time">
-                </div> -->
-                <div class="formdetail">
-                    <label class="formlabel" for="headsculpture">头像</label>
-                    <!-- <img id="headimage" :src="headsculpture" class="cover-image" alt="" v-show="headsculpture!==''"> -->
-                    <img id="headimage" :src="user.avatar" class="cover-image" alt="">
-                    <div class="upload">
-                        <div class="upload-cover-btn">
-                            修改头像
-                            <input type="file" class="" @change="getFile($event)" style="opacity: 0">
-                        </div>
-                    </div>
-                </div>
-                <div class="formdetail">
-                    <label class="formlabel" for="email">邮箱</label>
-                    <input class="input" placeholder="请输入邮箱" v-model="user.email">
-                </div>
-                <div class="formdetail">
-                    <label class="formlabel" for="mobile">移动电话</label>
-                    <input class="input" placeholder="请输入手机号码" v-model="user.mobile">
-                </div>
-                <div class="formdetail">
-                    <label class="formlabel" for="phone">固定电话</label>
-                    <input class="input" placeholder="请输入手机号码" v-model="user.phone">
-                </div>
-                <div class="formdetail">
-                    <label class="formlabel" for="password">密码</label>
-                    <input class="input" type="password" v-model="password" :disabled="updatePW" placeholder="请输入旧密码">
-                    <span class="blue-text" @click="updatePassword()" v-show="updatePW==true">修改密码</span>
-                </div>
-                <div class="formdetail" v-show="updatePW==false">
-                    <label class="formlabel" for="newpw">新密码</label>
-                    <input class="input" type="password" v-model="newpassword" placeholder="请输入新密码">
-                    <span class="blue-text" @click="submitPassword()" v-show="newpassword!==''">确认修改</span>
-                </div>
-                <div class="formdetail">
-                    <button class="buttonsave" @click='submit($event)'>
-                        保存
-                    </button>
-                </div>
-            </form>
-        </div>
+  <el-form ref="form" :model="form" label-width="80px" v-loading="screenLoading" element-loading-text="正在保存，请耐心等待！">
+    <el-form-item label="昵称">
+      <el-input type="text" v-model="user.username" placeholder="请输入用户名"></el-input>
+    </el-form-item>
+    <el-form-item label="性别">
+      <el-radio-group v-model="user.gender">
+        <el-radio label="1">男</el-radio>
+        <el-radio label="0">女</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="头像">
+      <el-upload class="avatar-uploader" action="#" :http-request="loadUserAvatar" :show-file-list="false">
+        <img v-if="user.avatar" :src="user.avatar" class="avatar">
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
+    </el-form-item>
+    <el-form-item label="邮箱">
+      <el-input type="text" v-model="user.email" placeholder="请输入邮箱"></el-input>
+    </el-form-item>
+    <el-form-item label="固定电话">
+      <el-input type="text" v-model="user.phone" placeholder="请输入固定电话"></el-input>
+    </el-form-item>
+    <div v-if="!needModifyPwd">
+      <el-form-item>
+        <el-link type="primary" :underline="false" @click="showModifyPwd">修改密码</el-link>
+      </el-form-item>
     </div>
+    <div v-else>
+      <el-form-item label="旧密码" prop="pass">
+        <el-input type="password" auto-complete="new-password" v-model="form.oldPass" placeholder="请输入新密码"></el-input>
+      </el-form-item>
+      <el-form-item label="新密码" prop="pass">
+        <el-input type="password" auto-complete="new-password" v-model="form.newPass" placeholder="请输入新密码"></el-input>
+      </el-form-item>
+      <el-form-item label="确认密码" prop="checkPass">
+        <el-input type="password" auto-complete="new-password" v-model="form.checkPass" placeholder="请再次输入密码">
+        </el-input>
+      </el-form-item>
+    </div>
+    <el-form-item>
+      <el-button type="primary" @click="saveUserInfo">保存信息</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script>
-    import AWS from 'aws-sdk';
-    import instance from '../../../../axios-auth.js';
-    import crypto from 'crypto';
-    import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
-    export default {
-        name: 'adminUserCenter',
-        data() {
-            return {
-                newpassword:"",
-                updatePW:true,
-                password:"*********",
-                file: null,
-                fileName: '',
-                headsculpture: '',
-                radiolist: [{ name: '男', value: 1, isCheck: false }, { name: '女', value: 2, isCheck: false }],
+  import AWS from 'aws-sdk';
+  import instance from '../../../../axios-auth.js';
+  import crypto from 'crypto';
+
+  export default {
+    name: 'adminUserCenter',
+    data() {
+      return {
+        form: {
+          oldPass: "",
+          newPass: "",
+          checkPass: "",
+          avatarFile: ""
+        },
+        screenLoading: false,
+        needModifyPwd: false
+      }
+    },
+    methods: {
+      postImgToS3(config, file) {
+        const that = this;
+        AWS.config = new AWS.Config({
+          accessKeyId: config.AccessKeyId,
+          secretAccessKey: config.SecretAccessKey,
+          sessionToken: config.SessionToken,
+          region: 'cn-northwest-1'
+        });
+        let s3 = new AWS.S3();
+        let params = {
+          ACL: 'public-read',
+          Bucket: "cedsi",
+          Body: file,
+          Key: `user/avatar/${config.id.substring(0, 10)}.${file.type.split('/')[1]}`,
+          ContentType: file.type,
+          Metadata: { 'uploader': window.localStorage.getItem('user') }
+        };
+        s3.putObject(params, function (err, data) {
+          console.log(err);
+          console.log(data);
+          that.screenLoading = false;
+          if (data.ETag) {
+            that.$message({ message: '用户信息保存成功', type: 'success' });
+          } else {
+            that.$message({ message: '用户信息保存失败', type: 'error' });
+          }
+        });
+      },
+      loadUserAvatar(event) {
+        this.form.avatarFile = event.file;
+        let reader = new FileReader();
+        let that = this;
+        reader.readAsDataURL(event.file);
+        reader.onload = function () {
+          that.user.avatar = this.result;
+        }
+      },
+      saveUserInfo() {
+        this.screenLoading = true;
+        const file = this.form.avatarFile;
+        const data = {
+          nickName: this.user.username,
+          gender: this.user.gender,
+          email: this.user.email,
+          phone: this.user.phone,
+          type: file ? file.type.split('/')[1] : ""
+        };
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        console.log(data);
+        this.modifyUserInfo(data, config);
+        // 如果需要修改密码
+        if (this.needModifyPwd) {
+          // 先进行表单验证
+          this.modifyUserPwd(config);
+        }
+      },
+      showModifyPwd() {
+        this.needModifyPwd = !this.needModifyPwd;
+      },
+      modifyUserInfo(data, config) {
+        instance.put('/student/studentinfo', data, config)
+          .then(res => {
+            console.log({ "字段上传情况": res });
+            const failToast = { message: '用户信息保存失败', type: 'error' };
+            const successToast = { message: '用户信息保存成功', type: 'success' };
+            this.screenLoading = false;
+            if (this.form.avatarFile) {
+              if (res.data.AccessKeyId) {
+                this.postImgToS3(res.data, this.form.avatarFile);
+              } else {
+                this.$message(failToast);
+              }
+            } else {
+              this.$message(res.data.status === "200" ? successToast : failToast);
             }
-        },
-        methods: {
-            updatePassword(){
-                this.updatePW=false
-                this.password=""
-            },
-            submitPassword(){
-                var that = this
-                var password={}
-                password.oldPassword=crypto.createHash('SHA256').update(this.password).digest('hex');
-                password.newPassword=crypto.createHash('SHA256').update(this.newpassword).digest('hex');
-                console.log(password)
-                instance.post('/user/password', password, {
-                    headers: { 
-                        Authorization: localStorage.getItem('idToken'),
-                        'Content-Type': 'application/json'}
-                })
-                .then((res) => {
-                    console.log(res);
-                    if(res.data.errorMessage=="密码错误"){
-                        that.$toast.error({title:"个人中心",message:'修改失败！原密码错误'})
-                    }
-                    else{
-                        that.$toast.success({title:"个人中心",message:'修改成功'})
-                        localStorage.removeItem('idToken');
-                        localStorage.removeItem('userId');
-                        localStorage.removeItem('roleId');
-                        localStorage.removeItem('expirationDate');
-                        localStorage.removeItem('user');
-                        that.$router.push({ path: "/signin" });
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-            },
-            changeInput(index) {
-                this.radiolist.map((v, i) => {
-                    if (i == index) {
-                        v.isCheck = true
-                    } else {
-                        v.isCheck = false
-                    }
-                })
-            },
-            getFile(event) {
-                this.file = event.target.files[0]
-                console.log(this.file)
-                this.fileName = this.file.name
-                var reader = new FileReader();
-                var that = this;
-                reader.readAsDataURL(this.file);
-                reader.onload = function (e) {
-                    that.user.avatar = this.result
-                }
-            },
-            submit(event) {
-                var that = this
-                let postImgToS3 = function (config, file) {
-                    AWS.config = new AWS.Config({
-                        accessKeyId: config.AccessKeyId,
-                        secretAccessKey: config.SecretAccessKey,
-                        sessionToken: config.SessionToken,
-                        region: 'cn-northwest-1'
-                    })
-                    var s3 = new AWS.S3();
-                    let formData = new FormData();
-                    formData.append('content', file);
-                    const reader = new FileReader();
-                    var content = reader.readAsArrayBuffer(file);
-                    var params = {
-                        ACL: 'public-read',
-                        Bucket: "cedsi",
-                        Body: formData.get('content'),
-                        Key: "user/avatar/" + config.id + "." + file.type.split('/')[1],
-                        ContentType: file.type,
-                        Metadata: { 'uploader': window.localStorage.getItem('user') }
-                    };
-                    s3.putObject(params, function (err, data) {
-                        if (err) {
-                            console.log(err, err.stack);
-                        } else {
-                            console.log(data);
-                            if (data.hasOwnProperty('ETag')) {
-                                that.$toast.error({title:"个人中心",message:'已保存'})
-                                // this.$router.replace({ path: '/Admin/courseManagement/' });
-                            } else {
-                                that.$toast.error({title:"个人中心",message:'保存失败'})
-                            }
-                        }
-                    });
-                }
-                this.radiolist.map((v, i) => {
-                    if (v.isCheck) {
-                        console.log('被选中的值为:' + v.value)
-                        this.user.gender = v.value
-                    }
-                })
-                this.postFormData({
-                    nickName: this.user.username,
-                    email: this.user.email,
-                    gender: this.user.gender,
-                    mobile: this.user.mobile,
-                    phone: this.user.phone,
-                    time: this.user.time,
-                    type: this.file?this.file.type.split('/')[1]:''
-                }, postImgToS3);
-            },
-            postFormData(formData, postImgToS3) {
-                let file = this.file;
-                instance.put('/student/studentinfo', formData, {
-                    headers: { 
-                        Authorization: localStorage.getItem('idToken'),
-                        'Content-Type': 'application/json'}
-                })
-                    .then((res) => {
-                        console.log(res);
-                        if(res.data.AccessKeyId){
-                        postImgToS3(res.data, file);}
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-            },
-        },
-        created: function () {
-            this.$store.commit('updateLoading', true)
-            this.$store.dispatch('getUser')
-            console.log(this.user)
-        },
-        computed: {
-            user: function (state) {
-                return this.$store.state.userInfo
-            },
-        },
+          })
+          .catch(err => { console.log(err) });
+      },
+      modifyUserPwd(config) {
+        const that = this;
+        const password = {
+          oldPassword: crypto.createHash('SHA256').update(this.form.oldPass).digest('hex'),
+          newPassword: crypto.createHash('SHA256').update(this.form.newPass).digest('hex')
+        };
+        console.log(password);
+        instance.post('/user/password', password, config)
+          .then(res => {
+            if (res.data.errorMessage === "密码错误") {
+              this.$message({ message: '密码修改失败, 原密码错误!', type: 'error' });
+            } else {
+              this.$message({ message: '密码修改成功, 请重新登录!', type: 'success' });
+              localStorage.clear();
+              setTimeout(() => {
+                that.$router.push({ path: "/signin" });
+              }, 1000);
+            }
+          })
+          .catch(err => { console.log(err) });
+      }
+    },
+    created: function () {
+      this.$store.commit('updateLoading', true);
+      this.$store.dispatch('getUser');
+    },
+    computed: {
+      user(state) {
+        return this.$store.state.userInfo
+      }
     }
+  }
 
 </script>
 
 <style scoped>
-  
-    #personalcontent {
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
-        border: 1px solid #ebeef5;
-        background-color: #fff;
-        color: #303133;
-        border-radius: 12px;
-        width: 80%;
-        margin: 15px auto;
-    }
+  .el-form-item {
+    width: 400px;
+  }
 
-    #personalcontent .contentdetail {
-        padding: 20px;
-        margin-bottom: 12px;
-    }
+  .avatar-uploader {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+  }
 
-    #personalcontent .personal {
-        width: 1000px;
-        margin: 10px 10px;
-    }
+  .avatar-uploader:hover {
+    border-color: #409EFF;
+  }
 
-    #personalcontent .formdetail {
-        margin: 20px 0 0 10px;
-    }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    text-align: center;
+  }
 
-    /* 清除浮动 */
-    #personalcontent .formdetail::after {
-        content: ".";
-        display: block;
-        height: 0;
-        clear: both;
-        visibility: hidden;
-    }
-
-    #personalcontent .formlabel {
-        width: 80px;
-        line-height: 15px;
-        margin-left: 10px;
-        text-align: right;
-        margin-right: 20px;
-        float: left;
-    }
-
-    #personalcontent .input {
-        width: 500px;
-        line-height: 15px;
-        color: #000;
-        padding: 5px 15px;
-        border-radius: 5px;
-        border: 1px solid #e7e7e7;
-    }
-
-    #personalcontent .disabledinput {
-        border-color: #e4e7ed;
-        background-color: #f5f7fa;
-        color: #c0c4cc;
-    }
-
-    #personalcontent .input:focus {
-        border-color: #67c23a;
-    }
-
-    #personalcontent input[type=radio] {
-        padding-right: 50px;
-    }
-
-    #personalcontent .image {
-        width: 150px;
-        height: 150px;
-    }
-
-    #personalcontent .headsculpture {
-        width: 500px;
-        margin-left: 110px;
-        margin-top: 10px;
-    }
-
-    #personalcontent .remark {
-        width: 500px;
-        height: 186px;
-        padding: 5px 15px;
-        resize: vertical;
-        min-height: 32px;
-        border-radius: 5px;
-        border: 1px solid #409eff;
-    }
-
-    #personalcontent .buttonsave {
-        margin-left: 260px;
-        padding: 9px 15px;
-        border-radius: 3px;
-        color: #fff;
-        background-color: #409eff;
-        border-color: #409eff;
-        text-align: center;
-    }
-
-    #personalcontent .upload-cover-btn {
-        margin-left: 170px;
-        width: 80px;
-        height: 35px;
-        display: inline-block;
-        background-color: #409eff;
-        color: #fff;
-        border-radius: 5px;
-        line-height: 35px;
-        text-align: center
-    }
-
-    #personalcontent input[type=file] {
-        width: 80px;
-        height: 35px;
-        position: relative;
-        top: -35px;
-    }
-
-    #personalcontent .cover-image {
-        width: 200px;
-        height: 200px;
-        margin-bottom: 20px;
-    }
-    .blue-text{
-        cursor: pointer;
-        color: #409eff;
-    }
+  .avatar {
+    width: 120px;
+    height: 120px;
+    display: block;
+  }
 </style>

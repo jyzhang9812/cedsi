@@ -40,11 +40,9 @@
             查看学生</el-button>
           <template slot-scope="scope">
             <el-button type="text" size="mini" data-target="#addClass" @click="updateClass(scope.$index)">编辑</el-button>
-            <el-button type="text" size="mini" @click="addStudent = true">导入学生</el-button>
-            
+            <el-button type="text" size="mini" @click="addStudent = true">导入学生</el-button>            
           </template>
         </el-table-column>
-      </el-table>
       </el-table>
     </div>
   </div>

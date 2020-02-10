@@ -148,16 +148,6 @@ const remark = resolve => {
     resolve(require('../components/container/teacher/teach/remark.vue'));
   });
 };
-const password = resolve => {
-  require.ensure(['../components/container/teacher/password/password.vue'], () => {
-    resolve(require('../components/container/teacher/password/password.vue'));
-  });
-};
-const space = resolve => {
-  require.ensure(['../components/container/teacher/space/space.vue'], () => {
-    resolve(require('../components/container/teacher/space/space.vue'));
-  });
-};
 const asider = resolve => {
   require.ensure(['../components/container/teacher/sidebar.vue'], () => {
     resolve(require('../components/container/teacher/sidebar.vue'));
@@ -212,11 +202,6 @@ const stuManagement = resolve => {
 const addStudent = resolve => {
   require.ensure(['../components/container/eduAdmin/office/addStudent.vue'], () => {
     resolve(require('../components/container/eduAdmin/office/addStudent.vue'));
-  });
-};
-const teaching = resolve => {
-  require.ensure(['../components/container/eduAdmin/teaching/teaching.vue'], () => {
-    resolve(require('../components/container/eduAdmin/teaching/teaching.vue'));
   });
 };
 const eduStatistics = resolve => {
@@ -399,25 +384,7 @@ const router = new Router({
     {
       path: '/console',
       component: asider,
-      children: [
-        {
-          path: '/console/space', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: space
-        },
-        {
-          path: '/console/password', beforeEnter(to, from, next) {
-            if (window.localStorage.getItem("idToken")) {
-              next()
-            } else {
-              next('/signin')
-            }
-          }, component: password
-        },
+      children: [      
         {
           path: '/console/homework', beforeEnter(to, from, next) {
             if (window.localStorage.getItem("idToken")) {
@@ -573,10 +540,6 @@ const router = new Router({
         {
           path: '/eduAdmin/stuManagement',
           component: stuManagement
-        },
-        {
-          path: '/eduAdmin/teaching',
-          component: teaching
         },
         {
           path: '/eduAdmin/eduStatistice',
