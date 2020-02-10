@@ -1,178 +1,138 @@
 <template>
-  <div id="organizationManagement">
-    <el-button type="button" class="btn btn-default" data-dismiss="modal">取消</el-button>
-    <el-button type="button" class="btn btn-primary" data-dismiss="modal" @click="submitDelete()">确定</el-button>
-    <div class="modal-dialog alterwidth">
-      <div class="modal-content">
-        <div class="modal-header">
-          <el-button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</el-button>
-          <h4 class="modal-title" id="myModalLabel">分配课程</h4>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-4 course-group" v-for="(course,index) in allCourseList" :key="index">
-              <input type="checkbox" class="course" v-model="authCourseList" :value="course" />
-              {{course.name}}
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <el-button type="primary" size="small" data-dismiss="modal">取消</el-button>
-          <el-button type="primary" size="small" data-dismiss="modal" @click="submit()">确定</el-button>
-        </div>
-      </div>
-    </div>
-    <div class="classroute">
-      <ol class="breadcrumb">
-        <li>机构管理</li>
-      </ol>
-    </div>
-    <div class="first-floor">
-      <el-button type="primary" size="medium" @click="addOrganization()" round>新增机构</el-button>
-    </div>
-    <div class="second-floor">
-      <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="num" label="序号" width="180"></el-table-column>
-        <el-table-column prop="id" label="企业账号" width="180"></el-table-column>
-        <el-table-column prop="name" label="机构名称" width="180"></el-table-column>
-        <el-table-column prop="headmaster" label="机构负责人" width="180"></el-table-column>
-        <el-table-column prop="intro" label="介绍" width="200"></el-table-column>
-        <el-table-column prop="location" label="所属地区" width="180"></el-table-column>
-        <el-table-column prop="address" label="操作" width="180">
-          <template slot-scope="scope">
-            <el-link type="primary" @click="See(scope.$index)">查看营业执照</el-link>
-            <br />
-            <el-link
-              type="primary"
-              data-toggle="modal"
-              data-target="#courseModal"
-              @click="getCourseList(scope.$index)"
-            >分配课程</el-link>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+  <div id="organizationManagement" v-loading="screenLoading" element-loading-text="正在处理, 请耐心等待">
+    <el-button type="primary" size="small" @click="addOrganization()">新增机构</el-button>
+    <div class="spaceLine"></div>
+    <el-table :data="currentList" style="width: 100%">
+      <el-table-column align="center" type="index" label="序号"></el-table-column>
+      <el-table-column align="center" prop="id" label="企业账号"></el-table-column>
+      <el-table-column align="center" prop="name" label="机构名称"></el-table-column>
+      <el-table-column align="center" prop="headmaster" label="机构负责人"></el-table-column>
+      <el-table-column align="center" prop="intro" label="介绍"></el-table-column>
+      <el-table-column align="center" prop="location" label="所属地区"></el-table-column>
+      <el-table-column align="center" prop="address" label="操作">
+        <template slot-scope="scope">
+          <el-link type="primary" :href="scope.row.license" target="_blank">查看营业执照</el-link>
+          <br />
+          <el-link type="primary" @click="getCourseList(scope.row)">分配课程</el-link>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog title="分配课程" :visible.sync="dialogVisible" width="25%">
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item label="选择课程">
+          <el-select size="small" v-model="form.course" multiple placeholder="请选择课程">
+            <el-option
+              v-for="item in allCourseList"
+              :key="item.COURSE_ID"
+              :label="item.COURSE_NAME"
+              :value="item.COURSE_ID"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button size="small" type="primary" @click="saveAllocation">保存</el-button>
+          <el-button size="small" type="primary" @click="dialogVisible=false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <div class="spaceLine"></div>
     <el-pagination
-      :num="tableData.length"
-      @getNew="changeTablePages"
+      :page-size="limit"
+      background
       layout="prev, pager, next"
-      :total="10"
+      :total="tableData.length"
+      @current-change="handlePageChange"
+      @prev-click="handlePageChange"
+      @next-click="handlePageChange"
     ></el-pagination>
   </div>
 </template>
-
 <script>
 import instance from "../../../../axios-auth";
-import { error } from "util";
+
 export default {
   name: "adminManagement",
   data() {
     return {
-      limit: 20,
+      limit: 6,
       currentList: [],
-      inputData: {
-        organizationUserName: ""
-      },
-      tableData: [], //页面表格内容
-      //提示框
-      alterimg: this.$store.state.url + "organization/alter.png",
-      alterMes: "",
-      //当前页码
-      currentPage: 0,
-      index: 0,
-      authCourseList: [], //已授权课程
-      allCourseList: [] //全部课程
+      tableData: [],
+      screenLoading: false,
+      authCourseList: [],
+      allCourseList: [],
+      dialogVisible: false,
+      form: { course: [] },
+      preAllocateOrg: ""
     };
   },
-  watch: {
-    checkedId(val, oldVal) {
-      this.authCourseList = val;
-    }
-  },
   methods: {
-    deleteOrganization(seq) {
-      this.index = this.currentPage * this.limit + seq;
-      console.log(this.index);
-      this.alterMes = "确认删除吗？";
+    handlePageChange(pageIndex) {
+      let start = (pageIndex - 1) * this.limit;
+      let end = start + this.limit;
+      this.currentList = this.tableData.slice(start, end);
     },
-    See(index) {
-      window.location.href = this.tableData[index].license;
+    deleteOrganization(seq) {
+      // To do
     },
     addOrganization() {
-      this.$router.push({
-        path: "/Admin/organizationManagement/addOrganization"
-      });
+      const path = "/Admin/organizationManagement/addOrganization";
+      this.$router.push({ path: path });
     },
-    //换页
-    changeTablePages(value) {
-      //console.log(value)
-      let currentPage = value / this.limit;
-      this.currentPage = currentPage;
-      //console.log(currentPage)
-      this.currentList = this.tableData.slice(value, value + this.limit);
-    },
-    getNew(value) {
-      this.currentList = this.tableData.slice(value, value + this.limit);
-    },
-    getCourseList(seq) {
-      this.index = this.currentPage * this.limit + seq;
-      let orgId = this.tableData[this.index].id;
-      console.log(orgId);
+    getCourseList(row) {
+      this.preAllocateOrg = row.id;
+      this.screenLoading = true;
       let token = localStorage.getItem("idToken");
       const config = { headers: { Authorization: token } };
       instance
-        .get(`/admin/org/${orgId}/course`, config)
-        .then(response => {
-          console.log(response.data);
-          let allCourseList = [];
-          let allCourseData = response.data.data.all;
-          for (let i = 0; i < allCourseData.length; i++) {
-            let allcourse = {};
-            allcourse.id = allCourseData[i].ID;
-            allcourse.name = allCourseData[i].COURSE_NAME;
-            allCourseList.push(allcourse);
-          }
-          this.allCourseList = allCourseList;
-          let authCourseList = [];
-          let authCourseData = response.data.data.authorization;
-          for (let i = 0; i < authCourseData.length; i++) {
-            let authcourse = {};
-            authcourse.id = authCourseData[i].COURSE_ID;
-            authcourse.name = authCourseData[i].COURSE_NAME;
-            authCourseList.push(authcourse);
-          }
-          this.authCourseList = authCourseList;
-          console.log(this.allCourseList);
-          console.log(this.authCourseList);
+        .get(`/admin/org/${row.id}/course`, config)
+        .then(({ data }) => {
+          console.log({ 课程信息: data });
+          this.authCourseList = data.authList;
+          this.allCourseList = data.allList;
+          this.form.course = data.authList.map(item => item.COURSE_ID);
+          this.screenLoading = false;
+          this.dialogVisible = true;
         })
         .catch(err => {
+          this.$message({ type: "error", message: "获取课程失败" });
+          this.dialogVisible = false;
+          this.screenLoading = false;
           console.error(err);
         });
     },
-    //确认提交
-    submit() {
-      console.log(this.authCourseList);
-      let postCourse = {};
-      postCourse.courseList = this.authCourseList;
-      let orgId = this.tableData[this.index].id;
-      let token = localStorage.getItem("idToken");
+    saveAllocation() {
+      this.dialogVisible = false;
+      this.screenLoading = true;
+      const token = localStorage.getItem("idToken");
       const config = { headers: { Authorization: token } };
+      const courseList = this.form.course.map(item => {
+        return this.allCourseList.find(course => {
+          return course.COURSE_ID === item;
+        });
+      });
+      const url = `admin/org/${this.preAllocateOrg}/course`;
       instance
-        .post(`admin/org/${orgId}/course`, postCourse)
-        .then(response => {
-          this.$toast.success({ title: "机构管理", message: "操作成功" });
+        .post(url, { courseList }, config)
+        .then(({ data }) => {
+          console.log(data);
+          this.screenLoading = false;
+          if (data.status === "ok") {
+            this.$message({ type: "success", message: "分配课程成功" });
+          } else {
+            throw new Error("allocate course fail");
+          }
         })
         .catch(err => {
+          this.screenLoading = false;
+          this.$message({ type: "error", message: "分配课程失败" });
           console.error(err);
         });
     }
   },
   mounted() {
-    this.changeTablePages(0);
-  },
-  created() {
     let token = localStorage.getItem("idToken");
     const config = { headers: { Authorization: token } };
+    this.screenLoading = true;
     instance
       .get("/admin/org", config)
       .then(response => {
@@ -191,26 +151,24 @@ export default {
           orgArr.push(org);
         }
         this.tableData = orgArr;
-        this.changeTablePages(0);
+        this.screenLoading = false;
+        this.handlePageChange(1);
       })
       .catch(err => {
+        this.screenLoading = false;
         console.error(err);
+        this.$message({ type: "error", message: "获取机构列表失败" });
       });
   }
 };
 </script>
 
 <style scoped>
-#organizationManagement .breadcrumb {
-  background-color: #fff;
-  color: #606266;
-  margin-bottom: 0;
-}
 #organizationManagement {
-  font-size: 12px;
-  color: #606266;
-  width: 100%;
-  margin: 0 auto;
-  padding: 10px;
+  padding: 0 20px 20px 20px;
+}
+#organizationManagement .spaceLine {
+  display: block;
+  height: 15px;
 }
 </style>

@@ -2,7 +2,7 @@
   <div id="videoManagement" v-loading="screenLoading" element-loading-text="正在处理, 请耐心等待">
     <el-row>
       <el-button
-        :disabled="uploadAvailable"
+        :disabled="!courseList.length"
         type="primary"
         size="small"
         @click="uploadNewVideo"
@@ -20,7 +20,6 @@
             :key="index"
             :label="item.name"
             :value="item.id"
-            :disabled="!item.isActive"
           ></el-option>
         </el-select>
       </div>
@@ -274,12 +273,7 @@ export default {
   computed: {
     ...mapState({
       courseList: state => state.adminCourseList
-    }),
-    uploadAvailable() {
-      return !this.courseList.find(item => {
-        return item.id === this.currentCourse && item.isActive;
-      });
-    }
+    })
   }
 };
 </script>

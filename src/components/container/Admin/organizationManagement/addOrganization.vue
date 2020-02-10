@@ -52,6 +52,7 @@
             id="headimage"
             :src="form.businessLicense"
             class="cover-image"
+            alt=""
           />
         </div>
       </el-form-item>
