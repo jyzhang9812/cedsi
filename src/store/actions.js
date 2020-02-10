@@ -652,7 +652,6 @@ const actions = {
           console.log(error);
         });
   },
-
   // Admin方法
   //获取课程目录
   getCourseList({ dispatch, commit, state }) {
@@ -666,7 +665,6 @@ const actions = {
       }
     ).then(
       response => {
-        console.log('0000000000000')
         var courseArr = [];
         var courseList = [];
         courseArr = response.data;
@@ -679,10 +677,7 @@ const actions = {
           courseList.push(course);
         }
         commit(TYPES.changeAdminCourseList, courseList);
-        console.log(courseList)
-        return dispatch('changeCourse', courseList[0].id).then(() => {
-          console.log('22222222222')
-        })
+        console.log(courseList);
       },
       error => {
         // this.$router.push({path:'/404'})
@@ -690,7 +685,6 @@ const actions = {
       }
     );
   },
-
   //切换课程下方视频数据
   changeCourse({ dispatch, commit, state }, id) {
     return globalAxios.get(

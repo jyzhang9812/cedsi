@@ -81,9 +81,9 @@ export default {
         const data = {
           comment: this.form.desc,
           type: this.form.file.name.split(".").pop(),
-          video_name: this.form.name,
+          name: this.form.name,
           size: this.form.file.size,
-          chapter_id: this.form.chapterId
+          chapterId: this.form.chapterId
         };
         this.submitAttributes(url, data, config);
       } else {
@@ -95,11 +95,12 @@ export default {
         .post(url, data, config)
         .then(({ data }) => {
           console.log(data);
-          if (data.status !== "ok") {
+          let { config, status } = data;
+          if (status !== "ok") {
             throw new Error("upload attributes error");
           }
           const that = this;
-          let AWSConfig = { ...data, path: "course/video" };
+          let AWSConfig = { ...config, path: "course/video" };
           const upload = (err, data) => {
             that.screenLoading = false;
             if (err || !data.ETag) {
@@ -118,6 +119,7 @@ export default {
         })
         .catch(err => {
           console.error(err);
+          this.screenLoading = false;
           this.$message({ type: "error", message: "上传失败" });
         });
     },
