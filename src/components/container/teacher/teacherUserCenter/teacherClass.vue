@@ -7,7 +7,7 @@
       </ol>
     </div>
     <div class="first-floor">
-      <table class="table hover">
+      <!-- <table class="table hover">
         <thead>
           <tr>
             <th v-for="(title,index) in tableTitle" class="title" :key="index">{{title}}</th>
@@ -22,9 +22,26 @@
             <td>{{classes.chapterCount}}</td>
           </tr>
         </tbody>
-      </table>
+      </table>-->
+      <el-table :data="teacherClassList" style="width: 100%">
+        <el-table-column align="center" type="index" label="序号"></el-table-column>
+        <el-table-column align="center" prop="className" label="班级名称"></el-table-column>
+        <el-table-column align="center" prop="courseName" label="课程"></el-table-column>
+        <el-table-column align="center" prop="classNum" label="班级人数"></el-table-column>
+        <el-table-column align="center" prop="chapterNum" label="章节数目"></el-table-column>
+      </el-table>
     </div>
-    <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit"></pagination>
+    <div class="spaceLine"></div>
+    <el-pagination
+      :page-size="limit"
+      background
+      layout="prev, pager, next"
+      :total="teacherClassList.length"
+      @current-change="handlePageChange"
+      @prev-click="handlePageChange"
+      @next-click="handlePageChange"
+    ></el-pagination>
+    <!-- <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit"></pagination> -->
   </div>
 </template>
 
@@ -40,6 +57,16 @@ export default {
   components: { pagination },
   data() {
     return {
+      //新改的
+      teacherClassList: [
+        {
+          className: "一班",
+          courseName: "数据库",
+          classNum: "13",
+          chapterNum: "2"
+        }
+      ],
+      //
       limit: 10,
       currentList: [],
       tableTitle: ["序号", "班级名称", "课程", "班级人数", "章节数目"],
@@ -101,24 +128,7 @@ export default {
   margin-top: 20px;
 }
 
-#teacherClass .title {
-  text-align: center;
+#teacherClass .spaceLine {
+  height: 20px;
 }
-
-#teacherClass .content td {
-  line-height: 30px;
-}
-
-#teacherClass table {
-  border: #eeeeee;
-}
-
-#teacherClass table tr {
-  text-align: center !important;
-}
-
-#teacherClass table td {
-  vertical-align: middle !important;
-}
-
 </style>
