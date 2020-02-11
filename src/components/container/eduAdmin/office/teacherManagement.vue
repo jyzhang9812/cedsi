@@ -10,11 +10,10 @@
       <el-table-column align="center" prop="desc" label="简介"></el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button size="mini" slot="reference" type="danger" @click="dialogVisible=true">删除</el-button>
+          <el-button size="mini" type="danger" @click="dialogVisible=true">删除</el-button>
           <el-dialog title :visible.sync="dialogVisible" width="20%">
             <i class="el-icon-info"></i>
-            <span>确定要删除此章节吗</span>
+            <span>确定要删除此教师吗</span>
             <span slot="footer" class="dialog-footer">
               <el-button type="success" size="mini" @click="dialogVisible=false">取 消</el-button>
               <el-button type="danger" size="mini" @click="handleDelete(scope.row)">确 定</el-button>
@@ -78,7 +77,6 @@
 
 <script>
 import instance from "../../../../axios-auth";
-import { uploadFile } from "../../../../uploadFile";
 import crypto from "crypto";
 
 export default {
@@ -96,7 +94,6 @@ export default {
     };
   },
   methods: {
-    handleEdit(row) {},
     clearCreateForm() {
       this.form1 = { name: "", account: "", desc: "" };
       this.form2 = { sex: "0", pass: "", _pass: "" };
@@ -107,15 +104,12 @@ export default {
       this.teacherList = this.tableData.slice(start, end);
     },
     handleDelete(row) {
-      // to do
-    },
-    submitDelete() {
       let token = localStorage.getItem("idToken");
       this.screenLoading = true;
       this.dialogVisible = false;
       let config = {
         headers: { Authorization: token },
-        params: { teacherId: teacherId }
+        params: { teacherId: row.id }
       };
       instance
         .delete("/eduadmin/teacher", config)
@@ -123,6 +117,7 @@ export default {
           if (data.status === "ok") {
             this.screenLoading = false;
             this.$message({ type: "success", message: "删除教师成功" });
+            this.getTeacherList();
           } else {
             throw new Error("delete teacher fail");
           }
