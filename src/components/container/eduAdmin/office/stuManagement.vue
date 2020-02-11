@@ -4,16 +4,16 @@
       <el-breadcrumb-item>教务管理</el-breadcrumb-item>
       <el-breadcrumb-item>学生管理</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-row type="flex" :gutter="20">
+    <el-row type="flex">
       <!-- 批量导入 -->
       <el-col :span="16" style="margin-left:15px;">
         <el-button @click="dialogVisible=true" type="primary" size="small">批量导入</el-button>
       </el-col>
       <!-- 搜索框 -->
-      <el-col :span="5" style="margin-top: -5px;">
+      <el-col :span="5">
         <el-input v-model="inputData.keywords" placeholder="请输入学生的姓名或学号" size="small"></el-input>
       </el-col>
-      <el-col :span="3" style="margin-top: -5px;">
+      <el-col :span="3">
         <el-button type="primary" size="small" @click="conditionSearch">搜索</el-button>
       </el-col>
     </el-row>
@@ -203,10 +203,6 @@
   .el-breadcrumb {
     margin: 20px;
     font-size: 12px;
-  }
-
-  .el-table {
-    margin: 5px 0px 15px 5px;
   }
 
   .btn-box {
