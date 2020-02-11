@@ -1,5 +1,35 @@
 <template>
   <div id="classmanagement">
+    <!-- 导入学生 -->
+    <el-dialog :visible.sync="addStudent">
+      <el-row type="flex" :gutter="20">
+        <!-- 搜索框 -->
+        <el-col :span="10" style="margin-top: -5px;">
+          <el-input v-model="inputData.keywords" placeholder="请输入学生的姓名或学号或年级" size="small"></el-input>
+        </el-col>
+        <el-col :span="3" style="margin-top: -5px;">
+          <el-button type="primary" size="small" @click="conditionSearch">搜索</el-button>
+        </el-col>
+      </el-row>
+      <!-- 表格区域 -->
+      <el-table :data="currentList" ref="multipleTable" row-key="id" tooltip-effect="dark" height="350"
+        @selection-change="handleSelectionChange">
+        <!-- <el-table-column type="selection" width="55" prop="userId"></el-table-column> -->
+        <el-table-column :prop="title.prop" :type="title.prop == 'userId'?'selection':''" :label="title.label" align="center" width="130px;" v-for="(title,index) in studentTitle" :key="index" ></el-table-column>
+      </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addStudent = false">取 消</el-button>
+        <el-button type="primary" @click="submitStudent">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 查看学生 -->
+    <el-dialog :visible.sync="checkStudent">
+      <el-table :data="classStudentList" stripe style="width: 100%"  height="350">
+        <!-- <el-table-column type="index" label="序号" width="180" align="center"></el-table-column> -->
+        <el-table-column :prop="title.prop" :type="title.prop == 'userId'?'index':''" :label="title.label" width="230" align="center"
+          v-for="(title,index) in studentTitle" :key="index"></el-table-column>
+      </el-table>
+    </el-dialog>
     <el-breadcrumb separator="/">
       <el-breadcrumb-item>教务管理</el-breadcrumb-item>
       <el-breadcrumb-item>班级管理</el-breadcrumb-item>
@@ -38,34 +68,10 @@
         <el-table-column prop label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" @click="updateClass(scope.$index)">编辑</el-button>
-            <el-button type="text">
+            <el-button type="text" @click="checkStudents(scope.$index)">
               查看学生</el-button>
             <el-button type="text" @click="addStudents(scope.$index)">导入学生</el-button>
-            <el-dialog :visible.sync="addStudent">
-              <el-row type="flex" :gutter="20">
-                <!-- 搜索框 -->
-                <el-col :span="10" style="margin-top: -5px;">
-                  <el-input v-model="inputData.keywords" placeholder="请输入学生的姓名或学号或年级" size="small"></el-input>
-                </el-col>
-                <el-col :span="3" style="margin-top: -5px;">
-                  <el-button type="primary" size="small" @click="conditionSearch">搜索</el-button>
-                </el-col>
-              </el-row>
-              <!-- 表格区域 -->
-              <el-table :data="currentList" ref="multipleTable" tooltip-effect="dark" height="350"  @selection-change="handleSelectionChange">
-                <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="id" label="学号" align="center"></el-table-column>
-                <el-table-column prop="name" label="姓名" align="center"></el-table-column>
-                <el-table-column prop="gender" label="性别" align="center"></el-table-column>
-                <el-table-column prop="age" label="年龄" align="center"></el-table-column>
-                <el-table-column prop="phone" label="手机号" align="center" width="130px;"></el-table-column>
-                <el-table-column prop="grade" label="年级" align="center"></el-table-column>
-              </el-table>
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="addClass = false">取 消</el-button>
-                <el-button type="primary" @click="submitStudent">确 定</el-button>
-              </div>
-            </el-dialog>
+
           </template>
         </el-table-column>
       </el-table>
@@ -85,6 +91,7 @@
         title: "新增班级",  //模态框标题
         addClass: false,   //新增班级模态框
         addStudent: false,  //导入学生模态框
+        checkStudent:false, //查看学生模态框
         form: {
           addClassName: "",
           currentCourse: "",
@@ -109,14 +116,44 @@
             prop: "courseName"
           }
         ],        //班级列表标题
+        studentTitle: [
+        {
+            prop: "userId"
+        },
+          {
+            label: "学号",
+            prop: "id"
+          },
+          {
+            label: "姓名",
+            prop: "name"
+          },
+          {
+            label: "性别",
+            prop: "gender"
+          },
+          {
+            label: "年龄",
+            prop: "age"
+          },
+          {
+            label: "手机号",
+            prop: "phone"
+          },
+          {
+            label: "年级",
+            prop: "grade"
+          }
+        ],        //学生列表标题
         tableData: [],  //班级列表数据
         inputData: {
           keywords: ""
         },  //导入学生搜索框
         limit: 5,         //分页页数
-        currentList:[], //学生列表
+        currentList: [], //导入学生列表
+        classStudentList:[], //班级学生列表
         allStudentList: [], //获取到的整个学生列表
-        selectStudents:[],
+        selectStudents: [],
       };
     },
     methods: {
@@ -199,6 +236,34 @@
             });
         }
       },
+      //查看学生
+      checkStudents(index){
+        this.checkStudent = true;
+        let token = localStorage.getItem("idToken");
+        const config = { headers: { Authorization: token } };
+        instance
+          .get(`/eduadmin/class/${this.form.classId}/students`, config)
+          .then(response => {
+            let classStudent = response.data.data;
+            console.log({ 班级学生数据: classStudent });
+            this.classStudentList = classStudent.map(item => {
+              let info = item.STUDENT_INFO;
+              return {
+                userId: item.USER_ID,
+                age: info.AGE,
+                id: info.STUDENT_ID,
+                phone: info.PHONE,
+                grade: info.GRADE,
+                name: info.STUDENT_NAME,
+                gender: info.GENDER === "0" ? "女" : "男"
+              };
+            });
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      },
+      //导入学生
       addStudents(index) {
         this.addStudent = true;
         this.currentList = this.allStudentList;
@@ -225,12 +290,29 @@
       },
       //选择学生
       handleSelectionChange(val) {
-        this.selectStudents = val;
+        this.selectStudents = val.map(item => { return item.userId });
         console.log(this.selectStudents)
       },
-      submitStudent(){
-        console.log(this.selectStudents)
-        console.log(this.form.classId)
+      //提交班级学生
+      submitStudent() {
+        console.log(this.selectStudents);
+        console.log(this.form.classId);
+        let classStudent = {
+          studentData:this.selectStudents,
+          class_id:this.form.classId
+        }
+        let token = window.localStorage.getItem("idToken");
+        const url = `/eduadmin/class/${classStudent.class_id}/students`;
+        const config = { headers: { Authorization: token}};
+        instance
+          .post(url, classStudent,config)
+          .then(response => {
+            console.log(response);
+          })
+          .catch(err => {
+            console.error(err);
+          });
+          this.studentList = this.selectStudents;
         this.addStudent = false;
       },
       getStudents() {
@@ -244,6 +326,7 @@
             this.allStudentList = allStudent.map(item => {
               let info = item.STUDENT_INFO;
               return {
+                userId: item.USER_ID,
                 age: info.AGE,
                 id: info.STUDENT_ID,
                 phone: info.PHONE,
