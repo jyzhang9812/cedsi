@@ -9,26 +9,16 @@
         <el-row class="space-line"></el-row>
         <el-row type="flex" justify="center" class="welcome">{{ isOrg ? '个人账号':'企业账号'}}</el-row>
         <el-row class="form-input" type="flex" justify="center" v-if="!isOrg">
-          <input v-model="form.number" type="text" placeholder="账号" autocomplete="off" />
+          <input v-model="number" type="text" placeholder="账号" autocomplete="off" />
         </el-row>
         <el-row class="form-input" type="flex" justify="center">
-          <input v-model="form.account" type="text" placeholder="用户名" autocomplete="off" />
+          <input v-model="account" type="text" placeholder="用户名" autocomplete="off" />
         </el-row>
         <el-row class="form-input" type="flex" justify="center">
-          <input
-            v-model="form.password"
-            type="password"
-            placeholder="密码"
-            autocomplete="new-password"
-          />
+          <input v-model="password" type="password" placeholder="密码" autocomplete="new-password" />
         </el-row>
         <el-row class="form-input" type="flex" justify="center">
-          <input
-            v-model="form.password"
-            type="password"
-            placeholder="确认密码"
-            autocomplete="new-password"
-          />
+          <input v-model="password_" type="password" placeholder="确认密码" autocomplete="new-password" />
         </el-row>
         <el-row type="flex" justify="center">
           <button class="confirm" @click="onSubmit">确定</button>
@@ -43,10 +33,10 @@ import crypto from "crypto";
 export default {
   data() {
     return {
-      form: {
-        account: "",
-        password: ""
-      },
+      number: "",
+      account: "",
+      password: "",
+      password_: "",
       image:
         "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/signup-image.png",
       isOrg: true,
@@ -54,32 +44,66 @@ export default {
       height: "height: 420px;"
     };
   },
+  watch: {
+    account() {
+      const rule1 = /[`~!@$%^&()\-+=<>?:"{}|,./;'#*·~！@￥%……&（）——\-+={}|《》？：“”【】、；‘’，。、]/g;
+      const rule2 = /[^_A-Za-z0-9\u4e00-\u9fa5]/g;
+      if (rule1.test(this.account) || rule2.test(this.account)) {
+        this.$message({
+          type: "error",
+          message: "账号不支持此符号, 请更换其他符号"
+        });
+        this.account = this.account.replace(rule1, "");
+        this.account = this.account.replace(rule2, "");
+      }
+    },
+    password() {
+      const rule1 = /[^a-zA-Z/a-zA-Z0-9/`~!@$%^&()\-+=<>?:"{}|,./;'_#*·~！@￥%……&（）——\-+={}|《》？：“”【】、；‘’，。、]/g;
+      if (rule1.test(this.password)) {
+        this.$message({
+          type: "error",
+          message: "密码不支持此符号, 请更换其他符号"
+        });
+        this.password = this.password.replace(rule1);
+      }
+    }
+  },
   methods: {
     onSubmit() {
       if (this.checkLogin()) {
-        let password = this.form.password;
-        let account = this.form.account;
+        let password = this.password;
         let SHA256 = crypto.createHash("SHA256");
         password = SHA256.update(password).digest("hex");
-        const formData = { password: password, username: account };
-        this.$store.dispatch("login", formData).then(() => {
-          let result = this.$store.getters.isAuthenticated;
-          console.log({ 登录结果: result });
-          if (!result) {
-            this.$message({ type: "error", message: "账号或密码错误" });
-          } else {
-            this.$message({ type: "success", message: "欢迎回来" });
-          }
-        });
+        const formData = {
+          account: this.isOrg ? "" : this.number,
+          username: this.account,
+          password: password,
+          that: this
+        };
+        console.log(formData);
+        this.$store.dispatch("signup", formData);
       }
     },
     checkLogin() {
-      if (!this.form.account) {
+      console.log(this.isOrg);
+      if (!this.isOrg && !this.number) {
+        this.$message({ type: "error", message: "请输入机构号码" });
+        return false;
+      }
+      if (!this.account) {
         this.$message({ type: "error", message: "请输入用户名" });
         return false;
       }
-      if (!this.form.password) {
+      if (!this.password) {
         this.$message({ type: "error", message: "请输入密码" });
+        return false;
+      }
+      if (!this.password_) {
+        this.$message({ type: "error", message: "请再次输入密码" });
+        return false;
+      }
+      if (this.password !== this.password_) {
+        this.$message({ type: "error", message: "两次密码不一致" });
         return false;
       }
       return true;
