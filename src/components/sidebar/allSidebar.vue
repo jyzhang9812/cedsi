@@ -73,11 +73,17 @@ export default {
   height: 100%;
   background-color: #3766a6;
 }
+
 .el-menu-item i,
 .el-submenu__title i {
   color: #fff;
 }
+
 .el-container {
   overflow: hidden;
+}
+
+.el-menu {
+  border: none;
 }
 </style>

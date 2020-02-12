@@ -205,7 +205,6 @@ export default {
 #add-activity {
   width: 98%;
   margin: 0 auto;
-  padding-top: 30px;
 }
 
 #add-activity .upload-cover-btn {
