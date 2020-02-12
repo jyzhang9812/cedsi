@@ -44,7 +44,7 @@
          <el-row :gutter="20">
           <el-col :span="11">
             <el-form-item label="选择教师">
-              <el-select @change="selevtGetTeacher" v-model="form.currentTeacher" placeholder="请选择教师">
+              <el-select @change="selectGetTeacher" v-model="form.currentTeacher" placeholder="请选择教师">
                 <el-option :label="item.name" :value="item.id" v-for="(item,index) in form.teacherList" :key="index">
                 </el-option>
               </el-select>
@@ -52,7 +52,7 @@
           </el-col>
           <el-col :span="11">
             <el-form-item label="选择课程">
-              <el-select @change="selevtGetCourse" v-model="form.currentCourse" placeholder="请选择课程">
+              <el-select @change="selectGetCourse" v-model="form.currentCourse" placeholder="请选择课程">
                 <el-option :label="item.name" :value="item.id" v-for="(item,index) in form.courseList" :key="index">
                 </el-option>
               </el-select>
@@ -171,12 +171,14 @@
         let end = start + this.limit;
         this.classList = this.tableData.slice(start, end);
       },
-      selevtGetCourse(val) {
-        this.form.courseValue = this.form.courseList.find((item) => { return item.id = val; })
+      selectGetCourse(val) {
+        console.log(val);
+        this.form.courseValue = this.form.courseList.find((item) => { return item.id == val; })
         console.log(this.form.courseValue);
       },
-      selevtGetTeacher(val) {
-        this.form.teacherValue = this.form.teacher.find((item) => { return item.id = val; })
+      selectGetTeacher(val) {
+        console.log(val);
+        this.form.teacherValue = this.form.teacherList.find((item) => { return item.id == val; })
         console.log(this.form.teacherValue);
       },
       addClasses() {
@@ -204,18 +206,19 @@
         console.log(this.form);
         // console.log(this.index);
         //编辑提交
-        if (this.title == "添加班级") {
+        if (this.title == "编辑班级") {
           let updateClass = {
             courseId: this.form.courseValue.id,
             courseName: this.form.courseValue.name,
             teacherId: this.form.teacherValue.id,
+
             classId: this.form.classId
           }
           console.log(updateClass);
           const url = `/eduadmin/class/${updateClass.classId}/course`;
           const config = { headers: { Authorization: token } };
           instance
-            .post(url, config)
+            .post(url, updateClass,config)
             .then(response => {
               console.log(response);
             })
@@ -229,11 +232,11 @@
             teacherId: this.form.teacherValue.id,
             className: this.form.addClassName
           }
-          console.log(newClass);
+          console.log(newClass.courseNmae);
           const url = `/eduadmin/class`;
           const config = { headers: { Authorization: token } };
           instance
-            .post(url, newClass)
+            .post(url, newClass,config)
             .then(response => {
               console.log(response);
               return instance.get("eduadmin/class", config);
@@ -244,7 +247,6 @@
                 return {
                   classId: item.CLASS_ID,
                   className: item.CLASS_NAME,
-                  teacherName: item.TEACHER_NAME,
                   courseId: item.COURSE_ID,
                   courseName: item.COURSE_NAME,
                   courseMemberCount: item.CLASS_MEMBER_COUNT
@@ -398,8 +400,8 @@
           })
           .then(({ data }) => {
             console.log({ 教师和课程: data });
-            let teacherList = data.teacher;
-            let courseList = data.course;
+            let teacherList = data.teachers;
+            let courseList = data.courses;
             this.form.teacherList = teacherList.map(item => {
               return {
                 name: item.TEACHER_NAME,
