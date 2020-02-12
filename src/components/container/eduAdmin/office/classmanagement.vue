@@ -1,7 +1,7 @@
 <template>
   <div id="classmanagement">
     <!-- 导入学生 -->
-    <el-dialog :visible.sync="addStudent"  width="70%" top="10vh">
+    <el-dialog :visible.sync="addStudent" width="70%" top="10vh">
       <el-row type="flex" :gutter="20">
         <!-- 搜索框 -->
         <el-col :span="10" style="margin-top: -5px;">
@@ -15,7 +15,8 @@
       <el-table :data="currentList" stripe row-key="id" tooltip-effect="dark" height="350"
         @selection-change="handleSelectionChange">
         <el-table-column :prop="title.prop" :type="title.prop == 'userId'?'selection':''" :label="title.label"
-          align="center" width="130px;" v-for="(title,index) in studentTitle" :key="index" :selectable="selectable"></el-table-column>
+          align="center" width="130px;" v-for="(title,index) in studentTitle" :key="index" :selectable="selectable">
+        </el-table-column>
       </el-table>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addStudent = false">取 消</el-button>
@@ -34,24 +35,30 @@
       <el-breadcrumb-item>班级管理</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="first-floor">
-      <el-button type="primary" size="mini" @click="addClass = true">新增班级</el-button>
-      <el-dialog :title="title" :visible.sync="addClass">
+      <el-button type="primary" size="mini" @click="addClasses">新增班级</el-button>
+      <el-dialog :title="title" :visible.sync="addClass" destroy-on-close>
         <el-form :model="form" label-width="80px">
           <el-form-item label="班级名称">
-            <el-input v-model="form.addClassName" maxlength="10" show-word-limit></el-input>
+            <el-col :span="10"><el-input v-model="form.addClassName" maxlength="10" show-word-limit ></el-input></el-col>
           </el-form-item>
-          <el-form-item label="选择教师">
-            <el-select @change="selevtGetTeacher" v-model="form.currentTeacher" placeholder="请选择教师">
-              <el-option :label="item.name" :value="item.id" v-for="(item,index) in form.teacherList" :key="index">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="选择课程">
-            <el-select @change="selevtGetCourse" v-model="form.currentCourse" placeholder="请选择课程">
-              <el-option :label="item.name" :value="item.id" v-for="(item,index) in form.courseList" :key="index">
-              </el-option>
-            </el-select>
-          </el-form-item>
+         <el-row :gutter="20">
+          <el-col :span="11">
+            <el-form-item label="选择教师">
+              <el-select @change="selevtGetTeacher" v-model="form.currentTeacher" placeholder="请选择教师">
+                <el-option :label="item.name" :value="item.id" v-for="(item,index) in form.teacherList" :key="index">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="选择课程">
+              <el-select @change="selevtGetCourse" v-model="form.currentCourse" placeholder="请选择课程">
+                <el-option :label="item.name" :value="item.id" v-for="(item,index) in form.courseList" :key="index">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+         </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="addClass = false">取 消</el-button>
@@ -66,7 +73,7 @@
           v-for="(title,index) in tableTitle" :key="index"></el-table-column>
         <el-table-column prop label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="text" @click="updateClass(scope.$index)">编辑</el-button>
+            <el-button type="text" @click="updateClass(scope.row,scope.$index)">编辑</el-button>
             <el-button type="text" @click="checkStudents(scope.$index)">
               查看学生</el-button>
             <el-button type="text" @click="addStudents(scope.$index)">导入学生</el-button>
@@ -74,8 +81,9 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination class="pagination" :page-size="limit" background layout="prev, pager, next" :total="tableData.length"
-        @current-change="handlePageChange" @prev-click="handlePageChange" @next-click="handlePageChange">
+      <el-pagination class="pagination" :page-size="limit" background layout="prev, pager, next"
+        :total="tableData.length" @current-change="handlePageChange" @prev-click="handlePageChange"
+        @next-click="handlePageChange">
       </el-pagination>
     </div>
   </div>
@@ -89,7 +97,7 @@
     name: "classmanagement",
     data() {
       return {
-        limit:5,
+        limit: 5,
         title: "新增班级",  //模态框标题
         addClass: false,   //新增班级模态框
         addStudent: false,  //导入学生模态框
@@ -148,7 +156,7 @@
           }
         ],        //学生列表标题
         tableData: [],  //班级总列表数据
-        classList:[], //班级列表
+        classList: [], //班级列表
         inputData: {
           keywords: ""
         },  //导入学生搜索框
@@ -159,27 +167,33 @@
     },
     methods: {
       handlePageChange(pageIndex) {
-      let start = (pageIndex - 1) * this.limit;
-      let end = start + this.limit;
-      this.classList = this.tableData.slice(start, end);
-    },
+        let start = (pageIndex - 1) * this.limit;
+        let end = start + this.limit;
+        this.classList = this.tableData.slice(start, end);
+      },
       selevtGetCourse(val) {
-        this.courseValue = this.form.courseList.find((item) => { return item.id = val; })
-        console.log(this.courseValue);
+        this.form.courseValue = this.form.courseList.find((item) => { return item.id = val; })
+        console.log(this.form.courseValue);
       },
       selevtGetTeacher(val) {
-        this.teacherValue = this.form.teacher.find((item) => { return item.id = val; })
-        console.log(this.teacherValue);
+        this.form.teacherValue = this.form.teacher.find((item) => { return item.id = val; })
+        console.log(this.form.teacherValue);
       },
-      updateClass(index) {
+      addClasses() {
+        this.addClass = true;
+        this.title = "新增班级";
+        this.form.addClassName = "";
+          this.form.currentCourse = "";
+          this.form.currentTeacher = "";
+          this.form.classId = '';
+      },
+      updateClass(row,index) {
         this.title = "编辑班级";
         this.addClass = true;
-        this.form = {
-          addClassName: this.tableData[index].className,
-          currentCourse: this.tableData[index].courseName,
-          currentTeacher: this.tableData[index].teacherName,
-          classId: this.tableData[index].classId
-        }
+        this.form.addClassName = row.className;
+          this.form.currentCourse = row.courseName;
+          this.form.currentTeacher=row.teacherName;
+          this.form.classId = this.tableData[index].classId;
       },
       //编辑或更改提交班级
       submit() {
@@ -278,10 +292,10 @@
         this.selectStudents = val.map(item => { return item.userId });
         console.log(this.selectStudents)
       },
-      selectable(row,index){
-        if(this.classStudentList.some(item => {return item.userId == row.userId})){
+      selectable(row, index) {
+        if (this.classStudentList.some(item => { return item.userId == row.userId })) {
           return false
-        }else{
+        } else {
           return true
         }
       },
@@ -307,7 +321,7 @@
         this.studentList = this.selectStudents;
         this.addStudent = false;
       },
-      getclassStudent(classId){
+      getclassStudent(classId) {
         let token = localStorage.getItem("idToken");
         let url = `/eduadmin/class/${classId}/students`;
         const config = { headers: { Authorization: token } };
@@ -392,6 +406,14 @@
                 id: item.TEACHER_ID
               };
             });
+            this.form.courseList = courseList.map(item => {
+              return {
+                name: item.COURSE_NAME,
+                id: item.COURSE_ID
+              };
+            });
+            console.log(this.form.courseList)
+
           })
           .catch(err => console.error(err));
       }

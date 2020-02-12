@@ -1,21 +1,28 @@
 <template>
-  <div id="sign-in">
-    <el-col class="form-outside">
-      <el-row class="space-line"></el-row>
-      <el-row type="flex" justify="center">
-        <div class="image-outside">
-          <el-avatar :size="60" :src="image"></el-avatar>
-        </div>
+  <div id="sign-up">
+    <el-col :offset="9">
+      <el-row class="tab-bar">
+        <button :style="isOrg ? '' : bar " @click="changeAccountType">个人</button>
+        <button :style="isOrg ? bar: '' " @click="changeAccountType">企业</button>
       </el-row>
-      <el-row type="flex" justify="center" class="welcome">WELCOME</el-row>
-      <el-row class="form-input" type="flex" justify="center">
-        <input v-model="form.account" type="text" placeholder="用户名" autocomplete="off" />
-      </el-row>
-      <el-row class="form-input" type="flex" justify="center">
-        <input v-model="form.password" type="password" placeholder="密码" autocomplete="new-password" />
-      </el-row>
-      <el-row type="flex" justify="center">
-        <button class="confirm" @click="onSubmit">登录</button>
+      <el-row class="form-outside" :style="height">
+        <el-row class="space-line"></el-row>
+        <el-row type="flex" justify="center" class="welcome">{{ isOrg ? '个人账号':'企业账号'}}</el-row>
+        <el-row class="form-input" type="flex" justify="center" v-if="!isOrg">
+          <input v-model="number" type="text" placeholder="账号" autocomplete="off" />
+        </el-row>
+        <el-row class="form-input" type="flex" justify="center">
+          <input v-model="account" type="text" placeholder="用户名" autocomplete="off" />
+        </el-row>
+        <el-row class="form-input" type="flex" justify="center">
+          <input v-model="password" type="password" placeholder="密码" autocomplete="new-password" />
+        </el-row>
+        <el-row class="form-input" type="flex" justify="center">
+          <input v-model="password_" type="password" placeholder="确认密码" autocomplete="new-password" />
+        </el-row>
+        <el-row type="flex" justify="center">
+          <button class="confirm" @click="onSubmit">确定</button>
+        </el-row>
       </el-row>
     </el-col>
   </div>
@@ -26,49 +33,92 @@ import crypto from "crypto";
 export default {
   data() {
     return {
-      form: {
-        account: "",
-        password: ""
-      },
-      image: "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/signup-image.png"
+      number: "",
+      account: "",
+      password: "",
+      password_: "",
+      image:
+        "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/signup-image.png",
+      isOrg: true,
+      bar: "background: transparent; color: #337AB7;",
+      height: "height: 420px;"
     };
+  },
+  watch: {
+    account() {
+      const rule1 = /[`~!@$%^&()\-+=<>?:"{}|,./;'#*·~！@￥%……&（）——\-+={}|《》？：“”【】、；‘’，。、]/g;
+      const rule2 = /[^_A-Za-z0-9\u4e00-\u9fa5]/g;
+      if (rule1.test(this.account) || rule2.test(this.account)) {
+        this.$message({
+          type: "error",
+          message: "账号不支持此符号, 请更换其他符号"
+        });
+        this.account = this.account.replace(rule1, "");
+        this.account = this.account.replace(rule2, "");
+      }
+    },
+    password() {
+      const rule1 = /[^a-zA-Z/a-zA-Z0-9/`~!@$%^&()\-+=<>?:"{}|,./;'_#*·~！@￥%……&（）——\-+={}|《》？：“”【】、；‘’，。、]/g;
+      if (rule1.test(this.password)) {
+        this.$message({
+          type: "error",
+          message: "密码不支持此符号, 请更换其他符号"
+        });
+        this.password = this.password.replace(rule1);
+      }
+    }
   },
   methods: {
     onSubmit() {
       if (this.checkLogin()) {
-        let password = this.form.password;
-        let account = this.form.account;
+        let password = this.password;
         let SHA256 = crypto.createHash("SHA256");
         password = SHA256.update(password).digest("hex");
-        const formData = { password: password, username: account };
-        this.$store.dispatch("login", formData).then(() => {
-          let result = this.$store.getters.isAuthenticated;
-          console.log({ 登录结果: result });
-          if (!result) {
-            this.$message({ type: "error", message: "账号或密码错误" });
-          } else {
-            this.$message({ type: "success", message: "欢迎回来" });
-          }
-        });
+        const formData = {
+          account: this.isOrg ? "" : this.number,
+          username: this.account,
+          password: password,
+          that: this
+        };
+        console.log(formData);
+        this.$store.dispatch("signup", formData);
       }
     },
     checkLogin() {
-      if (!this.form.account) {
+      console.log(this.isOrg);
+      if (!this.isOrg && !this.number) {
+        this.$message({ type: "error", message: "请输入机构号码" });
+        return false;
+      }
+      if (!this.account) {
         this.$message({ type: "error", message: "请输入用户名" });
         return false;
       }
-      if (!this.form.password) {
+      if (!this.password) {
         this.$message({ type: "error", message: "请输入密码" });
         return false;
       }
+      if (!this.password_) {
+        this.$message({ type: "error", message: "请再次输入密码" });
+        return false;
+      }
+      if (this.password !== this.password_) {
+        this.$message({ type: "error", message: "两次密码不一致" });
+        return false;
+      }
       return true;
+    },
+    changeAccountType() {
+      this.isOrg = !this.isOrg;
+      let temp = this.isOrg ? 42 : 50;
+      this.height = `height: ${temp}0px;`;
     }
   }
 };
 </script>
 
 <style scoped>
-#sign-in {
+#sign-up {
   background-image: url("https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/static/bg-01.jpg");
   height: 100%;
   background-repeat: no-repeat;
@@ -82,7 +132,7 @@ export default {
   font: inherit;
 }
 
-#sign-in::before {
+#sign-up::before {
   content: "";
   display: block;
   position: absolute;
@@ -94,9 +144,8 @@ export default {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-#sign-in .form-outside {
+#sign-up .form-outside {
   width: 400px;
-  height: 460px;
   border-radius: 10px;
   overflow: hidden;
   background: -webkit-linear-gradient(top, #7579ff, #b224ef);
@@ -105,7 +154,15 @@ export default {
   background: linear-gradient(top, #7579ff, #b224ef);
 }
 
-#sign-in .image-outside {
+#sign-up .form-height1 {
+  height: 420px;
+}
+
+#sign-up .form-height2 {
+  height: 500px;
+}
+
+#sign-up .image-outside {
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -115,18 +172,18 @@ export default {
   align-items: center;
 }
 
-#sign-in .welcome {
+#sign-up .welcome {
   font-size: 22px;
   color: #fff;
   height: 45px;
   line-height: 45px;
 }
 
-#sign-in .space-line {
+#sign-up .space-line {
   height: 50px;
 }
 
-#sign-in .confirm {
+#sign-up .confirm {
   min-width: 120px;
   height: 50px;
   border-radius: 25px;
@@ -136,7 +193,7 @@ export default {
   cursor: pointer;
 }
 
-#sign-in .confirm::before {
+#sign-up .confirm::before {
   content: "";
   display: block;
   position: absolute;
@@ -152,7 +209,7 @@ export default {
   transition: all 0.4s;
 }
 
-#sign-in .confirm:hover {
+#sign-up .confirm:hover {
   color: #fff;
   background: #9152f8;
   background: -webkit-gradient(
@@ -165,13 +222,35 @@ export default {
   background: linear-gradient(bottom, #7579ff, #b224ef);
 }
 
-#sign-in .confirm:focus {
+#sign-up .confirm:focus {
   outline: none;
 }
 
-#sign-in .confirm:hover:before {
+#sign-up .confirm:hover:before {
   color: #fff;
   opacity: 0;
+}
+
+#sign-up .tab-bar {
+  height: 47px;
+  position: relative;
+  top: 8px;
+  display: inline-flex;
+}
+
+#sign-up .tab-bar > button {
+  cursor: pointer;
+  height: 100%;
+  width: 100px;
+  background: #7579ff;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 5px 5px 0 0;
+}
+
+#sign-up .tab-bar > button:focus {
+  outline: none;
 }
 
 input {
