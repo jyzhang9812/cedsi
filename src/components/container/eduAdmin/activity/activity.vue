@@ -37,7 +37,7 @@
         currentList: [], //当前绑定的活动列表
         allActivityList: [],//获取到的整个活动列表
         tempActivityList: [], //临时的学生列表
-        limit: 4
+        limit: 6
       }
     },
     created() {
