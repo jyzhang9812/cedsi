@@ -15,7 +15,7 @@
         <input v-model="form.password" type="password" placeholder="密码" />
       </el-row>
       <el-row>
-        <el-button class="confirm">确定</el-button>
+        <el-button class="confirm" @click="onSubmit()">确定</el-button>
       </el-row>
     </el-col>
   </div>
@@ -35,14 +35,14 @@ export default {
   },
   methods: {
     onSubmit() {
-      var password = this.password;
+      var password = this.form.password;
       password = crypto
         .createHash("SHA256")
         .update(password)
         .digest("hex");
       const formData = {
         password: password,
-        username: this.username
+        username: this.form.account
       };
       this.$store.dispatch("login", formData).then(() => {
         console.log("\\\\\\\\\\\\\\\\\\\\\\\\");
