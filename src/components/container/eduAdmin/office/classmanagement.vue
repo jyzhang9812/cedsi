@@ -1,7 +1,7 @@
 <template>
   <div id="classmanagement">
     <!-- 导入学生 -->
-    <el-dialog :visible.sync="addStudent">
+    <el-dialog :visible.sync="addStudent"  width="70%" top="10vh">
       <el-row type="flex" :gutter="20">
         <!-- 搜索框 -->
         <el-col :span="10" style="margin-top: -5px;">
@@ -12,10 +12,10 @@
         </el-col>
       </el-row>
       <!-- 表格区域 -->
-      <el-table :data="currentList" ref="multipleTable" row-key="id" tooltip-effect="dark" height="350"
+      <el-table :data="currentList" stripe row-key="id" tooltip-effect="dark" height="350"
         @selection-change="handleSelectionChange">
-        <!-- <el-table-column type="selection" width="55" prop="userId"></el-table-column> -->
-        <el-table-column :prop="title.prop" :type="title.prop == 'userId'?'selection':''" :label="title.label" align="center" width="130px;" v-for="(title,index) in studentTitle" :key="index" ></el-table-column>
+        <el-table-column :prop="title.prop" :type="title.prop == 'userId'?'selection':''" :label="title.label"
+          align="center" width="130px;" v-for="(title,index) in studentTitle" :key="index" :selectable="selectable"></el-table-column>
       </el-table>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addStudent = false">取 消</el-button>
@@ -23,11 +23,10 @@
       </div>
     </el-dialog>
     <!-- 查看学生 -->
-    <el-dialog :visible.sync="checkStudent">
-      <el-table :data="classStudentList" stripe style="width: 100%"  height="350">
-        <!-- <el-table-column type="index" label="序号" width="180" align="center"></el-table-column> -->
-        <el-table-column :prop="title.prop" :type="title.prop == 'userId'?'index':''" :label="title.label" width="230" align="center"
-          v-for="(title,index) in studentTitle" :key="index"></el-table-column>
+    <el-dialog :visible.sync="checkStudent" stripe width="70%" top="10vh">
+      <el-table :data="classStudentList" stripe height="350">
+        <el-table-column :prop="title.prop" :type="title.prop == 'userId'?'index':''" :label="title.label"
+          width="130px;" align="center" v-for="(title,index) in studentTitle" :key="index"></el-table-column>
       </el-table>
     </el-dialog>
     <el-breadcrumb separator="/">
@@ -61,7 +60,7 @@
       </el-dialog>
     </div>
     <div class="second-floor">
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table :data="classList" stripe style="width: 100%">
         <el-table-column type="index" label="序号" width="180" align="center"></el-table-column>
         <el-table-column :prop="title.prop" :label="title.label" width="230" align="center"
           v-for="(title,index) in tableTitle" :key="index"></el-table-column>
@@ -75,7 +74,9 @@
           </template>
         </el-table-column>
       </el-table>
-      </el-table>
+      <el-pagination class="pagination" :page-size="limit" background layout="prev, pager, next" :total="tableData.length"
+        @current-change="handlePageChange" @prev-click="handlePageChange" @next-click="handlePageChange">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -88,10 +89,11 @@
     name: "classmanagement",
     data() {
       return {
+        limit:5,
         title: "新增班级",  //模态框标题
         addClass: false,   //新增班级模态框
         addStudent: false,  //导入学生模态框
-        checkStudent:false, //查看学生模态框
+        checkStudent: false, //查看学生模态框
         form: {
           addClassName: "",
           currentCourse: "",
@@ -117,9 +119,9 @@
           }
         ],        //班级列表标题
         studentTitle: [
-        {
+          {
             prop: "userId"
-        },
+          },
           {
             label: "学号",
             prop: "id"
@@ -145,18 +147,22 @@
             prop: "grade"
           }
         ],        //学生列表标题
-        tableData: [],  //班级列表数据
+        tableData: [],  //班级总列表数据
+        classList:[], //班级列表
         inputData: {
           keywords: ""
         },  //导入学生搜索框
-        limit: 5,         //分页页数
         currentList: [], //导入学生列表
-        classStudentList:[], //班级学生列表
+        classStudentList: [], //班级学生列表
         allStudentList: [], //获取到的整个学生列表
-        selectStudents: [],
       };
     },
     methods: {
+      handlePageChange(pageIndex) {
+      let start = (pageIndex - 1) * this.limit;
+      let end = start + this.limit;
+      this.classList = this.tableData.slice(start, end);
+    },
       selevtGetCourse(val) {
         this.courseValue = this.form.courseList.find((item) => { return item.id = val; })
         console.log(this.courseValue);
@@ -237,37 +243,16 @@
         }
       },
       //查看学生
-      checkStudents(index){
+      checkStudents(index) {
         this.checkStudent = true;
-        let token = localStorage.getItem("idToken");
-        const config = { headers: { Authorization: token } };
-        instance
-          .get(`/eduadmin/class/${this.form.classId}/students`, config)
-          .then(response => {
-            let classStudent = response.data.data;
-            console.log({ 班级学生数据: classStudent });
-            this.classStudentList = classStudent.map(item => {
-              let info = item.STUDENT_INFO;
-              return {
-                userId: item.USER_ID,
-                age: info.AGE,
-                id: info.STUDENT_ID,
-                phone: info.PHONE,
-                grade: info.GRADE,
-                name: info.STUDENT_NAME,
-                gender: info.GENDER === "0" ? "女" : "男"
-              };
-            });
-          })
-          .catch(err => {
-            console.error(err);
-          });
+        this.getclassStudent(this.tableData[index].classId);
       },
       //导入学生
       addStudents(index) {
         this.addStudent = true;
         this.currentList = this.allStudentList;
-        this.form.classId = this.tableData[index].classId
+        this.form.classId = this.tableData[index].classId;
+        this.getclassStudent(this.form.classId);
       },
       //搜索学生
       conditionSearch() {
@@ -293,27 +278,61 @@
         this.selectStudents = val.map(item => { return item.userId });
         console.log(this.selectStudents)
       },
+      selectable(row,index){
+        if(this.classStudentList.some(item => {return item.userId == row.userId})){
+          return false
+        }else{
+          return true
+        }
+      },
       //提交班级学生
       submitStudent() {
         console.log(this.selectStudents);
         console.log(this.form.classId);
         let classStudent = {
-          studentData:this.selectStudents,
-          class_id:this.form.classId
+          studentData: this.selectStudents,
+          class_id: this.form.classId
         }
         let token = window.localStorage.getItem("idToken");
         const url = `/eduadmin/class/${classStudent.class_id}/students`;
-        const config = { headers: { Authorization: token}};
+        const config = { headers: { Authorization: token } };
         instance
-          .post(url, classStudent,config)
+          .post(url, classStudent, config)
           .then(response => {
             console.log(response);
           })
           .catch(err => {
             console.error(err);
           });
-          this.studentList = this.selectStudents;
+        this.studentList = this.selectStudents;
         this.addStudent = false;
+      },
+      getclassStudent(classId){
+        let token = localStorage.getItem("idToken");
+        let url = `/eduadmin/class/${classId}/students`;
+        const config = { headers: { Authorization: token } };
+        instance
+          .get(url, config, { class_id: classId })
+          .then(response => {
+            console.log(response)
+            let classStudent = response.data.students;
+            console.log({ 班级学生数据: classStudent });
+            this.classStudentList = classStudent.map(item => {
+              let info = item.STUDENT_INFO;
+              return {
+                userId: item.USER_ID,
+                age: info.AGE,
+                id: info.STUDENT_ID,
+                phone: info.PHONE,
+                grade: info.GRADE,
+                name: info.STUDENT_NAME,
+                gender: info.GENDER === "0" ? "女" : "男"
+              };
+            });
+          })
+          .catch(err => {
+            console.error(err);
+          });
       },
       getStudents() {
         let token = localStorage.getItem("idToken");
@@ -359,6 +378,7 @@
                   courseMemberCount: item.CLASS_MEMBER_COUNT
                 };
               });
+              this.handlePageChange(1);
             }
             return instance.get("/eduadmin/class/msg", config);
           })
@@ -370,12 +390,6 @@
               return {
                 name: item.TEACHER_NAME,
                 id: item.TEACHER_ID
-              };
-            });
-            this.form.courseList = courseList.map(item => {
-              return {
-                name: item.COURSE_NAME,
-                id: item.COURSE_ID
               };
             });
           })
@@ -399,6 +413,14 @@
   }
 
   .second-floor {
+    margin-top: 20px;
+  }
+
+  el-dialog {
+    width: 1000px;
+  }
+
+  .pagination {
     margin-top: 20px;
   }
 </style>
