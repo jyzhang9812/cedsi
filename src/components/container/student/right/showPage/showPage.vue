@@ -1,24 +1,74 @@
 <template>
   <el-col id="showPage">
+    <!-- 精品活动 -->
     <el-row class="activity">
+      <!-- 精品活动标题栏 -->
       <el-row class="title-create">
         <h3>精品活动</h3>
         <i class="fa fa-cog fa-2x" style="color:#FFF;"></i>
         <i class="fa fa-trophy fa-2x" style="color:rgb(255, 191, 53);"></i>
         <button @click="createProject" disabled>开始创作</button>
       </el-row>
-      <el-row>
-        <el-col class="activity-card" v-for="item in activities" :key="item.id" :span="6">
-          <img :src="item.cover" alt />
-          <div class="activity-info">
-            <h4>{{item.name}}</h4>
-            <button>查看详情</button>
+      <!-- 精品活动卡片-->
+      <el-row :gutter="10">
+        <el-col :span="2" class="icon-control control-left">
+          <i class="fa fa-chevron-left fa-2x"></i>
+        </el-col>
+        <el-col :span="2" class="icon-control control-right">
+          <i class="fa fa-chevron-right fa-2x"></i>
+        </el-col>
+        <el-col v-for="item in activities" :key="item.id" :span="6" :offset="1" :push="1">
+          <div
+            @mouseenter="item.showInfo = true;"
+            @mouseleave="item.showInfo = false;"
+            class="activity-card"
+          >
+            <img :src="item.cover" alt />
+            <div class="activity-info" :style="{'display': item.showInfo ? 'flex' : 'none'}">
+              <h4>{{item.name}}</h4>
+              <button>查看详情</button>
+            </div>
           </div>
         </el-col>
       </el-row>
     </el-row>
-    <el-row class="course"></el-row>
-    <el-row class="author"></el-row>
+    <!-- 全部课程 -->
+    <el-row class="course">
+      <!-- 全部课程标题栏 -->
+      <el-row class="title-course">
+        <h3>全部课程</h3>
+      </el-row>
+      <!-- 全部课程卡片 -->
+      <el-row :gutter="10">
+        <el-col :span="2" class="icon-control control-left">
+          <i class="fa fa-chevron-left fa-2x"></i>
+        </el-col>
+        <el-col :span="2" class="icon-control control-right">
+          <i class="fa fa-chevron-right fa-2x"></i>
+        </el-col>
+        <el-col v-for="item in activities" :key="item.id" :span="6" :offset="1" :push="1">
+          <div
+            @mouseenter="item.showInfo = true;"
+            @mouseleave="item.showInfo = false;"
+            class="activity-card"
+          >
+            <img :src="item.cover" alt />
+            <div class="activity-info" :style="{'display': item.showInfo ? 'flex' : 'none'}">
+              <h4>{{item.name}}</h4>
+              <button>查看详情</button>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+    </el-row>
+    <el-row class="author">
+      <el-row>
+        <h3>优秀作者</h3>
+      </el-row>
+      <el-row>
+        <div style="width:200px; height:300px"></div>
+      </el-row>
+    </el-row>
   </el-col>
 </template>
 
@@ -59,13 +109,34 @@ export default {
           name: "最新活动",
           desc: "这是最新的活动, 请大家注意了嗯嗯嗯嗯嗯",
           cover:
-            "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/eduActivity/6cee65e2.jpeg"
+            "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/eduActivity/6cee65e2.jpeg",
+          showInfo: false
+        },
+        {
+          id: "002",
+          name: "最新活动",
+          desc: "这是最新的活动, 请大家注意了嗯嗯嗯嗯嗯",
+          cover:
+            "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/eduActivity/6cee65e2.jpeg",
+          showInfo: false
+        },
+        {
+          id: "003",
+          name: "最新活动",
+          desc: "这是最新的活动, 请大家注意了嗯嗯嗯嗯嗯",
+          cover:
+            "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/eduActivity/6cee65e2.jpeg",
+          showInfo: false
         }
       ]
     };
   },
   methods: {
     createProject() {},
+    changeCardShadow(index, type) {
+      console.log(index, type);
+      this.activities[index].showInfo = !this.activities[index].showInfo;
+    },
     gotoActivity(index) {
       this.$router.push({
         path: "/activitydetailCard",
@@ -113,11 +184,14 @@ export default {
 
 .title-create h3 {
   color: #fff;
-  font-size: 24px;
-  font-weight: 500;
   float: left;
+}
+
+h3 {
   margin-top: 15px;
   margin-left: 20px;
+  font-size: 24px;
+  font-weight: 500;
 }
 
 .title-create button {
@@ -149,6 +223,7 @@ export default {
 }
 
 .activity-card {
+  cursor: pointer;
   width: 300px;
   height: 200px;
   border-radius: 8px;
@@ -174,11 +249,24 @@ export default {
 .activity-info {
   width: 300px;
   height: 100px;
-  background: linear-gradient(180deg, rgba(69, 72, 77, 0) 0, #232427 50%, #000);
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(rgba(69, 72, 77, 0)),
+    color-stop(50%, #232427),
+    to(#000000)
+  );
+  background: linear-gradient(
+    to bottom,
+    rgba(69, 72, 77, 0) 0%,
+    #232427 50%,
+    #000000 100%
+  );
   z-index: 999;
-  display: flex;
   justify-content: space-between;
   margin-top: -100px;
+  position: relative;
 }
 
 .activity-info button {
@@ -202,233 +290,39 @@ export default {
   margin: 40px 0 0 10px;
 }
 
-.container {
+.icon-control {
+  opacity: 1;
+  -webkit-box-shadow: 2px 2px 10px #23527c;
+  box-shadow: 2px 2px 10px #23527c;
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  background-color: #f4f9fa;
-  min-height: 620px;
-  padding: 0;
-}
-
-.threeImg {
-  min-width: 1000px;
-  height: 100%;
-  color: black;
-}
-
-.threeImg .Containt ul {
-  margin: 0 auto;
-  /* width: 2400px; */
-  position: absolute;
-  left: 0px;
-  cursor: pointer;
-  min-height: 100%;
-}
-
-.threeImg .Containt ul li {
-  margin-right: 20px;
-  margin-top: 10px;
-  float: left;
-}
-
-.Containt {
-  position: relative;
-  min-height: 300px;
-  height: 100%;
-  overflow: hidden;
-  margin: 0 auto;
-}
-
-.recommend_title {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.iconleft {
-  position: absolute;
-  text-align: center;
-  width: 50px;
-  height: 50px;
-  top: 120px;
-  z-index: 99999;
-  background-color: #fff;
-  vertical-align: middle;
-  border-radius: 50%;
-  opacity: 0.5;
-}
-
-.iconright {
-  display: inline-block;
-  position: absolute;
-  text-align: center;
-  right: 0;
-  top: 120px;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  z-index: 99999;
-  background-color: #fff;
-  vertical-align: middle;
-  opacity: 0.5;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
-}
-.iconleft i,
-.iconright i {
-  margin: 10px auto;
-}
-.recommend_title i {
+  position: absolute;
+  align-items: center;
   width: 50px;
-  height: 55px;
-  margin: 0 10px 2px 0;
-  padding-top: 10px;
-  background: #333;
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
-  text-align: center;
-}
-
-.recommend_title i:hover {
-  -webkit-transform: scale(1.05);
-  -moz-transform: scale(1.05);
-  -ms-transform: scale(1.05);
-  -o-transform: scale(1.05);
-  transform: scale(1.05);
+  height: 50px;
+  top: 80px;
+  z-index: 99999;
+  border-radius: 50%;
   cursor: pointer;
+  background-color: #7fabc4;
 }
 
-#showPage p {
-  margin-right: 10px;
-  color: #fff;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+.icon-control:hover {
+  background-color: #fff;
 }
 
-/* 推荐课程 */
-ul {
-  min-height: 250px;
-  list-style-type: none;
-  padding-bottom: 20px;
+.control-left {
+  left: 30px;
+}
+
+.control-right {
+  right: 30px;
 }
 
 .course {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-}
-
-.course_card {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-left: 20px;
-}
-
-.img {
-  width: 300px;
-  height: 200px;
-  border-radius: 8px;
-}
-
-.inside {
-  border-radius: 8px;
-}
-
-.el-icon-arrow {
-  margin-top: 12px;
-  margin-left: 12px;
-  width: 25px;
-  height: 25px;
-  opacity: 0.5;
-}
-
-.el-icon-arrow:hover {
-  opacity: 1;
-}
-
-.iconright:hover {
-  opacity: 1;
-  box-shadow: 2px 2px 10px #23527c;
-}
-
-.iconleft:hover {
-  opacity: 1;
-  box-shadow: 5px 10px 10px #25293a;
-}
-
-.details {
-  width: 300px;
-  height: 100px;
-  /* background-color: rgba(0, 0, 0, 0.35); */
-  background: linear-gradient(
-    to bottom,
-    rgba(69, 72, 77, 0) 0%,
-    #232427 50%,
-    #000000 100%
-  );
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  margin-top: -100px;
-  position: relative;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-
-.detail_item {
-  margin: 30px 10px 0 10px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  position: relative;
-  color: #fff;
-}
-
-.icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 5px;
-}
-
-.work_type {
-  width: 34.7px;
-  height: 20px;
-}
-
-.btn {
-  background: #51c79f;
-  color: #fff;
-  height: 35px;
-  width: 75px;
-  font-size: 12px;
-  text-align: center;
-  margin-right: 20px;
-  font-weight: bold;
-  border-radius: 8px;
-}
-
-.button {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 2px 30px 0 0;
-  font-family: inherit;
-  padding: 0.8em 1em;
-  -webkit-appearance: none;
-  border: 1px solid transparent;
-  border-radius: 5px;
-  transition: background-color 0.25s ease-out, color 0.25s ease-out;
-  font-size: 1.5rem;
-  line-height: 1;
-  text-align: center;
-  cursor: pointer;
-  background: #ff8d1a;
-  color: #fff;
+  height: 300px;
+  background-color: #fff;
 }
 </style>

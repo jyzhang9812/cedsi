@@ -1,6 +1,6 @@
 <template>
-  <div id="student">
-    <el-col :span="4">
+  <el-container id="student">
+    <el-aside width="254px">
       <el-row>
         <div class="card-square" @click="routeToPath({route:'/class'})">
           <el-avatar :size="70" :src="user.avatar"></el-avatar>
@@ -15,11 +15,11 @@
           </div>
         </div>
       </el-row>
-    </el-col>
-    <el-col :span="20">
+    </el-aside>
+    <el-main>
       <router-view></router-view>
-    </el-col>
-  </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -79,13 +79,17 @@ export default {
 </script>
 
 <style scoped>
-#student,
-#student .el-col {
+#student {
   height: 100%;
 }
 
-#student .el-col:first-child {
-  background: #252937;
+#student .el-main {
+  overflow-x: hidden;
+  height: calc(100vh - 113px);
+}
+
+#student .el-aside {
+  background-color: #252937;
 }
 
 #student .user-name {
