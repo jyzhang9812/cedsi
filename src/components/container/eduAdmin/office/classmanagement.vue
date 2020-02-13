@@ -77,6 +77,24 @@
               ></el-option>
             </el-select>
           </el-form-item>
+         <el-row :gutter="20">
+          <el-col :span="11">
+            <el-form-item label="选择教师">
+              <el-select @change="selevtGetTeacher" v-model="form.currentTeacher" placeholder="请选择教师">
+                <el-option :label="item.name" :value="item.id" v-for="(item,index) in form.teacherList" :key="index">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="选择课程">
+              <el-select @change="selevtGetCourse" v-model="form.currentCourse" placeholder="请选择课程">
+                <el-option :label="item.name" :value="item.id" v-for="(item,index) in form.courseList" :key="index">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+         </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="addClass = false">取 消</el-button>
