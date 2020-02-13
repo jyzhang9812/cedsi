@@ -5,7 +5,7 @@
       <el-row type="flex" :gutter="20">
         <!-- 搜索框 -->
         <el-col :span="10" style="margin-top: -5px;">
-          <el-input v-model="inputData.keywords" placeholder="请输入学生的姓名或学号或年级" size="small"></el-input>
+          <el-input v-model="inputData.keywords" placeholder="请输入学生的姓名或学号或年级" size="small" @keyup.enter.native="searchEnterFun"></el-input>
         </el-col>
         <el-col :span="3" style="margin-top: -5px;">
           <el-button type="primary" size="small" @click="conditionSearch">搜索</el-button>
@@ -270,6 +270,14 @@
         this.form.classId = this.tableData[index].classId;
         this.getclassStudent(this.form.classId);
       },
+      searchEnterFun:function(e){
+                 var keyCode = window.event? e.keyCode:e.which;
+                //  console.log('回车搜索',keyCode,e);
+                 if(keyCode == 13 && this.input){
+                     this.conditionSearch();
+                 }
+
+            },
       //搜索学生
       conditionSearch() {
         let value = this.inputData.keywords;

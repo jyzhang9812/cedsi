@@ -1,6 +1,6 @@
 <template>
     <div id="course">
-        <searchBar></searchBar>
+        <!-- <searchBar></searchBar> -->
         <courseCard></courseCard>
     </div>
 </template>
