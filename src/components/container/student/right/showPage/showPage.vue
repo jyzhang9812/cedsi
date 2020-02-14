@@ -11,10 +11,18 @@
       </el-row>
       <!-- 精品活动卡片-->
       <el-row :gutter="10">
-        <el-col :span="2" class="icon-control control-left">
+        <el-col
+          :span="2"
+          class="icon-control control1-left"
+          @click.native="changeGroup('prev','activity')"
+        >
           <i class="fa fa-chevron-left fa-2x"></i>
         </el-col>
-        <el-col :span="2" class="icon-control control-right">
+        <el-col
+          :span="2"
+          class="icon-control control1-right"
+          @click.native="changeGroup('next','activity')"
+        >
           <i class="fa fa-chevron-right fa-2x"></i>
         </el-col>
         <el-col v-for="item in activities" :key="item.id" :span="6" :offset="1" :push="1">
@@ -40,22 +48,31 @@
       </el-row>
       <!-- 全部课程卡片 -->
       <el-row :gutter="10">
-        <el-col :span="2" class="icon-control control-left">
+        <el-col
+          :span="2"
+          class="icon-control control2-left"
+          @click.native="changeGroup('prev','course')"
+        >
           <i class="fa fa-chevron-left fa-2x"></i>
         </el-col>
-        <el-col :span="2" class="icon-control control-right">
+        <el-col
+          :span="2"
+          class="icon-control control2-right"
+          @click.native="changeGroup('next','course')"
+        >
           <i class="fa fa-chevron-right fa-2x"></i>
         </el-col>
-        <el-col v-for="item in activities" :key="item.id" :span="6" :offset="1" :push="1">
+        <el-col v-for="item in courses" :key="item.id" :span="6" :offset="1" :push="1">
           <div
             @mouseenter="item.showInfo = true;"
             @mouseleave="item.showInfo = false;"
-            class="activity-card"
+            @click="learnCourse(item)"
+            class="course-card"
           >
             <img :src="item.cover" alt />
-            <div class="activity-info" :style="{'display': item.showInfo ? 'flex' : 'none'}">
-              <h4>{{item.name}}</h4>
-              <button>查看详情</button>
+            <div class="course-info" :style="{'display': item.showInfo ? '' : 'none'}">
+              <h5>{{item.name}}</h5>
+              <p>{{item.desc}}</p>
             </div>
           </div>
         </el-col>
@@ -65,74 +82,116 @@
       <el-row>
         <h3>优秀作者</h3>
       </el-row>
-      <el-row>
-        <div style="width:200px; height:300px"></div>
+      <el-row type="flex" justify="space-around">
+        <el-col class="author-card" v-for="item in authors" :key="item.id" :span="22" :push="0.5">
+          <el-row class="author-info">
+            <img :src="item.avatar" alt />
+            <h5>
+              <strong>作者姓名</strong>
+            </h5>
+          </el-row>
+          <el-row class="project-info">
+            <el-col :offset="4">
+              <i class="fa fa-gamepad fa-lg" style="color:#ffbf35;"></i>
+              <p>作品</p>
+              <p>99</p>
+            </el-col>
+            <el-col>
+              <i class="fa fa-heart fa-lg" style="color:#FF808B;"></i>
+              <p>点赞</p>
+              <p>99</p>
+            </el-col>
+            <el-col>
+              <i class="fa fa-eye fa-lg" style="color:#50B8EE;"></i>
+              <p>浏览</p>
+              <p>99</p>
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-col :span="2" class="more-project">
+          <el-link type="primary" :underline="false">更多作品</el-link>
+        </el-col>
       </el-row>
     </el-row>
+    <el-row class="spaceLine"></el-row>
   </el-col>
 </template>
 
 <script>
-import userCard from "./userCard.vue";
-import communityCard from "./communityCard.vue";
-import allCourseCard from "./allCourseCard.vue";
-import { mapState } from "vuex";
+import instance from "../../../../../axios-auth";
 
 export default {
   name: "presentation",
-  components: {
-    userCard,
-    communityCard,
-    allCourseCard
-  },
   data() {
+    let tynkerBase = "https://www.tynker.com/image/course-card/vertical/";
     return {
-      arrComponent: [
+      activities: [],
+      courses: [],
+      activityList: [],
+      courseList: [],
+      authors: [
         {
-          componentName: "allCourseCard",
-          title: "全部课程"
+          avatar: `${tynkerBase}minecraft-starter.png`,
+          project: 99,
+          like: 99,
+          view: 99,
+          id: "001"
         },
         {
-          componentName: "userCard",
-          title: "优秀作者"
-        }
-      ],
-      calleft: [0, 0, 0, 0],
-      i: -1,
-      curId: 0,
-      limit: 12,
-      currentList: [],
-      tableData: [],
-      activities: [
-        {
-          id: "001",
-          name: "最新活动",
-          desc: "这是最新的活动, 请大家注意了嗯嗯嗯嗯嗯",
-          cover:
-            "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/eduActivity/6cee65e2.jpeg",
-          showInfo: false
+          avatar: `${tynkerBase}turings-tower.png`,
+          project: 99,
+          like: 99,
+          view: 99,
+          id: "002"
         },
         {
-          id: "002",
-          name: "最新活动",
-          desc: "这是最新的活动, 请大家注意了嗯嗯嗯嗯嗯",
-          cover:
-            "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/eduActivity/6cee65e2.jpeg",
-          showInfo: false
+          avatar: `${tynkerBase}cannon-crasher-physics-game.png`,
+          project: 99,
+          like: 99,
+          view: 99,
+          id: "003"
         },
         {
-          id: "003",
-          name: "最新活动",
-          desc: "这是最新的活动, 请大家注意了嗯嗯嗯嗯嗯",
-          cover:
-            "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn/eduActivity/6cee65e2.jpeg",
-          showInfo: false
+          avatar: `${tynkerBase}the-drone-menace-arcade-game.png`,
+          project: 99,
+          like: 99,
+          view: 99,
+          id: "004"
+        },
+        {
+          avatar: `${tynkerBase}gravity-sling-advanced-projectile-physics.png`,
+          project: 99,
+          like: 99,
+          view: 99,
+          id: "005"
         }
       ]
     };
   },
   methods: {
     createProject() {},
+    changeGroup(aspect, type) {
+      if (type === "activity") {
+        if (this.activityList.length <= 3) return;
+        let first = this.activities[0];
+        let start = this.activityList.findIndex(item => item.id === first.id);
+        start += aspect === "prev" ? -1 : 1;
+        let end = start + 3;
+        if (start >= 0 && end <= this.activityList.length) {
+          this.activities = this.activityList.slice(start, end);
+        }
+      }
+      if (type === "course") {
+        if (this.courseList.length <= 3) return;
+        let first = this.courses[0];
+        let start = this.courseList.findIndex(item => item.id === first.id);
+        start += aspect === "prev" ? -1 : 1;
+        let end = start + 3;
+        if (start >= 0 && end <= this.courseList.length) {
+          this.courses = this.courseList.slice(start, end);
+        }
+      }
+    },
     changeCardShadow(index, type) {
       console.log(index, type);
       this.activities[index].showInfo = !this.activities[index].showInfo;
@@ -143,35 +202,72 @@ export default {
         query: { id: this.slidePic[index].id, type: this.slidePic[index].type }
       });
     },
-    tab(index) {
-      this.curId = index;
+    learnCourse(item) {
+      let path = "/dashboard/coursemap";
+      let params = { id: item.id };
+      this.$router.push({ path, query: params });
     },
-    show(index) {
-      this.i = index;
-      this.isShow = true;
+    getCourses() {
+      let token = localStorage.getItem("idToken");
+      let config = { headers: { Authorization: token } };
+      instance
+        .get("student/courses", config)
+        .then(({ data }) => {
+          console.log(data);
+          if (data.status === "ok") {
+            this.courseList = data.courses.map(item => {
+              return {
+                name: item.COURSE_NAME,
+                id: item.ID,
+                desc: item.INTRO,
+                showInfo: false,
+                cover: item.COVER
+              };
+            });
+            this.courses = this.courseList.slice(0, 3);
+          } else {
+            throw new Error("get courses fail");
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          this.$message({ type: "error", message: "获取课程列表失败" });
+        });
     },
-    hidden(index) {
-      this.i = -1;
-      this.isShow = false;
-    },
-    //点击按钮左移
-    zuohua(index) {
-      this.calleft[index] += 1020;
-    },
-    //点击按钮右移
-    youhua(index) {
-      this.calleft[index] -= 1020;
+    getActivities() {
+      let token = localStorage.getItem("idToken");
+      let config = { headers: { Authorization: token } };
+      instance
+        .get("student/activity", config)
+        .then(({ data }) => {
+          console.log(data);
+          if (data.status === "ok") {
+            this.activityList = data.ced.concat(data.org).map(item => {
+              return {
+                content: item.ACTIVITY_CONTENT_IMG,
+                cover: item.ACTIVITY_COVER,
+                id: item.ACTIVITY_ID,
+                place: item.PLACE,
+                deadline: item.ACTIVITY_TIME,
+                name: item.ACTIVITY_TITLE,
+                time: item.RELEASE_TIME,
+                showInfo: false
+              };
+            });
+            this.activities = this.activityList.slice(0, 3);
+          } else {
+            throw new Error("get activities fail");
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          this.$message({ type: "error", message: "获取活动列表失败" });
+        });
     }
   },
-  created: function() {
-    this.$store.dispatch("getActivity");
-    this.$store.dispatch("getEduActivity");
-  },
-  computed: {
-    ...mapState({
-      slidePic: state => state.slidePic,
-      scratch: state => state.scratch
-    })
+  mounted() {
+    this.getActivities();
+    this.getCourses();
   }
 };
 </script>
@@ -192,6 +288,10 @@ h3 {
   margin-left: 20px;
   font-size: 24px;
   font-weight: 500;
+}
+
+.spaceLine {
+  height: 70px;
 }
 
 .title-create button {
@@ -230,23 +330,39 @@ h3 {
   overflow: hidden;
 }
 
-.activity-card img {
+.course-card {
+  cursor: pointer;
+  width: 350px;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.activity-card img,
+.course-card img {
   width: 100%;
   height: 100%;
 }
 
-.activity-card:hover {
+.activity-card:hover,
+.course-card:hover,
+.author-card:hover {
   -webkit-transform: scale(1.05);
   -moz-transform: scale(1.05);
   -ms-transform: scale(1.05);
   -o-transform: scale(1.05);
   transform: scale(1.05);
+}
+
+.activity-card:hover,
+.author-card:hover {
   -moz-box-shadow: 5px 10px 10px #25293a;
   -webkit-box-shadow: 5px 10px 10px #25293a;
   box-shadow: 5px 10px 10px #25293a;
 }
 
-.activity-info {
+.activity-info,
+.course-info {
   width: 300px;
   height: 100px;
   background: -webkit-gradient(
@@ -267,6 +383,29 @@ h3 {
   justify-content: space-between;
   margin-top: -100px;
   position: relative;
+}
+.course-info {
+  margin-top: -130px;
+}
+
+.course-info {
+  width: 350px;
+  padding-left: 10px;
+}
+
+.course-info h5 {
+  font-weight: 800;
+  font-size: 15px;
+  color: #fff;
+  padding-top: 25px;
+}
+
+.course-info p {
+  margin-right: 10px;
+  color: #fff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .activity-info button {
@@ -292,8 +431,6 @@ h3 {
 
 .icon-control {
   opacity: 1;
-  -webkit-box-shadow: 2px 2px 10px #23527c;
-  box-shadow: 2px 2px 10px #23527c;
   display: flex;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
@@ -306,23 +443,92 @@ h3 {
   z-index: 99999;
   border-radius: 50%;
   cursor: pointer;
-  background-color: #7fabc4;
 }
 
-.icon-control:hover {
+.control1-left:hover,
+.control1-right:hover {
   background-color: #fff;
 }
 
-.control-left {
+.control2-left:hover,
+.control2-right:hover {
+  -webkit-box-shadow: 2px 2px 10px #23527c;
+  box-shadow: 2px 2px 10px #23527c;
+}
+
+.control1-left {
+  -webkit-box-shadow: 2px 2px 10px #23527c;
+  box-shadow: 2px 2px 10px #23527c;
+  background-color: #7fabc4;
   left: 30px;
 }
 
-.control-right {
+.control1-right {
+  -webkit-box-shadow: 2px 2px 10px #23527c;
+  box-shadow: 2px 2px 10px #23527c;
+  background-color: #7fabc4;
   right: 30px;
 }
 
-.course {
+.control2-left {
+  background-color: #ccc;
+  left: 30px;
+}
+
+.control2-right {
+  background-color: #ccc;
+  right: 30px;
+}
+
+.course,
+.author {
   height: 300px;
-  background-color: #fff;
+  background-color: #f4f9fa;
+}
+
+.author-card {
+  width: 180px;
+  height: 180px;
+  border-radius: 10px;
+  background: #fff;
+  -webkit-box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.author-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.author-info img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-top: 10px;
+}
+
+.author-info h5 {
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+}
+
+.project-info {
+  font-size: 12px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.project-info p {
+  margin-block-start: 5px;
+  margin-block-end: 5px;
+}
+
+.more-project .el-link {
+  margin-top: 60px;
+  font-size: 18px;
+  color: #337ab7;
 }
 </style>
