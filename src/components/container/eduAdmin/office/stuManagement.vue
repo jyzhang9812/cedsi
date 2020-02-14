@@ -208,12 +208,6 @@ export default {
 #stu-management {
   margin: 0 20px 20px 20px;
 }
-
-.el-breadcrumb {
-  margin: 20px;
-  font-size: 12px;
-}
-
 .btn-box {
   margin: 30px 0 30px 100px;
 }

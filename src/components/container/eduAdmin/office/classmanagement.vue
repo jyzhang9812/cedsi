@@ -30,10 +30,6 @@
           width="130px;" align="center" v-for="(title,index) in studentTitle" :key="index"></el-table-column>
       </el-table>
     </el-dialog>
-    <el-breadcrumb separator="/">
-      <el-breadcrumb-item>教务管理</el-breadcrumb-item>
-      <el-breadcrumb-item>班级管理</el-breadcrumb-item>
-    </el-breadcrumb>
     <div class="first-floor">
       <el-button type="primary" size="mini" @click="addClasses">新增班级</el-button>
       <el-dialog :title="title" :visible.sync="addClass" destroy-on-close>
@@ -193,9 +189,13 @@
         this.title = "编辑班级";
         this.addClass = true;
         this.form.addClassName = row.className;
-          this.form.currentCourse = row.courseName;
-          this.form.currentTeacher=row.teacherName;
-          this.form.classId = this.tableData[index].classId;
+        this.form.currentCourse = row.courseName;
+        this.form.currentTeacher = row.teacherName;
+        this.form.courseValue.id = row.courseId;
+        this.form.courseValue.name = row.courseName;
+        this.form.teacherValue.id = row.teacherId;
+        this.form.teacherValue.name = row.teacherName;        
+        this.form.classId = this.tableData[index].classId;
       },
       //编辑或更改提交班级
       submit() {
@@ -250,6 +250,8 @@
                   className: item.CLASS_NAME,
                   courseId: item.COURSE_ID,
                   courseName: item.COURSE_NAME,
+                  teacherId:item.TEACHER_ID,
+                  teacherName:item.TEACHER_NAME,
                   courseMemberCount: item.CLASS_MEMBER_COUNT
                 };
               });
@@ -446,11 +448,6 @@
   #classmanagement {
     padding: 10px;
   }
-
-  .first-floor {
-    margin-top: 20px;
-  }
-
   .second-floor {
     margin-top: 20px;
   }
