@@ -17,11 +17,11 @@ const actions = {
         console.log(response);
         let arr = [];
         let b = [];
-        for (var i = 0; i < response.data.length; i++) {
+        for (let i = 0; i < response.data.length; i++) {
           arr.push(response.data[i]);
         }
-        for (var i = 0; i < arr.length; i++) {
-          var array = {};
+        for (let i = 0; i < arr.length; i++) {
+          let array = {};
           array.id = arr[i].ID;
           array.cover = arr[i].ACTIVITY_COVER;
           array.title = arr[i].ACTIVITY_TITLE;
@@ -73,7 +73,7 @@ const actions = {
 
   //登录注册
   login({ commit, dispatch, state }, authData) {
-    var token = "";
+    let token = "";
     return globalAxios
       .post("/user/login", {
         username: authData.username,
@@ -202,8 +202,8 @@ const actions = {
       .then(
         response => {
           console.log(response.data);
-          var user = {};
-          var arr = response.data;
+          let user = {};
+          let arr = response.data;
           (user.avatar = arr.AVATAR),
             (user.time = arr.CREATED_TIME),
             (user.username = arr.NICK_NAME),
@@ -253,10 +253,10 @@ const actions = {
       })
       .then(
         response => {
-          var arr = [];
+          let arr = [];
           console.log(response);
           if (response.data != null) {
-            for (var i = 0; i < response.data.length; i++) {
+            for (let i = 0; i < response.data.length; i++) {
               arr.push(response.data[i]);
             }
           }
@@ -272,75 +272,42 @@ const actions = {
   },
   //课程视频及信息
   getCourseDetail({ commit, state }, id) {
+    let url = `/student/courses/${id}/chapters`;
+    let config = { headers: { Authorization: state.idToken } };
     return globalAxios
-      .get("/student/courses/" + id + "/chapters", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: state.idToken
+      .get(url, config)
+      .then(({ data }) => {
+        console.log(data);
+        if (data.status !== "ok") throw new Error("get course detail fail");
+        let allChapters = data.allChapters;
+        let finishChapters = data.finishChapters;
+        let List = { name: data.courseName, list: [] };
+        for (let i = 0; i < allChapters.length; i++) {
+          let point = {};
+          // if (i <= finishChapters.length) {
+          // } else {
+          //   point.bgImg = "../../static/images/scratch/coordinate.a15fa38.png";
+          //   point.status = "未解锁";
+          //   point.flag = false;
+          // }
+          point.bgImg = "../../static/images/scratch/coordinateed.6a1e9a5.png";
+          point.status = "已完成";
+          point.flag = true;
+          point.time = allChapters[i].CP_UPLOAD_TIME;
+          point.description = allChapters[i].CP_DESCRIPTION;
+          point.number = allChapters[i].CP_NUMBER;
+          point.name = allChapters[i].CP_NAME;
+          point.videos = allChapters[i].CP_RESOURCE;
+          point.chapterId = allChapters[i].CP_ID;
+          List.list.push(point);
         }
+        commit(TYPES.changeCouseDetail, List);
+        commit(TYPES.updateLoading, false);
       })
-      .then(
-        response => {
-          console.log(response);
-          var chaptersArr = response.data.allChapters;
-          console.log(chaptersArr)
-          var finishChaptersArr = [];
-          if (response.data.finish_chapters) {
-            finishChaptersArr =
-              response.data.finish_chapters;
-          }
-          state.finishChaptersLength = finishChaptersArr.length;
-          var List = {
-            name: "",
-            list: []
-          };
-          for (var i = 0; i < chaptersArr.length; i++) {
-            var point = {};
-            if (i <= finishChaptersArr.length) {
-              point.bgImg =
-                "../../static/images/scratch/coordinateed.6a1e9a5.png";
-              point.status = "已完成";
-              point.flag = true;
-            } else {
-              point.bgImg =
-                "../../static/images/scratch/coordinate.a15fa38.png";
-              point.status = "未解锁";
-              point.flag = false;
-            }
-            point.time = chaptersArr[i].CP_UPLOAD_TIME;
-            point.description = chaptersArr[i].CP_DESCRIPTION;
-            point.number = chaptersArr[i].CP_NUMBER;
-            point.name = chaptersArr[i].CP_NAME;
-            if (
-              chaptersArr[i].CP_RESOURCE &&
-              chaptersArr[i].CP_RESOURCE.VIDEO
-            ) {
-              point.videoSrc = chaptersArr[i].CP_RESOURCE.VIDEO;
-              // point.lectureSrc = chaptersArr[i].CP_RESOURCE.LECTURE;
-              // point.templateSrc = chaptersArr[i].CP_RESOURCE.TEMPLATE;
-            } else {
-              point.videoSrc = "";
-            }
-            console.log(point.videoSrc);
-            point.chapterId = chaptersArr[i].CP_ID;
-            List.list.push(point);
-          }
-          for (i = 0; i >= chaptersArr.length; i++) {
-            var point = {};
-            point.bgImg = "../../static/images/scratch/coordinate.a15fa38.png";
-            point.status = "未解锁";
-            point.flag = false;
-            List.list.push(point);
-          }
-          (List.name = response.data.courseName), console.log(List);
-          commit(TYPES.changeCouseDetail, List);
-          commit(TYPES.updateLoading, false);
-        },
-        error => {
-          commit(TYPES.updateLoading, false);
-          console.log(error);
-        }
-      );
+      .catch(error => {
+        commit(TYPES.updateLoading, false);
+        console.log(error);
+      });
   },
   //获取作业
   getWork({ commit, state }, courseId) {
@@ -354,15 +321,15 @@ const actions = {
       .then(
         response => {
           console.log(response);
-          var arr = [];
-          var content = [];
+          let arr = [];
+          let content = [];
           console.log(response);
           // if (curId == 0) {
-          for (var i = 0; i < response.data.homework.length; i++) {
+          for (let i = 0; i < response.data.homework.length; i++) {
             arr.push(response.data.homework[i]);
           }
-          for (var i = 0; i < arr.length; i++) {
-            var array = {};
+          for (let i = 0; i < arr.length; i++) {
+            let array = {};
             array.id = arr[i].HW_ID;
             array.name = arr[i].HW_NAME;
             let substr = arr[i].HW_URL.substring(arr[i].HW_URL.length - 3);
@@ -390,11 +357,11 @@ const actions = {
           }
           // }
           // else {
-          //     for (var i = 0; i < response.data.product.length; i++) {
+          //     for (let i = 0; i < response.data.product.length; i++) {
           //         arr.push(response.data.product[i])
           //     }
-          //     for (var i = 0; i < arr.length; i++) {
-          //         var array = {}
+          //     for (let i = 0; i < arr.length; i++) {
+          //         let array = {}
           //         array.name = arr[i].PRODUCT_NAME;
           //         array.img_url = arr[i].COVER_URL;
           //         array.teacher_remark = arr[i].TEACHER_REMARK;
@@ -425,9 +392,9 @@ const actions = {
       .then(
         response => {
           console.log(response);
-          var arr = [];
+          let arr = [];
           if (response.data != null) {
-            for (var i = 0; i < response.data.length; i++) {
+            for (let i = 0; i < response.data.length; i++) {
               arr.push(response.data[i]);
             }
           }
@@ -453,11 +420,11 @@ const actions = {
       .then(
         response => {
           // console.log(response);
-          var myClasses = [];
+          let myClasses = [];
           if (response.data != null) {
             for (let i = 0; i < response.data.length; i++) {
-              var myClass = {};
-              var arr = [];
+              let myClass = {};
+              let arr = [];
               myClass.name = response.data[i].className;
               myClass.teacher = response.data[i].teacher;
               myClass.memberCount = response.data[i].member_count;
@@ -533,10 +500,10 @@ const actions = {
       })
       .then(
         response => {
-          var arr = [];
+          let arr = [];
           let courseList = state.courseList;
           console.log(response);
-          for (var i = 0; i < response.data.length; i++) {
+          for (let i = 0; i < response.data.length; i++) {
             arr.push(response.data[i]);
           }
           if (courseList.length != 0) {
@@ -570,10 +537,10 @@ const actions = {
       })
       .then(
         response => {
-          var arr = {};
+          let arr = {};
           console.log(response);
           arr = response.data;
-          var array = {};
+          let array = {};
           array.id = arr.ID;
           array.cover = arr.COVER;
           array.name = arr.COURSE_NAME;
@@ -601,9 +568,9 @@ const actions = {
       })
       .then(
         response => {
-          var arr = [];
+          let arr = [];
           console.log(response);
-          for (var i = 0; i < response.data.length; i++) {
+          for (let i = 0; i < response.data.length; i++) {
             arr.push(response.data[i]);
           }
           commit(TYPES.changeOrder, arr);
@@ -630,11 +597,11 @@ const actions = {
           console.log(response);
           let arr = [];
           // let b = []
-          for (var i = 0; i < response.data.length; i++) {
+          for (let i = 0; i < response.data.length; i++) {
             arr.push(response.data[i]);
           }
-          for (var i = 0; i < arr.length; i++) {
-            var array = {};
+          for (let i = 0; i < arr.length; i++) {
+            let array = {};
             array.id = arr[i].ACTIVITY_ID;
             array.cover = arr[i].ACTIVITY_COVER;
             array.title = arr[i].ACTIVITY_TITLE;
@@ -697,11 +664,11 @@ const actions = {
       })
       .then(
         response => {
-          var courseArr = [];
-          var courseList = [];
+          let courseArr = [];
+          let courseList = [];
           courseArr = response.data;
-          for (var i = 0; i < courseArr.length; i++) {
-            var course = {};
+          for (let i = 0; i < courseArr.length; i++) {
+            let course = {};
             course.name = courseArr[i].COURSE_NAME;
             course.id = courseArr[i].ID;
             if (i == 0) course.isActive = true;
@@ -730,12 +697,12 @@ const actions = {
         response => {
           console.log("1111111111111");
           console.log(response);
-          var videoArr = [];
-          var videoData = [];
+          let videoArr = [];
+          let videoData = [];
           if (response.data != null) {
             videoArr = response.data.data;
-            for (var i = 0; i < videoArr.length; i++) {
-              var video = {};
+            for (let i = 0; i < videoArr.length; i++) {
+              let video = {};
               video.chapterId = videoArr[i].CP_ID;
               video.videoId = videoArr[i].RS_ID;
               video.chapterName = videoArr[i].CP_NAME;
@@ -770,11 +737,11 @@ const actions = {
       .then(
         response => {
           console.log(response);
-          var chapterArr = [];
-          var chapterData = [];
+          let chapterArr = [];
+          let chapterData = [];
           chapterArr = response.data.data;
-          for (var i = 0; i < chapterArr.length; i++) {
-            var chapter = {};
+          for (let i = 0; i < chapterArr.length; i++) {
+            let chapter = {};
             chapter.name = chapterArr[i].CP_NAME;
             chapter.id = chapterArr[i].CP_ID;
             chapterData.push(chapter);
@@ -798,16 +765,16 @@ const actions = {
       .then(
         response => {
           console.log(response.data);
-          var chapterArr = [];
-          var chapterData = [];
+          let chapterArr = [];
+          let chapterData = [];
           if (response.data != null) {
             chapterArr = response.data.data;
             if (chapterArr == null) {
               return null;
             } else {
               state.chapterLength = chapterArr.length;
-              for (var i = 0; i < state.chapterLength; i++) {
-                var chapter = {};
+              for (let i = 0; i < state.chapterLength; i++) {
+                let chapter = {};
                 chapter.chapterId = chapterArr[i].CP_ID;
                 chapter.chapterName = chapterArr[i].CP_NAME;
                 chapter.date = chapterArr[i].CP_UPLOAD_TIME;
@@ -842,10 +809,10 @@ const actions = {
       })
       .then(
         response => {
-          var admin_arr = response.data.data;
-          var admin_table = [];
-          for (var i = 0; i < admin_arr.length; i++) {
-            var admin = {};
+          let admin_arr = response.data.data;
+          let admin_table = [];
+          for (let i = 0; i < admin_arr.length; i++) {
+            let admin = {};
             admin.username = admin_arr[i].USER_NAME;
             admin.id = admin_arr[i].USER_ID;
             if (admin_arr[i].USER_STATUS == "active") admin.status = "启用";

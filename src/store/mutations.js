@@ -31,14 +31,14 @@ const mutations = {
     },
 
     [TYPES.changeCouseDetail](state, List) {
-        state.courseName = List.name
+        state.courseName = List.name;
         for (var i = 0; i < List.list.length; i++) {
             state.pointList[i].bgImg = List.list[i].bgImg
             state.pointList[i].status = List.list[i].status
             state.pointList[i].description = List.list[i].description
             state.pointList[i].number = List.list[i].number
             state.pointList[i].name = List.list[i].name
-            state.pointList[i].videoSrc = List.list[i].videoSrc
+            state.pointList[i].videos = List.list[i].videos
             state.pointList[i].flag = List.list[i].flag
             state.pointList[i].chapterId = List.list[i].chapterId
         }

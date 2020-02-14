@@ -141,6 +141,7 @@ export default {
     },
     handleEdit(row) {
       console.log(row);
+      this.editVisible = true;
       this.form = {
         name: row.rs_name,
         desc: row.rs_desc,
@@ -148,12 +149,14 @@ export default {
         rs_id: row.rs_id,
         cp_id: row.cp_id
       };
-      this.editVisible = true;
+      if (this.player) {
+        this.player.src(row.rs_url);
+        return;
+      }
       setTimeout(() => {
-        if (this.player) return;
         let config = { controls: true, preload: "none" };
         this.player = this.$video("myVideo", config);
-      }, 1000);
+      }, 300);
     },
     handleDelete() {
       this.dialogVisible = false;
