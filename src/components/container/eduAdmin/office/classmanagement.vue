@@ -211,7 +211,7 @@
             courseId: this.form.courseValue.id,
             courseName: this.form.courseValue.name,
             teacherId: this.form.teacherValue.id,
-
+            teacherName: this.form.teacherValue.name,
             classId: this.form.classId
           }
           console.log(updateClass);
@@ -230,6 +230,7 @@
             courseId: this.form.courseValue.id,
             courseName: this.form.courseValue.name,
             teacherId: this.form.teacherValue.id,
+            teacherName: this.form.teacherValue.name,
             className: this.form.addClassName
           }
           console.log(newClass.courseNmae);
@@ -243,7 +244,7 @@
             })
             .then(({ data }) => {
               console.log(data);
-              this.tableData = data.map(item => {
+              this.tableData = data.classes.map(item => {
                 return {
                   classId: item.CLASS_ID,
                   className: item.CLASS_NAME,
@@ -389,9 +390,10 @@
         instance
           .get("/eduadmin/class", config)
           .then(({ data }) => {
-            console.log({ 班级数据: data });
-            if (data.length) {
-              this.tableData = data.map(item => {
+            let classes = data.classes;
+            console.log({ 班级数据: data.classes });
+            if (classes.length) {
+              this.tableData = classes.map(item => {
                 return {
                   classId: item.CLASS_ID,
                   className: item.CLASS_NAME,
@@ -404,9 +406,14 @@
               });
               this.handlePageChange(1);
             }
-            return instance.get("/eduadmin/class/msg", config);
           })
-          .then(({ data }) => {
+          .catch(err => console.error(err));
+      },
+      getCourse(){
+        let token = localStorage.getItem("idToken");
+        const config = { headers: { Authorization: token } };
+        instance.get("/eduadmin/class/msg", config)
+        .then(({ data }) => {
             console.log({ 教师和课程: data });
             let teacherList = data.teachers;
             let courseList = data.courses;
@@ -423,7 +430,6 @@
               };
             });
             console.log(this.form.courseList)
-
           })
           .catch(err => console.error(err));
       }
@@ -431,6 +437,7 @@
     mounted() {
       this.getClasses();
       this.getStudents();
+      this.getCourse();
     }
   };
 
