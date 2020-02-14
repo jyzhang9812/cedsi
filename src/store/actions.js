@@ -282,11 +282,12 @@ const actions = {
       .then(
         response => {
           console.log(response);
-          var chaptersArr = response.data.data.chapter_message.chapters;
+          var chaptersArr = response.data.allChapters;
+          console.log(chaptersArr)
           var finishChaptersArr = [];
-          if (response.data.data.chapter_message.finish_chapters) {
+          if (response.data.finish_chapters) {
             finishChaptersArr =
-              response.data.data.chapter_message.finish_chapters;
+              response.data.finish_chapters;
           }
           state.finishChaptersLength = finishChaptersArr.length;
           var List = {
@@ -331,7 +332,7 @@ const actions = {
             point.flag = false;
             List.list.push(point);
           }
-          (List.name = response.data.data.courseName), console.log(List);
+          (List.name = response.data.courseName), console.log(List);
           commit(TYPES.changeCouseDetail, List);
           commit(TYPES.updateLoading, false);
         },

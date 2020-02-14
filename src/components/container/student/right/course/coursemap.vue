@@ -1,64 +1,12 @@
 <template>
-  <div id="coursemap">
-    <!-- 模态框（Modal） -->
-    <div class="modal fade" id="goStudy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content bckimg">
-          <div class="modal-header header-height">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          </div>
-          <div class="modal-body modal-box">
-            <div class="left-box">
-              <div class="box-title">
-                <p>{{courseName}}| 第{{courseNum}}节课 | {{chapterName}}</p>
-              </div>
-              <button class="study-btn" data-toggle="modal" data-target="#myVideo">开始学习</button>
-            </div>
-            <div class="right-box" v-if='role!=0'>
-              <p class="course-intro">课程介绍</p>
-              <p class="intro-detials">{{courseIntro}}</p>
-              <p class="course-warn">
-                不要忘记交作业呀！
-                <br />1.点击下方【我要做作业】，填写名称和描述，上传作业文件、封面，即可提交
-                <br />2.点击我的首页【开始创作】，进入scratch页面
-              </p>
-              <router-link class="work-btn" data-dismiss="modal" :to="{name:'addHomework',query:{chapterId:chapterId,courseId:this.courseId,chapterName:chapterName}}">我要做作业</router-link>
-              <p class="preview">预览讲义</p>
-            </div>
-            <div class="right-box" v-if='role==0'>
-              <p class="course-intro">课程介绍</p>
-              <p class="intro-detials">{{courseIntro}}</p>
-              <button class="work-btn" data-dismiss="modal">预览讲义</button>
-            </div>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
-    <div class="modal fade" id="myVideo" ref="myVideo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content video-bck">
-          <div class="modal-header header-height">
-            <span class="video-name">{{courseName}}| 第{{courseNum}}节课 | {{chapterName}}</span>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-              @click="deletevideo">&times;</button>
-          </div>
-          <div class="modal-body modal-box">
-            <!-- <Media :controls="true" :controlslist="'nodownload'" :autoplay="false" disablePictureInPicture :kind="'video'" :src="videosrc"
-              style="height: 400px;width: 700px;" @ended="videoEnd()"></Media> -->
-          </div>
-        </div>
-      </div>
-    </div>
+  <div id="course-map">
     <div class="introduction" :style="screenHeight">
       <div class="introductionContent">
         <img :src="mapUrl" />
         <div class="introductionList">
           <div class="course-btn" v-for="(point,index) in pointList" :key="index"
             :style="{width:point.width,height:point.height,bottom:point.bottom,right:point.right}"
-            @click="gotoStudy(index)" :data-toggle="point.flag==true?'modal':''" data-target="#goStudy">
+            @click="gotoStudy(index)">
             <div>
               <img :src="point.bgImg" class="btn-img" />
             </div>
@@ -70,27 +18,63 @@
         </div>
       </div>
     </div>
-    <button class="btn goback-btn" @click="gotoCourseList">返回课程列表</button>
+    <button class="goback-btn" @click="gotoCourseList">返回课程列表</button>
+    <!-- 开始学习对话框 -->
+    <el-dialog :visible.sync="studyDialogVisible" width="50%" @close="studyDialogClosed">
+      <div class="study-back">
+        <div class="left-box">
+          <div class="box-title">
+            <p>{{courseName}}| 第{{courseNum}}节课 | {{chapterName}}</p>
+          </div>
+          <button class="study-btn">开始学习</button>
+        </div>
+        <div class="right-box" v-if='role!=0'>
+          <p class="course-intro">课程介绍</p>
+          <p class="intro-detials">{{courseIntro}}</p>
+          <p class="course-warn">
+            不要忘记交作业呀！
+            <br />1.点击下方【我要做作业】，填写名称和描述，上传作业文件、封面，即可提交
+            <br />2.点击我的首页【开始创作】，进入scratch页面
+          </p>
+          <router-link class="work-btn"
+            :to="{name:'addHomework',query:{chapterId:chapterId,courseId:this.courseId,chapterName:chapterName}}">
+            我要做作业
+          </router-link>
+          <p class="preview">预览讲义</p>
+        </div>
+        <div class="right-box" v-if='role==0'>
+          <p class="course-intro">课程介绍</p>
+          <p class="intro-detials">{{courseIntro}}</p>
+          <button class="work-btn">预览讲义</button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import globalAxios from "axios";
   import { mapState } from 'vuex'
   export default {
     data() {
       return {
         mapUrl: this.$store.state.url + "scratch/bg.f0d850a.jpg",
+        studyDialogVisible: false,
+        chapterName: "",
         courseIntro: "",
-        scratch: '',
         courseNum: "",
         videosrc: "",
-        chapterName: "",
-        i: 0,
-        videoend: false,
+        template: '',
         chapterId: "",
-        role:0,
-      };
+        scratch: '',
+        role: 0,
+        i: 0
+      }
+    },
+    created() {
+      this.courseId = this.$route.query.id;
+      this.screenHeight = "min-height:" + (this.height - 56) + "px;";
+      this.$store.commit("updateLoading", true);
+      this.$store.dispatch("getCourseDetail", this.$route.query.id);
     },
     methods: {
       gotoStudy(index) {
@@ -101,92 +85,67 @@
         this.videosrc = this.pointList[index].videoSrc;
         this.template = this.pointList[index].templateSrc;
         this.chapterId = this.pointList[index].chapterId;
+        if (this.pointList[index].flag !== true) {
+          return
+        }
+        this.studyDialogVisible = true
         let token = window.localStorage.getItem("idToken")
-        this.scratch = this.baseScratch + '?chapterId=' + this.chapterId + '&&courseId=' + this.courseId + 
-        '&&chapterName='+this.chapterName+'&&token='+token+'&&userName='+this.userName;
+        this.scratch = this.baseScratch + '?chapterId=' + this.chapterId + '&&courseId=' + this.courseId +
+          '&&chapterName=' + this.chapterName + '&&token=' + token + '&&userName=' + this.userName;
       },
-      deletevideo() {
-        this.videosrc = "";
+      studyDialogClosed() {
+        this.chapterName = ''
+        this.courseIntro = ''
+        this.courseNum = ''
+        this.videosrc = ''
+        this.template = ''
+        this.chapterId = ''
+        this.i = 0
+        this.scratch = ''
+        this.studyDialogVisible = false
       },
       gotoCourseList() {
         this.$router.push({ path: "/dashboard/class" });
-      },
-      videoEnd() {
-        if (this.i == this.$store.state.finishChaptersLength - 1) {
-          var token = window.localStorage.getItem("idToken");
-          globalAxios
-            .post(
-              "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/student/courses/" +
-              this.courseId +
-              "/chapters/" +
-              this.chapterId,
-              {},
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: token
-                }
-              }
-            )
-            .then(
-              response => {
-                console.log(response);
-                this.pointList[this.i + 1].flag = true;
-                this.pointList[this.i + 1].bgImg = "../../static/images/scratch/coordinateed.6a1e9a5.png";
-                this.pointList[this.i + 1].status = "已完成";
-                console.log(this.pointList[this.i + 1]);
-              },
-              error => { }
-            );
-        }
       }
-    },
-    created: function () {
-      this.courseId = this.$route.query.id;
-      this.screenHeight = "min-height:" + (this.height - 56) + "px;";
-      this.$store.commit("updateLoading", true);
-      this.$store.dispatch("getCourseDetail", this.$route.query.id);
-      this.userName = window.localStorage.getItem("user");
-      this.role = window.localStorage.getItem("roleId");
     },
     computed: {
       ...mapState({
-        courseName: state => state.courseName,
         pointList: state => state.pointList,
-        baseScratch: state => state.scratch,
+        courseName: state => state.courseName,
+        baseScratch: state => state.scratch
       }),
     }
   }
 </script>
 
 <style scoped>
-  #coursemap {
+  #course-map {
     background: #2fd0ff;
   }
 
-  #coursemap .introduction {
+  .introduction {
     width: 100%;
     margin: 0 auto;
   }
 
-  #coursemap img {
+  img {
     border: 0 !important;
     display: block;
   }
 
-  #coursemap .introductionContent {
+  .introductionContent {
     max-width: 1200px;
     min-width: 700px;
     margin: 0 auto;
     position: relative;
   }
 
-  #coursemap .introductionContent img {
+  .introductionContent img {
     margin: 0 auto;
     width: 100%;
   }
 
-  #coursemap .introductionList {
+  .introductionList {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -194,17 +153,17 @@
     top: 0;
   }
 
-  #coursemap .course-btn {
+  .course-btn {
     position: absolute;
   }
 
-  #coursemap .btn-img {
+  .btn-img {
     position: relative;
     width: 100%;
     height: 100%;
   }
 
-  #coursemap .chapter-intro {
+  .chapter-intro {
     position: absolute;
     width: 280px;
     height: 68px;
@@ -218,18 +177,19 @@
     visibility: hidden;
   }
 
-  #coursemap .course-btn:hover .chapter-intro {
+  .course-btn:hover .chapter-intro {
     visibility: visible;
   }
 
-  #coursemap .intro {
+  .intro {
     text-align: center;
     width: 95%;
     margin: 10px auto;
     color: #fff;
   }
 
-  #coursemap .goback-btn {
+  .goback-btn {
+    border: 0;
     position: absolute;
     top: 100px;
     left: 50px;
@@ -242,66 +202,40 @@
     border-radius: 6px;
   }
 
-  #coursemap .goback-btn:hover {
-    color: #fff;
-  }
-
-  #coursemap .goback-btn:active {
-    color: #fff;
-    outline: none;
-  }
-
-  /*开始学习模态框*/
-  #coursemap .btn:active {
-    outline: none;
-  }
-
-  #coursemap .bckimg {
+  /* 开始学习对话框 */
+  .study-back {
     background: url("../../../../../../static/images/scratch/background.png") no-repeat;
     background-size: cover;
     height: 400px;
-    width: 660px;
-  }
-
-  #coursemap .video-bck {
-    height: 400px;
-    width: 700px;
-  }
-
-  #coursemap .video-name {
-    margin-bottom: 10px;
-    display: inline-block;
-  }
-
-  #coursemap .header-height {
-    height: 20px;
-    border: none;
-  }
-
-  #coursemap .modal-box {
     width: 100%;
-    height: 320px;
-    padding: 0;
+    margin: -20px -20px -30px -20px;
   }
 
-  #coursemap .left-box {
+  .left-box {
     float: left;
     width: 47%;
     height: 100%;
     text-align: center;
   }
 
-  #coursemap .box-title {
+  .right-box {
+    float: right;
+    width: 50%;
+    height: 100%;
+    text-align: center;
+  }
+
+  .box-title {
     width: 80%;
     height: 100px;
     text-align: center;
     font-size: 18px;
     margin: 0 auto;
-    padding-bottom: 290px;
+    padding-bottom: 240px;
     color: #fff;
   }
 
-  #coursemap .study-btn {
+  .study-btn {
     width: 120px;
     height: 30px;
     line-height: 25px;
@@ -311,23 +245,14 @@
     border-radius: 6px;
   }
 
-  #coursemap .right-box {
-    float: left;
-    width: 53%;
-    height: 100%;
-    text-align: center;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  #coursemap .course-intro {
+  .course-intro {
     width: 100%;
     font-size: 14px;
     color: #22a0ff;
     text-align: left;
   }
 
-  #coursemap .intro-detials {
+  .intro-detials {
     width: 100%;
     text-align: left;
     background: #e3f3ff;
@@ -341,7 +266,7 @@
     overflow-y: auto;
   }
 
-  #coursemap .course-warn {
+  .course-warn {
     font-size: 12px;
     width: 100%;
     text-align: left;
@@ -349,7 +274,7 @@
     color: red;
   }
 
-  #coursemap .work-btn {
+  .work-btn {
     padding: 5px;
     font-size: 12px;
     line-height: 35px;
@@ -360,21 +285,10 @@
     border: none;
   }
 
-  #coursemap .preview {
+  .preview {
     width: 100%;
     font-size: 12px;
     color: #22a0ff;
     cursor: pointer;
-  }
-
-  /*视频*/
-  #coursemap .video-js {
-    height: 600px;
-    width: 800px;
-  }
-
-  #coursemap .vjs-tech {
-    height: auto;
-    width: 100%;
   }
 </style>
