@@ -5,7 +5,7 @@
         <app-header height="56px"></app-header>
       </el-header>
       <router-view></router-view>
-      <el-footer height="53px">
+      <el-footer height="53px" style="padding:0;">
         <app-footer></app-footer>
       </el-footer>
     </el-container>
