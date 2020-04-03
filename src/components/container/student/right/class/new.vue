@@ -1,7 +1,7 @@
 <template>
   <div id="new" class="limiter">
     <h4 v-if="!myClass.length" style="padding:20px 0 0 50px">还没有加入任何班级哦~</h4>
-    <div class="container-table100" v-if="myClass.length">
+    <div class="container-table100" v-else>
       <div style="margin-bottom: 10px;">
         <button
           class="nameOfClass"
