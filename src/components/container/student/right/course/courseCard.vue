@@ -1,6 +1,6 @@
 <template>
   <div id="coursecard">
-    <h4 v-if="txt">还没有学习任何课程哦~</h4>
+    <h4 v-if="!currentList.length" style="padding:20px 0 0 50px">还没有学习任何课程哦~</h4>
     <el-row v-else style="padding-top:15px;">
       <el-col
         v-for="(item,index) in currentList"
@@ -44,6 +44,7 @@
     <el-pagination
       class="pagination"
       :page-size="limit"
+      v-if="currentList.length"
       background
       layout="prev, pager, next"
       :total="tableData.length"

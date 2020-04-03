@@ -44,7 +44,7 @@ export default {
 
 #setup .menu {
   padding-top: 10px;
-  padding-right: 40px;
+  padding-left: 40px;
   display: flex;
   justify-content: left;
 }
