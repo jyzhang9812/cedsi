@@ -19,13 +19,22 @@ function uploadFile(file, AWSConfig, callback, progress) {
     sessionToken: AWSConfig.SessionToken,
     region: "cn-northwest-1"
   });
+  // const fileType = file.name.split(".").pop();
+
+  let mimeType="";
   const fileType = file.name.split(".").pop();
+  if(fileType=="jpg"){
+     mimeType = "image/"+fileType
+  }else{
+     mimeType = mime.getType(fileType)
+  }
+
   const params = {
     ACL: "public-read",
     Bucket: "cedsi",
     Body: file,
     Key: `${AWSConfig.path}/${AWSConfig.id}.${fileType}`,
-    ContentType: fileType,
+    ContentType: mimeType,
     Metadata: {
       uploader: localStorage.getItem("user")
     }
