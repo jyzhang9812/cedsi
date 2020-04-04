@@ -11,7 +11,7 @@
         style="margin-bottom: 15px;"
       >
         <div class="inside" @mouseover="show(index)" @mouseleave="hidden(index)">
-          <img class="img" :src="item.cover" />
+          <img class="img" :src="item.COVER" />
           <div class="details" v-show="index==i">
             <div class="detail_item">
               <i class="fa fa-desktop fa-lg" aria-hidden="true" style="color: #fcb3a5"></i>
@@ -36,7 +36,7 @@
           </div>
         </div>
         <div class="outside">
-          <span>{{item.courseName}}</span>
+          <span>{{item.COURSE_NAME}}</span>
           <button class="btn">开始学习</button>
         </div>
       </el-col>
@@ -64,75 +64,75 @@ export default {
     return {
       txt: false,
       limit: 10,
-      tableData: [],
-      currentList: [
-        {
-          id: "001",
-          cover: "https://www.henrenx.cn/f92839.jpg",
-          courseName: "线性代数",
-          haveStarted: 5,
-          chaptersNum: 10,
-          haveLearned: 4,
-          homeworkStars: 98,
-          homeworkNum: 13,
-          creationNum: 17
-        },
-        {
-          id: "001",
-          cover: "https://www.henrenx.cn/f92839.jpg",
-          courseName: "线性代数",
-          haveStarted: 5,
-          chaptersNum: 10,
-          haveLearned: 4,
-          homeworkStars: 98,
-          homeworkNum: 13,
-          creationNum: 17
-        },
-        {
-          id: "001",
-          cover: "https://www.henrenx.cn/f92839.jpg",
-          courseName: "线性代数",
-          haveStarted: 5,
-          chaptersNum: 10,
-          haveLearned: 4,
-          homeworkStars: 98,
-          homeworkNum: 13,
-          creationNum: 17
-        },
-        {
-          id: "001",
-          cover: "https://www.henrenx.cn/f92839.jpg",
-          courseName: "线性代数",
-          haveStarted: 5,
-          chaptersNum: 10,
-          haveLearned: 4,
-          homeworkStars: 98,
-          homeworkNum: 13,
-          creationNum: 17
-        },
-        {
-          id: "001",
-          cover: "https://www.henrenx.cn/f92839.jpg",
-          courseName: "线性代数",
-          haveStarted: 5,
-          chaptersNum: 10,
-          haveLearned: 4,
-          homeworkStars: 98,
-          homeworkNum: 13,
-          creationNum: 17
-        },
-        {
-          id: "001",
-          cover: "https://www.henrenx.cn/f92839.jpg",
-          courseName: "线性代数",
-          haveStarted: 5,
-          chaptersNum: 10,
-          haveLearned: 4,
-          homeworkStars: 98,
-          homeworkNum: 13,
-          creationNum: 17
-        }
-      ],
+      // tableData: [],
+      // currentList: [
+        // {
+        //   id: "001",
+        //   cover: "https://www.henrenx.cn/f92839.jpg",
+        //   courseName: "线性代数",
+        //   haveStarted: 5,
+        //   chaptersNum: 10,
+        //   haveLearned: 4,
+        //   homeworkStars: 98,
+        //   homeworkNum: 13,
+        //   creationNum: 17
+        // },
+        // {
+        //   id: "001",
+        //   cover: "https://www.henrenx.cn/f92839.jpg",
+        //   courseName: "线性代数",
+        //   haveStarted: 5,
+        //   chaptersNum: 10,
+        //   haveLearned: 4,
+        //   homeworkStars: 98,
+        //   homeworkNum: 13,
+        //   creationNum: 17
+        // },
+        // {
+        //   id: "001",
+        //   cover: "https://www.henrenx.cn/f92839.jpg",
+        //   courseName: "线性代数",
+        //   haveStarted: 5,
+        //   chaptersNum: 10,
+        //   haveLearned: 4,
+        //   homeworkStars: 98,
+        //   homeworkNum: 13,
+        //   creationNum: 17
+        // },
+        // {
+        //   id: "001",
+        //   cover: "https://www.henrenx.cn/f92839.jpg",
+        //   courseName: "线性代数",
+        //   haveStarted: 5,
+        //   chaptersNum: 10,
+        //   haveLearned: 4,
+        //   homeworkStars: 98,
+        //   homeworkNum: 13,
+        //   creationNum: 17
+        // },
+        // {
+        //   id: "001",
+        //   cover: "https://www.henrenx.cn/f92839.jpg",
+        //   courseName: "线性代数",
+        //   haveStarted: 5,
+        //   chaptersNum: 10,
+        //   haveLearned: 4,
+        //   homeworkStars: 98,
+        //   homeworkNum: 13,
+        //   creationNum: 17
+        // },
+        // {
+        //   id: "001",
+        //   cover: "https://www.henrenx.cn/f92839.jpg",
+        //   courseName: "线性代数",
+        //   haveStarted: 5,
+        //   chaptersNum: 10,
+        //   haveLearned: 4,
+        //   homeworkStars: 98,
+        //   homeworkNum: 13,
+        //   creationNum: 17
+        // }
+      // ],
       currentPage: 0,
       btn: "btn",
       btnh: "btnhover",
@@ -158,13 +158,19 @@ export default {
     }
   },
   created: function() {
-    // this.$store.commit("updateLoading", true);
-    // this.$store.dispatch("getCourse").then(() => {
-    //   if (this.tableData.length == 0) {
-    //     this.txt = true;
-    //   }
-    // });
-  }
+    this.$store.commit("updateLoading", true);
+    this.$store.dispatch("getCourse").then(() => {
+      if (this.tableData.length == 0) {
+        this.txt = true;
+      }
+    });
+  },
+  computed: {
+    ...mapState({
+      tableData: state => state.courseList,
+      currentList: state => state.courseCurrentList,
+    })
+  },
 };
 </script>
 

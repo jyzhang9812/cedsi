@@ -256,8 +256,8 @@ const actions = {
           let arr = [];
           console.log(response);
           if (response.data != null) {
-            for (let i = 0; i < response.data.length; i++) {
-              arr.push(response.data[i]);
+            for (let i = 0; i < response.data.courses.length; i++) {
+              arr.push(response.data.courses[i]);
             }
           }
           commit(TYPES.changeCourseList, arr);
@@ -419,7 +419,7 @@ const actions = {
       })
       .then(
         response => {
-          // console.log(response);
+          console.log(response);
           let myClasses = [];
           if (response.data != null) {
             for (let i = 0; i < response.data.length; i++) {
@@ -427,7 +427,7 @@ const actions = {
               let arr = [];
               myClass.name = response.data[i].className;
               myClass.teacher = response.data[i].teacher;
-              myClass.memberCount = response.data[i].member_count;
+              myClass.member_count = response.data[i].member_count;
               for (let j = 0; j < response.data[i].classmates.length; j++) {
                 arr.push(response.data[i].classmates[j]);
               }
@@ -447,10 +447,18 @@ const actions = {
   },
   //将购买的课程添加至我的课程
   postCourseId({ commit, state }, allId) {
+    let payload ={}
+    if(allId.orderId=='000'){
+      payload = {
+        cover: allId.cover 
+      }
+    }else{
+      payload = {orderId: allId.orderId, cover: allId.cover}
+    }
     globalAxios({
       method: "post",
       url: "/student/courses/" + allId.id,
-      data: { orderId: allId.orderId, cover: allId.cover },
+      data: payload,
       headers: {
         "Content-Type": "application/json",
         Authorization: state.idToken

@@ -1,4 +1,5 @@
 import AWS from "aws-sdk";
+import mime from "mime";
 
 /**
  *  更新时间 2020-02-09  author: henrenx

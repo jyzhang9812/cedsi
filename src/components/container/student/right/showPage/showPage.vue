@@ -19,10 +19,10 @@
         </el-col>
         <el-col v-for="item in activities" :key="item.id" :span="6" :offset="1" :push="1">
           <div @mouseenter="item.showInfo = true;" @mouseleave="item.showInfo = false;" class="activity-card">
-            <img :src="item.cover" alt />
+            <img :src="item.ACTIVITY_COVER" alt />
             <div class="activity-info" :style="{'display': item.showInfo ? 'flex' : 'none'}">
-              <h4>{{item.name}}</h4>
-              <button>查看详情</button>
+              <h4>{{item.ACTIVITY_TITLE}}</h4>
+              <button @click='gotoActivity(index)'>查看详情</button>
             </div>
           </div>
         </el-col>
@@ -175,7 +175,7 @@
       gotoActivity(index) {
         this.$router.push({
           path: "/activitydetailCard",
-          query: { id: this.slidePic[index].id, type: this.slidePic[index].type }
+          query: { id: this.activityList[index].id, type: this.activityList[index].type }
         });
       },
       learnCourse(item) {
@@ -210,18 +210,7 @@
           .then(({ data }) => {
             console.log(data);
             if (data.status === "ok") {
-              this.activityList = data.ced.concat(data.org).map(item => {
-                return {
-                  content: item.ACTIVITY_CONTENT_IMG,
-                  cover: item.ACTIVITY_COVER,
-                  id: item.ACTIVITY_ID,
-                  place: item.PLACE,
-                  deadline: item.ACTIVITY_TIME,
-                  name: item.ACTIVITY_TITLE,
-                  time: item.RELEASE_TIME,
-                  showInfo: false
-                };
-              });
+              this.activityList = [...data.ced,...data.org];
               this.activities = this.activityList.slice(0, 3);
             } else {
               throw new Error("get activities fail");

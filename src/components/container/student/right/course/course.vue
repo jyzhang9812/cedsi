@@ -141,10 +141,11 @@ export default {
         });
       } else {
         let allid = {
-          id: this.currentList[index].ID
-          // orderId: '000',
-          // cover: this.currentList[index].COVER
+          id: this.currentList[index].ID,
+          orderId: '000',
+          cover: this.currentList[index].COVER
         };
+        console.log(allid)
         this.$store.dispatch("postCourseId", allid).then(() => {
           this.$router.push({
             path: "/dashboard/coursemap",
