@@ -53,9 +53,9 @@
         </div>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="videoVisible" width="50%" title="视频学习" @close="player.pause()">
+    <el-dialog :visible.sync="videoVisible" width="50%" title="视频学习" @close="closeDialog">
       <div class="video-area">
-        <el-row>
+        <!-- <el-row>
           <span>请选择视频</span>
           <el-select v-model="currentVideo" @change="changeVideo">
             <el-option
@@ -65,9 +65,10 @@
               :value="item.RS_URL"
             ></el-option>
           </el-select>
-        </el-row>
+        </el-row> -->
         <div class="spaceLine"></div>
-        <video id="myVideo" class="video-js">
+        <video id="myVideo" :key="currentVideo" class="video-js" preload="auto" controlsList="nodownload"
+        controls autoplay>
           <source :src="currentVideo" type="video/mp4" />
         </video>
       </div>
@@ -103,6 +104,9 @@ export default {
     this.$store.dispatch("getCourseDetail", this.$route.query.id);
   },
   methods: {
+    closeDialog(){
+      this.currentVideo = ""
+    },
     gotoStudy(index) {
       this.i = index;
       this.chapterName = this.pointList[index].name;
@@ -144,20 +148,24 @@ export default {
     startToLearn() {
       this.studyDialogVisible = false;
       this.videoVisible = true;
-      if (this.videos[0]) {
-        this.currentVideo = this.videos[0].RS_URL;
-        setTimeout(() => {
-          if (this.player) return;
-          let config = { controls: true, preload: "none" };
-          this.player = this.$video("myVideo", config);
-        }, 200);
-      }
+      this.currentVideo = this.videos[0].RS_URL;
+      console.log(this.currentVideo);
+      
+      // if (this.videos[0]) {
+      //   this.currentVideo = this.videos[0].RS_URL;
+      //   setTimeout(() => {
+      //     if (this.player) return;
+      //     let config = { controls: true, preload: "none" };
+      //     this.player = this.$video("myVideo", config);
+      //   }, 200);
+      // }
+
     },
-    changeVideo(item) {
-      if (this.player) {
-        this.player.src(item.RS_URL);
-      }
-    }
+    // changeVideo(item) {
+    //   if (this.player) {
+    //     this.player.src(item.RS_URL);
+    //   }
+    // }
   },
   computed: {
     ...mapState({

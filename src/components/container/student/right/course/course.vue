@@ -1,7 +1,7 @@
 <template>
   <div id="allCourse">
-    <el-dialog :visible.sync="myVideo" controls>
-      <video width="600" height="400" controls>
+    <el-dialog :visible.sync="myVideo" controls @close='closeDialog'>
+      <video autoplay :key="videosrc" width="600" height="400" controls>
         <source :src="videosrc" type="video/mp4" />
       </video>
     </el-dialog>
@@ -90,6 +90,9 @@ export default {
     };
   },
   methods: {
+    closeDialog:function(){
+            this.videosrc = "";
+    },
     searchEnterFun: function(e) {
       var keyCode = window.event ? e.keyCode : e.which;
       if (keyCode == 13) {
@@ -153,13 +156,14 @@ export default {
   },
   mounted() {
     let token = localStorage.getItem("idToken");
-    let url = `/student/courses`;
+    let url = `/courses`;
     const config = { headers: { Authorization: token } };
     instance
       .get(url, config)
       .then(({ data }) => {
         console.log({ 课程数据: data });
-        this.tableData = data.courses;
+        this.tableData = data;
+        this.currentList = this.tableData;
         console.log(this.tableData);
       })
       .catch(err => console.error(err));
@@ -202,6 +206,7 @@ img {
 }
 
 .inside {
+  color: #fff;
   width: 100%;
   height: 220px;
   position: relative;
