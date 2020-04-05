@@ -1,89 +1,47 @@
 <template>
   <div id="rollPic" class="container-fluid">
-    <!-- 模态框（Modal） -->
-    <div
-      class="modal fade"
-      v-if="tableData!=0"
-      id="myHomework"
-      data-backdrop="false"
-      tabindex="-1"
-      role="dialog"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-body head">
-            <div class="left">
-              <iframe
-                :src="'https://s3.cn-northwest-1.amazonaws.com.cn/ced.cedsie.com/cedScratch/player.html?projectUrl=' + currentList[num].url"
-              ></iframe>
-            </div>
-            <div class="right">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h3>作品名</h3>
-              <p>{{currentList[num].name}}</p>
-              <!-- <h3>作品描述</h3>
-              <p>dwqenwrehgnruy</p>-->
-              <h3>操作说明</h3>
-              <p>{{currentList[num].guide}}</p>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <p>老师点评：{{currentList[num].teacher_remark}}</p>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
+    <el-dialog :visible.sync="dialogVisible" width="58%" @open="handleDialogOpen">
+      <el-row :gutter="20">
+        <el-col :span="16">
+          <p class="loading-tips" v-show="!iFrameShow">正在努力加载。。。</p>
+          <iframe
+            v-show="iFrameShow"
+            id="scratch"
+            frameborder="no"
+            border="0"
+            :src="`${scratchUrl}projectUrl=${currentList[curWork]}`"
+          ></iframe>
+        </el-col>
+        <el-col :span="8" style="height:450px">
+          <h3>作品名</h3>
+          <p>{{currentList[curWork].name}}</p>
+          <h3>操作说明</h3>
+          <p>{{currentList[curWork].guide}}</p>
+          <h3>老师点评</h3>
+          <p>{{currentList[curWork].teacher_remark}}</p>
+        </el-col>
+      </el-row>
+    </el-dialog>
     <div class="menu">
-      <button
-        @click="tab(index)"
-        v-for="(item,index) in items"
-        class="tag"
-        :class="{active : index==curId}"
-      >{{item.COURSE_NAME}}</button>
+      <button :class="{'active' :curTab===0}" @click="tab(0)">未提交</button>
+      <button :class="{'active' :curTab===1}" @click="tab(1)">已提交</button>
     </div>
-    <!-- <div id="selectMenu">
-            <div>
-                <button @click="selectTab(index)" v-for="(item,index) in selectItems" class="tag"
-                    :class="{active : index==selectId}">{{item}}</button>
-            </div>
-            <div style="padding-right: 20px;" @click='changeDirection'>
-                <i class="fa fa-2x fa-long-arrow-up" :style="isUpload?'color:#00bcd4':'color:#ccc'"
-                    aria-hidden="true"></i>
-                <i class="fa fa-2x fa-long-arrow-down" :style="isUpload?'color:#ccc':'color:#00bcd4'"
-                    aria-hidden="true"></i>
-            </div>
-    </div>-->
-    <div class="row" style="margin-top: 10px">
-      <div v-if="txt==true">
-        <h4>还没有做作业哦~</h4>
-      </div>
-      <div
-        class="col-md-4"
-        v-if="txt==false"
-        v-for="(item,index) in currentList"
-        :key="index"
-        @mouseover="show(index)"
-        @mouseleave="hidden(index)"
-        @click="show(index)"
-      >
-        <div class="inside" data-toggle="modal" data-target="#myHomework" data-index="index">
-          <img class="img" :style="style" :src="item.img_url" />
-          <div class="details" v-show="index==i">
+    <h4 v-if="!currentList.length" style="padding:20px 0 0 50px">还没有做作业哦~</h4>
+    <el-row v-else :gutter="30">
+      <el-col v-for="(item,index) in currentList" :key="index" :span="6" :offset="1" :push="1">
+        <div
+          class="inside"
+          @mouseover="controlCardShow(index, true)"
+          @mouseleave="controlCardShow(index,false)"
+        >
+          <img class="img" :src="item.img_url" alt />
+          <div class="details" v-show="index===curId">
             <div class="detail_item">
               <i
-                class="fa fa-star fa-lg"
-                aria-hidden="true"
+                v-for="star in 5"
+                :key="star"
+                :class="['fa','fa-lg',item.rank < star ? 'fa-star-o': 'fa-star']"
                 style="color: #ffbf35"
-                v-for="j in parseInt(item.rank)"
-              ></i>
-              <i
-                class="fa fa-star-o fa-lg"
-                aria-hidden="true"
-                style="color: #ffbf35"
-                v-for="j in 5-parseInt(item.rank)"
               ></i>
               <span>{{item.teacher_remark}}</span>
             </div>
@@ -92,115 +50,94 @@
         <div class="outside">
           <div class="left">
             <div class="up">
-              <img class="work_type" :src="zuopin" />
-              <h5>{{item.name}}</h5>
+              <img class="work_type" :src="`${baseUrl}dashboard/zuopin.png`" />
+              <span>{{item.name}}</span>
             </div>
             <div class="down">
-              <i class="fa fa-clock-o fa-lg" aria-hidden="true" style="color: #50b8ee"></i>
+              <i class="fa fa-clock-o fa-lg" style="color: #50b8ee;line-height:1em"></i>
               <span>{{item.time}}</span>
             </div>
           </div>
           <div class="right">
-            <button
-              v-if="item.flag==0"
-              class="edit"
-              data-toggle="modal"
-              data-target="#myHomework"
-              data-index="index"
-            >查看</button>
-            <button v-if="item.flag==1" class="edit" @click="download(index)">查看</button>
-            <button class="delete" @click="del(index)">删除</button>
+            <button class="edit view" @click="viewWork(index)">查看</button>
+            <button class="delete view" @click="del(index)">删除</button>
           </div>
         </div>
-      </div>
-    </div>
-    <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
+      </el-col>
+    </el-row>
+    <el-pagination
+      class="pagination"
+      :page-size="limit"
+      v-if="tableData.length"
+      background
+      layout="prev, pager, next"
+      :total="tableData.length"
+      @current-change="handlePageChange"
+      @prev-click="handlePageChange"
+      @next-click="handlePageChange"
+    ></el-pagination>
   </div>
 </template>
 
-
 <script>
 import { mapState } from "vuex";
+
 export default {
   name: "rollPic",
   data() {
     return {
-      txt: false,
-      curId: 0,
-      num: 0,
-      btn: "btn",
-      btnh: "btnhover",
-      zuopin: "../" + this.$store.state.url + "dashboard/zuopin.png",
-      products: "../" + this.$store.state.url + "dashboard/xiangmu.png",
-      i: -1,
-      selectItems: ["未提交", "已提交"],
-      selectId: 0,
-      isUpload: true
+      curId: -1,
+      curTab: 0,
+      curWork: 0,
+      iFrameShow: false,
+      currentList: [],
+      tableData: [
+        {
+          img_url: "https://www.henrenx.cn/f92839.jpg",
+          rank: "3",
+          teacher_remark: "做的真棒！",
+          name: "植物大战僵尸",
+          url: "https://henrenx.cn",
+          flag: 0,
+          guide: "This is the homework guide from me.",
+          time: "2018年7月3日"
+        },
+        {
+          img_url: "https://www.henrenx.cn/f92839.jpg",
+          rank: "3",
+          teacher_remark: "做的真棒！",
+          name: "植物大战僵尸",
+          url: "https://henrenx.cn",
+          flag: 0,
+          guide: "This is the homework guide from me.",
+          time: "2018年7月3日"
+        }
+      ],
+      limit: 6,
+      dialogVisible: false,
+      scratchUrl:
+        "https://s3.cn-northwest-1.amazonaws.com.cn/ced.cedsie.com/cedScratch/player.html?"
     };
   },
   methods: {
-    //下载
-    download(index) {
-      console.log("download");
-      window.open("https://" + this.currentList[index].url);
+    handlePageChange(pageIndex) {
+      let start = (pageIndex - 1) * this.limit;
+      let end = start + this.limit;
+      this.currentList = this.tableData.slice(start, end);
     },
-    show(index) {
-      this.num = index;
-      this.i = index;
-      this.isShow = true;
+    controlCardShow(index, isShow) {
+      this.curId = isShow ? index : -1;
     },
-    hidden(index) {
-      this.i = -1;
-      this.isShow = false;
+    viewWork(index) {
+      let item = this.currentList[index];
+      if (item.flag) {
+        window.open("https://" + this.currentList[index].url);
+      } else {
+        this.dialogVisible = true;
+      }
     },
     tab(index) {
-      this.curId = index;
-      this.$store
-        .dispatch("getWork", this.$store.state.courseList[index].ID)
-        .then(() => {
-          if (this.tableData.length == 0) {
-            this.txt = true;
-          } else {
-            this.txt = false;
-            for (let i = 0; i <= this.currentList.length; i++) {
-              this.currentList[i].time = this.timestampToTime(
-                this.currentList[i].time
-              );
-            }
-          }
-        })
-        .then(() => {
-          if (this.tableData.length == 0) {
-            this.txt = true;
-          } else {
-            this.txt = false;
-          }
-        });
-    },
-    selectTab(index) {
-      this.selectId = index;
-      this.currentList = [];
-    },
-    changeDirection() {
-      this.isUpload = !this.isUpload;
-    },
-    //换页
-    getNew(value) {
-      var currentPage = value / this.limit;
-      this.currentPage = currentPage;
-      this.$store.commit(
-        "changeWorkCurrentList",
-        this.currentPage * this.limit
-      );
-      if (this.tableData.length == 0) {
-        this.txt = true;
-      } else {
-        for (let i = 0; i <= this.currentList.length; i++) {
-          this.currentList[i].time = this.timestampToTime(
-            this.currentList[i].time
-          );
-        }
-      }
+      this.curTab = index;
     },
     del(index) {},
     timestampToTime(timestamp) {
@@ -222,41 +159,49 @@ export default {
       var s =
         date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
       return Y + M + D + h + m + s;
+    },
+    handleDialogOpen() {
+      const that = this;
+      const event = () => (that.iFrameShow = true);
+      setTimeout(() => {
+        let scratch = document.getElementById("scratch");
+        if (scratch.requestFullScreen) {
+          scratch.requestFullScreen();
+        }
+        if (scratch.attachEvent) {
+          scratch.attachEvent("onload", event);
+        } else {
+          scratch.onload = event;
+        }
+      }, 200);
     }
   },
   created: function() {
-    //let that = this.$router;
-    this.style =
-      "height:" + document.documentElement.clientWidth * 0.17 + "px;";
-    this.style1 =
-      "height:" +
-      document.documentElement.clientWidth * 0.17 +
-      "px;margin-top:-" +
-      document.documentElement.clientWidth * 0.17 +
-      "px;";
-    this.$store.commit("updateLoading", true);
-    this.$store.dispatch("getCourse").then(() => {
-      this.$store
-        .dispatch("getWork", this.$store.state.courseList[0].ID)
-        .then(() => {
-          if (this.tableData.length == 0) {
-            this.txt = true;
-          } else {
-            for (let i = 0; i <= this.currentList.length; i++) {
-              this.currentList[i].time = this.timestampToTime(
-                this.currentList[i].time
-              );
-            }
-          }
-        });
-    });
+    this.handlePageChange(1);
+    // this.$store.commit("updateLoading", true);
+    // this.$store.dispatch("getCourse").then(() => {
+    //   this.$store
+    //     .dispatch("getWork", this.$store.state.courseList[0].ID)
+    //     .then(() => {
+    //       if (this.tableData.length == 0) {
+    //         this.txt = true;
+    //       } else {
+    //         for (let i = 0; i <= this.currentList.length; i++) {
+    //           this.currentList[i].time = this.timestampToTime(
+    //             this.currentList[i].time
+    //           );
+    //         }
+    //       }
+    //     });
+    // });
   },
   computed: {
     ...mapState({
-      items: state => state.courseList,
-      tableData: state => state.workList,
-      currentList: state => state.workCurrentList,
-      limit: state => state.limit
+      // items: state => state.courseList,
+      // tableData: state => state.workList,
+      // currentList: state => state.workCurrentList,
+      // limit: state => state.limit
+      baseUrl: state => state.url
     })
   }
 };
@@ -264,82 +209,50 @@ export default {
 
 
 <style scoped>
-#rollPic {
-  min-height: 100%;
+iframe {
+  width: 100%;
+  height: 450px;
 }
 
-#rollPic .menu {
+.menu {
   background-color: #f4f9fa;
-  height: auto;
   padding-top: 10px;
   padding-left: 40px;
   padding-right: 40px;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   justify-content: center;
 }
 
-#rollPic .tag {
+.menu button {
   background-color: inherit;
   color: #575757;
-  padding: 15px 32px;
-  margin: 10px 4px 0px;
-  text-align: center;
+  padding: 10px 32px;
+  margin: 0 4px 15px;
   text-decoration: none;
   padding: 4px 10px;
   font-size: 18px;
   border: none;
   font-weight: 550;
+  outline: none;
 }
 
-#rollPic .tag:hover,
-#rollPic .active {
+.menu button:hover,
+.menu .active {
   color: #00bcd4;
 }
 
-#selectMenu {
-  height: auto;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-#selectMenu .tag {
-  background-color: #ccc;
-  color: #fff;
-  display: inline-block;
-  margin: 10px;
-  padding: 7px 20px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  border: none;
-}
-
-#selectMenu .tag:hover,
-#selectMenu button.active {
-  background-color: #00bcd4;
-  color: #fff;
-}
-
-#rollPic .col-md-4 {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  text-decoration: none;
-}
-
-#rollPic .img {
+.img {
   border-radius: 20px;
   width: 100%;
+  height: 100%;
 }
 
-#rollPic .inside {
+.inside {
   border-radius: 20px;
+  height: 170px;
 }
 
-#rollPic .inside:hover {
+.inside:hover {
   -webkit-transform: scale(1.05);
   -moz-transform: scale(1.05);
   -ms-transform: scale(1.05);
@@ -350,18 +263,7 @@ export default {
   /*下边阴影*/
 }
 
-#rollPic .btn {
-  background: #f4f9fa;
-  height: 30px;
-  width: 70px;
-  font-size: 12px;
-  text-align: center;
-  margin-right: 10px;
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-#rollPic .edit {
+.view {
   background: #f4f9fa;
   height: 30px;
   width: 60px;
@@ -370,169 +272,116 @@ export default {
   margin-right: 10px;
   margin-top: 10px;
   font-weight: bold;
-  color: #50b8ee;
-  border: 1px solid #50b8ee;
   border-radius: 8px;
+  outline: none;
 }
 
-#rollPic .edit:hover,
-#rollPic .edit:focus {
+.edit {
+  color: #50b8ee;
+  border: 1px solid #50b8ee;
+}
+
+.edit:hover,
+.edit:focus {
   background: #50b8ee;
   color: #f4f9fa;
 }
 
-#rollPic .delete {
-  background: #f4f9fa;
-  height: 30px;
-  width: 60px;
-  font-size: 12px;
-  text-align: center;
-  margin-right: 10px;
-  margin-top: 10px;
-  font-weight: bold;
+.delete {
   color: red;
   border: 1px solid red;
-  border-radius: 8px;
 }
 
-#rollPic .delete:hover,
-#rollPic .delete:focus {
+.delete:hover,
+.delete:focus {
   background: red;
   color: #f4f9fa;
 }
 
-#rollPic .details {
-  width: 100%;
-  height: 50px;
+.details {
   background-color: rgba(0, 0, 0, 0.35);
   z-index: 999;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  margin-top: -50px;
+  bottom: 65px;
   position: relative;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-  padding-top: 20px;
+  padding: 20px 0;
 }
 
-#rollPic .detail_item {
+.detail_item {
   margin-left: 40px;
   width: 60%;
   height: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: flex-start;
   position: relative;
   border-radius: 20px;
   color: #fff;
 }
 
-#rollPic .outside {
-  margin-top: 8px;
+.outside {
+  margin-bottom: 15px;
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
   font-size: 12px;
   justify-content: space-between;
 }
 
-#rollPic .up {
-  margin-top: 10px;
+.up {
+  margin: 10px 0 5px 0;
   display: flex;
-  flex-direction: row;
   justify-content: flex-start;
   width: 150px;
+  color: #777;
 }
 
-#rollPic h5 {
+span {
   margin-left: 10px;
-  margin-top: 5px;
   font-weight: bold;
-  color: #777;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
-#rollPic span {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-#rollPic .down {
+.down {
   display: flex;
-  flex-direction: row;
   color: #777;
 }
 
-#rollPic .icon {
-  width: 16px;
-  height: 16px;
-  margin-right: 5px;
+.work_type {
+  width: 25px;
+  height: 15px;
 }
 
-#rollPic .work_type {
-  width: 34.7px;
-  height: 20px;
+.pagination {
+  padding-left: 90px;
 }
 
-#myHomework {
-  width: 100%;
-  height: auto;
-  background: (255, 255, 255, 0.5);
+.loading-tips {
+  font-size: 35px;
+  text-align: center;
+  margin-top: 30%;
+  background: -webkit-linear-gradient(
+    left,
+    #147b96,
+    #e6d205 25%,
+    #147b96 50%,
+    #e6d205 75%,
+    #147b96
+  );
+  color: transparent;
+  -webkit-background-clip: text;
+  background-size: 200% 100%;
+  animation: masked-animation 1s infinite linear;
 }
 
-#myHomework .modal-dialog {
-  width: 60%;
-  height: auto;
-  background: (255, 255, 255, 0.5);
-}
-
-#myHomework iframe {
-  width: 100%;
-  height: 441px;
-  margin: -25px 0 0 0;
-  background-color: #fff;
-  border: none;
-  border-radius: inherit;
-}
-
-#myHomework .head {
-  display: flex;
-  flex-direction: row;
-}
-
-#myHomework .left {
-  width: 65%;
-  height: auto;
-  margin: 20px auto;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 2px solid #ccc;
-}
-
-#myHomework .right {
-  width: 30%;
-  height: 441px;
-  overflow-x: scroll;
-  margin-left: 5%;
-}
-
-#myHomework .right .close {
-  position: relative;
-  top: 0;
-  right: 0;
-}
-
-#myHomework .right p {
-  color: #777;
-  font-size: 16px;
-}
-
-#myHomework .right h3 {
-  color: #50b8ee;
+@-webkit-keyframes masked-animation {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
 }
 </style>

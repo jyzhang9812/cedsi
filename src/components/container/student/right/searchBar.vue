@@ -43,7 +43,7 @@
         background-color: #00bcd4;
         color: #fff;
         width: 100%;
-        padding: 30px
+        padding: 20px
     }
     .searchBox input.el-input__inner {
         background: #17788e;
