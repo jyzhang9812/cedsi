@@ -49,6 +49,7 @@
       
 <script>
     import AWS from "aws-sdk";
+    import mime from "mime";
     import instance from "../../../../../axios-auth.js";
     import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
 

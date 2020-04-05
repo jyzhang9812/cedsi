@@ -66,6 +66,7 @@
 <script>
 import VDistpicker from "v-distpicker";
 import AWS from "aws-sdk";
+import mime from "mime";
 import globalAxios from "axios";
 import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 export default {

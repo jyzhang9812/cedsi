@@ -225,6 +225,7 @@
 <script>
 import instance from "../../../../axios-auth.js";
 import AWS from "aws-sdk";
+import mime from "mime";
 
 export default {
   name: "postJob",
