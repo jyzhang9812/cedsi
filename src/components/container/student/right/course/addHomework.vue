@@ -116,7 +116,7 @@
                         Body: formData.get("content"),
                         Key: "homework/work/" + config.id + "." + that.file.name.split(".")[that.file.name.split(".").length-1],
                         // ContentType:
-                        Metadata: { uploader: window.localStorage.getItem("user") }
+                        Metadata: { uploader: window.localStorage.getItem("userId") }
                     };
                     s3.putObject(params, function (err, data) {
                         if (err) {

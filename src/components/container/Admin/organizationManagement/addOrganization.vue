@@ -189,7 +189,7 @@ export default {
               Key: "license/" + response.data.id + "." + this.form.licenseType,
               ContentType: this.form.licenseType,
               Metadata: {
-                uploader: window.localStorage.getItem("user")
+                uploader: window.localStorage.getItem("userId")
               }
             };
             s3.putObject(params, function(err, data) {

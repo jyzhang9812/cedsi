@@ -666,7 +666,7 @@ export default {
         Body: file,
         Key: `preHomework/${config.path}/${config.id}.${fix[fix.length - 1]}`,
         ContentType: file.type,
-        Metadata: { uploader: window.localStorage.getItem("user") }
+        Metadata: { uploader: window.localStorage.getItem("userId") }
       };
       return new Promise((resolve, reject) => {
         s3.putObject(params, (err, data) => {

@@ -218,7 +218,7 @@
           Body: file,
           Key: "activity/" + config.id + "." + file.type.split("/")[1],
           ContentType: file.type,
-          Metadata: { uploader: window.localStorage.getItem("user") }
+          Metadata: { uploader: window.localStorage.getItem("userId") }
         };
         return new Promise((resolve, reject) => {
           s3.putObject(params, (err, data) => {
@@ -266,7 +266,7 @@
           Body: file,
           Key: "activity/" + config.id + "." + file.type.split("/")[1],
           ContentType: file.type,
-          Metadata: { uploader: window.localStorage.getItem("user") }
+          Metadata: { uploader: window.localStorage.getItem("userId") }
         };
         return new Promise((resolve, reject) => {
           s3.putObject(params, (err, data) => {

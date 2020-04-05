@@ -172,7 +172,7 @@ export default {
           Body: formData.get("content"),
           Key: "user/avatar/" + config.id + "." + file.type.split("/")[1],
           ContentType: file.type,
-          Metadata: { uploader: window.localStorage.getItem("user") }
+          Metadata: { uploader: window.localStorage.getItem("userd") }
         };
         s3.putObject(params, function(err, data) {
           if (err) {

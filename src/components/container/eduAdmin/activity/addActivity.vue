@@ -166,7 +166,7 @@
           Body: file,
           Key: "eduActivity/" + config.id + "." + file.type.split("/")[1],
           ContentType: mimeType,
-          // Metadata: { uploader: window.localStorage.getItem("userId") }
+          Metadata: { uploader: window.localStorage.getItem("userId") }
         };
         console.log(params);
         return new Promise((resolve, reject) => {
