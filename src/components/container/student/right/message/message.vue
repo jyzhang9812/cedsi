@@ -1,95 +1,195 @@
 <template>
   <div id="msg" class="container">
     <searchBar></searchBar>
-    <!-- 模态框（Modal） -->
-    <div
-      class="modal fade"
-      v-if="tableData!=0"
-      id="myMessage"
-      data-backdrop="false"
-      tabindex="-1"
-      role="dialog"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">{{currentList[num].DISPATCH_DATE}}</h4>
-          </div>
-          <div class="modal-body">
-            <img :src="currentList[num].MESSAGE_CONTENT" width="100%" />
-            附件：
-            <a :href="baseURL + currentList[num].ATTACHED_FILE" download>点击下载</a>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal -->
-    </div>
+    <el-dialog :visible.sync="dialogVisible" width="40%" title="消息详情">
+      <h4>{{currentList[curWork].DISPATCH_DATE | dateFormatter}}</h4>
+      <el-row>
+        <el-link :href="currentList[curWork].ATTACHED_FILE" target="_blank">点击下载附件</el-link>
+      </el-row>
+      <el-row style="height:250px;overflow-y:auto;">
+        <el-image :src="currentList[curWork].MESSAGE_CONTENT"></el-image>
+      </el-row>
+    </el-dialog>
     <div class="menu">
       <button
         @click="tab(index)"
-        v-for="(item,index) in items"
+        v-for="(item,index) in buttons"
         class="tag"
-        :class="{active : index===curId}"
-      >{{item.item}}</button>
+        :key="index"
+        :class="{'active':index===curTab}"
+      >{{item.name}}</button>
     </div>
-    <div class="main">
-      <div v-if="txt==true">
-        <h4>该分类下暂无消息</h4>
-      </div>
+    <h4 v-if="!tableData.length" style="padding:20px 0 0 50px">该分类下暂无消息哦~</h4>
+    <div class="main" v-else>
       <div
         class="cardbox"
-        v-if="txt==false"
         v-for="(item,index) in currentList"
-        data-toggle="modal"
-        data-target="#myMessage"
-        v-on:click="num = index"
+        :key="index"
+        @click="openDialog(index)"
       >
-        <div
-          class="card_content"
-        >{{item.HW_NAME}}:{{item.COURSE_NAME}}课程{{item.CP_NAME}}作业，截止日期{{item.DEADLINE}}</div>
+        <div class="card_content">{{item | mesFormatter(buttons[curTab])}}</div>
         <div class="card_footer">
           <span>
-            <b>{{item.teacher_name}}</b>
+            <b style="line-height:30px">{{item.teacher_name}}</b>
             <br />
-            {{item.DISPATCH_DATE}}
+            {{item.DISPATCH_DATE | dateFormatter}}
           </span>
           <img class="avast" :src="item.avatar" />
         </div>
       </div>
     </div>
-    <pagination :num="tableData.length" :limit="limit" @getNew="getNew"></pagination>
+    <el-pagination
+      class="pagination"
+      :page-size="limit"
+      :hide-on-single-page="true"
+      background
+      layout="prev, pager, next"
+      :total="tableData.length"
+      @current-change="handlePageChange"
+      @prev-click="handlePageChange"
+      @next-click="handlePageChange"
+    ></el-pagination>
   </div>
 </template>
 
+<script>
+import searchBar from "../searchBar.vue";
+import { mapState } from "vuex";
+
+export default {
+  name: "message",
+  components: { searchBar },
+  data() {
+    return {
+      baseURL: "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn",
+      curTab: 4,
+      curWork: 0,
+      limit: 6,
+      tableData: [
+        {
+          DISPATCH_DATE: 1586053981,
+          MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/test.png",
+          HW_NAME: "我的作业1",
+          COURSE_NAME: "我是练习生",
+          CP_NAME: "章小节-1",
+          DEADLINE: 1586053981,
+          ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
+          avatar: "https://henrenx.cn/avatar.jpg",
+          teacher_name: "张老师"
+        },
+        {
+          DISPATCH_DATE: 1586053981,
+          MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/cartoon.png",
+          HW_NAME: "我的作业2",
+          COURSE_NAME: "我是练习生",
+          CP_NAME: "章小节-1",
+          DEADLINE: 1586053981,
+          ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
+          avatar: "https://henrenx.cn/avatar.jpg",
+          teacher_name: "郝老师"
+        },
+        {
+          DISPATCH_DATE: 1586053981,
+          MESSAGE_CONTENT: "https://www.henrenx.cn/f92839.jpg",
+          HW_NAME: "我的作业3",
+          COURSE_NAME: "我是练习生",
+          CP_NAME: "章小节-1",
+          DEADLINE: 1586053981,
+          ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
+          avatar: "https://henrenx.cn/avatar.jpg",
+          teacher_name: "孙老师"
+        }
+      ],
+      currentList: [],
+      dialogVisible: false,
+      buttons: [
+        { name: "系统消息", template: item => "" },
+        { name: "通知公告", template: item => "" },
+        { name: "活动安排", template: item => "" },
+        { name: "辅导答疑", template: item => "" },
+        {
+          name: "我的作业",
+          template: item =>
+            `${item.HW_NAME}:“${item.COURSE_NAME}”课程 ` +
+            `${item.CP_NAME} 作业，截止日期 ${item.DEADLINE}`
+        }
+        // 上面为消息模板，可匹配不同字段类型的消息，达到通用效果
+      ]
+    };
+  },
+  methods: {
+    openDialog(index) {
+      this.curWork = index;
+      this.dialogVisible = true;
+    },
+    tab(index) {
+      this.curTab = index;
+      // 拉取对应 TAB 下的数据
+      // 修改 tableData
+      // 调用 this.handlePageChange(1)
+
+      // this.$store.dispatch("getMsg", this.curTab).then(() => {
+      //   this.currentList = this.$store.state.msgCurrentList;
+      // });
+    },
+    handlePageChange(pageIndex) {
+      let start = (pageIndex - 1) * this.limit;
+      let end = start + this.limit;
+      this.currentList = this.tableData.slice(start, end);
+    }
+  },
+  filters: {
+    dateFormatter: value => Date.format(value),
+    mesFormatter: (value, curTab) => {
+      let DEADLINE = "";
+      if (value.DEADLINE) {
+        DEADLINE = Date.format(value.DEADLINE);
+      }
+      return curTab.template({ ...value, DEADLINE });
+    }
+  },
+  created() {
+    this.handlePageChange(1);
+    // this.$store.dispatch("getMsg", this.curTab).then(() => {
+    //   this.currentList = this.$store.state.msgCurrentList;
+    //   if (this.currentList.length != 0) {
+    //     this.txt = false;
+    //     for (let i = 0; i <= this.currentList.length; i++) {
+    //       currentList[i].DISPATCH_DATE = this.timestampToTime(
+    //         currentList[i].DISPATCH_DATE
+    //       );
+    //     }
+    //   }
+    // });
+    // this.$store.commit("updateLoading", true);
+  },
+  computed: {
+    // ...mapState({
+    //   tableData: state => state.msgList,
+    //   // currentList: state => state.msgCurrentList,
+    //   limit: state => state.limit
+    // })
+  }
+};
+</script>
 
 <style scoped>
 #msg {
-  width: 100%;
-  min-height: 100%;
   background: #f4f9fa;
-  padding: 0;
+  height: 100%;
 }
 
 #msg .menu {
-  width: auto;
-  height: auto;
   padding-top: 10px;
   padding-left: 40px;
   padding-right: 40px;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   justify-content: center;
 }
 
 #msg .tag {
   background-color: inherit;
+  outline: none;
   color: #575757;
   padding: 15px 32px;
   margin: 10px 4px 0px;
@@ -107,12 +207,9 @@
 }
 
 #msg .main {
-  width: inherit;
-  min-height: inherit;
   padding: 20px 0 0 0;
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
   justify-content: flex-start;
 }
 
@@ -149,7 +246,6 @@
 
 #msg .card_content {
   padding: 20px 20px 0 20px;
-  height: auto;
   color: #2f2f2f;
   text-align: justify;
   font-size: 110%;
@@ -167,7 +263,6 @@
 
 #msg .card_footer {
   padding: 0px 40px 10px 40px;
-  margin-left: auto;
   text-align: end;
 }
 
@@ -186,214 +281,4 @@
   vertical-align: middle;
   display: inline-block;
 }
-
-#msg .footer {
-  background-color: #f4f9fa;
-  height: auto;
-  padding-top: 10px;
-  padding-left: 40px;
-  padding-right: 40px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-#msg .modal-6 {
-  -moz-box-shadow: 0 2px 2px #333;
-  -webkit-box-shadow: 0 2px 2px #333;
-  box-shadow: 0 2px 2px #333;
-  -moz-border-radius: 50px;
-  -webkit-border-radius: 50px;
-  border-radius: 50px;
-}
-
-#msg .modal-6 a {
-  border-color: #ddd;
-  color: #999;
-  background: #fff;
-  padding: 10px 15px;
-}
-
-#msg .modal-6 a:hover {
-  color: #e34e48;
-  background-color: #eee;
-}
-
-#msg .modal-6 a.prev {
-  -moz-border-radius: 50px 0 0 50px;
-  -webkit-border-radius: 50px;
-  border-radius: 50px 0 0 50px;
-  width: 50px;
-  position: relative;
-}
-
-#msg .modal-6 a.prev:after {
-  content: "";
-  position: absolute;
-  width: 10px;
-  height: 100%;
-  top: 0;
-  right: 0;
-  background-image: -moz-linear-gradient(
-    left,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.2) 100%
-  );
-  background-image: -webkit-linear-gradient(
-    left,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.2) 100%
-  );
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.2) 100%
-  );
-}
-
-#msg .modal-6 a.next {
-  -moz-border-radius: 0 50px 50px 0;
-  -webkit-border-radius: 0;
-  border-radius: 0 50px 50px 0;
-  width: 50px;
-  position: relative;
-}
-
-#msg .modal-6 a.next:after {
-  content: "";
-  position: absolute;
-  width: 10px;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-image: -moz-linear-gradient(
-    left,
-    rgba(0, 0, 0, 0.2) 0%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  background-image: -webkit-linear-gradient(
-    left,
-    rgba(0, 0, 0, 0.2) 0%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.2) 0%,
-    rgba(0, 0, 0, 0) 100%
-  );
-}
-
-#msg .modal-6 a.active {
-  border-color: #bbb;
-  background: #fff;
-  color: #e34e48;
-  -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.25) inset;
-  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.25) inset;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25) inset;
-}
 </style>
-
-<script>
-import searchBar from "../searchBar.vue";
-import { mapState } from "vuex";
-
-export default {
-  name: "message",
-  components: { searchBar },
-  data() {
-    return {
-      txt: true,
-      baseURL: "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn",
-      //当前分类
-      curId: 0,
-      //当前点击的卡片
-      num: 0,
-      //当前页码
-      currentPage: 0,
-      currentList: [{ DISPATCH_DATE: "" }],
-      items: [
-        { item: "系统消息" },
-        { item: "通知公告" },
-        { item: "活动安排" },
-        { item: "辅导答疑" },
-        { item: "我的作业" }
-      ]
-    };
-  },
-  methods: {
-    tab(index) {
-      this.curId = index;
-      this.$store.dispatch("getMsg", this.curId).then(() => {
-        this.currentList = this.$store.state.msgCurrentList;
-        if (this.currentList.length != 0) {
-          this.txt = false;
-          for (let i = 0; i <= this.currentList.length; i++) {
-            this.currentList[i].DISPATCH_DATE = this.timestampToTime(
-              this.currentList[i].DISPATCH_DATE
-            );
-          }
-        } else {
-          this.txt = true;
-        }
-      });
-    },
-    //换页
-    getNew(value) {
-      var currentPage = value / this.limit;
-      this.currentPage = currentPage;
-      this.$store.commit("changeMsgCurrentList", this.currentPage * this.limit);
-      if (this.tableData.length == 0) {
-        this.txt = true;
-      } else {
-        for (let i = 0; i <= this.currentList.length; i++) {
-          this.currentList[i].time = this.timestampToTime(
-            this.currentList[i].time
-          );
-        }
-      }
-    },
-    timestampToTime(timestamp) {
-      timestamp = String(timestamp);
-      timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
-      var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
-      var Y = date.getFullYear() + "-";
-      var M =
-        (date.getMonth() + 1 < 10
-          ? "0" + (date.getMonth() + 1)
-          : date.getMonth() + 1) + "-";
-      var D =
-        (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
-      var h =
-        (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":";
-      var m =
-        (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
-        ":";
-      var s =
-        date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-      return Y + M + D + h + m + s;
-    }
-  },
-  created: function() {
-    this.$store.dispatch("getMsg", this.curId).then(() => {
-      this.currentList = this.$store.state.msgCurrentList;
-      if (this.currentList.length != 0) {
-        this.txt = false;
-        for (let i = 0; i <= this.currentList.length; i++) {
-          currentList[i].DISPATCH_DATE = this.timestampToTime(
-            currentList[i].DISPATCH_DATE
-          );
-        }
-      }
-    });
-    this.$store.commit("updateLoading", true);
-  },
-  computed: {
-    ...mapState({
-      tableData: state => state.msgList,
-      // currentList: state => state.msgCurrentList,
-      limit: state => state.limit
-    })
-  }
-};
-</script>
