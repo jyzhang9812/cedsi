@@ -47,7 +47,7 @@
       <div class="summary">
         应付金额:
         <span>¥{{payinfo.price / 100}}</span>
-        <button class="pay" data-toggle="modal" data-target="#myPay" @click="closeModal">立即支付</button>
+        <button class="pay" data-toggle="modal" data-target="#myPay" @click="showModal">立即支付</button>
       </div>
     </div>
   </div>
@@ -70,7 +70,7 @@
       };
     },
     methods: {
-      closeModal() {
+      showModal() {
         let payment = {
           orderId: this.orderId,
           productId: this.$route.query.id,
@@ -94,29 +94,35 @@
           if (error) console.error(error);
           var timer = setInterval(function () {
             that.query(timer, orderId)
-          }, 2000);
+          }, 3000);
         });
       },
       query(timer, orderId) {
-        let config = { params: { orderId: orderId } };
-        instance.get("/lambda/tenpay", config)
+        console.log(orderId)
+        let query = "/lambda/tenpay?orderId="+orderId;
+        instance.get(query, {
+          headers: {
+          "Content-Type": "application/json",
+          Authorization: this.$store.state.idToken
+        }})
           .then(response => {
             console.log(response.data)
-            console.log(this.$route.query.type);
             if (response.data == "SUCCESS") {
-              $('#myPay').modal('hide');
+              // $('#myPay').modal('hide');
               let allid = {
                 id: this.$route.query.id,
                 orderId: orderId,
                 cover: this.payinfo.cover
               };
-              if (this.$route.query.type == 2) {
+              if (this.$route.query.type == 2) 
+              //2为活动报名
+              {
                 this.$store.dispatch('postCourseId', allid)
               } else {
                 this.$store.dispatch('postUserInfo', allid)
               }
               clearInterval(timer)
-              this.$toast.success({ message: '报名成功 ~!' })
+              // this.$toast.success({ message: '报名成功 ~!' })
               this.$router.push({ path: '/payOK' });
             }
           })
@@ -125,6 +131,7 @@
     },
     created: function () {
       this.orderId = random(6) + Date.now();
+      console.log(this.orderId)
       this.$store.commit('updateLoading', true)
       if (this.$route.query.type == 2) {
         this.$store.dispatch('payCourse', this.$route.query.id)
@@ -136,7 +143,8 @@
     },
     computed: {
       ...mapState({
-        payinfo: state => state.payInfo
+        payinfo: state => state.payInfo,
+        // token: state => state.idToken
       }),
     },
   };
