@@ -129,14 +129,7 @@
 </template>
 
 <script>
-import DatePicker from "../utils/datePicker";
-import SelectInput from "../utils/selectInput";
-import Pagination from "../utils/pagination";
-import DeletePrompt from "../utils/deletePrompt";
 import instance from "../../../../axios-auth.js";
-import InputModal from "../utils/inputModal";
-import TurnDownWork from "../utils/turnDownWork";
-
 export default {
   name: "remark",
   data() {
@@ -492,14 +485,6 @@ export default {
   },
   created() {
     this.pullClassAndCourseData();
-  },
-  components: {
-    DeletePrompt,
-    Pagination,
-    SelectInput,
-    DatePicker,
-    InputModal,
-    TurnDownWork
   }
 };
 </script>

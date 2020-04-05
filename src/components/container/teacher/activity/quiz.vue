@@ -1,10 +1,3 @@
-<!--
- * @Email: rumosky@163.com
- * @Author: rumosky
- * @Github: https://github.com/rumosky
- * @Date: 2019-07-19 13:44:06
- * @Description: teacher角色学生提问页面
- -->
 <template>
   <div id="quiz">
     <p>学生提问</p>
@@ -49,8 +42,6 @@
 </template>
 
 <script>
-  import pagination from "../utils/pagination.vue";
-  import selectInput from "../utils/selectInput";
   export default {
     name: 'quizList',
     data() {
@@ -102,10 +93,6 @@
           }
         ]
       }
-    },
-    components: {
-      pagination,
-      selectInput
     },
     methods: {
       getNew(value) {

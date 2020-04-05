@@ -64,8 +64,30 @@ export default {
       baseURL: "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn",
       curTab: 4,
       curWork: 0,
-      limit: 6,
+      limit: 4,
       tableData: [
+        {
+          DISPATCH_DATE: 1586053981,
+          MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/test.png",
+          HW_NAME: "我的作业1",
+          COURSE_NAME: "我是练习生",
+          CP_NAME: "章小节-1",
+          DEADLINE: 1586053981,
+          ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
+          avatar: "https://henrenx.cn/avatar.jpg",
+          teacher_name: "张老师"
+        },
+        {
+          DISPATCH_DATE: 1586053981,
+          MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/test.png",
+          HW_NAME: "我的作业1",
+          COURSE_NAME: "我是练习生",
+          CP_NAME: "章小节-1",
+          DEADLINE: 1586053981,
+          ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
+          avatar: "https://henrenx.cn/avatar.jpg",
+          teacher_name: "张老师"
+        },
         {
           DISPATCH_DATE: 1586053981,
           MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/test.png",
@@ -179,7 +201,7 @@ export default {
   height: 100%;
 }
 
-#msg .menu {
+.menu {
   padding-top: 10px;
   padding-left: 40px;
   padding-right: 40px;
@@ -187,7 +209,7 @@ export default {
   justify-content: center;
 }
 
-#msg .tag {
+.tag {
   background-color: inherit;
   outline: none;
   color: #575757;
@@ -201,19 +223,18 @@ export default {
   font-weight: 550;
 }
 
-#msg .tag:hover,
-#msg .active {
+.tag:hover,
+.active {
   color: #00bcd4;
 }
-
-#msg .main {
+.main {
   padding: 20px 0 0 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
 
-#msg .cardbox {
+.cardbox {
   width: 45%;
   margin: 20px 0 0 3%;
   background-color: white;
@@ -221,7 +242,7 @@ export default {
   border: 1px solid #e7e7e7;
 }
 
-#msg .cardbox:hover {
+.cardbox:hover {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
   transform: scale(1.03);
   -ms-transform: scale(1.03);
@@ -234,17 +255,17 @@ export default {
   /* Firefox */
 }
 
-#msg .card_header {
+.card_header {
   text-align: left;
 }
 
-#msg .card_header img {
+.card_header img {
   width: 16px;
   height: 16px;
   padding-right: 5px;
 }
 
-#msg .card_content {
+.card_content {
   padding: 20px 20px 0 20px;
   color: #2f2f2f;
   text-align: justify;
@@ -252,7 +273,7 @@ export default {
   font-style: initial;
 }
 
-#msg .card_content::before {
+.card_content::before {
   content: "\201C";
   font-family: MS PGothic;
   font-size: 30px;
@@ -261,12 +282,12 @@ export default {
   box-sizing: inherit;
 }
 
-#msg .card_footer {
+.card_footer {
   padding: 0px 40px 10px 40px;
   text-align: end;
 }
 
-#msg .avast {
+.avast {
   height: 60px;
   width: 60px;
   border-radius: 50%;
@@ -276,9 +297,13 @@ export default {
   display: inline-block;
 }
 
-#msg .card_footer span {
+.card_footer span {
   color: black;
   vertical-align: middle;
   display: inline-block;
+}
+.pagination {
+  padding-left: 30px;
+  padding-top: 30px;
 }
 </style>

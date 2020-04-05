@@ -1,10 +1,3 @@
-<!--
- * @Email: rumosky@163.com
- * @Author: rumosky
- * @Github: https://github.com/rumosky
- * @Date: 2019-07-19 13:44:06
- * @Description: teacher角色活动评论页面
- -->
 <template>
   <div id="opuscomment">
     <p>活动评论管理</p>
@@ -52,8 +45,6 @@
 </template>
 
 <script>
-  import pagination from "../utils/pagination.vue";
-  import selectInput from "../utils/selectInput";
   export default {
     name: 'commentList',
     data() {

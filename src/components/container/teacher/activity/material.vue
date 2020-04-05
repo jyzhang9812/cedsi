@@ -1,10 +1,3 @@
-<!--
- * @Email: rumosky@163.com
- * @Author: rumosky
- * @Github: https://github.com/rumosky
- * @Date: 2019-07-19 13:44:06
- * @Description: teacher角色辅导资料页面
- -->
 <template>
   <div id="material">
     <p>辅导资料</p>
@@ -107,8 +100,6 @@
 </template>
 
 <script>
-  import pagination from "../utils/pagination.vue";
-  import selectInput from "../utils/selectInput";
   export default {
     name: 'materialList',
     data() {
@@ -155,10 +146,6 @@
           }
         ]
       }
-    },
-    components: {
-      pagination,
-      selectInput
     },
     methods: {
       getNew(value) {

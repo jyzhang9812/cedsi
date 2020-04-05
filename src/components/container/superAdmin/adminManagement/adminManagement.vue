@@ -139,12 +139,9 @@
 </template>
 
 <script>
-import pagination from "../../teacher/utils/pagination.vue";
-import globalAxios from "axios";
-import crypto from 'crypto';
+import crypto from "crypto";
 export default {
   name: "adminManagement",
-  components: { pagination },
   data() {
     return {
       inputData: {
@@ -196,14 +193,13 @@ export default {
         this.tableData[this.index].status = "启用";
       }
       var updateAdmin = JSON.parse(JSON.stringify(this.tableData[this.index]));
-      if(this.tableData[this.index].status=="禁用")
-        updateAdmin.status="disable"
-      else
-        updateAdmin.status="active"
-      var data={}
-      data.userId=updateAdmin.id
-      data.status=updateAdmin.status
-      this.$store.dispatch("updateAdminStatus",data)
+      if (this.tableData[this.index].status == "禁用")
+        updateAdmin.status = "disable";
+      else updateAdmin.status = "active";
+      var data = {};
+      data.userId = updateAdmin.id;
+      data.status = updateAdmin.status;
+      this.$store.dispatch("updateAdminStatus", data);
     },
     deleteAdmin(seq) {
       this.index = this.currentPage * this.limit + seq;
@@ -212,11 +208,11 @@ export default {
     },
     submitDelete() {
       var deleteAdmin = this.tableData[this.index];
-      var data={}
-      data.id=deleteAdmin.id
-      data.index=this.index
-      data.page=this.currentPage
-      this.$store.dispatch("deleteAdmin",data)
+      var data = {};
+      data.id = deleteAdmin.id;
+      data.index = this.index;
+      data.page = this.currentPage;
+      this.$store.dispatch("deleteAdmin", data);
     },
     addAdmin() {
       this.adminUserName = "";
@@ -225,31 +221,41 @@ export default {
     //提交
     submit() {
       var password = this.adminPassword;
-      password=crypto.createHash('SHA256').update(password).digest('hex');
-      var data = { username: this.adminUserName, password: password ,page:this.currentPage};
-      this.$store.dispatch("addAdmin",data)
+      password = crypto
+        .createHash("SHA256")
+        .update(password)
+        .digest("hex");
+      var data = {
+        username: this.adminUserName,
+        password: password,
+        page: this.currentPage
+      };
+      this.$store.dispatch("addAdmin", data);
     },
     //换页
     changeTablePages(value) {
       var currentPage = value / this.limit;
       this.currentPage = currentPage;
-      this.$store.commit("changeAdminCurrentList",this.currentPage*this.limit)
-    },
-  },
-  created() {
-    this.$store.dispatch('getAdmin')
-  },
-  computed:{
-    currentList(){
-      return this.$store.state.adminCurrentList
-    },
-    tableData(){
-      return this.$store.state.adminList
-    },
-    limit(){
-      return this.$store.state.limit
+      this.$store.commit(
+        "changeAdminCurrentList",
+        this.currentPage * this.limit
+      );
     }
   },
+  created() {
+    this.$store.dispatch("getAdmin");
+  },
+  computed: {
+    currentList() {
+      return this.$store.state.adminCurrentList;
+    },
+    tableData() {
+      return this.$store.state.adminList;
+    },
+    limit() {
+      return this.$store.state.limit;
+    }
+  }
 };
 </script>
 
@@ -304,7 +310,6 @@ export default {
 #adminManagement .textBox:hover {
   border-color: #409eff;
 }
-
 
 #adminManagement .btn {
   background: #409eff;

@@ -1,10 +1,3 @@
-<!--
- * @Email: rumosky@163.com
- * @Author: rumosky
- * @Github: https://github.com/rumosky
- * @Date: 2019-07-19 13:44:06
- * @Description: teacher角色发布活动页面
- -->
 <template>
   <div id="teacher-activity">
     <div class="body" v-show="!addShown">
@@ -95,9 +88,6 @@
 </template>
 
 <script>
-  import pagination from "../utils/pagination.vue";
-  import selectInput from "../utils/selectInput";
-  import deletePrompt from "../utils/deletePrompt";
   import E from 'wangeditor';
   export default {
     name: 'activity',
@@ -149,134 +139,9 @@
             reply: "0",
             view: "6",
             status: "正常"
-          },
-          {
-            title: "test4",
-            date: "2019-04-01 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "赛迪思",
-            reply: "3",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test5",
-            date: "2019-05-01 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "赛迪思",
-            reply: "5",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test6",
-            date: "2019-04-01 12:00",
-            author: "编程测试",
-            activityType: "班级活动",
-            school: "赛迪思",
-            reply: "3",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test7",
-            date: "2019-04-01 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "翠华路小学",
-            reply: "3",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test8",
-            date: "2019-04-01 12:00",
-            author: "编程测试",
-            activityType: "班级活动",
-            school: "赛迪思",
-            reply: "3",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test9",
-            date: "2019-04-01 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "赛迪思",
-            reply: "3",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test10",
-            date: "2019-04-01 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "翠华路小学",
-            reply: "3",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test11",
-            date: "2019-04-01 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "赛迪思",
-            reply: "3",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test12",
-            date: "2019-04-01 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "翠华路小学",
-            reply: "3",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test13",
-            date: "2019-04-01 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "赛迪思",
-            reply: "3",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test14",
-            date: "2019-04-01 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "雁塔路小学",
-            reply: "3",
-            view: "6",
-            status: "正常"
-          },
-          {
-            title: "test15",
-            date: "2019-04-01 12:00",
-            author: "编程测试",
-            activityType: "布置作业",
-            school: "赛迪思",
-            reply: "3",
-            view: "6",
-            status: "正常"
-          }
+          }          
         ]
       }
-    },
-    components: {
-      pagination,
-      selectInput,
-      deletePrompt
     },
     methods: {
       getNew(value) {

@@ -47,13 +47,14 @@
           :drop-down-list="inputData.grade.list"
         ></select-input>
       </div>
-       <div class="select-input">
-        <select-input id="order"
-                      tips="请选择课次"
-                      :option="inputData.order.option"
-                      @option="changeOption"
-                      :drop-down-list="inputData.order.list">
-        </select-input>
+      <div class="select-input">
+        <select-input
+          id="order"
+          tips="请选择课次"
+          :option="inputData.order.option"
+          @option="changeOption"
+          :drop-down-list="inputData.order.list"
+        ></select-input>
       </div>
     </div>
     <div class="second-floor"></div>
@@ -74,15 +75,35 @@
 
       <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否学习:</span>
       <div class="btn-group btn-group-sm" role="group">
-        <button id="bt1" type="button" class="btn btn-default " @click="studyOrNot(1),changeButtonStyle(1)">是</button>
-        <button id="bt2" type="button" class="btn btn-default" @click="studyOrNot(0),changeButtonStyle(2)">否</button>
+        <button
+          id="bt1"
+          type="button"
+          class="btn btn-default"
+          @click="studyOrNot(1),changeButtonStyle(1)"
+        >是</button>
+        <button
+          id="bt2"
+          type="button"
+          class="btn btn-default"
+          @click="studyOrNot(0),changeButtonStyle(2)"
+        >否</button>
       </div>
       <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否做作业:</span>
       <div class="btn-group btn-group-sm" role="group" aria-label="...">
-        <button id="bt3" type="button" class="btn btn-default" @click="homeWorkOrNot(1),changeButtonStyle(3)">是</button>
-        <button id="bt4" type="button" class="btn btn-default" @click="homeWorkOrNot(0),changeButtonStyle(4)">否</button>
+        <button
+          id="bt3"
+          type="button"
+          class="btn btn-default"
+          @click="homeWorkOrNot(1),changeButtonStyle(3)"
+        >是</button>
+        <button
+          id="bt4"
+          type="button"
+          class="btn btn-default"
+          @click="homeWorkOrNot(0),changeButtonStyle(4)"
+        >否</button>
       </div>
-       <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
       <button class="btn btn-search" @click="search(formData),afterSearch()">搜索</button>
       <button class="btn btn-clear" @click="clearChoices(),afterSearch()">清空筛选</button>
     </div>
@@ -119,9 +140,6 @@
 </template>
 
 <script>
-import DatePicker from "../utils/datePicker";
-import SelectInput from "../utils/selectInput";
-import pagination from "../utils/pagination.vue";
 export default {
   name: "remark",
   data() {
@@ -142,9 +160,9 @@ export default {
         className: "",
         objName: "",
         levelName: "",
-        studyOrNot:"",
-        videoName:"",
-        workOrNot:""
+        studyOrNot: "",
+        videoName: "",
+        workOrNot: ""
       },
       realList: [], //真正的数组，经过filter后的
       temporaryList: [],
@@ -222,262 +240,6 @@ export default {
           commitTime: "2019-05-27 16:57:55",
           homeworkStar: "3",
           commitNmm: "1"
-        },
-        {
-          organName: "师大二中",
-          className: "赛迪思",
-          studentName: "大红",
-          objName: "课程二",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第2节课 | 初遇地球--重组机器人",
-          isStart: "是",
-          startTime: "2019-05-01 00:00:00",
-          learnTime: "2019-05-27 17:53:33",
-          learnNmm: "1",
-          learnNoteNmm: "1",
-          commitTime: "2019-05-27 16:57:55",
-          homeworkStar: "3",
-          commitNmm: "1"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-07-20 15:31",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "开学第一课",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-        {
-          organName: "师大三中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "2019-04-03 20:00:06 ",
-          learnNmm: "17",
-          learnNoteNmm: "11",
-          commitTime: "2019-05-17 15:31:55",
-          homeworkStar: "0",
-          commitNmm: "2"
-        },
-         {
-          organName: "师大一中",
-          className: "赛迪思",
-          studentName: "小明",
-          objName: "课程三",
-          levelName: "Level 1",
-          videoName: "Scratch Level 1| 第1节课 | 初遇地球--机器人解体",
-          isStart: "是",
-          startTime: "2019-03-01 00:00:00 ",
-          learnTime: "",
-          learnNmm: "",
-          learnNoteNmm: "",
-          commitTime: "",
-          homeworkStar: "",
-          commitNmm: ""
         }
       ]
     };
@@ -496,17 +258,17 @@ export default {
       videoName,
       studyOrNot,
       workOrNot
-    }) {    //temporary list 保存的是满足除时间以外所有搜索条件产生的数组
-        this.temporaryList = this.tableData.filter(item => {
+    }) {
+      //temporary list 保存的是满足除时间以外所有搜索条件产生的数组
+      this.temporaryList = this.tableData.filter(item => {
         let matchName = true;
         let matchOrganName = true;
         let matchClassName = true;
         let matchObjName = true;
         let matchLevelName = true;
-        let matchVideo=true;
-        let matchStudy=true;
-        let matchWork=true;
-
+        let matchVideo = true;
+        let matchStudy = true;
+        let matchWork = true;
 
         if (telOrName) {
           // 姓名搜索;
@@ -533,18 +295,16 @@ export default {
           matchVideo = item.videoName.match(videoName);
         }
         //是否学习(！！！当前是通过观看视频次数进行判断的)
-        if(studyOrNot){
-          if(studyOrNot==="yes"){
-            matchStudy=item.learnNmm;
-          }else
-           matchStudy=!item.learnNmm;
+        if (studyOrNot) {
+          if (studyOrNot === "yes") {
+            matchStudy = item.learnNmm;
+          } else matchStudy = !item.learnNmm;
         }
         //是否做作业（！！！当前通过提交作业次数进行判断）
-         if(workOrNot){
-          if(workOrNot==="yes"){
-            matchWork=item.commitNmm;
-          }else
-           matchWork=!item.commitNmm;
+        if (workOrNot) {
+          if (workOrNot === "yes") {
+            matchWork = item.commitNmm;
+          } else matchWork = !item.commitNmm;
         }
         return (
           matchName &&
@@ -556,11 +316,12 @@ export default {
           matchStudy &&
           matchWork
         );
-      })   //对temporaryList使用时间过滤器进行过滤，realList为全条件搜索结果
-         this.realList=this.timeFilter(
-          this.inputData.startDate,
-          this.inputData.endDate,
-          this.temporaryList);
+      }); //对temporaryList使用时间过滤器进行过滤，realList为全条件搜索结果
+      this.realList = this.timeFilter(
+        this.inputData.startDate,
+        this.inputData.endDate,
+        this.temporaryList
+      );
     },
 
     changeChoices() {
@@ -631,61 +392,56 @@ export default {
       };
     },
     //操作是否单选按钮组
-    changeButtonStyle(id){
-      var bt1 = document.getElementById('bt1');   
-      var bt2 = document.getElementById('bt2');
-      var bt3 = document.getElementById('bt3'); 
-      var bt4 = document.getElementById('bt4');       
-    if(id==1){     
-        bt1.className = 'btn btn-default active';//选中它，给它添加active否则样式
-        bt2.className = 'btn btn-default ';//  清除同一个按钮组
-}
-    else if(id==2){        
-        bt2.className = 'btn btn-default active';
-        bt1.className = 'btn btn-default ';
-}
-    else if(id==3){     
-        bt3.className = 'btn btn-default active';  
-        bt4.className = 'btn btn-default ';
-}
-    else if(id==4){            
-        bt4.className = 'btn btn-default active';
-        bt3.className = 'btn btn-default ';  
-       
-}
+    changeButtonStyle(id) {
+      var bt1 = document.getElementById("bt1");
+      var bt2 = document.getElementById("bt2");
+      var bt3 = document.getElementById("bt3");
+      var bt4 = document.getElementById("bt4");
+      if (id == 1) {
+        bt1.className = "btn btn-default active"; //选中它，给它添加active否则样式
+        bt2.className = "btn btn-default "; //  清除同一个按钮组
+      } else if (id == 2) {
+        bt2.className = "btn btn-default active";
+        bt1.className = "btn btn-default ";
+      } else if (id == 3) {
+        bt3.className = "btn btn-default active";
+        bt4.className = "btn btn-default ";
+      } else if (id == 4) {
+        bt4.className = "btn btn-default active";
+        bt3.className = "btn btn-default ";
+      }
     },
     //清空搜索列表
-    cleanFormdata(){
-     Object.keys(this.formData).forEach(res=>{
-       this.formData[res]="";
-     });
+    cleanFormdata() {
+      Object.keys(this.formData).forEach(res => {
+        this.formData[res] = "";
+      });
     },
-    cleanButtonStyle(){           //清楚是否选择按钮状态
-       var bt1 = document.getElementById('bt1');      
-       var bt2 = document.getElementById('bt2');
-       var bt3 = document.getElementById('bt3');  
-       var bt4 = document.getElementById('bt4');               
-        bt1.className = 'btn btn-default ';
-        bt2.className = 'btn btn-default ';
-        bt3.className = 'btn btn-default ';
-        bt4.className = 'btn btn-default ';
+    cleanButtonStyle() {
+      //清楚是否选择按钮状态
+      var bt1 = document.getElementById("bt1");
+      var bt2 = document.getElementById("bt2");
+      var bt3 = document.getElementById("bt3");
+      var bt4 = document.getElementById("bt4");
+      bt1.className = "btn btn-default ";
+      bt2.className = "btn btn-default ";
+      bt3.className = "btn btn-default ";
+      bt4.className = "btn btn-default ";
     },
     changeOption(item, id) {
       Object.keys(this.inputData).forEach(res => {
         if (res === id) {
-          this.inputData[res].option = item;                    
-          if (id === "school") {                                  //将下拉选项加入到搜索列表
+          this.inputData[res].option = item;
+          if (id === "school") {
+            //将下拉选项加入到搜索列表
             this.formData.organName = item;
-          }else
-          if (id === "classes") {
+          } else if (id === "classes") {
             this.formData.className = item;
-          } else
-          if (id === "course") {
+          } else if (id === "course") {
             this.formData.objName = item;
-          } else
-          if (id === "grade") {
+          } else if (id === "grade") {
             this.formData.levelName = item;
-          } else if(id==="order"){
+          } else if (id === "order") {
             this.formData.videoName = item;
           }
         }
@@ -714,65 +470,61 @@ export default {
         this.formData.workOrNot = "no";
       }
     },
-     timeFilter(startTime, endTime, tableList) {
-        if (startTime === "" && endTime === "") return tableList;
-        startTime = startTime === "" ? 0 : startTime;
-        // 今天是 2019-7-21 此系统若能运行1000年算我输
-        endTime = endTime === "" ? "3000-01-01 00:00" : endTime;
-        let restTableList = tableList.slice(0);
-        startTime = new Date(startTime);
-        endTime = new Date(endTime);
-        for (let i = 0, j = restTableList.length; i < j; i++) {
-          let flag=restTableList[i].commitTime;               //用flag过滤掉没有数据的
-          let submitTime = new Date(restTableList[i].commitTime);
-          if (!flag || startTime > submitTime || submitTime > endTime ) {
-            restTableList.splice(i, 1);
-            i -= 1;
-            j -= 1;
-          }
+    timeFilter(startTime, endTime, tableList) {
+      if (startTime === "" && endTime === "") return tableList;
+      startTime = startTime === "" ? 0 : startTime;
+      // 今天是 2019-7-21 此系统若能运行1000年算我输
+      endTime = endTime === "" ? "3000-01-01 00:00" : endTime;
+      let restTableList = tableList.slice(0);
+      startTime = new Date(startTime);
+      endTime = new Date(endTime);
+      for (let i = 0, j = restTableList.length; i < j; i++) {
+        let flag = restTableList[i].commitTime; //用flag过滤掉没有数据的
+        let submitTime = new Date(restTableList[i].commitTime);
+        if (!flag || startTime > submitTime || submitTime > endTime) {
+          restTableList.splice(i, 1);
+          i -= 1;
+          j -= 1;
         }
-        return restTableList;
       }
+      return restTableList;
+    }
   },
   mounted() {
     this.getNew(0);
     this.num = this.realList.length;
-   
-  },
-  components: { SelectInput, DatePicker, pagination }
+  }
 };
-
-
 </script>
 
 <style scoped>
-#statistics  {
+#statistics {
   font-size: 12px;
   color: #606266;
 }
 
-#statistics  .second-floor {
+#statistics .second-floor {
   margin-top: 20px;
 }
 
-#statistics  .first-floor {
+#statistics .first-floor {
   display: flex;
   margin-left: 5px;
   margin-top: 10px;
 }
 
-#statistics  .third-floor {
+#statistics .third-floor {
   margin-top: 20px;
   vertical-align: middle;
   font-size: 12px;
   margin-left: 5px;
 }
 
-#statistics  .third-floor span {
+#statistics .third-floor span {
   line-height: 30px;
 }
 
-#statistics  .forth-floor {
+#statistics .forth-floor {
   font-size: 12px;
   color: #606266;
   margin-top: 40px;
@@ -782,11 +534,11 @@ export default {
   display: inline;
 }
 
-#statistics  .content td {
+#statistics .content td {
   line-height: 30px;
 }
 
-#statistics  .textBox {
+#statistics .textBox {
   width: 180px;
   height: 32px;
   font-size: 12px;
@@ -797,17 +549,15 @@ export default {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-#statistics  .textBox:focus {
+#statistics .textBox:focus {
   outline: none;
 }
 
-#statistics  .textBox:hover {
+#statistics .textBox:hover {
   border-color: #c0c4cc;
 }
 
-
-
-#statistics  .comment {
+#statistics .comment {
   width: 68px;
   height: 32px;
   display: inline-block;
@@ -816,17 +566,16 @@ export default {
   cursor: pointer;
 }
 
-#statistics  .has-comment {
+#statistics .has-comment {
   border-radius: 4px 0 0 4px;
 }
 
-#statistics  .no-comment {
+#statistics .no-comment {
   margin-right: 20px;
   border-radius: 0 4px 4px 0;
 }
 
-#statistics  .btn {
-  
+#statistics .btn {
   height: 30px;
   border-radius: 5px;
   font-size: 12px;
@@ -834,33 +583,32 @@ export default {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-
-#statistics  .btn:focus {
+#statistics .btn:focus {
   outline: none;
 }
 
-#statistics  .btn:hover {
+#statistics .btn:hover {
   background: #66b1ff;
 }
 
-#statistics  .btn-search {
+#statistics .btn-search {
   background: #409eff;
   color: #fff;
   width: 54px;
 }
 
-#statistics  .btn-clear {
+#statistics .btn-clear {
   background: #409eff;
   color: #fff;
   width: 78px;
 }
 
-#statistics  .blue {
+#statistics .blue {
   cursor: pointer;
   color: #409eff;
 }
 
-#statistics  .red {
+#statistics .red {
   cursor: pointer;
   color: #ff6947;
 }
@@ -877,14 +625,14 @@ table td {
   vertical-align: middle !important;
 }
 
-#statistics  .title {
+#statistics .title {
   text-align: center;
 }
 
-#statistics  .select-input {
+#statistics .select-input {
   margin-right: 0;
 }
-#statistics  .select-input1 {
+#statistics .select-input1 {
   margin-right: 8px;
 }
 </style>

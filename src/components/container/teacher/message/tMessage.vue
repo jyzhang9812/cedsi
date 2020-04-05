@@ -23,7 +23,6 @@
 </template>
 
 <script>
-  import pagination from "../utils/pagination.vue";
   import instance from "../../../../axios-auth.js";
 
   export default {

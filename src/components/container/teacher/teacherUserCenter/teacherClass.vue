@@ -46,15 +46,12 @@
 </template>
 
 <script>
-import pagination from "../../teacher/utils/pagination.vue";
-// import globalAxios from "axios";
 import XLSX from "xlsx";
 import instance from "../../../../axios-auth.js";
 import AWS from "aws-sdk";
 
 export default {
   name: "teacherClass",
-  components: { pagination },
   data() {
     return {
       //新改的

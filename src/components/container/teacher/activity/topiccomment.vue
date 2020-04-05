@@ -1,10 +1,3 @@
-<!--
- * @Email: rumosky@163.com
- * @Author: rumosky
- * @Github: https://github.com/rumosky
- * @Date: 2019-07-19 13:44:06
- * @Description: teacher角色作品评论页面
- -->
 <template>
   <div id="topiccomment">
     <p>作品评论</p>
@@ -47,8 +40,6 @@
 </template>
 
 <script>
-  import pagination from "../utils/pagination.vue";
-  import selectInput from "../utils/selectInput";
   export default {
     name: 'commentList',
     data() {
@@ -95,10 +86,6 @@
           }
         ]
       }
-    },
-    components: {
-      pagination,
-      selectInput
     },
     methods: {
       getNew(value) {

@@ -223,10 +223,6 @@
 </template>
 
 <script>
-import DeletePrompt from "../utils/deletePrompt";
-import Pagination from "../utils/pagination";
-import DatePicker from "../utils/datePicker";
-import selectInput from "../utils/selectInput";
 import instance from "../../../../axios-auth.js";
 import AWS from "aws-sdk";
 
@@ -322,8 +318,6 @@ export default {
       let end = start + this.limit;
       this.homeworkList = this.homeworkData.slice(start, end);
     },
-
-
 
     /**
      * 获取此教师的所有作业 (仅仅是自己布置的, 其他老师的看不到)
@@ -701,17 +695,15 @@ export default {
       .catch(err => {
         console.log(err);
       });
-  },
-  mounted() {},
-  components: { DeletePrompt, Pagination, DatePicker, selectInput }
+  }
 };
 </script>
 <style scoped>
-#teacher-postJob .body{
+#teacher-postJob .body {
   width: 95%;
   margin: 0 auto;
 }
-#teacher-postJob .spaceLine{
+#teacher-postJob .spaceLine {
   height: 20px;
 }
 .form-size {
