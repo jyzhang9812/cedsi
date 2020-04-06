@@ -61,7 +61,7 @@
       <div class="summary">
         应付金额:
         <span>¥{{payinfo.price / 100}}</span>
-        <button class="pay" data-toggle="modal" data-target="#myPay" @click="closeModal">立即支付</button>
+        <button class="pay" data-toggle="modal" data-target="#myPay" @click="showModal">立即支付</button>
       </div>
     </div>
   </div>
@@ -91,29 +91,84 @@ export default {
         userId: localStorage.getItem("userId"),
         fee: this.payinfo.price * 100
       };
-      let config = {
-        headers: { Authorization: localStorage.getItem("idToken") }
-      };
-      console.log(payment);
-      instance
-        .post("/lambda", payment, config)
-        .then(res => {
-          console.log(res);
-          this.qrCode(res.data.code_url, payment.orderId);
-        })
-        .catch(err => {
-          console.error(err);
-        });
     },
-    qrCode(url, orderId) {
-      var that = this;
-      var url = url;
-      QRCode.toCanvas(canvas, url, function(error) {
-        if (error) console.error(error);
-        var timer = setInterval(function() {
-          that.query(timer, orderId);
-        }, 2000);
-      });
+    methods: {
+      showModal() {
+        let payment = {
+          orderId: this.orderId,
+          productId: this.$route.query.id,
+          productName: this.payinfo.name,
+          userId: localStorage.getItem('userId'),
+          fee: this.payinfo.price * 100
+        };
+        let config = { headers: { Authorization: localStorage.getItem('idToken') } };
+        console.log(payment);
+        instance.post("/lambda", payment, config)
+          .then(res => {
+            console.log(res);
+            this.qrCode(res.data.code_url, payment.orderId);
+          })
+          .catch(err => { console.error(err) });
+      },
+      qrCode(url, orderId) {
+        var that = this;
+        var url = url;
+        QRCode.toCanvas(canvas, url, function (error) {
+          if (error) console.error(error);
+          var timer = setInterval(function () {
+            that.query(timer, orderId)
+          }, 3000);
+        });
+      },
+      query(timer, orderId) {
+        console.log(orderId)
+        let query = "/lambda/tenpay?orderId="+orderId;
+        instance.get(query, {
+          headers: {
+          "Content-Type": "application/json",
+          Authorization: this.$store.state.idToken
+        }})
+          .then(response => {
+            console.log(response.data)
+            if (response.data == "SUCCESS") {
+              // $('#myPay').modal('hide');
+              let allid = {
+                id: this.$route.query.id,
+                orderId: orderId,
+                cover: this.payinfo.cover
+              };
+              if (this.$route.query.type == 2) 
+              //2为活动报名
+              {
+                this.$store.dispatch('postCourseId', allid)
+              } else {
+                this.$store.dispatch('postUserInfo', allid)
+              }
+              clearInterval(timer)
+              // this.$toast.success({ message: '报名成功 ~!' })
+              this.$router.push({ path: '/payOK' });
+            }
+          })
+          .catch(err => console.log(err));
+      }
+    },
+    created: function () {
+      this.orderId = random(6) + Date.now();
+      console.log(this.orderId)
+      this.$store.commit('updateLoading', true)
+      if (this.$route.query.type == 2) {
+        this.$store.dispatch('payCourse', this.$route.query.id)
+      } else if (this.$route.query.type == 0) {
+        this.$store.dispatch('searchActivity', this.$route.query.id)
+      } else {
+        this.$store.dispatch('searchEduActivity', this.$route.query.id)
+      }
+    },
+    computed: {
+      ...mapState({
+        payinfo: state => state.payInfo,
+        // token: state => state.idToken
+      }),
     },
     query(timer, orderId) {
       let config = { params: { orderId: orderId } };

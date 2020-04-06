@@ -67,6 +67,7 @@
 <script>
 import VDistpicker from "v-distpicker";
 import AWS from "aws-sdk";
+import mime from "mime";
 import globalAxios from "axios";
 export default {
   name: "addorganization",

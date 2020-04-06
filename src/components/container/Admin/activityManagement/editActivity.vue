@@ -77,6 +77,7 @@
 
 <script>
     import AWS from "aws-sdk";
+    import mime from "mime";
     import globalAxios from "axios";
     import instance from "../../../../axios-auth.js";
 

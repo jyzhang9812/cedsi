@@ -55,6 +55,7 @@
       
 <script>
 import AWS from "aws-sdk";
+import mime from "mime";
 import instance from "../../../../../axios-auth.js";
 
 export default {

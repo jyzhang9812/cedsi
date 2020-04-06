@@ -111,9 +111,10 @@
 </template>
 
 <script>
-import AWS from "aws-sdk";
-import globalAxios from "axios";
-import instance from "../../../../axios-auth.js";
+  import AWS from "aws-sdk";
+  import mime from "mime";
+  import globalAxios from "axios";
+  import instance from "../../../../axios-auth.js";
 
 export default {
   name: "addactivity",

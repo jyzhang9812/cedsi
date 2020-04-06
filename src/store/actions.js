@@ -660,6 +660,7 @@ const actions = {
       }
     );
   },
+  
   // Admin方法
   //获取课程目录
   getCourseList({ dispatch, commit, state }) {
