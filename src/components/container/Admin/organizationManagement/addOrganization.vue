@@ -28,7 +28,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="机构地区" style="margin-left:-12px">
-            <v-distpicker 
+            <v-distpicker
               class="address-input"
               @province="onChangeProvince"
               @city="onChangeCity"
@@ -37,10 +37,16 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="机构描述" >
-        <el-input type="textarea" :autosize="{ minRows:6, maxRows: 10}" placeholder="请输入机构描述" v-model="form.organizationIntro" style="width: 420px" ></el-input>
+      <el-form-item label="机构描述">
+        <el-input
+          type="textarea"
+          :autosize="{ minRows:6, maxRows: 10}"
+          placeholder="请输入机构描述"
+          v-model="form.organizationIntro"
+          style="width: 420px"
+        ></el-input>
       </el-form-item>
-      <el-form-item label="上传营业执照"  style="margin-left:28px">
+      <el-form-item label="上传营业执照" style="margin-left:28px">
         <div class="upload-cover-btn">
           上传图片
           <input type="file" @change="getLicenseFile($event)" style="opacity: 0" />
@@ -48,18 +54,13 @@
       </el-form-item>
       <el-form-item label="预览">
         <div class="upload-cover-img">
-          <img
-            id="headimage"
-            :src="form.businessLicense"
-            class="cover-image"
-            alt=""
-          />
+          <img id="headimage" :src="form.businessLicense" class="cover-image" alt />
         </div>
       </el-form-item>
     </el-form>
     <div class="upload-footer">
-      <el-button  type="primary" @click="submit">确定</el-button>
-      <el-button  type="primary" @click="cancle">取消</el-button>
+      <el-button type="primary" @click="submit">确定</el-button>
+      <el-button type="primary" @click="cancle">取消</el-button>
     </div>
   </div>
 </template>
@@ -67,7 +68,6 @@
 import VDistpicker from "v-distpicker";
 import AWS from "aws-sdk";
 import globalAxios from "axios";
-import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 export default {
   name: "addorganization",
   components: { VDistpicker },
@@ -103,10 +103,10 @@ export default {
         fileName: "",
         organizationAddress: "",
         organizationIntro: "",
-        licenseFile:"",
-        licenseFileName:"",
-        licenseType:"",
-        licenseSize:"",
+        licenseFile: "",
+        licenseFileName: "",
+        licenseType: "",
+        licenseSize: ""
       }
     };
   },
@@ -137,7 +137,7 @@ export default {
       };
     },
     submit() {
-    console.log(this.form);
+      console.log(this.form);
       var that = this;
       var token = window.localStorage.getItem("idToken");
       this.form.organizationAddress =
@@ -153,7 +153,7 @@ export default {
       newOrg.code = this.code;
       newOrg.organizationType = this.form.inputData.option;
       newOrg.type = this.form.licenseType;
-      console.log(newOrg)
+      console.log(newOrg);
       globalAxios
         .post(
           "https://3z8miabr93.execute-api.cn-northwest-1.amazonaws.com.cn/prod/admin/org",
@@ -167,7 +167,7 @@ export default {
         )
         .then(
           response => {
-            this.$toast.success({ title: "机构管理", message: "操作成功" });
+            this.$message({ type: "success", message: "操作成功" });
             this.$router.push({ path: "/Admin/organizationManagement" });
             AWS.config = new AWS.Config({
               accessKeyId: response.data.AccessKeyId,
@@ -206,10 +206,10 @@ export default {
         );
     },
     cancle() {
-        this.$router.replace({
-          path: "/Admin/organizationManagement/"
-        });
-      }
+      this.$router.replace({
+        path: "/Admin/organizationManagement/"
+      });
+    }
   }
 };
 </script>

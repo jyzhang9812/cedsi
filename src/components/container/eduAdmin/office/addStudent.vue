@@ -36,7 +36,6 @@
 
 <script>
 import globalAxios from "axios";
-import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 
 export default {
   name: "adminManagement",
@@ -96,7 +95,7 @@ export default {
       //console.log(this.currentList)
     },
     submit() {
-      var that = this
+      var that = this;
       var postStudent = {};
       postStudent.studentData = this.checkedId;
       console.log(postStudent);
@@ -117,7 +116,7 @@ export default {
         .then(
           response => {
             console.log(response);
-            this.$toast.success({ title: "学生管理", message: "操作成功" });
+            this.$message({ type: "success", message: "操作成功" });
             setTimeout(function() {
               that.$router.push({ path: "/eduAdmin/classManagement/" });
             }, 1000);
