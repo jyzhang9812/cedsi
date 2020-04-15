@@ -38,7 +38,7 @@
       <div class="summary">
         应付金额:
         <span>¥{{payinfo.price / 100}}</span>
-        <button class="pay" @click="dialogVisible=true">立即支付</button>
+        <button class="pay" @click="showModal">立即支付</button>
       </div>
     </div>
   </div>
