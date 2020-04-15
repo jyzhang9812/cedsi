@@ -17,12 +17,11 @@
         <el-col :span="2" class="icon-control control1-right" @click.native="changeGroup('next','activity')">
           <i class="fa fa-chevron-right fa-2x"></i>
         </el-col>
-        <el-col v-for="item in activities" :key="item.id" :span="6" :offset="1" :push="1">
-          <div @mouseenter="item.showInfo = true;" @mouseleave="item.showInfo = false;" class="activity-card">
+        <el-col v-for="(item,index) in activities" :key="item.ACTIVITY_ID" :span="6" :offset="1" :push="1">
+          <div class="activity-card" @click='gotoActivity(index)'>
             <img :src="item.ACTIVITY_COVER" alt />
-            <div class="activity-info" :style="{'display': item.showInfo ? 'flex' : 'none'}">
+            <div class="activity-info" >
               <h4>{{item.ACTIVITY_TITLE}}</h4>
-              <button @click='gotoActivity(index)'>查看详情</button>
             </div>
           </div>
         </el-col>
@@ -175,7 +174,7 @@
       gotoActivity(index) {
         this.$router.push({
           path: "/activitydetailCard",
-          query: { id: this.activityList[index].id, type: this.activityList[index].type }
+          query: { id: this.activityList[index].ACTIVITY_ID, type: this.activityList[index].TYPE }
         });
       },
       learnCourse(item) {
@@ -358,7 +357,7 @@
     overflow: hidden;
   }
 
-  .activity-info button {
+  /* .activity-info button {
     background: #51c79f;
     color: #fff;
     height: 35px;
@@ -370,7 +369,7 @@
     border-radius: 8px;
     border: 1px solid transparent;
     cursor: pointer;
-  }
+  } */
 
   .activity-info h4 {
     color: #fff;

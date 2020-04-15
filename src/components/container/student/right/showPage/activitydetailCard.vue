@@ -83,7 +83,7 @@ export default {
   },
   created: function() {
     this.type = this.$route.query.type;
-    if (this.type == 0) {
+    if (this.type == 'CEDSI') {
       this.$store.dispatch("searchActivity", this.$route.query.id);
     } else {
       this.$store.dispatch("searchEduActivity", this.$route.query.id);
