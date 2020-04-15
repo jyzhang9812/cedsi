@@ -35,29 +35,29 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          ORDER_ID: "00001",
-          COMMIT_TIME: "1580280099309",
-          COVER: "https://www.henrenx.cn/f92839.jpg",
-          PRODUCT_NAME: "青春有你2报名费",
-          FEE: 2000
-        },
-        {
-          ORDER_ID: "00002",
-          COMMIT_TIME: "1580280099309",
-          COVER: "https://www.henrenx.cn/f92839.jpg",
-          PRODUCT_NAME: "青春有你2报名费",
-          FEE: 2000
-        },
-        {
-          ORDER_ID: "00003",
-          COMMIT_TIME: "1580280099309",
-          COVER: "https://www.henrenx.cn/f92839.jpg",
-          PRODUCT_NAME: "青春有你2报名费",
-          FEE: 2000
-        }
-      ],
+      // tableData: [
+      //   {
+      //     ORDER_ID: "00001",
+      //     COMMIT_TIME: "1580280099309",
+      //     COVER: "https://www.henrenx.cn/f92839.jpg",
+      //     PRODUCT_NAME: "青春有你2报名费",
+      //     FEE: 2000
+      //   },
+      //   {
+      //     ORDER_ID: "00002",
+      //     COMMIT_TIME: "1580280099309",
+      //     COVER: "https://www.henrenx.cn/f92839.jpg",
+      //     PRODUCT_NAME: "青春有你2报名费",
+      //     FEE: 2000
+      //   },
+      //   {
+      //     ORDER_ID: "00003",
+      //     COMMIT_TIME: "1580280099309",
+      //     COVER: "https://www.henrenx.cn/f92839.jpg",
+      //     PRODUCT_NAME: "青春有你2报名费",
+      //     FEE: 2000
+      //   }
+      // ],
       currentList: [],
       limit: 2
     };
@@ -89,30 +89,29 @@ export default {
       return Y + M + D + h + m + s;
     }
   },
-  mounted() {
-    this.handlePageChange(1);
-  }
-  // created: function() {
-  //   this.$store.commit("updateLoading", true);
-  //   this.$store.dispatch("getOrder").then(() => {
-  //     if (this.tableData.length == 0) {
-  //       this.txt = true;
-  //     } else {
-  //       for (let i = 0; i <= this.currentList.length; i++) {
-  //         this.currentList[i].COMMIT_TIME = this.timestampToTime(
-  //           this.currentList[i].COMMIT_TIME
-  //         );
-  //       }
-  //     }
-  //   });
+  // mounted() {
+  //   this.handlePageChange(1);
   // },
-  // computed: {
-  //   ...mapState({
-  //     tableData: state => state.orderList,
-  //     currentList: state => state.orderCurrentList,
-  //     limit: state => state.limit
-  //   })
-  // }
+  created: function() {
+    this.$store.commit("updateLoading", true);
+    this.$store.dispatch("getOrder").then(() => {
+      if (this.tableData.length != 0) {
+        console.log(this.tableData)
+        for (let i = 0; i < this.tableData.length; i++) {
+          this.tableData[i].COMMIT_TIME = this.timestampToTime(
+            this.tableData[i].COMMIT_TIME
+          );
+        }
+        this.handlePageChange(1);
+      }
+    });
+  },
+  computed: {
+    ...mapState({
+      tableData: state => state.orderList,
+      // currentList: state => state.orderCurrentList,
+    })
+  }
 };
 </script>
 

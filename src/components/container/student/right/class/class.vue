@@ -39,7 +39,7 @@ export default {
 #setup {
   background: url("https://www.tynker.com/image/dashboard/student/public-profile/profile-hero-adventurer-01-08-2018.png"),
     linear-gradient(45deg, #2ad3b6 0%, #99f3b1 100%);
-  height: 100%;
+  min-height: 100%;
 }
 
 #setup .menu {
