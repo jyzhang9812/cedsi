@@ -1,8 +1,12 @@
 <template>
   <div id="msg" class="container">
     <searchBar></searchBar>
-    <el-dialog :visible.sync="dialogVisible" width="40%" title="消息详情">
-      <h4>{{currentList[curWork].DISPATCH_DATE | dateFormatter}}</h4>
+    <el-dialog v-if='dialogVisible' :visible.sync="dialogVisible" width="40%" title="消息详情">
+      <h4>
+        {{currentList[curWork].HW_NAME}}
+         <!-- | dateFormatter}} -->
+        </h4>
+        <h5>{{currentList[curWork].DEADLINE}}</h5>
       <el-row>
         <el-link :href="currentList[curWork].ATTACHED_FILE" target="_blank">点击下载附件</el-link>
       </el-row>
@@ -27,14 +31,18 @@
         :key="index"
         @click="openDialog(index)"
       >
-        <div class="card_content">{{item | mesFormatter(buttons[curTab])}}</div>
+        <div class="card_content">
+          {{item.HW_NAME}}：{{item.COURSE_NAME}}课程{{item.CP_NAME}}作业，截止日期{{item.DEADLINE}}
+          <!-- {{item | mesFormatter(buttons[curTab])}} -->
+        </div>
         <div class="card_footer">
           <span>
-            <b style="line-height:30px">{{item.teacher_name}}</b>
+            <b style="line-height:30px">{{item.TEACHER_NAME}}</b>
             <br />
-            {{item.DISPATCH_DATE | dateFormatter}}
+            {{item.DISPATCH_DATE}}
+               <!-- | dateFormatter}} -->
           </span>
-          <img class="avast" :src="item.avatar" />
+          <img class="avast" :src="item.AVATAR" />
         </div>
       </div>
     </div>
@@ -65,63 +73,63 @@ export default {
       curTab: 4,
       curWork: 0,
       limit: 4,
-      tableData: [
-        {
-          DISPATCH_DATE: 1586053981,
-          MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/test.png",
-          HW_NAME: "我的作业1",
-          COURSE_NAME: "我是练习生",
-          CP_NAME: "章小节-1",
-          DEADLINE: 1586053981,
-          ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
-          avatar: "https://henrenx.cn/avatar.jpg",
-          teacher_name: "张老师"
-        },
-        {
-          DISPATCH_DATE: 1586053981,
-          MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/test.png",
-          HW_NAME: "我的作业1",
-          COURSE_NAME: "我是练习生",
-          CP_NAME: "章小节-1",
-          DEADLINE: 1586053981,
-          ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
-          avatar: "https://henrenx.cn/avatar.jpg",
-          teacher_name: "张老师"
-        },
-        {
-          DISPATCH_DATE: 1586053981,
-          MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/test.png",
-          HW_NAME: "我的作业1",
-          COURSE_NAME: "我是练习生",
-          CP_NAME: "章小节-1",
-          DEADLINE: 1586053981,
-          ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
-          avatar: "https://henrenx.cn/avatar.jpg",
-          teacher_name: "张老师"
-        },
-        {
-          DISPATCH_DATE: 1586053981,
-          MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/cartoon.png",
-          HW_NAME: "我的作业2",
-          COURSE_NAME: "我是练习生",
-          CP_NAME: "章小节-1",
-          DEADLINE: 1586053981,
-          ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
-          avatar: "https://henrenx.cn/avatar.jpg",
-          teacher_name: "郝老师"
-        },
-        {
-          DISPATCH_DATE: 1586053981,
-          MESSAGE_CONTENT: "https://www.henrenx.cn/f92839.jpg",
-          HW_NAME: "我的作业3",
-          COURSE_NAME: "我是练习生",
-          CP_NAME: "章小节-1",
-          DEADLINE: 1586053981,
-          ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
-          avatar: "https://henrenx.cn/avatar.jpg",
-          teacher_name: "孙老师"
-        }
-      ],
+      // tableData: [
+      //   {
+      //     DISPATCH_DATE: 1586053981,
+      //     MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/test.png",
+      //     HW_NAME: "我的作业1",
+      //     COURSE_NAME: "我是练习生",
+      //     CP_NAME: "章小节-1",
+      //     DEADLINE: 1586053981,
+      //     ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
+      //     avatar: "https://henrenx.cn/avatar.jpg",
+      //     teacher_name: "张老师"
+      //   },
+      //   {
+      //     DISPATCH_DATE: 1586053981,
+      //     MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/test.png",
+      //     HW_NAME: "我的作业1",
+      //     COURSE_NAME: "我是练习生",
+      //     CP_NAME: "章小节-1",
+      //     DEADLINE: 1586053981,
+      //     ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
+      //     avatar: "https://henrenx.cn/avatar.jpg",
+      //     teacher_name: "张老师"
+      //   },
+      //   {
+      //     DISPATCH_DATE: 1586053981,
+      //     MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/test.png",
+      //     HW_NAME: "我的作业1",
+      //     COURSE_NAME: "我是练习生",
+      //     CP_NAME: "章小节-1",
+      //     DEADLINE: 1586053981,
+      //     ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
+      //     avatar: "https://henrenx.cn/avatar.jpg",
+      //     teacher_name: "张老师"
+      //   },
+      //   {
+      //     DISPATCH_DATE: 1586053981,
+      //     MESSAGE_CONTENT: "https://wiki.wannax.cn/weixin/images/cartoon.png",
+      //     HW_NAME: "我的作业2",
+      //     COURSE_NAME: "我是练习生",
+      //     CP_NAME: "章小节-1",
+      //     DEADLINE: 1586053981,
+      //     ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
+      //     avatar: "https://henrenx.cn/avatar.jpg",
+      //     teacher_name: "郝老师"
+      //   },
+      //   {
+      //     DISPATCH_DATE: 1586053981,
+      //     MESSAGE_CONTENT: "https://www.henrenx.cn/f92839.jpg",
+      //     HW_NAME: "我的作业3",
+      //     COURSE_NAME: "我是练习生",
+      //     CP_NAME: "章小节-1",
+      //     DEADLINE: 1586053981,
+      //     ATTACHED_FILE: "https://wiki.wannax.cn/learning/work.zip",
+      //     avatar: "https://henrenx.cn/avatar.jpg",
+      //     teacher_name: "孙老师"
+      //   }
+      // ],
       currentList: [],
       dialogVisible: false,
       buttons: [
@@ -131,9 +139,9 @@ export default {
         { name: "辅导答疑", template: item => "" },
         {
           name: "我的作业",
-          template: item =>
-            `${item.HW_NAME}:“${item.COURSE_NAME}”课程 ` +
-            `${item.CP_NAME} 作业，截止日期 ${item.DEADLINE}`
+          // template: item =>
+          //   `${item.HW_NAME}:“${item.COURSE_NAME}”课程 ` +
+          //   `${item.CP_NAME} 作业，截止日期 ${item.DEADLINE}`
         }
         // 上面为消息模板，可匹配不同字段类型的消息，达到通用效果
       ]
@@ -158,39 +166,62 @@ export default {
       let start = (pageIndex - 1) * this.limit;
       let end = start + this.limit;
       this.currentList = this.tableData.slice(start, end);
+    },
+    timestampToTime(timestamp) {
+      timestamp = String(timestamp);
+      timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
+      let date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      let Y = date.getFullYear() + "-";
+      let M =
+        (date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1)
+          : date.getMonth() + 1) + "-";
+      let D =
+        (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
+      let h =
+        (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":";
+      let m =
+        (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
+        ":";
+      let s =
+        date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+      return Y + M + D + h + m + s;
     }
   },
-  filters: {
-    dateFormatter: value => Date.format(value),
-    mesFormatter: (value, curTab) => {
-      let DEADLINE = "";
-      if (value.DEADLINE) {
-        DEADLINE = Date.format(value.DEADLINE);
-      }
-      return curTab.template({ ...value, DEADLINE });
-    }
-  },
+  // filters: {
+  //   dateFormatter: value => Date.format(value),
+  //   mesFormatter: (value, curTab) => {
+  //     let DEADLINE = "";
+  //     if (value.DEADLINE) {
+  //       DEADLINE = Date.format(value.DEADLINE);
+  //     }
+  //     return curTab.template({ ...value, DEADLINE });
+  //   }
+  // },
   created() {
-    this.handlePageChange(1);
-    // this.$store.dispatch("getMsg", this.curTab).then(() => {
-    //   this.currentList = this.$store.state.msgCurrentList;
-    //   if (this.currentList.length != 0) {
-    //     this.txt = false;
-    //     for (let i = 0; i <= this.currentList.length; i++) {
-    //       currentList[i].DISPATCH_DATE = this.timestampToTime(
-    //         currentList[i].DISPATCH_DATE
-    //       );
-    //     }
-    //   }
-    // });
-    // this.$store.commit("updateLoading", true);
+    this.$store.commit("updateLoading", true);
+    this.$store.dispatch("getMsg", this.curTab).then(() => {
+      // this.currentList = this.$store.state.msgCurrentList;
+      if (this.tableData.length != 0) {
+        // this.txt = false;
+        for (let i = 0; i < this.tableData.length; i++) {
+          this.tableData[i].DISPATCH_DATE = this.timestampToTime(
+            this.tableData[i].DISPATCH_DATE
+          );
+          this.tableData[i].DEADLINE = this.timestampToTime(
+            this.tableData[i].DEADLINE
+          );
+        }
+      this.handlePageChange(1);
+      }
+    });
   },
   computed: {
-    // ...mapState({
-    //   tableData: state => state.msgList,
-    //   // currentList: state => state.msgCurrentList,
-    //   limit: state => state.limit
-    // })
+    ...mapState({
+      tableData: state => state.msgList,
+      // currentList: state => state.msgCurrentList,
+      // limit: state => state.limit
+    })
   }
 };
 </script>

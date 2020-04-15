@@ -578,11 +578,11 @@ const actions = {
         response => {
           let arr = [];
           console.log(response);
-          for (let i = 0; i < response.data.length; i++) {
-            arr.push(response.data[i]);
+          for (let i = 0; i < response.data.USER_ORDER.length; i++) {
+            arr.push(response.data.USER_ORDER[i]);
           }
           commit(TYPES.changeOrder, arr);
-          commit(TYPES.changeOrderCurrentList, 0);
+          // commit(TYPES.changeOrderCurrentList, 0);
           commit(TYPES.updateLoading, false);
         },
         error => {
