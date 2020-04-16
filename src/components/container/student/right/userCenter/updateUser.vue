@@ -69,7 +69,7 @@
           newPass: "",
           checkPass: "",
           avatarFile: "",
-          fileName:'',
+          fileName: '',
         }
       };
     },
@@ -79,6 +79,7 @@
         this.password = "";
       },
       loadUserAvatar(event) {
+        console.log(event)
         this.form.avatarFile = event.file;
         this.form.fileName = event.file.name;
         let reader = new FileReader();
@@ -124,21 +125,21 @@
             console.log(err);
           });
       },
-      submit(event) {     
-      console.log(this.form.avatarFile);
-      let data=  {
-            nickName: this.user.username,
-            email: this.user.email,
-            gender: this.user.gender,
-            mobile: this.user.mobile,
-            phone: this.user.phone,
-            time: this.user.time,
-            type: this.form.avatarFile ? this.form.avatarFile.type.split("/")[1] : ""
+      submit(event) {
+        console.log(this.form.avatarFile);
+        let data = {
+          nickName: this.user.username,
+          email: this.user.email,
+          gender: this.user.gender,
+          mobile: this.user.mobile,
+          phone: this.user.phone,
+          time: this.user.time,
+          type: this.form.avatarFile ? this.form.avatarFile.type.split("/")[1] : ""
         };
-        this.postFormData(data);        
-    },
+        this.postFormData(data);
+      },
 
-    postImgToS3(config, file) {
+      postImgToS3(config, file) {
         const that = this;
         AWS.config = new AWS.Config({
           accessKeyId: config.AccessKeyId,
@@ -147,6 +148,7 @@
           region: 'cn-northwest-1'
         });
         let s3 = new AWS.S3();
+        let formData = new FormData();
         formData.append("content", file);
 
         let params = {
@@ -169,20 +171,20 @@
         });
       },
 
-    postFormData(formData) {
-      let file = this.form.avatarFile;
-      instance
-        .post("/student/studentinfo", formData, {
-          headers: { Authorization: localStorage.getItem("idToken") }
-        })
-        .then(res => {
-          console.log(res);
-          this.postImgToS3(res.data, file);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
+      postFormData(formData) {
+        let file = this.form.avatarFile;
+        instance
+          .put("/student/studentinfo", formData, {
+            headers: { Authorization: localStorage.getItem("idToken") }
+          })
+          .then(res => {
+            console.log(res);
+            this.postImgToS3(res.data, file);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
       // submit(event) {
       //   var that = this;
       //   let postImgToS3 = function (config, file) {
