@@ -57,7 +57,7 @@ const actions = {
         array.content = arr.ACTIVITY_CONTENT_IMG;
         array.avatar = arr.AVATAR;
         array.time = arr.ACTIVITY_TIME;
-        array.price = arr.ACTIVITY_PRICE;
+        array.price = arr.ACTIVITY_PRICE?'arr.ACTIVITY_PRICE':'0';
         array.place = arr.ACTIVITY_PLACE;
         array.type = 0;
         state.payInfo = array;
@@ -323,8 +323,6 @@ const actions = {
           console.log(response);
           let arr = [];
           let content = [];
-          console.log(response);
-          // if (curId == 0) {
           for (let i = 0; i < response.data.homework.length; i++) {
             arr.push(response.data.homework[i]);
           }
