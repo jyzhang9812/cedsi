@@ -96,7 +96,7 @@
   import instance from "../../../../../axios-auth";
 
   export default {
-    name: "presentation",
+    name: "showPage",
     data() {
       let tynkerBase = "https://www.tynker.com/image/course-card/vertical/";
       return {
