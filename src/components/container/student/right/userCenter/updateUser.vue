@@ -79,20 +79,20 @@
       //   this.updatePW = false;
       //   this.password = "";
       // },
-      validate() {
-      if (!this.form.oldPass) {
+      validate(data) {
+      if (!data.oldPass) {
         this.$message({ type: "error", message: "请输入旧密码" });
         return false;
       }
-      if (!this.form.newPass) {
+      if (!data.newPass) {
         this.$message({ type: "error", message: "请输入新密码" });
         return false;
       }
-      if (!this.form.checkPass) {
+      if (!data.checkPass) {
         this.$message({ type: "error", message: "请再次输入密码" });
         return false;
       }
-      if (this.form.newPass !== this.form.checkPass) {
+      if (data.newPass !== data.checkPass) {
         this.$message({ type: "error", message: "两次密码不一致" });
         return false;
       }
@@ -112,7 +112,7 @@
       submitPassword() {
         var that = this;
         var password = {};
-        if(this.validate()){
+        if(this.validate(this.form)){
           password.oldPassword = crypto
           .createHash("SHA256")
           .update(this.form.oldPass)
