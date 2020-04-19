@@ -4,39 +4,10 @@
       <p>发布作业</p>
       <div class="filter">
         <div class="option">
-          <!-- <el-select v-model="className" clearable placeholder="请选择班级">
-            <el-option v-for="(className,index) in classNameList" :key="index" :label="className"
-              :value="index"></el-option>
-          </el-select>
-          <el-select v-model="chapterName" clearable placeholder="请选择章节">
-            <el-option v-for="chapterName in chapterNameList" :key="chapterName.value" :label="chapterName.label"
-              :value="chapterName.value"></el-option>
-          </el-select> -->
           <el-button type="primary" @click="newHomeWork">新增作业</el-button>
         </div>
       </div>
       <div class="panels">
-        <!--
-        <table class="table table-hover" rules="rows" frame="below">
-          <thead>
-            <tr>
-              <th v-for="(title, index) in tableTitle" :key="index">{{title}}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(line, seq) in currentList" :key="seq">
-              <td>{{seq + 1}}</td>
-              <td v-for="(value, key, index) in line" :key="index">{{value}}</td>
-              <td>
-                <span class="blue" @click="editWork(line)">编辑</span>&nbsp;&nbsp;
-                <span class="blue" @click="postJob(line)">发布</span>&nbsp;&nbsp;
-                 <span class="red" @click="popModal('delete')">删除</span> 
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <delete-prompt :id="deletePromptId" @deleteWork="deleteWork" :work-id="currentWorkId"></delete-prompt>
-        -->
         <el-table :data="homeworkList" style="width: 100%">
           <el-table-column align="center" type="index" label="序号"></el-table-column>
           <el-table-column align="center" prop="chapterName" label="作业名称"></el-table-column>
@@ -70,55 +41,21 @@
     <div class="add" v-show="addShown">
       <div class="form-size">
         <el-form ref="form" :model="form" label-width="80px">
-          <!-- <div class="item">
-          <p>作业名称：</p>
-          <input
-            type="text"
-            class="title"
-            placeholder="请输入作业名称"
-            v-model="inputData.homework.HW_NAME"
-          />
-          </div>-->
           <el-form-item label="作业名称">
             <el-input v-model="form.homeworkName" size="medium"></el-input>
           </el-form-item>
-          <!-- <div class="item">
-          <p>选择班级：</p>
-          <select-input
-            :option="inputData.classes2.option"
-            :dropDownList="inputData.classes2.list"
-            tips="选择班级"
-            id="classes2"
-            @option="changeOption2"
-          ></select-input>-->
           <el-form-item label="班级名称">
-            <el-select v-model="form.className" clearable placeholder="请选择班级" @change="searchChapter(form.className)">
-              <el-option v-for="(className,index) in classNameList" :key="index" :label="className"
-                :value="className"></el-option>
+            <el-select v-model="form.classId" clearable placeholder="请选择班级" @change="searchChapter(form.classId)">
+              <el-option v-for="(item,index) in classNameList" :key="index" :label="item.name" :value="item.Id">
+              </el-option>
             </el-select>
           </el-form-item>
-          <!-- <p>章节名称：</p>
-        <select-input
-          :option="inputData.chapter2.option"
-          :dropDownList="inputData.chapter2.list"
-          tips="选择章节"
-          id="chapter2"
-          @option="changeOption2"
-          ></select-input>-->
           <el-form-item label="章节名称">
-            <el-select v-model="form.chapterName" clearable placeholder="请选择班级">
+            <el-select v-model="form.chapterId" clearable placeholder="请选择班级">
               <el-option v-for="(chapterName,index) in chapterNameList" :key="index" :label="chapterName.CP_NAME"
-                :value="chapterName.CP_NAME"></el-option>
+                :value="chapterName.CP_ID"></el-option>
             </el-select>
           </el-form-item>
-          <!-- <p>截止时间：</p>
-        <date-picker
-          tips="选择截止时间"
-          class="datePicker"
-          id="postJob_deadline"
-          :date="inputData.homework.DEADLINE"
-          @changeDate="changeDate"
-          ></date-picker>-->
           <el-form-item label="截止时间">
             <el-col :span="11">
               <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
@@ -128,53 +65,22 @@
               <el-time-picker placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
             </el-col>
           </el-form-item>
-          <!-- </div> -->
-          <!-- <div class="item">
-          <p>作业内容：</p>
-          <textarea class="form-control" rows="10" v-model="inputData.homework.CONTENT"></textarea>
-          </div>-->
-          <!-- <div class="item">
-            <p class="upload-title">上传附件：</p>
-            <div class="upload-cover-btn">
-              上传文件
-              <input type="file" @change="getAttachedFile" style="opacity: 0" />
-            </div>
-            <span>&nbsp;&nbsp;{{attachedFile.name}}</span>
-          </div>-->
           <el-form-item label="上传附件">
-            <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple>
+            <el-upload class="upload-demo" drag action="#" :http-request="loadHomework" multiple>
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">
-                将文件拖到此处，或
-                <em>点击上传</em>
+                将文件拖到此处
               </div>
               <div class="el-upload__tip" slot="tip">只能上传zip文件，且不超过500kb</div>
             </el-upload>
           </el-form-item>
-          <!-- <div class="item">
-            <p class="upload-title">作业图片：</p>
-            <div class="upload-cover-btn">
-              作业图片
-              <input type="file" @change="getCoverFile" style="opacity: 0" />
-            </div>
-          </div>
-          <div class="item">
-            <p class="upload-title">图片预览:</p>
-            <div class="upload-cover-img">
-              <img id="headimage" :src="coverImageDisplay" class="cover-image" alt />
-            </div>
-          </div>-->
           <el-form-item label="作业封面">
-            <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
-              :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+            <el-upload class="avatar-uploader" :http-request="loadHomeworkCover" action="#" :show-file-list="false">
               <img v-if="imageUrl" :src="imageUrl" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
-          <!-- <div class="item1">
-            <button type="button" class="btn-my" @click="saveAsDraft">保存草稿</button>
-            <button type="button" class="btn-my" @click="newHomeWork">取消编辑</button>
-          </div>-->
+
           <el-form-item>
             <el-button type="primary" @click="onSubmit">立即创建</el-button>
             <el-button>取消</el-button>
@@ -195,18 +101,12 @@
     data() {
       return {
         //elment改的
-        classNameList: [],
-        chapterNameList: [],
+        imageUrl: "",
+        classNameList: [],//
+        chapterNameList: [],//
         className: "",
         chapterName: "",
         homeworkList: [
-          {
-            chapterName: "第一章",
-            date: "2020-2-10",
-            className: "一班",
-            courseName: "数据库",
-            chapterName: "第一章"
-          },
           {
             chapterName: "第一章",
             date: "2020-2-10",
@@ -218,10 +118,15 @@
         dialogVisible: false,
         form: {
           homeworkName: "",
-          chapterName: "",
-          className: "",
+          chapterId: "",
+          classId: "",
           date1: "",
-          date2: ""
+          date2: "",
+          zipFile: "",
+          zip: "",
+          coverFile: "",
+          cover: "",
+          currentCourseId: ""
         },
         //
         limit: 10,
@@ -461,7 +366,7 @@
        *
        * @param {String} className
        */
-      changeChapters(className) {
+      changeChapters(classId) {
 
         let result = this.tableData
           .filter(item => {
@@ -473,11 +378,12 @@
         this.inputData.chapter1.list = Array.from(new Set(result));
         this.inputData.chapter1.option = "";
       },
-      searchChapter(className){
-        let tempList=[...this.originalInputData];
+      searchChapter(classId) {
+        let tempList = [...this.originalInputData];
         tempList.forEach(element => {
-          if(element.CLASS_NAME==className){
-            this.chapterNameList=element.CHAPTERS
+          if (element.CLASS_ID == classId) {
+            this.chapterNameList = element.CHAPTERS
+            this.form.currentCourseId = element.COURSE_ID
           }
         });
       },
@@ -591,12 +497,21 @@
         });
         let s3 = new AWS.S3();
         let fix = file.name.split(".");
+
+        let mimeType = "";
+        const fileType = file.name.split(".").pop();
+        if (fileType == "jpg") {
+          mimeType = "image/" + fileType
+        } else {
+          mimeType = mime.getType(fileType)
+        }
+
         let params = {
           ACL: "public-read",
           Bucket: "cedsi",
           Body: file,
           Key: `preHomework/${config.path}/${config.id}.${fix[fix.length - 1]}`,
-          ContentType: file.type,
+          ContentType: mimeType,
           Metadata: { uploader: window.localStorage.getItem("userId") }
         };
         return new Promise((resolve, reject) => {
@@ -604,6 +519,71 @@
             err ? reject(err) : resolve(data);
           });
         });
+      },
+
+      loadHomework(event) {
+        this.form.zipFile = event.file;
+        let reader = new FileReader();
+        let that = this;
+        reader.readAsDataURL(event.file);
+        reader.onload = function () {
+          that.form.zip = this.result;
+        }
+      },
+      loadHomeworkCover(event) {
+        this.form.coverFile = event.file;
+        let reader = new FileReader();
+        let that = this;
+        reader.readAsDataURL(event.file);
+        reader.onload = function () {
+          that.form.cover = this.result;
+        }
+      },
+      onSubmit(event) {
+
+        const headerData = {
+          headers: { Authorization: localStorage.getItem("idToken") }
+        };
+        let zipType = this.form.zipFile.name.split('.').pop();
+        let coverType = this.form.coverFile.name.split('.').pop();
+        let homeworkData = {
+          HW_NAME: this.form.homeworkName,
+          COURSE_ID: this.form.currentCourseId,
+          CLASS_ID: this.form.classId,
+          CP_ID: this.form.chapterId,
+          DEADLINE: this.form.date2,
+          FILE_TYPE: "." + zipType,
+          CONTENT_TYPE: "." + coverType
+          // zipFileName:this.form.zipFile.name,
+          // coverFileName:this.form.coverFile.name,
+        };
+        console.log(homeworkData);
+        instance.post("teacher/homework", homeworkData, headerData).then((res) => {
+          console.log("插入数据库成功");
+          console.log(res);
+          let config = res.data.data;
+          config.path = "content";
+          this.uploadToBucket(config, this.form.coverFile)
+            .then(res => {
+              console.log(res);
+              config.path = "attachedFile";
+              return this.uploadToBucket(config, this.form.zipFile);
+            })
+            .then(res => {
+              console.log(res);
+              if (res.ETag) {
+                alert("保存成功!");
+                this.newHomeWork();
+              } else {
+                console.log("保存失败!");
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }).catch(err => {
+          console.log(err)
+        })
       }
     },
     computed: {
@@ -623,9 +603,12 @@
           console.log("zhanghuiquan-----");
           this.originalInputData = res.data;
           this.classNameList = res.data.map(item => {
-            return item.CLASS_NAME;
+            let temp = {};
+            temp.name = item.CLASS_NAME;
+            temp.Id = item.CLASS_ID
+            return temp;
           })
-          
+
           // this.inputData.classes2.list = res.data.map(item => {
           //   return item.CLASS_NAME;
           // });
@@ -636,7 +619,7 @@
         });
     },
     created() {
-      
+
 
       // this.pullHomeworkData()
       //   .then(res => {
