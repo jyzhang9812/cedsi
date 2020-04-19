@@ -1,11 +1,11 @@
 <template>
   <div id="teacherClass">
-    <div>
+    <!-- <div>
       <ol class="breadcrumb">
         <li>个人资料</li>
         <li>任课班级</li>
       </ol>
-    </div>
+    </div> -->
     <div class="first-floor">
       <!-- <table class="table hover">
         <thead>
@@ -23,12 +23,12 @@
           </tr>
         </tbody>
       </table>-->
-      <el-table :data="teacherClassList" style="width: 100%">
+      <el-table :data="currentList" style="width: 100%">
         <el-table-column align="center" type="index" label="序号"></el-table-column>
-        <el-table-column align="center" prop="className" label="班级名称"></el-table-column>
-        <el-table-column align="center" prop="courseName" label="课程"></el-table-column>
-        <el-table-column align="center" prop="classNum" label="班级人数"></el-table-column>
-        <el-table-column align="center" prop="chapterNum" label="章节数目"></el-table-column>
+        <el-table-column align="center" prop="CLASS_NAME" label="班级名称"></el-table-column>
+        <el-table-column align="center" prop="COURSE_NAME" label="课程"></el-table-column>
+        <el-table-column align="center" prop="CLASS_MEMBER_COUNT" label="班级人数"></el-table-column>
+        <el-table-column align="center" prop="CHAPTER_NUM" label="章节数目"></el-table-column>
       </el-table>
     </div>
     <div class="spaceLine"></div>
@@ -36,13 +36,12 @@
       :page-size="limit"
       background
       layout="prev, pager, next"
-      :total="teacherClassList.length"
+      :total="tableData.length"
       @current-change="handlePageChange"
       @prev-click="handlePageChange"
       @next-click="handlePageChange"
     ></el-pagination>
-    <!-- <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit"></pagination> -->
-  </div>
+</div>
 </template>
 
 <script>
@@ -54,16 +53,6 @@ export default {
   name: "teacherClass",
   data() {
     return {
-      //新改的
-      teacherClassList: [
-        {
-          className: "一班",
-          courseName: "数据库",
-          classNum: "13",
-          chapterNum: "2"
-        }
-      ],
-      //
       limit: 10,
       currentList: [],
       tableTitle: ["序号", "班级名称", "课程", "班级人数", "章节数目"],
@@ -71,9 +60,11 @@ export default {
     };
   },
   methods: {
-    changeTablePages(value) {
-      this.currentList = this.tableData.slice(value, value + this.limit);
-    },
+    handlePageChange(pageIndex) {
+        let start = (pageIndex - 1) * this.limit;
+        let end = start + this.limit;
+        this.currentList = this.tableData.slice(start, end);
+      },
     //获取班级列表
     getClasses() {
       let config = {
@@ -82,15 +73,8 @@ export default {
       instance.get("/teacher/class", config).then(
         response => {
           console.log(response);
-          this.tableData = response.data.map(item => {
-            return {
-              className: item.CLASS_NAME,
-              courseName: item.COURSE_NAME,
-              classMemberCount: item.CLASS_MEMBER_COUNT,
-              chapterCount: item.CHAPTER_NUM
-            };
-          });
-          this.changeTablePages(0);
+          this.tableData = response.data;
+          this.handlePageChange(1);
         },
         error => {
           console.log(error);
