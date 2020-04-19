@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     payment() {
-      if (this.type == 1) {
+      if (this.type == 'EDU') {
         this.$store.dispatch("postUserInfo", this.$route.query.id).then(res => {
           if (res == 1) {
             this.$message({ type: "success", message: "报名成功 ~!" });
@@ -82,12 +82,11 @@ export default {
     }
   },
   created: function() {
-    this.type = this.$route.query.type;
-    if (this.type == 'CEDSI') {
-      this.$store.dispatch("searchActivity", this.$route.query.id);
-    } else {
-      this.$store.dispatch("searchEduActivity", this.$route.query.id);
+    let params={
+      id:this.$route.query.id,
+      type:this.$route.query.type,
     }
+    this.$store.dispatch("searchActivity", params);
   },
   computed: {
     ...mapState({
@@ -103,7 +102,7 @@ export default {
   width: 100%;
   padding: 0;
   min-width: 1000px;
-  overflow-y: hidden;
+  overflow-y: scroll;
   margin-bottom: 50px;
 }
 

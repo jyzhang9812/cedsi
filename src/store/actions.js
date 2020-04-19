@@ -42,10 +42,14 @@ const actions = {
     );
   },
   //获取具体活动
-  searchActivity({ commit, state }, id) {
+  searchActivity({ commit, state }, activityData) {
     return globalAxios({
       method: "GET",
-      url: "/activity/" + id
+      url: "student/activity/" + activityData.id + '?type=' + activityData.type,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: state.idToken
+      }
     }).then(
       response => {
         console.log(response);
@@ -57,7 +61,7 @@ const actions = {
         array.content = arr.ACTIVITY_CONTENT_IMG;
         array.avatar = arr.AVATAR;
         array.time = arr.ACTIVITY_TIME;
-        array.price = arr.ACTIVITY_PRICE?'arr.ACTIVITY_PRICE':'0';
+        array.price = arr.ACTIVITY_PRICE ? 'arr.ACTIVITY_PRICE' : '0';
         array.place = arr.ACTIVITY_PLACE;
         array.type = 0;
         state.payInfo = array;
@@ -445,13 +449,13 @@ const actions = {
   },
   //将购买的课程添加至我的课程
   postCourseId({ commit, state }, allId) {
-    let payload ={}
-    if(allId.orderId=='000'){
+    let payload = {}
+    if (allId.orderId == '000') {
       payload = {
-        cover: allId.cover 
+        cover: allId.cover
       }
-    }else{
-      payload = {orderId: allId.orderId, cover: allId.cover}
+    } else {
+      payload = { orderId: allId.orderId, cover: allId.cover }
     }
     globalAxios({
       method: "post",
@@ -589,76 +593,7 @@ const actions = {
         }
       );
   },
-  //获取教务活动
-  getEduActivity({ commit, state }) {
-    return globalAxios
-      .get("/student/activity", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: state.idToken
-        }
-      })
-      .then(
-        response => {
-          console.log(response);
-          let arr = [];
-          // let b = []
-          for (let i = 0; i < response.data.length; i++) {
-            arr.push(response.data[i]);
-          }
-          for (let i = 0; i < arr.length; i++) {
-            let array = {};
-            array.id = arr[i].ACTIVITY_ID;
-            array.cover = arr[i].ACTIVITY_COVER;
-            array.title = arr[i].ACTIVITY_TITLE;
-            array.avatar = arr[i].AVATAR;
-            array.time = arr[i].ACTIVITY_TIME;
-            array.price = arr[i].ACTIVITY_PRICE;
-            array.place = arr[i].ACTIVITY_PLACE;
-            array.type = 1;
-            state.slidePic.push(array);
-          }
-        },
-        error => {
-          router.push({ path: "/404" });
-          console.log(error);
-        }
-      );
-  },
-  //获取具体活动
-  searchEduActivity({ commit, state }, id) {
-    return globalAxios({
-      method: "GET",
-      url: "/student/activity/" + id + "/eduadmin",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: state.idToken
-      }
-    }).then(
-      response => {
-        console.log(response);
-        let arr = response.data;
-        let array = {};
-        array.id = arr.ACTIVITY_ID;
-        array.cover = arr.ACTIVITY_COVER;
-        array.title = arr.ACTIVITY_TITLE;
-        array.content = arr.ACTIVITY_CONTENT_IMG;
-        array.avatar = arr.AVATAR;
-        array.time = arr.ACTIVITY_TIME;
-        array.price = arr.ACTIVITY_PRICE;
-        array.place = arr.ACTIVITY_PLACE;
-        array.type = 1;
-        state.payInfo = array;
-        commit(TYPES.updateLoading, false);
-      },
-      error => {
-        commit(TYPES.updateLoading, false);
-        router.push({ path: "/404" });
-        console.log(error);
-      }
-    );
-  },
-  
+
   // Admin方法
   //获取课程目录
   getCourseList({ dispatch, commit, state }) {

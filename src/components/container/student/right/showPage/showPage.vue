@@ -174,7 +174,7 @@
       gotoActivity(index) {
         this.$router.push({
           path: "/activitydetailCard",
-          query: { id: this.activityList[index].ACTIVITY_ID, type: this.activityList[index].TYPE }
+          query: { id: this.activities[index].ACTIVITY_ID, type: this.activities[index].TYPE }
         });
       },
       learnCourse(item) {
