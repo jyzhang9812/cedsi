@@ -38,6 +38,11 @@
         </el-input>
       </el-form-item>
     </div>
+    <div v-if="needModifyPwd">
+      <el-form-item>
+        <el-link type="primary" :underline="false" @click="showModifyPwd">收起</el-link>
+      </el-form-item>
+    </div>
     <el-form-item>
       <el-button type="primary" @click="saveUserInfo">保存信息</el-button>
     </el-form-item>
@@ -115,7 +120,7 @@
         console.log(data);
         this.modifyUserInfo(data, config);
         // 如果需要修改密码
-        if (this.needModifyPwd) {
+        if (this.needModifyPwd&&this.validate(this.form)) {
           // 先进行表单验证
           this.modifyUserPwd(config);
         }
@@ -162,7 +167,26 @@
             }
           })
           .catch(err => { console.log(err) });
+      },
+      validate(data) {
+      if (!data.oldPass) {
+        this.$message({ type: "error", message: "请输入旧密码" });
+        return false;
       }
+      if (!data.newPass) {
+        this.$message({ type: "error", message: "请输入新密码" });
+        return false;
+      }
+      if (!data.checkPass) {
+        this.$message({ type: "error", message: "请再次输入密码" });
+        return false;
+      }
+      if (data.newPass !== data.checkPass) {
+        this.$message({ type: "error", message: "两次密码不一致" });
+        return false;
+      }
+      return true;
+    },
     },
     created: function () {
       this.$store.commit('updateLoading', true);
