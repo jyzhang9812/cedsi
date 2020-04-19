@@ -32,7 +32,7 @@
         <div v-else>
           <el-form-item label="旧密码" prop="pass">
             <el-input type="password" size="small" auto-complete="new-password" v-model="form.oldPass"
-              placeholder="请输入新密码"></el-input>
+              placeholder="请输入原密码"></el-input>
           </el-form-item>
           <el-form-item label="新密码" prop="pass">
             <el-input type="password" size="small" auto-complete="new-password" v-model="form.newPass"
@@ -40,10 +40,11 @@
           </el-form-item>
           <el-form-item label="确认密码" prop="checkPass">
             <el-input type="password" size="small" auto-complete="new-password" v-model="form.checkPass"
-              placeholder="请再次输入密码"></el-input>
+              placeholder="请再次输入新密码"></el-input>
           </el-form-item>
         </div>
         <el-form-item>
+          <el-button type="primary" size="small" @click='submitPassword'>gai</el-button>
           <el-button type="primary" size="small" @click='submit'>保存信息</el-button>
         </el-form-item>
       </el-form>
@@ -74,10 +75,29 @@
       };
     },
     methods: {
-      updatePassword() {
-        this.updatePW = false;
-        this.password = "";
-      },
+      // updatePassword() {
+      //   this.updatePW = false;
+      //   this.password = "";
+      // },
+      validate() {
+      if (!this.form.oldPass) {
+        this.$message({ type: "error", message: "请输入旧密码" });
+        return false;
+      }
+      if (!this.form.newPass) {
+        this.$message({ type: "error", message: "请输入新密码" });
+        return false;
+      }
+      if (!this.form.checkPass) {
+        this.$message({ type: "error", message: "请再次输入密码" });
+        return false;
+      }
+      if (this.form.newPass !== this.form.checkPass) {
+        this.$message({ type: "error", message: "两次密码不一致" });
+        return false;
+      }
+      return true;
+    },
       loadUserAvatar(event) {
         console.log(event)
         this.form.avatarFile = event.file;
@@ -92,13 +112,14 @@
       submitPassword() {
         var that = this;
         var password = {};
-        password.oldPassword = crypto
+        if(this.validate()){
+          password.oldPassword = crypto
           .createHash("SHA256")
-          .update(this.password)
+          .update(this.form.oldPass)
           .digest("hex");
         password.newPassword = crypto
           .createHash("SHA256")
-          .update(this.newpassword)
+          .update(this.form.newPass)
           .digest("hex");
         console.log(password);
         instance
@@ -124,9 +145,13 @@
           .catch(err => {
             console.log(err);
           });
+        }
       },
       submit(event) {
-        console.log(this.form.avatarFile);
+        console.log(this.form);
+        if(this.needPassword){
+          this.submitPassword();
+        }
         let data = {
           nickName: this.user.username,
           email: this.user.email,
@@ -134,7 +159,7 @@
           mobile: this.user.mobile,
           phone: this.user.phone,
           time: this.user.time,
-          type: this.form.avatarFile ? this.form.avatarFile.type.split("/")[1] : ""
+          type: this.form.avatarFile=="" ? "" : this.form.avatarFile.type.split("/")[1]
         };
         this.postFormData(data);
       },
@@ -157,7 +182,6 @@
           Body: formData.get("content"),
           Key: "user/avatar/" + config.id + "." + file.type.split("/")[1],
           ContentType: file.type,
-          // Metadata: { uploader: window.localStorage.getItem("userId") }
         };
         s3.putObject(params, function (err, data) {
           console.log(err);
@@ -185,114 +209,6 @@
             console.log(err);
           });
       }
-      // submit(event) {
-      //   var that = this;
-      //   let postImgToS3 = function (config, file) {
-      //     AWS.config = new AWS.Config({
-      //       accessKeyId: config.AccessKeyId,
-      //       secretAccessKey: config.SecretAccessKey,
-      //       sessionToken: config.SessionToken,
-      //       region: "cn-northwest-1"
-      //     });
-      //     var s3 = new AWS.S3();
-      //     let formData = new FormData();
-      //     formData.append("content", file);
-      //     const reader = new FileReader();
-      //     var content = reader.readAsArrayBuffer(file);
-      //     var params = {
-      //       ACL: "public-read",
-      //       Bucket: "cedsi",
-      //       Body: formData.get("content"),
-      //       Key: "user/avatar/" + config.id + "." + file.type.split("/")[1],
-      //       ContentType: file.type,
-      //       Metadata: { uploader: window.localStorage.getItem("userd") }
-      //     };
-      //     s3.putObject(params, function (err, data) {
-      //       if (err) {
-      //         console.log(err, err.stack);
-      //       } else {
-      //         console.log(data);
-      //         if (data.hasOwnProperty("ETag")) {
-      //           that.$message.success({
-      //             title: "个人中心",
-      //             message: "头像修改成功"
-      //           });
-      //           // alert("上传成功!");
-      //           that.$router.replace({ path: "/dashboard/class" });
-      //         } else {
-      //           that.$message.error({
-      //             title: "个人中心",
-      //             message: "头像保存失败"
-      //           });
-      //         }
-      //       }
-      //     });
-      //   };
-      //   this.postFormData(
-      //     {
-      //       nickName: this.user.username,
-      //       email: this.user.email,
-      //       gender: this.user.gender,
-      //       mobile: this.user.mobile,
-      //       phone: this.user.phone,
-      //       time: this.user.time,
-      //       type: this.file ? this.file.type.split("/")[1] : ""
-      //     },
-      //     postImgToS3
-      //   );
-      // },
-      // postImgToS3(config, file) {
-      //   const that = this;
-      //   AWS.config = new AWS.Config({
-      //     accessKeyId: config.AccessKeyId,
-      //     secretAccessKey: config.SecretAccessKey,
-      //     sessionToken: config.SessionToken,
-      //     region: 'cn-northwest-1'
-      //   });
-      //   let s3 = new AWS.S3();
-      //   let params = {
-      //     ACL: 'public-read',
-      //     Bucket: "cedsi",
-      //     Body: file,
-      //     Key: "course/" + config.id + "." + file.type.split("/")[1],
-      //     ContentType: file.type,
-      //     Metadata: { 'uploader': window.localStorage.getItem('user') }
-      //   };
-      //   s3.putObject(params, function (err, data) {
-      //     console.log(err);
-      //     console.log(data);
-      //     that.screenLoading = false;
-      //     if (data.ETag) {
-      //       that.$message({ message: '课程增加成功', type: 'success' });
-      //     } else {
-      //       that.$message({ message: '课程增加失败', type: 'error' });
-      //     }
-      //   });
-      // },
-      // postFormData(formData, postImgToS3) {
-      //   let file = this.file;
-      //   instance
-      //     .put("/student/studentinfo", formData, {
-      //       headers: {
-      //         Authorization: localStorage.getItem("idToken"),
-      //         "Content-Type": "application/json"
-      //       }
-      //     })
-      //     .then(res => {
-      //       console.log(res);
-      //       if (res.status == "200") {
-      //         this.$message.success({ title: "个人中心", message: "修改成功" });
-      //       } else {
-      //         this.$message.error({ title: "个人中心", message: "修改失败" });
-      //       }
-      //       if (res.data.AccessKeyId) {
-      //         postImgToS3(res.data, file);
-      //       }
-      //     })
-      //     .catch(err => {
-      //       console.log(err);
-      //     });
-      // }
     },
     created: function () {
       this.$store.commit("updateLoading", true);
