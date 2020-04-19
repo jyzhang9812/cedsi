@@ -141,7 +141,7 @@ export default {
         teacherId: this.form1.account,
         teacherName: this.form1.name,
         password: SHA256.update(this.form2.pass).digest("hex"),
-        introduction: this.form1.desc,
+        introduction: this.form1.desc==""?'暂无简介':this.form1.desc,
         gender: this.form2.sex
       };
       let token = localStorage.getItem("idToken");
