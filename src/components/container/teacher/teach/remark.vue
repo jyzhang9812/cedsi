@@ -176,27 +176,10 @@
           }
           this.tableData = status?arr1:arr2
         }
-      //   let condition1 = comment === "has",
-      //     condition2 = comment === "no";
-      //   tableData = tableData || this.originalTableData;
-      //   this.comment.commentStatus = condition1 ? 1 : condition2 ? 2 : 0;
-      //   this.comment.hasComment = condition1
-      //     ? this.blueCommentStyle
-      //     : this.whiteCommentStyle;
-      //   this.comment.noComment = condition2
-      //     ? this.blueCommentStyle
-      //     : this.whiteCommentStyle;
-      //   this.tableData = this.commentStatFilter(
-      //     this.comment.commentStatus,
-      //     tableData
-      //   );
         this.handlePageChange(1);
       },
       /**
        * 修改当前选中项, 是 selectInput 组件绑定的事件处理函数
-       *
-       * @param {String} item
-       * @param {String} id
        */
       changeOption:function(e) {
         let type = e.target.name
@@ -222,52 +205,6 @@
         let end = start + this.limit;
         this.currentList = this.tableData.slice(start, end);
       },
-      /**
-       * 点评过滤器
-       *
-       * @param {Number} commentCode
-       * @param {Array<Object>} tableList
-       */
-      // commentStatFilter(commentCode, tableList) {
-      //   if (!commentCode) return tableList;
-      //   let restTableList = tableList.slice(0),
-      //     status = commentCode === 1;
-      //   for (let i = 0, j = restTableList.length; i < j; i++) {
-      //     if ((restTableList[i].TEACHER_REMARK === "null") === status) {
-      //       restTableList.splice(i, 1);
-      //       j -= 1;
-      //       i -= 1;
-      //     }
-      //   }
-      //   return restTableList;
-      // },
-      /**
-       * selectInput 组件的过滤器
-       *
-       * @param {Array<Object>} inputData
-       * @param {Array<Object>} tableList
-       * @return {Array<Object>}
-       */
-      // selectInputFilter(inputData, tableList) {
-      //   let restTableList = tableList.slice(0);
-      //   for (let i = 0, j = restTableList.length; i < j; i++) {
-      //     for (let res of Object.keys(inputData)) {
-      //       let condition1 =
-      //         inputData[res].hasOwnProperty("option") &&
-      //         inputData[res].option !== "";
-      //       let condition2 =
-      //         restTableList[i].hasOwnProperty(res) &&
-      //         restTableList[i][res] !== inputData[res].option;
-      //       if (condition1 && condition2) {
-      //         restTableList.splice(i, 1);
-      //         i -= 1;
-      //         j -= 1;
-      //         break;
-      //       }
-      //     }
-      //   }
-      //   return restTableList;
-      // },
       //查看作业内容,sb3打开,其他类型下载
       viewWork(index) {
         let item = this.currentList[index];
