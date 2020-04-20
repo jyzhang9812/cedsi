@@ -2,506 +2,489 @@
   <div id="remark">
     <p>作业点评</p>
     <div class="second-floor">
-      <!-- <div class="select-input">
-        <select-input id="classes" tips="请选择班级" :option="inputData.classes.option" @option="changeOption"
-          :drop-down-list="inputData.classes.list">
-        </select-input>
-      </div>
-      <div class="select-input">
-        <select-input id="chapter" tips="请选择章节" :option="inputData.chapter.option" @option="changeOption"
-          :drop-down-list="inputData.chapter.list">
-        </select-input>
-      </div>-->
-      <el-select v-model="className" clearable placeholder="请选择班级" class="select-class">
-        <el-option
-          v-for="className in classNameList"
-          :key="className.value"
-          :label="className.label"
-          :value="className.value"
-        ></el-option>
-      </el-select>
-      <el-select v-model="chapterName" clearable placeholder="请选择章节" class="select-class">
-        <el-option
-          v-for="chapterName in chapterNameList"
-          :key="chapterName.value"
-          :label="chapterName.label"
-          :value="chapterName.value"
-        ></el-option>
-      </el-select>
+      <select v-model="select" name='class' clearable placeholder="请选择班级"
+        @change='changeOption' class="select-class">
+        <option
+          :data-index="index"
+          v-for="(className,index) in classNameList"
+          :key="className.id"
+          :label='className.name'
+          :value="className.name"
+        >{{className.name}}</option>
+      </select>
+      <select v-model="selectedChapter" name='chapter' clearable placeholder="请选择章节" 
+        @change='changeOption' class="select-class">
+        <option
+          data-index="index"
+          v-for="(chapterName,index) in classNameList[classIndex].chapterNameList"
+          :key="chapterName.CP_ID"
+          :value="chapterName.CP_NAME"
+        >{{chapterName.CP_NAME}}</option>
+      </select>
       <div></div>
     </div>
     <div class="third-floor">
       <span>点评状态</span>
-      <el-radio-group v-model="radio1">
-        <el-radio-button label="已点评"></el-radio-button>
-        <el-radio-button label="未点评"></el-radio-button>
+      <el-radio-group v-model="radio1" @change='changeComment'>
+        <el-radio-button label="all">全部</el-radio-button>
+        <el-radio-button label="comment">已点评</el-radio-button>
+        <el-radio-button label="not_comment">未点评</el-radio-button>
       </el-radio-group>
-      <!-- <span class="comment has-comment" @click="changeComment('has')" :style="comment.hasComment">已点评</span>
-      <span class="comment no-comment" @click="changeComment('no')" :style="comment.noComment">未点评</span>-->
     </div>
     <div class="forth-floor">
-      <!-- <table class="table table-hover">
-        <thead>
-          <tr>
-            <th v-for="(title,index) in tableTitle" class="title" :key="index">{{title}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(line, seq) in currentList" :key="seq" class="content">
-            <td>{{seq + 1}}</td>
-            <td>{{line.STUDENT_NAME}}</td>
-            <td>{{line.SUBMIT_TIME}}</td>
-            <td>{{line.HW_NAME}}</td>
-            <td>{{line.CLASS_NAME}}</td>
-            <td>{{line.COURSE_NAME}}</td>
-            <td>{{line.CP_NAME}}</td>
-            <td>
-              <button class="edit" data-toggle="modal" data-target="#remarkHomework" data-index="index"
-                @click="viewWork(line)">查看作品</button>&nbsp;&nbsp;
-      <span class="blue" @click="popModal('remark', line)">点评</span>&nbsp;&nbsp;-->
-      <!-- <span class="blue" @click="popModal('turndown', line)">驳回</span>&nbsp;&nbsp; -->
-      <!-- <span class="red" @click="popModal('delete', line)">删除</span> -->
-      <!-- </td>
-          </tr>
-        </tbody>
-      </table>-->
-      <el-table :data="homeworkList" style="width: 100%">
+      <el-table :data="currentList" style="width: 100%">
         <el-table-column align="center" type="index" label="序号"></el-table-column>
-        <el-table-column align="center" prop="chapterName" label="作者名称"></el-table-column>
-        <el-table-column align="center" prop="date" label="提交时间"></el-table-column>
-        <el-table-column align="center" prop="work" label="作品"></el-table-column>
-        <el-table-column align="center" prop="className" label="班级"></el-table-column>
-        <el-table-column align="center" prop="courseName" label="课程名称"></el-table-column>
-        <el-table-column align="center" prop="chapterName" label="章节名称"></el-table-column>
+        <el-table-column align="center" prop="STUDENT_NAME" label="作者名称"></el-table-column>
+        <el-table-column align="center" prop="SUBMIT_TIME" label="提交时间"></el-table-column>
+        <el-table-column align="center" prop="HW_NAME" label="作品"></el-table-column>
+        <el-table-column align="center" prop="COURSE_NAME" label="课程名称"></el-table-column>
+        <el-table-column align="center" prop="CP_NAME" label="章节名称"></el-table-column>
         <el-table-column align="center" label="操作" width="280">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary">点评</el-button>
-            <el-button size="mini" type="success">驳回</el-button>
-            <el-button size="mini" slot="reference" type="danger" @click="dialogVisible=true">删除</el-button>
-            <el-dialog title :visible.sync="dialogVisible" width="20%">
-              <i class="el-icon-info"></i>
-              <span>确定要删除此作业吗?</span>
-              <span slot="footer" class="dialog-footer">
-                <el-button type="success" size="mini" @click="dialogVisible=false">取 消</el-button>
-                <el-button type="danger" size="mini" @click="handleDelete(scope.row)">确 定</el-button>
-              </span>
-            </el-dialog>
+            <el-button size="mini" type="success" @click='viewWork(scope.$index)'>查看</el-button>
+            <el-button size="mini" type="primary" @click="openCommentDialog(scope.$index)">点评</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <div
-        class="modal fade"
-        id="remarkHomework"
-        data-backdrop="false"
-        tabindex="-1"
-        role="dialog"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-body head">
-              <div class="left">
-                <iframe :src="currentWork.HW_URL"></iframe>
-              </div>
-              <div class="right">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3>作品名</h3>
-                <p>{{currentWork.HW_NAME === "null" ? "" : currentWork.HW_NAME}}</p>
-                <h3>操作说明</h3>
-                <p>{{currentWork.HW_GUIDE === "null" ? "" : currentWork.HW_GUIDE}}</p>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <p>老师点评</p>
-              <p>{{currentWork.TEACHER_REMARK === "null" ? "" : currentWork.TEACHER_REMARK}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <delete-prompt :id="bindingIds.delete" @deleteWork="deleteWork"></delete-prompt>
-      <turn-down-work :id="bindingIds.turndown" @turnDownWorkResult="turnDownWork"></turn-down-work>
-      <input-modal :id="bindingIds.remark" @remarkResult="remarkWork"></input-modal>
+      <el-dialog v-if='dialogHomeworkVisible' :visible.sync="dialogHomeworkVisible" width="58%"
+        @open="handleDialogOpen">
+        <el-row :gutter="20">
+          <el-col :span="16">
+            <p class="loading-tips" v-show="!iFrameShow">正在努力加载。。。</p>
+            <iframe v-show="iFrameShow" id="scratch" frameborder="no" border="0"
+              :src="`${scratchUrl}${currentList[curWork].HW_URL}`"></iframe>
+          </el-col>
+          <el-col :span="8" style="height:450px">
+            <h3>作品名</h3>
+            <p>{{currentList[curWork].HW_NAME}}</p>
+            <h3>操作说明</h3>
+            <p>{{currentList[curWork].HW_GUIDE}}</p>
+            <h3>老师点评</h3>
+            <p>{{currentList[curWork].TEACHER_REMARK}}</p>
+          </el-col>
+        </el-row>
+      </el-dialog>
+      <el-dialog v-if='dialogVisible' :visible.sync="dialogVisible" width="58%">
+        <el-form ref="form" :model="form" label-width="100px">
+          <el-form-item label="教师评语：">
+            <el-input type="textarea" :autosize="{ minRows: 6, maxRows: 6}" v-model="form.comment"></el-input>
+          </el-form-item>
+          <el-form-item label="评分">
+            <i v-for='(item,index) in star_list' :class="item?'el-icon-star-on':'el-icon-star-off'" @click='changeStarNum(index)'></i>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click='remarkWork(curWork)'>确定</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
     </div>
-    <div class="fifth-floor">
-      <pagination :num="tableData.length" @getNew="changeTablePages" :limit="limit"></pagination>
-    </div>
+    <el-pagination class="pagination" :page-size="limit" v-if="tableData.length" background layout="prev, pager, next"
+      :total="tableData.length" @current-change="handlePageChange" @prev-click="handlePageChange"
+      @next-click="handlePageChange"></el-pagination>
   </div>
 </template>
 
 <script>
-import instance from "../../../../axios-auth.js";
-export default {
-  name: "remark",
-  data() {
-    return {
-      //elment改的
-      classNameList: [
-        {
-          value: "选项1",
-          label: "黄金糕"
+  import instance from "../../../../axios-auth.js";
+  export default {
+    name: "remark",
+    data() {
+      return {
+        classIndex:0,
+        classNameList: [{
+          name:'',
+          chapterNameList:[],
+        }],
+        select:'',
+        selectedChapter:'',
+        radio1: "all", //已点评未点评
+        dialogVisible: false,
+        dialogHomeworkVisible: false,
+        iFrameShow: false,
+        scratchUrl:
+          "https://cedsi.s3.cn-northwest-1.amazonaws.com.cn",
+        limit: 10,
+        curWork: 0,
+        form:{
+          star_num:0,
+          comment:'',
+        },//点评内容
+        starNum:0,
+        // comment: { commentStatus: 0, hasComment: "", noComment: "" },
+        originalInputData: [],
+        inputData: {
+          classes: { option: "", list: [], id: [] },
+          course: { option: "", list: [], id: [] },
+          chapter: { option: "", list: [], id: [] }
         },
-        {
-          value: "选项2",
-          label: "双皮奶"
+        tableTitle: [
+          "序号",
+          "作者姓名",
+          "提交时间",
+          "作品",
+          "课程名称",
+          "章节",
+          "操作"
+        ],
+        originalTableData: [],
+        tableData: [],
+        currentList: [],
+        bindingIds: {
+          delete: "remarkDeletePrompt",
+          turndown: "remarkTurnDownPrompt",
+          remark: "remarkPrompt"
         }
-      ],
-      chapterNameList: [
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
-      ],
-      className: "",
-      chapterName: "",
-      radio1: "", //已点评未点评
-      homeworkList: [
-        {
-          chapterName: "第一章",
-          date: "2020-2-10",
-          className: "一班",
-          courseName: "数据库",
-          chapterName: "第一章"
-        },
-        {
-          chapterName: "第一章",
-          date: "2020-2-10",
-          className: "一班",
-          courseName: "数据库",
-          chapterName: "第一章"
-        }
-      ],
-      dialogVisible: false,
-      //
-      limit: 10,
-      currentWork: {
-        HW_GUIDE: "",
-        HW_NAME: "",
-        HW_URL: "",
-        HW_ID: ""
-      },
-      comment: { commentStatus: 0, hasComment: "", noComment: "" },
-      originalInputData: [],
-      inputData: {
-        classes: { option: "", list: [], id: [] },
-        course: { option: "", list: [], id: [] },
-        chapter: { option: "", list: [], id: [] }
-      },
-      tableTitle: [
-        "序号",
-        "作者姓名",
-        "提交时间",
-        "作品",
-        "班级",
-        "课程名称",
-        "章节",
-        "操作"
-      ],
-      originalTableData: [],
-      tableData: [],
-      currentList: [],
-      bindingIds: {
-        delete: "remarkDeletePrompt",
-        turndown: "remarkTurnDownPrompt",
-        remark: "remarkPrompt"
-      }
-    };
-  },
-  methods: {
-    /**
-     * 改变点评的状态, 并立即刷新数据的显示, 其中的 commentStatus 映射关系为
-     * 0: 均未选中
-     * 1: 已点评
-     * 2: 未点评
-     *
-     * @param {String} comment
-     * @param {Array<Object>} tableData
-     */
-    changeComment(comment, tableData) {
-      let condition1 = comment === "has",
-        condition2 = comment === "no";
-      tableData = tableData || this.originalTableData;
-      this.comment.commentStatus = condition1 ? 1 : condition2 ? 2 : 0;
-      this.comment.hasComment = condition1
-        ? this.blueCommentStyle
-        : this.whiteCommentStyle;
-      this.comment.noComment = condition2
-        ? this.blueCommentStyle
-        : this.whiteCommentStyle;
-      this.tableData = this.commentStatFilter(
-        this.comment.commentStatus,
-        tableData
-      );
-      this.changeTablePages(0);
+      };
     },
-    /**
-     * 修改当前选中项, 是 selectInput 组件绑定的事件处理函数
-     *
-     * @param {String} item
-     * @param {String} id
-     */
-    changeOption(item, id) {
-      this.inputData[id].option = item;
-      if (id === "classes") {
-        let classId = this.searchClassId(item);
-        this.pullHomeworkWithId(classId);
-      } else if (id === "chapter") {
-        let result = this.selectInputFilter(
-          this.inputData,
-          this.originalTableData
-        );
-        this.tableData = result;
-        this.changeTablePages(0);
-      }
-    },
-    /**
-     * 分页跳转, 是 pagination 分页组件绑定的事件处理函数
-     *
-     * @param {Number} value
-     */
-    changeTablePages(value) {
-      this.currentList = this.tableData
-        .slice(value, value + this.limit)
-        .map(item => {
-          item.SUBMIT_TIME = this.timestampToTime(item.SUBMIT_TIME);
-          item.HW_URL =
-            "https://s3.cn-northwest-1.amazonaws.com.cn/ced.cedsie.com/cedScratch/player.html?projectUrl=" +
-            item.HW_URL;
-          return item;
-        });
-    },
-    /**
-     * 点评过滤器
-     *
-     * @param {Number} commentCode
-     * @param {Array<Object>} tableList
-     */
-    commentStatFilter(commentCode, tableList) {
-      if (!commentCode) return tableList;
-      let restTableList = tableList.slice(0),
-        status = commentCode === 1;
-      for (let i = 0, j = restTableList.length; i < j; i++) {
-        if ((restTableList[i].TEACHER_REMARK === "null") === status) {
-          restTableList.splice(i, 1);
-          j -= 1;
-          i -= 1;
-        }
-      }
-      return restTableList;
-    },
-    /**
-     * selectInput 组件的过滤器
-     *
-     * @param {Array<Object>} inputData
-     * @param {Array<Object>} tableList
-     * @return {Array<Object>}
-     */
-    selectInputFilter(inputData, tableList) {
-      let restTableList = tableList.slice(0);
-      for (let i = 0, j = restTableList.length; i < j; i++) {
-        for (let res of Object.keys(inputData)) {
-          let condition1 =
-            inputData[res].hasOwnProperty("option") &&
-            inputData[res].option !== "";
-          let condition2 =
-            restTableList[i].hasOwnProperty(res) &&
-            restTableList[i][res] !== inputData[res].option;
-          if (condition1 && condition2) {
-            restTableList.splice(i, 1);
-            i -= 1;
-            j -= 1;
-            break;
+    methods: {
+      /**
+       * 改变点评的状态, 并立即刷新数据的显示, 其中的 commentStatus 映射关系为
+       * 0: 均未选中
+       * 1: 已点评
+       * 2: 未点评
+       * @param {String} comment
+       * @param {Array<Object>} tableData
+       */
+      changeComment(event) {
+          let arr1=[]
+          let arr2=[]
+          this.tableData = this.originalTableData
+          if(event!=='all'){
+          let status = (event==='comment')?true:false
+          for(let i=0;i<this.tableData.length;i++){
+            let obj={}
+            obj.COURSE_ID=this.tableData[i].COURSE_ID
+            obj.TEACHER_REMARK=this.tableData[i].TEACHER_REMARK
+            obj.HW_RANK=this.tableData[i].HW_RANK
+            obj.HW_URL=this.tableData[i].HW_URL
+            obj.CLASS_ID=this.tableData[i].CLASS_ID
+            obj.HW_NAME=this.tableData[i].HW_NAME
+            obj.COURSE_NAME=this.tableData[i].COURSE_NAME
+            obj.HW_DESCRIPTION=this.tableData[i].HW_DESCRIPTION
+            obj.DEADLINE=this.tableData[i].DEADLINE
+            obj.HW_GUIDE=this.tableData[i].HW_GUIDE
+            obj.SUBMIT_TIME=this.tableData[i].SUBMIT_TIME
+            obj.HW_ID=this.tableData[i].HW_ID
+            obj.SELECTED_WORKS=this.tableData[i].SELECTED_WORKS
+            obj.CP_ID=this.tableData[i].CP_ID
+            obj.CP_NAME=this.tableData[i].CP_NAME
+            obj.STUDENT_ID=this.tableData[i].STUDENT_ID
+            obj.STUDENT_NAME=this.tableData[i].STUDENT_NAME
+            obj.commentStatus=this.tableData[i].commentStatus
+            console.log(obj)
+            obj.commentStatus?arr1.push(obj):arr2.push(obj)
           }
+          this.tableData = status?arr1:arr2
         }
+      //   let condition1 = comment === "has",
+      //     condition2 = comment === "no";
+      //   tableData = tableData || this.originalTableData;
+      //   this.comment.commentStatus = condition1 ? 1 : condition2 ? 2 : 0;
+      //   this.comment.hasComment = condition1
+      //     ? this.blueCommentStyle
+      //     : this.whiteCommentStyle;
+      //   this.comment.noComment = condition2
+      //     ? this.blueCommentStyle
+      //     : this.whiteCommentStyle;
+      //   this.tableData = this.commentStatFilter(
+      //     this.comment.commentStatus,
+      //     tableData
+      //   );
+        this.handlePageChange(1);
+      },
+      /**
+       * 修改当前选中项, 是 selectInput 组件绑定的事件处理函数
+       *
+       * @param {String} item
+       * @param {String} id
+       */
+      changeOption:function(e) {
+        let type = e.target.name
+        let index = e.target.options.selectedIndex 
+        console.log(e)
+        if (type === "class") {
+          console.log('切换班级')
+          this.classIndex = index;
+        } else if (type === "chapter") {
+          console.log('章节切换')
+          this.pullHomeworkWithId(this.classNameList[this.classIndex].id,
+          this.classNameList[this.classIndex].chapterNameList[index].CP_ID);
+        }
+        this.handlePageChange(1);
+      },
+      /**
+       * 分页跳转, 是 pagination 分页组件绑定的事件处理函数
+       *
+       * @param {Number} value
+       */
+      handlePageChange(value) {
+        let start = (value - 1) * this.limit;
+        let end = start + this.limit;
+        this.currentList = this.tableData.slice(start, end);
+      },
+      /**
+       * 点评过滤器
+       *
+       * @param {Number} commentCode
+       * @param {Array<Object>} tableList
+       */
+      // commentStatFilter(commentCode, tableList) {
+      //   if (!commentCode) return tableList;
+      //   let restTableList = tableList.slice(0),
+      //     status = commentCode === 1;
+      //   for (let i = 0, j = restTableList.length; i < j; i++) {
+      //     if ((restTableList[i].TEACHER_REMARK === "null") === status) {
+      //       restTableList.splice(i, 1);
+      //       j -= 1;
+      //       i -= 1;
+      //     }
+      //   }
+      //   return restTableList;
+      // },
+      /**
+       * selectInput 组件的过滤器
+       *
+       * @param {Array<Object>} inputData
+       * @param {Array<Object>} tableList
+       * @return {Array<Object>}
+       */
+      // selectInputFilter(inputData, tableList) {
+      //   let restTableList = tableList.slice(0);
+      //   for (let i = 0, j = restTableList.length; i < j; i++) {
+      //     for (let res of Object.keys(inputData)) {
+      //       let condition1 =
+      //         inputData[res].hasOwnProperty("option") &&
+      //         inputData[res].option !== "";
+      //       let condition2 =
+      //         restTableList[i].hasOwnProperty(res) &&
+      //         restTableList[i][res] !== inputData[res].option;
+      //       if (condition1 && condition2) {
+      //         restTableList.splice(i, 1);
+      //         i -= 1;
+      //         j -= 1;
+      //         break;
+      //       }
+      //     }
+      //   }
+      //   return restTableList;
+      // },
+      //查看作业内容,sb3打开,其他类型下载
+      viewWork(index) {
+        let item = this.currentList[index];
+        this.curWork = index;
+        let url = this.getCaption(item.HW_URL.match('[^/]+(?!.*/)')[0]);
+        if (url!=='sb3') {
+          window.open(this.currentList[index].url);
+        } else {
+          this.dialogHomeworkVisible = true;
+        }
+      },
+      //获取作业文件类型
+      getCaption(obj) {
+        var index = obj.lastIndexOf("\.");
+        obj = obj.substring(index + 1, obj.length);
+        return obj;
+      },
+      //点评模态框
+      openCommentDialog(index){
+        this.curWork = index;
+        this.dialogVisible=!this.dialogVisible;
+      },
+      //评分计算星星
+      changeStarNum(index){
+        this.starNum = index;
+      },
+      //查看作业模态框
+      handleDialogOpen() {
+        const that = this;
+        const event = () => (that.iFrameShow = true);
+        setTimeout(() => {
+          let scratch = document.getElementById("scratch");
+          if (scratch.requestFullScreen) {
+            scratch.requestFullScreen();
+          }
+          if (scratch.attachEvent) {
+            scratch.attachEvent("onload", event);
+          } else {
+            scratch.onload = event;
+          }
+        }, 200);
+      },
+      /**
+       * 通过班级名称和课程名称寻找 CLASS_ID
+       *
+       * @param {String} className
+       * @return {String}
+       */
+      searchClassId(className) {
+        let result = "";
+        return this.originalInputData
+          .filter(item => item.CLASS_NAME === className)
+          .map(item => (result = item.CLASS_ID));
+        return result;
+      },
+      /**
+       * 作品点评, 参数为当前行数据
+       *
+       * @param {Object} remarkResult
+       */
+      remarkWork() {
+        this.form.star_num=this.starNum;
+        let config = {
+          headers: { Authorization: localStorage.getItem("idToken") }
+        };
+        let putData = {
+          teacherRemark: this.form.comment==''?'暂无评价':this.form.comment,
+          homeworkRank: this.form.star_num+1,
+          selectedWorks:false,
+          studentId: this.currentList[this.curWork].STUDENT_ID,
+          homeworkId: this.currentList[this.curWork].HW_ID
+        };
+        console.log(putData)
+        instance
+          .put(`teacher/stuhomework/${putData.homeworkId}`, putData, config)
+          .then(res => {
+            console.log(res);
+            this.pullHomeworkWithId(this.currentList[this.curWork].CLASS_ID,this.currentList[this.curWork].HW_ID)
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      },
+      /**
+       * 拉取选择框的选项数据
+       */
+      pullClassAndCourseData() {
+        let config = {
+          headers: { Authorization: localStorage.getItem("idToken") }
+        };
+        instance
+          .get("/teacher/class", config)
+          .then(res => {
+            console.log(res.data);
+            let className = res.data[0].CLASS_NAME;
+            let classId = res.data[0].CLASS_ID;
+            this.pullHomeworkWithId(classId,res.data[0].CHAPTERS[0].CP_ID)
+            this.originalInputData = res.data;
+            for(let i=0;i<res.data.length;i++){
+              this.classNameList[i].name=res.data[i].CLASS_NAME
+              this.classNameList[i].id = res.data[i].CLASS_ID
+              for(let j=0;j<res.data[i].CHAPTERS.length;j++){
+                this.classNameList[i].chapterNameList.push(res.data[i].CHAPTERS[j])
+              } 
+            }
+            this.inputData.classes.list = res.data.map(item => {
+              return item.CLASS_NAME;
+            });
+            this.select = this.classNameList[0].name
+            this.selectedChapter = this.classNameList[0].chapterNameList[0].CP_NAME
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      },
+      /**
+       * 通过 CLASS_ID 来拉取表格内的数据
+       *
+       * @param {String} chapterId
+       */
+      pullHomeworkWithId(classId,chapterId) {
+        let config = {
+          headers: { Authorization: localStorage.getItem("idToken") }
+        };
+        instance
+          .get("/teacher/class/" + classId + "/homework?cpId=" + chapterId, config)
+          .then(res => {
+            console.log(res);
+            let CP_NAMECache = [];
+            this.originalTableData = res.data.data;
+            for (let i = 0; i < this.originalTableData.length; i++) {
+              CP_NAMECache.push(this.originalTableData[i].CP_NAME);
+            };
+            this.inputData.chapter.list = Array.from(new Set(CP_NAMECache));
+            this.inputData.chapter.option = this.inputData.chapter.list[0] || "";
+            if (this.originalTableData.length != 0) {
+              for (let i = 0; i < this.originalTableData.length; i++) {
+                this.originalTableData[i].SUBMIT_TIME = this.timestampToTime(
+                  this.originalTableData[i].SUBMIT_TIME
+                );
+                if(this.originalTableData[i].TEACHER_REMARK==='null'){
+                  this.originalTableData[i].commentStatus = false;
+                }
+              };
+              this.tableData = this.originalTableData
+          }this.handlePageChange(1)
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      },
+      //时间戳转换
+      timestampToTime(timestamp) {
+        timestamp = String(timestamp);
+        timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
+        var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + "-";
+        var M =
+          (date.getMonth() + 1 < 10
+            ? "0" + (date.getMonth() + 1)
+            : date.getMonth() + 1) + "-";
+        var D =
+          (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
+        var h =
+          (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":";
+        var m =
+          (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
+          ":";
+        var s =
+          date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+        return Y + M + D + h + m + s;
       }
-      return restTableList;
     },
-    /**
-     * 删除作品, 是表格里每行数据中 删除 操作绑定的事件处理函数
-     *
-     * @param {String} workId
-     */
-    deleteWork() {
-      setTimeout(() => {
-        alert("删除成功!");
-      }, 1000);
+    computed: {
+      star_list(){
+        let index = this.starNum;
+        console.log(index)
+        let arr=[false,false,false,false,false]
+        if(index==0){
+          for(let i=0;i<5;i++){ arr[i]=false }
+        }else if(index==4){for(let i=0;i<5;i++){arr[i]=true}}
+        else{
+          for(let i=0;i<=index;i++){arr[i]=true}
+          for(let i=index+1;i<5;i++){arr[i]=false}
+        }
+        console.log(arr)
+        return arr;
+      },
+      blueCommentStyle() {
+        return "background-color: #409EFF; color: #FFF;";
+      },
+      whiteCommentStyle() {
+        return "background-color: #FFF; color: #000;";
+      },
     },
-    /**
-     * 驳回作品, 是表格里每行数据中 驳回 操作绑定的事件处理函数
-     *
-     * @param {String} workId
-     */
-    turnDownWork(data) {
-      console.log(data);
-      setTimeout(() => {
-        alert("驳回成功!");
-      }, 1000);
-    },
-    /**
-     * 查看作品, 参数为当前行数据
-     *
-     * @param {Object} item
-     */
-    viewWork(item) {
-      console.log(item);
-      this.currentWork = item;
-    },
-    /**
-     * 通过班级名称和课程名称寻找 CLASS_ID
-     *
-     * @param {String} className
-     * @return {String}
-     */
-    searchClassId(className) {
-      let result = "";
-      return this.originalInputData
-        .filter(item => item.CLASS_NAME === className)
-        .map(item => (result = item.CLASS_ID));
-      return result;
-    },
-    /**
-     * 作品点评, 参数为当前行数据
-     *
-     * @param {Object} remarkResult
-     */
-    remarkWork(remarkResult) {
-      console.log(remarkResult);
-      let config = {
-        headers: { Authorization: localStorage.getItem("idToken") }
-      };
-      let putData = {
-        teacherRemark: remarkResult.comment,
-        homeworkRank: remarkResult.stars,
-        selectedWork: remarkResult.selectedWork,
-        homeworkId: this.currentWork.HW_ID
-      };
-      instance
-        .put(`teacher/stuhomework/${putData.homeworkId}`, putData, config)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    /**
-     * 弹出模态框, 提示用户是否进一步删除作品
-     *
-     * @param {String} type
-     */
-    popModal(type, line) {
-      $("#" + this.bindingIds[type]).modal("show");
-      console.log(line);
-      this.currentWork = line;
-    },
-    /**
-     * 拉取选择框的选项数据
-     */
-    pullClassAndCourseData() {
-      let config = {
-        headers: { Authorization: localStorage.getItem("idToken") }
-      };
-      instance
-        .get("/teacher/class", config)
-        .then(res => {
-          console.log(res.data);
-          let className = res.data[0].CLASS_NAME;
-          let classId = res.data[0].CLASS_ID;
-          this.originalInputData = res.data;
-          this.inputData.classes.list = res.data.map(item => {
-            return item.CLASS_NAME;
-          });
-          this.changeOption(className, "classes");
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    /**
-     * 通过 CLASS_ID 来拉取表格内的数据
-     *
-     * @param {String} classId
-     */
-    pullHomeworkWithId(classId) {
-      let config = {
-        headers: { Authorization: localStorage.getItem("idToken") }
-      };
-      instance
-        .get("/teacher/class/" + classId + "/homework", config)
-        .then(res => {
-          console.log(res);
-          let CP_NAMECache = [];
-          this.originalTableData = this.tableData = res.data.data;
-          this.tableData.forEach(item => {
-            CP_NAMECache.push(item.CP_NAME);
-          });
-          this.inputData.chapter.list = Array.from(new Set(CP_NAMECache));
-          this.inputData.chapter.option = this.inputData.chapter.list[0] || "";
-          this.changeComment("no");
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    //时间戳转换
-    timestampToTime(timestamp) {
-      timestamp = String(timestamp);
-      timestamp = timestamp.length == 10 ? timestamp * 1000 : timestamp * 1;
-      var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
-      var Y = date.getFullYear() + "-";
-      var M =
-        (date.getMonth() + 1 < 10
-          ? "0" + (date.getMonth() + 1)
-          : date.getMonth() + 1) + "-";
-      var D =
-        (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
-      var h =
-        (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":";
-      var m =
-        (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
-        ":";
-      var s =
-        date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-      return Y + M + D + h + m + s;
+    created() {
+      this.pullClassAndCourseData();
     }
-  },
-  computed: {
-    blueCommentStyle() {
-      return "background-color: #409EFF; color: #FFF;";
-    },
-    whiteCommentStyle() {
-      return "background-color: #FFF; color: #000;";
-    },
-    promptWords() {
-      return "确定驳回该学生的作业吗?";
-    }
-  },
-  created() {
-    this.pullClassAndCourseData();
-  }
-};
+  };
 </script>
 
 <style scoped>
-#remark {
-  width: 95%;
-  margin: 0 auto;
-}
-p,
-span {
-  font-size: 14px;
-}
-.select-class {
-  margin-right: 10px;
-}
-.second-floor {
-  margin-bottom: 10px;
-}
+  #remark {
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  p,
+  span {
+    font-size: 14px;
+  }
+
+  .select-class {
+    margin-right: 10px;
+  }
+
+  .second-floor {
+    margin-bottom: 10px;
+  }
 </style>
