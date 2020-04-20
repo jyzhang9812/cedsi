@@ -130,7 +130,9 @@
       },
       viewWork(index) {
         let item = this.currentList[index];
+        this.curWork = index;
         if (item.flag) {
+          //flag是判断作业文件类型，sb3文件用iframe打开，其他类型则直接下载
           window.open("https://" + this.currentList[index].url);
         } else {
           this.dialogVisible = true;
