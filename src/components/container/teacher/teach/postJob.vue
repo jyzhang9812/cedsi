@@ -8,16 +8,16 @@
         </div>
       </div>
       <div class="panels">
-        <el-table :data="homeworkList" style="width: 100%">
+        <el-table :data="tableData" style="width: 100%">
           <el-table-column align="center" type="index" label="序号"></el-table-column>
-          <el-table-column align="center" prop="chapterName" label="作业名称"></el-table-column>
-          <el-table-column align="center" prop="date" label="截止时间"></el-table-column>
-          <el-table-column align="center" prop="className" label="班级"></el-table-column>
-          <el-table-column align="center" prop="courseName" label="课程名称"></el-table-column>
-          <el-table-column align="center" prop="chapterName" label="章节名称"></el-table-column>
+          <el-table-column align="center" prop="CP_NAME" label="作业名称"></el-table-column>
+          <el-table-column align="center" prop="DEADLINE" label="截止时间"></el-table-column>
+          <el-table-column align="center" prop="CLASS_NAME" label="班级"></el-table-column>
+          <el-table-column align="center" prop="COURSE_NAME" label="课程名称"></el-table-column>
+          <el-table-column align="center" prop="CP_NAME" label="章节名称"></el-table-column>
           <el-table-column align="center" label="操作" width="280">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="editWork(scope.row)">编辑</el-button>
+              <!-- <el-button size="mini" type="primary" @click="editWork(scope.row)">编辑</el-button> -->
               <el-button size="mini" type="success" @click="postJob(scope.row)">发布</el-button>
               <el-button size="mini" slot="reference" type="danger" @click="dialogVisible=true">删除</el-button>
               <el-dialog title :visible.sync="dialogVisible" width="20%">
@@ -106,15 +106,7 @@
         chapterNameList: [],//
         className: "",
         chapterName: "",
-        homeworkList: [
-          {
-            chapterName: "第一章",
-            date: "2020-2-10",
-            className: "一班",
-            courseName: "数据库",
-            chapterName: "第一章"
-          }
-        ],
+        homeworkList: [],
         dialogVisible: false,
         form: {
           homeworkName: "",
@@ -163,7 +155,7 @@
       handlePageChange(pageIndex) {
         let start = (pageIndex - 1) * this.limit;
         let end = start + this.limit;
-        this.homeworkList = this.homeworkData.slice(start, end);
+        this.tableData = this.tableData.slice(start, end);
       },
 
       /**
@@ -245,21 +237,21 @@
        *
        * @param {Object} item
        */
-      editWork(item) {
-        let work = this.searchForWorkId(item);
-        this.newHomeWork();
-        this.changeOption2(work.CLASS_NAME, "classes2");
-        this.inputData.homework = {
-          CONTENT: work.CONTENT,
-          DEADLINE: work.DEADLINE,
-          HW_NAME: work.HW_NAME
-        };
-        this.inputData.classes2.option = work.CLASS_NAME;
-        this.inputData.chapter2.option = work.CP_NAME;
-        console.log(work);
-        this.operation = "put";
-        this.currentWorkId = work.HOMEWORK_ID;
-      },
+      // editWork(item) {
+      //   let work = this.searchForWorkId(item);
+      //   this.newHomeWork();
+      //   this.changeOption2(work.CLASS_NAME, "classes2");
+      //   this.inputData.homework = {
+      //     CONTENT: work.CONTENT,
+      //     DEADLINE: work.DEADLINE,
+      //     HW_NAME: work.HW_NAME
+      //   };
+      //   this.inputData.classes2.option = work.CLASS_NAME;
+      //   this.inputData.chapter2.option = work.CP_NAME;
+      //   console.log(work);
+      //   this.operation = "put";
+      //   this.currentWorkId = work.HOMEWORK_ID;
+      // },
       /**
        * 删除作业的绑定函数
        */
@@ -434,10 +426,12 @@
        * 发布作业(给学生发送通知)
        */
       postJob(line) {
+        console.log(line);
+        console.log("line---------");
         let config = {
           headers: { Authorization: localStorage.getItem("idToken") }
         };
-        let workId = this.searchForWorkId(line).HOMEWORK_ID;
+        let workId = line.HOMEWORK_ID
         instance
           .post(`teacher/homework/${workId}`, { homework_id: workId }, config)
           .then(res => {
@@ -456,7 +450,10 @@
        */
       searchForWorkId(line) {
         return this.originalTableData.find(item => {
-          return item.CLASS_NAME + item.HW_NAME === line.classes + line.hwName;
+          if(item.CLASS_NAME + item.HW_NAME === line.classes + line.hwName){
+            return item;
+          }
+          
         });
       },
       /**
@@ -539,6 +536,7 @@
           that.form.cover = this.result;
         }
       },
+      
       onSubmit(event) {
 
         const headerData = {
@@ -621,19 +619,19 @@
     created() {
 
 
-      // this.pullHomeworkData()
-      //   .then(res => {
-      //     console.log(res);
-      //     this.originalTableData = res.data || [];
-      //     this.tableData = res.data || [];
-      //     this.changeTablePages(0);
-      //     this.inputData.classes1.list = Array.from(
-      //       new Set(res.data.map(item => item.CLASS_NAME))
-      //     );
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
+      this.pullHomeworkData()
+        .then(res => {
+          console.log(res);
+          this.originalTableData = res.data || [];
+          this.tableData = res.data || [];
+          this.changeTablePages(0);
+          this.inputData.classes1.list = Array.from(
+            new Set(res.data.map(item => item.CLASS_NAME))
+          );
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   };
 </script>
