@@ -32,7 +32,7 @@
           </div>
           <button class="study-btn" @click="startToLearn">开始学习</button>
         </div>
-        <div class="right-box" v-if="role!=0">
+        <div class="right-box" v-if="role==0">
           <p class="course-intro">课程介绍</p>
           <p class="intro-detials">{{courseIntro}}</p>
           <p class="course-warn">
@@ -45,11 +45,6 @@
             :to="{name:'addHomework',query:{chapterId:chapterId,courseId:this.courseId,chapterName:chapterName}}"
           >我要做作业</router-link>
           <p class="preview">预览讲义</p>
-        </div>
-        <div class="right-box" v-if="role==0">
-          <p class="course-intro">课程介绍</p>
-          <p class="intro-detials">{{courseIntro}}</p>
-          <button class="work-btn">预览讲义</button>
         </div>
       </div>
     </el-dialog>
