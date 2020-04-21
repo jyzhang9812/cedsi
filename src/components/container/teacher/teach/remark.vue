@@ -24,7 +24,6 @@
       <div></div>
     </div>
     <div class="third-floor">
-      <span>点评状态</span>
       <el-radio-group v-model="radio1" @change='changeComment'>
         <el-radio-button label="all">全部</el-radio-button>
         <el-radio-button label="comment">已点评</el-radio-button>
@@ -42,7 +41,7 @@
         <el-table-column align="center" label="操作" width="280">
           <template slot-scope="scope">
             <el-button size="mini" type="success" @click='viewWork(scope.$index)'>查看</el-button>
-            <el-button size="mini" type="primary" @click="openCommentDialog(scope.$index)">点评</el-button>
+            <el-button size="mini" type="primary" :disabled='scope.row.commentStatus' @click="openCommentDialog(scope.$index)">点评</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -148,6 +147,7 @@
       changeComment(event) {
           let arr1=[]
           let arr2=[]
+          //每次切换都由前台处理，切换都是从该章节全部数据来筛选点评、未点评
           this.tableData = this.originalTableData
           if(event!=='all'){
           let status = (event==='comment')?true:false
@@ -195,11 +195,7 @@
         }
         this.handlePageChange(1);
       },
-      /**
-       * 分页跳转, 是 pagination 分页组件绑定的事件处理函数
-       *
-       * @param {Number} value
-       */
+      //分页跳转, 是 pagination 分页组件绑定的事件处理函数
       handlePageChange(value) {
         let start = (value - 1) * this.limit;
         let end = start + this.limit;
@@ -273,8 +269,8 @@
         let putData = {
           teacherRemark: this.form.comment==''?'暂无评价':this.form.comment,
           homeworkRank: this.form.star_num+1,
-          selectedWorks:false,
-          studentId: this.currentList[this.curWork].STUDENT_ID,
+          selectedWork:false,
+          stuId: this.currentList[this.curWork].STUDENT_ID,
           homeworkId: this.currentList[this.curWork].HW_ID
         };
         console.log(putData)
@@ -282,6 +278,8 @@
           .put(`teacher/stuhomework/${putData.homeworkId}`, putData, config)
           .then(res => {
             console.log(res);
+            this.dialogVisible=!this.dialogVisible
+            // if(res.data)
             this.pullHomeworkWithId(this.currentList[this.curWork].CLASS_ID,this.currentList[this.curWork].HW_ID)
           })
           .catch(err => {
@@ -347,10 +345,14 @@
                 );
                 if(this.originalTableData[i].TEACHER_REMARK==='null'){
                   this.originalTableData[i].commentStatus = false;
+                }else{
+                  this.originalTableData[i].commentStatus = true;
                 }
               };
-              this.tableData = this.originalTableData
-          }this.handlePageChange(1)
+            }
+          //originalData是全部数据，tabledata作为页面渲染数据，主要作用在筛选点评、未点评
+          this.tableData = this.originalTableData
+          this.handlePageChange(1)
           })
           .catch(err => {
             console.log(err);
