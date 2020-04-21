@@ -18,7 +18,7 @@
           <el-table-column align="center" label="操作" width="280">
             <template slot-scope="scope">
               <!-- <el-button size="mini" type="primary" @click="editWork(scope.row)">编辑</el-button> -->
-              <el-button size="mini" type="success" @click="postJob(scope.row)">发布</el-button>
+              <el-button size="mini" type="success" :disabled="scope.row.IS_PUBLISH" @click="postJob(scope.row)">发布</el-button>
               <el-button size="mini" slot="reference" type="danger" @click="dialogVisible=true">删除</el-button>
               <el-dialog title :visible.sync="dialogVisible" width="20%">
                 <i class="el-icon-info"></i>
@@ -58,11 +58,11 @@
           </el-form-item>
           <el-form-item label="截止时间">
             <el-col :span="11">
-              <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%;"></el-date-picker>
             </el-col>
             <el-col class="line" :span="2">-</el-col>
             <el-col :span="11">
-              <el-time-picker placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
+              <el-time-picker placeholder="选择时间" v-model="form.date2" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%;"></el-time-picker>
             </el-col>
           </el-form-item>
           <el-form-item label="上传附件">
@@ -544,12 +544,13 @@
         };
         let zipType = this.form.zipFile.name.split('.').pop();
         let coverType = this.form.coverFile.name.split('.').pop();
+        // let stamp=this.form.date1.slice(0,9)+this.form.date2.slice(11)
         let homeworkData = {
           HW_NAME: this.form.homeworkName,
           COURSE_ID: this.form.currentCourseId,
           CLASS_ID: this.form.classId,
           CP_ID: this.form.chapterId,
-          DEADLINE: this.form.date2,
+          DEADLINE: this.dateValue,
           FILE_TYPE: "." + zipType,
           CONTENT_TYPE: "." + coverType
           // zipFileName:this.form.zipFile.name,
@@ -582,12 +583,43 @@
         }).catch(err => {
           console.log(err)
         })
+      },
+      handleDelete(row){
+        console.log(row);
+        let config = {
+        headers: { Authorization: localStorage.getItem("idToken") }
+      };
+      let pa="/teacher/homework/"+row.HOMEWORK_ID
+      instance
+        .delete(pa, config)
+        .then(res => {
+          console.log(res);
+          if(res.data.status="200"){
+            this.dialogVisible=false;
+          }
+        }).catch(err => {
+          console.log(err);
+        });
+        this.dialogVisible=false;
       }
     },
     computed: {
       deletePromptId() {
         return "postJob_deletePrompt";
-      }
+      },
+      dateValue(){
+        if(this.form.date1&&this.form.date2){
+          let d=this.form.date1.slice(0,9)+" "+this.form.date2.slice(11)
+          // console.log(d)
+          let date = new Date(d).getTime()
+          // let date = new Date(d.replace(/-/g, '/'));
+          // console.log(date)
+          return date;
+        }else{
+          return ""
+        }
+      },
+      
     },
     mounted() {
       let config = {
