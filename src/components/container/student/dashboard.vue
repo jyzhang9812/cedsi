@@ -86,6 +86,7 @@ export default {
 #student .el-main {
   overflow-x: hidden;
   height: calc(100vh - 113px);
+  padding: 0;
 }
 
 #student .el-aside {
