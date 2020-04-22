@@ -3,7 +3,7 @@
     <el-button type="primary" size="small" @click="addOrganization()">新增机构</el-button>
     <div class="spaceLine"></div>
     <el-table :data="currentList" style="width: 100%">
-      <el-table-column align="center" type="index" label="序号"></el-table-column>
+      <el-table-column align="center" prop='num' label="序号"></el-table-column>
       <el-table-column align="center" prop="id" label="企业账号"></el-table-column>
       <el-table-column align="center" prop="name" label="机构名称"></el-table-column>
       <el-table-column align="center" prop="headmaster" label="机构负责人"></el-table-column>
