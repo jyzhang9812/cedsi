@@ -178,9 +178,16 @@
         });
       },
       learnCourse(item) {
-        let path = "/dashboard/coursemap";
-        let params = { id: item.id };
-        this.$router.push({ path, query: params });
+        if(item.PRICE!=0){
+          this.$router.push({
+          path: "/payment",
+          query: { id: item.ID, type: 2 }
+        });
+        }else{
+          let path = "/dashboard/coursemap";
+          let params = { id: item.id };
+          this.$router.push({ path, query: params });
+        }
       },
       getCourses() {
         let token = localStorage.getItem("idToken");
@@ -189,12 +196,8 @@
           .get("/courses", config)
           .then(({ data }) => {
             console.log(data);
-
             this.courseList = data;
-
-            console.log(this.courseList)
             this.courses = this.courseList.slice(0, 3);
-
           })
           .catch(err => {
             console.error(err);
