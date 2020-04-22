@@ -5,7 +5,8 @@
       <el-row type="flex" :gutter="20">
         <!-- 搜索框 -->
         <el-col :span="10" style="margin-top: -5px;">
-          <el-input v-model="inputData.keywords" placeholder="请输入学生的姓名或学号或年级" size="small" @keyup.enter.native="searchEnterFun"></el-input>
+          <el-input v-model="inputData.keywords" placeholder="请输入学生的姓名或学号或年级" size="small"
+            @keyup.enter.native="searchEnterFun"></el-input>
         </el-col>
         <el-col :span="3" style="margin-top: -5px;">
           <el-button type="primary" size="small" @click="conditionSearch">搜索</el-button>
@@ -35,26 +36,28 @@
       <el-dialog :title="title" :visible.sync="addClass" destroy-on-close>
         <el-form :model="form" label-width="80px">
           <el-form-item label="班级名称">
-            <el-col :span="10"><el-input v-model="form.addClassName" maxlength="10" show-word-limit ></el-input></el-col>
+            <el-col :span="10">
+              <el-input v-model="form.addClassName" maxlength="10" show-word-limit></el-input>
+            </el-col>
           </el-form-item>
-         <el-row :gutter="20">
-          <el-col :span="11">
-            <el-form-item label="选择教师">
-              <el-select @change="selectGetTeacher" v-model="form.currentTeacher" placeholder="请选择教师">
-                <el-option :label="item.name" :value="item.id" v-for="(item,index) in form.teacherList" :key="index">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="11">
-            <el-form-item label="选择课程">
-              <el-select @change="selectGetCourse" v-model="form.currentCourse" placeholder="请选择课程">
-                <el-option :label="item.name" :value="item.id" v-for="(item,index) in form.courseList" :key="index">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-         </el-row>
+          <el-row :gutter="20">
+            <el-col :span="11">
+              <el-form-item label="选择教师">
+                <el-select @change="selectGetTeacher" v-model="form.currentTeacher" placeholder="请选择教师">
+                  <el-option :label="item.name" :value="item.id" v-for="(item,index) in form.teacherList" :key="index">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+              <el-form-item label="选择课程">
+                <el-select @change="selectGetCourse" v-model="form.currentCourse" placeholder="请选择课程">
+                  <el-option :label="item.name" :value="item.id" v-for="(item,index) in form.courseList" :key="index">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="addClass = false">取 消</el-button>
@@ -181,11 +184,11 @@
         this.addClass = true;
         this.title = "新增班级";
         this.form.addClassName = "";
-          this.form.currentCourse = "";
-          this.form.currentTeacher = "";
-          this.form.classId = '';
+        this.form.currentCourse = "";
+        this.form.currentTeacher = "";
+        this.form.classId = '';
       },
-      updateClass(row,index) {
+      updateClass(row, index) {
         this.title = "编辑班级";
         this.addClass = true;
         this.form.addClassName = row.className;
@@ -194,7 +197,7 @@
         this.form.courseValue.id = row.courseId;
         this.form.courseValue.name = row.courseName;
         this.form.teacherValue.id = row.teacherId;
-        this.form.teacherValue.name = row.teacherName;        
+        this.form.teacherValue.name = row.teacherName;
         this.form.classId = this.tableData[index].classId;
       },
       //编辑或更改提交班级
@@ -212,15 +215,21 @@
             courseName: this.form.courseValue.name,
             teacherId: this.form.teacherValue.id,
             teacherName: this.form.teacherValue.name,
-            classId: this.form.classId
+            classId: this.form.classId,
+            className: this.form.addClassName
           }
           console.log(updateClass);
           const url = `/eduadmin/class/${updateClass.classId}/course`;
           const config = { headers: { Authorization: token } };
           instance
-            .post(url, updateClass,config)
+            .post(url, updateClass, config)
             .then(response => {
-              console.log(response);
+              if (response.data.status === 'ok') {
+                this.$message({ type: "success", message: "操作成功" });
+                this.getClasses();
+              } else {
+                this.$message({ type: "error", message: "操作失败" });
+              }
             })
             .catch(err => {
               console.error(err);
@@ -237,10 +246,15 @@
           const url = `/eduadmin/class`;
           const config = { headers: { Authorization: token } };
           instance
-            .post(url, newClass,config)
+            .post(url, newClass, config)
             .then(response => {
               console.log(response);
-              return instance.get("eduadmin/class", config);
+              if (response.data.status === 'ok') {
+                this.$message({ type: "success", message: "操作成功" });
+                this.getClasses();
+              } else {
+                this.$message({ type: "error", message: "操作失败" });
+              }
             })
             .then(({ data }) => {
               console.log(data);
@@ -250,8 +264,8 @@
                   className: item.CLASS_NAME,
                   courseId: item.COURSE_ID,
                   courseName: item.COURSE_NAME,
-                  teacherId:item.TEACHER_ID,
-                  teacherName:item.TEACHER_NAME,
+                  teacherId: item.TEACHER_ID,
+                  teacherName: item.TEACHER_NAME,
                   courseMemberCount: item.CLASS_MEMBER_COUNT
                 };
               });
@@ -273,14 +287,14 @@
         this.form.classId = this.tableData[index].classId;
         this.getclassStudent(this.form.classId);
       },
-      searchEnterFun:function(e){
-                 var keyCode = window.event? e.keyCode:e.which;
-                //  console.log('回车搜索',keyCode,e);
-                 if(keyCode == 13 && this.input){
-                     this.conditionSearch();
-                 }
+      searchEnterFun: function (e) {
+        var keyCode = window.event ? e.keyCode : e.which;
+        //  console.log('回车搜索',keyCode,e);
+        if (keyCode == 13 && this.input) {
+          this.conditionSearch();
+        }
 
-            },
+      },
       //搜索学生
       conditionSearch() {
         let value = this.inputData.keywords;
@@ -302,7 +316,9 @@
       },
       //选择学生
       handleSelectionChange(val) {
-        this.selectStudents = val.map(item => { return item.userId });
+        console.log(val)
+        let newList = val.map(item => { return item.userId });
+        this.selectStudents = newList.filter(item => !this.classStudentList.some(val => val.id === item.id ))
         console.log(this.selectStudents)
       },
       selectable(row, index) {
@@ -327,6 +343,11 @@
           .post(url, classStudent, config)
           .then(response => {
             console.log(response);
+            if (response.data.status === 'ok') {
+              this.$message({ type: "success", message: "操作成功" });
+            } else {
+              this.$message({ type: "error", message: "操作失败" });
+            }
           })
           .catch(err => {
             console.error(err);
@@ -411,11 +432,11 @@
           })
           .catch(err => console.error(err));
       },
-      getCourse(){
+      getCourse() {
         let token = localStorage.getItem("idToken");
         const config = { headers: { Authorization: token } };
         instance.get("/eduadmin/class/msg", config)
-        .then(({ data }) => {
+          .then(({ data }) => {
             console.log({ 教师和课程: data });
             let teacherList = data.teachers;
             let courseList = data.courses;
@@ -444,10 +465,12 @@
   };
 
 </script>
+
 <style>
   #classmanagement {
     padding: 10px;
   }
+
   .second-floor {
     margin-top: 20px;
   }
