@@ -737,6 +737,7 @@ export default {
     instance
       .get("/teacher/class", config)
       .then(res => {
+        console.log(res);
         console.log(res.data);
         this.originalInputData = res.data;
         this.classNameList = res.data.map(item => {
