@@ -20,7 +20,7 @@
         </el-table-column>
       </el-table>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="addStudent = false">取 消</el-button>
+        <el-button @click="cancelAddStudents">取 消</el-button>
         <el-button type="primary" @click="submitStudent">确 定</el-button>
       </div>
     </el-dialog>
@@ -287,6 +287,10 @@
         this.form.classId = this.tableData[index].classId;
         this.getclassStudent(this.form.classId);
       },
+      cancelAddStudents() {
+        this.addStudent = false
+        this.selectStudents = []
+      },
       searchEnterFun: function (e) {
         var keyCode = window.event ? e.keyCode : e.which;
         //  console.log('回车搜索',keyCode,e);
@@ -316,10 +320,19 @@
       },
       //选择学生
       handleSelectionChange(val) {
-        console.log(val)
         let newList = val.map(item => { return item.userId });
-        console.log(newList)
-        this.selectStudents = newList.filter(item => !this.classStudentList.some(val => val.id === item.id ))
+        let classStudentList = this.classStudentList.map(item=> {return item.userId})
+        console.log(classStudentList)
+        for (let i = 0; i < newList.length; i++) {
+          for (let j = 0; j < classStudentList.length; j++) {
+            if (newList[i] == classStudentList[j]) {
+              console.log('------------')
+              newList.splice(i, 1);
+            }
+          }
+        }
+        this.selectStudents = newList
+        // this.selectStudents = newList.filter(item => !this.classStudentList.some(ele=>ele.userId===item.userId))
         console.log(this.selectStudents)
       },
       selectable(row, index) {
@@ -346,6 +359,7 @@
             console.log(response);
             if (response.data.status === 'ok') {
               this.$message({ type: "success", message: "操作成功" });
+              this.$router.go(0);
             } else {
               this.$message({ type: "error", message: "操作失败" });
             }
@@ -354,6 +368,7 @@
             console.error(err);
           });
         this.studentList = this.selectStudents;
+        this.selectStudents = [];
         this.addStudent = false;
       },
       getclassStudent(classId) {
