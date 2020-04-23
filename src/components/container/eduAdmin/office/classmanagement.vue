@@ -318,6 +318,7 @@
       handleSelectionChange(val) {
         console.log(val)
         let newList = val.map(item => { return item.userId });
+        console.log(newList)
         this.selectStudents = newList.filter(item => !this.classStudentList.some(val => val.id === item.id ))
         console.log(this.selectStudents)
       },
